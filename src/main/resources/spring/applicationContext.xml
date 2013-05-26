@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:onejpa="http://com.sinosoft.one/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd"
+	default-lazy-init="true">
+
+	<description>Spring公共配置 </description>
+
+	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+	<context:component-scan base-package="com.sinosoft.one.monitor,com.fusionspy.beacon">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!--<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"> 
+		<property name="showSql" value="true"/></bean> -->
+	<bean id="hibernateJpaVendorAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="database">
+			<value>MYSQL</value>
+		</property>
+	</bean>
+	<!-- Jpa Entity Manager 配置 -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSourceProxy" />
+		<property name="packagesToScan">
+            <list>
+                <value>com.sinosoft.one.monitor</value>
+                <value>com.fusionspy.beacon</value>
+            </list>
+		</property>
+		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
+		<property name="jpaProperties">
+			<props>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Spring Data Jpa配置 -->
+	<onejpa:repositories base-package="com.sinosoft.one.monitor"
+		transaction-manager-ref="transactionManager"
+		entity-manager-factory-ref="entityManagerFactory"
+		sql-queries-location="classpath:META-INF/sqlquery/*"
+		named-queries-location="classpath:META-INF/jpa-named-queries.properties" />
+
+    <onejpa:repositories base-package="com.fusionspy.beacon"
+                         transaction-manager-ref="transactionManager"
+                         entity-manager-factory-ref="entityManagerFactory"
+                         sql-queries-location="classpath:META-INF/sqlquery/*"
+                         named-queries-location="classpath:META-INF/jpa-named-queries.properties" />
+
+
+
+	<!-- Jpa 事务配置 -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
+	<!-- production/local development环境 -->
+	<context:property-placeholder
+		ignore-unresolvable="true" location="classpath*:/application.properties" />
+	<!-- 数据源配置, 使用Druid数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+
+        <property name="filters" value="stat" />
+
+        <property name="maxActive" value="${jdbc.maxActive}" />
+        <property name="initialSize" value="1" />
+        <property name="maxWait" value="60000" />
+        <property name="minIdle" value="1" />
+
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+    </bean>
+
+    <bean id="dataSourceProxy" class="com.sinosoft.one.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSource" />
+    </bean>
+
+
+    <bean id="sitesHolder" class="com.fusionspy.beacon.site.SitesHolder">
+        <property name="demo" value="${demo.is}"></property>
+    </bean>
+
+ 
+</beans>

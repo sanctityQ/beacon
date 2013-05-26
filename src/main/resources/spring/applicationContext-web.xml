@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>导入beacon web中的applicationContext文件列表</description>
+	<import resource="classpath:cache/applicationContext-ehcache.xml" />
+    <import resource="classpath:mail/applicationContext-mail.xml" />
+    <import resource="classpath:security/applicationContext-shiro.xml" />
+
+</beans>
