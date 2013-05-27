@@ -10,18 +10,11 @@
 <%@include file="/WEB-INF/layouts/base.jsp"%>
 <script type="text/javascript">
 $(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
     if($.browser.msie && ($.browser.version == "7.0")){
         var center = $("#layout_center");
         $("#main").width(center.width() - 31).height(center.height() - 30);
     }
     getAlarmListOfGivenTimeAndType();
-	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
     $("#timeSelect").bind("change",getAlarmListOfGivenTimeAndType);
     $("#typeSelect").bind("change",getAlarmListOfGivenTimeAndType);
 });
@@ -78,39 +71,12 @@ function alarmDetailInfo(e){
     window.location.href="${ctx}/alarm/manager/alarmmanager/detail/"+_alarmId;
 }
 
-function navHover(){
-	$(this).toggleClass("hover")
-}
-function navClick(){
-	$(this).addClass("seleck").siblings().removeClass("seleck");
-	if($(this).hasClass('has_sub')){
-		var subMav = $(this).children("ul.add_sub_menu");
-		var isAdd = false;
-		if($(this).parent().attr("id") == "menu"){
-			isAdd = true;
-		};
-		subMav.slideDown('fast',function(){
-			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
-			return false;
-		});		
-	};
-}
-function hideNav(e){
-	var subMenu = e.data.dom;
-	var isAdd = e.data.add;
-	subMenu.slideUp('fast',function(){
-		if(isAdd){
-			subMenu.parent().removeClass('seleck');
-		};
-	});	
-	$(document).unbind();
-}
 function delRow(e){
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
 	msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
 		msgSuccess("系统消息", "操作成功，配置已删除！");
-		alert(id);
+		//alert(id);
 		rows.remove();
 	});
 }
@@ -185,8 +151,8 @@ function viewRelevance(){
           	<strong class="right">筛选表单：
                 <select id="timeSelect" name="timeSelect" class="diySelect">
                     <option value="">选择时间</option>
-                    <option value="twentyFourHours">最近24小时</option>
-                    <option value="thirtyDays">最近30天</option>
+                    <option value="1">最近24小时</option>
+                    <option value="30">最近30天</option>
                 </select>
                 <select id="typeSelect" name="typeSelect" class="diySelect">
                     <option value="">选择类型</option>
@@ -197,10 +163,10 @@ function viewRelevance(){
                 </select>
             </strong>
           	<b>告警信息列表　</b>
-              <a href="javascript:void(0)" class="itemize">全部告警(100)</a>
-              <a href="javascript:void(0)" class="itemize">严重告警(30)</a>
-              <a href="javascript:void(0)" class="itemize">告警(20)</a>
-              <a href="javascript:void(0)" class="itemize">正常(50)</a>
+              <a href="javascript:void(0)" class="itemize">全部告警</a>
+              <a href="javascript:void(0)" class="itemize">严重</a>
+              <a href="javascript:void(0)" class="itemize">警告</a>
+              <a href="javascript:void(0)" class="itemize">正常</a>
           </h2>
           <div class="tool_bar_top"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></div>
           <div id="thresholdList"></div>

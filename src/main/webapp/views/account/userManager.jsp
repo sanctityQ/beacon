@@ -4,27 +4,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <title>用户管理</title>
-<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+<%@include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
 $(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
+
     if($.browser.msie && ($.browser.version == "7.0")){
         var center = $("#layout_center");
         $("#main").width(center.width() - 31).height(center.height() - 30);
     }
-
 	$("#thresholdList").Grid({
 		type : "post",
 		url : "${ctx}/account/user/data",  
@@ -42,14 +29,11 @@ $(function(){
 			{id:'6',text:'创建时间',name:"createTime",index:'1',align:''},
 			{id:'7',text:'操作',name:"operation",index:'1',align:''}
 		],  
-		rowNum:9999,
+		rowNum:10,
 		pager : false,
 		number:false,  
 		multiselect: true  
 	});
-	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
 });
 
 function updRow(e){
@@ -102,30 +86,7 @@ function delUser(url){
 	});
 }
 
-function navClick(){
-	$(this).addClass("seleck").siblings().removeClass("seleck");
-	if($(this).hasClass('has_sub')){
-		var subMav = $(this).children("ul.add_sub_menu");
-		var isAdd = false;
-		if($(this).parent().attr("id") == "menu"){
-			isAdd = true;
-		};
-		subMav.slideDown('fast',function(){
-			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
-			return false;
-		});		
-	};
-}
-function hideNav(e){
-	var subMenu = e.data.dom;
-	var isAdd = e.data.add;
-	subMenu.slideUp('fast',function(){
-		if(isAdd){
-			subMenu.parent().removeClass('seleck');
-		};
-	});	
-	$(document).unbind();
-}
+
 function viewRelevance(e){
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');

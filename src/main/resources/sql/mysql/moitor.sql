@@ -1,10 +1,10 @@
-drop table if exists GE_MONITOR_ALARM;
+drop table if exists ge_monitor_alarm;
 
-drop table if exists GE_MONITOR_APPLICATION;
+drop table if exists ge_monitor_application;
 
-drop table if exists GE_MONITOR_ATTRIBUTE;
+drop table if exists ge_monitor_attribute;
 
-drop table if exists GE_MONITOR_ATTRIBUTE_ACTION;
+drop table if exists ge_monitor_attribute_action;
 
 drop table if exists GE_MONITOR_ATTRIBUTE_THRESHOLD;
 
@@ -73,9 +73,9 @@ drop table if exists GE_MONITOR_URL_TRACE_LOG;
 drop table if exists GE_MONITOR_URL_VISITS_STA;
 
 /*==============================================================*/
-/* Table: GE_MONITOR_ALARM                                      */
+/* Table: ge_monitor_alarm                                      */
 /*==============================================================*/
-create table GE_MONITOR_ALARM
+create table ge_monitor_alarm
 (
    ID                   varchar(32) not null comment '主键ID',
    SEVERITY             varchar(1) comment '严重级别(severity)',
@@ -91,12 +91,12 @@ create table GE_MONITOR_ALARM
    primary key (ID)
 );
 
-alter table GE_MONITOR_ALARM comment '应用系统告警信息表';
+alter table ge_monitor_alarm comment '应用系统告警信息表';
 
 /*==============================================================*/
-/* Table: GE_MONITOR_APPLICATION                                */
+/* Table: ge_monitor_application                                */
 /*==============================================================*/
-create table GE_MONITOR_APPLICATION
+create table ge_monitor_application
 (
    ID                   varchar(32) not null comment '主键ID',
    APPLICATION_NAME     varchar(100) not null comment '应用系统英文名称',
@@ -112,12 +112,12 @@ create table GE_MONITOR_APPLICATION
    primary key (ID)
 );
 
-alter table GE_MONITOR_APPLICATION comment '存储需要监控的应用系统信息';
+alter table ge_monitor_application comment '存储需要监控的应用系统信息';
 
 /*==============================================================*/
-/* Table: GE_MONITOR_ATTRIBUTE                                  */
+/* Table: ge_monitor_attribute                                  */
 /*==============================================================*/
-create table GE_MONITOR_ATTRIBUTE
+create table ge_monitor_attribute
 (
    ID                   varchar(32) not null comment '主键ID',
    RESOURCE_TYPE        varchar(32) comment '资源类型',
@@ -127,12 +127,12 @@ create table GE_MONITOR_ATTRIBUTE
    primary key (ID)
 );
 
-alter table GE_MONITOR_ATTRIBUTE comment '属性信息表';
+alter table ge_monitor_attribute comment '属性信息表';
 
 /*==============================================================*/
-/* Table: GE_MONITOR_ATTRIBUTE_ACTION                           */
+/* Table: ge_monitor_attribute_action                           */
 /*==============================================================*/
-create table GE_MONITOR_ATTRIBUTE_ACTION
+create table ge_monitor_attribute_action
 (
    ID                   varchar(32) not null comment '主键ID',
    RESOURCE_ID          varchar(32) not null comment '资源ID',
@@ -143,7 +143,7 @@ create table GE_MONITOR_ATTRIBUTE_ACTION
    primary key (ID)
 );
 
-alter table GE_MONITOR_ATTRIBUTE_ACTION comment '属性动作信息表';
+alter table ge_monitor_attribute_action comment '属性动作信息表';
 
 /*==============================================================*/
 /* Table: GE_MONITOR_ATTRIBUTE_THRESHOLD                        */
@@ -746,7 +746,7 @@ create table GE_MONITOR_ACCOUNT
 alter table GE_MONITOR_ACCOUNT comment '用户管理';
 
 alter table GE_MONITOR_BIZ_SCENARIO add constraint FK_BUSINESS_SCENARIO foreign key (APPLICATION_ID)
-      references GE_MONITOR_APPLICATION (ID) on delete restrict on update restrict;
+      references ge_monitor_application (ID) on delete restrict on update restrict;
 
 alter table GE_MONITOR_BIZ_SCENARIO_URL add constraint FK_BIZ_SCENARIO_URL_BIZ foreign key (BIZ_SCENARIO_ID)
       references GE_MONITOR_BIZ_SCENARIO (ID) on delete restrict on update restrict;
@@ -983,4 +983,34 @@ CREATE TABLE GE_MONITOR_TUX_SYSRECS (
 -- ----------------------------
 BEGIN;
 INSERT INTO GE_MONITOR_ACCOUNT VALUES ('1', 'admin', 'admin', 'Admin', 'admin@springside.org.cn', '13800138001', '2012-12-25 19:36:34', '1');
+COMMIT;
+
+-- ----------------------------
+--  `GE_MONITOR_ATTRIBUTE` 监控属性
+-- ----------------------------
+BEGIN;
+INSERT INTO `GE_MONITOR_ATTRIBUTE` VALUES ('1', 'APPLICATION', 'ResponseTime', 'ms', '响应时间'),
+('10', 'DB', 'Availability', null, '可用性'),
+('11', 'DB', 'ResponseTime', 'ms', '响应时间'),
+('12', 'DB', 'Health', null, '健康度'),
+('13', 'OS', 'Availability', null, '可用性'),
+('14', 'OS', 'DiskUtilization', null, '磁盘使用率'),
+('15', 'OS', 'ResponseTime', 'ms', '响应时间'),
+('16', 'DB', 'BufferHitRatio', null, '缓存击中率'),
+('17', 'OS', 'CPUUtilization', null, 'CPU利用率'),
+('18', 'APP_SERVER', 'ServerDied', null, '宕机'),
+('19', 'APP_SERVER', 'ServerNoTrans', '', '无交易'),
+('2', 'APPLICATION', 'Exception', null, '异常'),
+('20', 'APP_SERVER', 'ServerBusy', '', '服务繁忙'),
+('21', 'APP_SERVER', 'UsedMemory', '', '已用内存'),
+('22', 'APP_SERVER', 'QueuedNumber', '', '队列大小'),
+('23', 'APP_SERVER', 'CPUUtilization', '', 'CPU利用率'),
+('24', 'APP_SERVER', 'SystemStop', null, '系统停止'),
+('3', 'APPLICATION', 'Availability', null, '可用性'),
+('4', 'APPLICATION', 'Health', null, '健康度'),
+('5', 'OS', 'PhysicalMemoryUtilization', null, '物理内存'),
+('6', 'OS', 'Health', null, '健康度'),
+('7', 'OS', 'SwapMemoryUtilization', null, '交换内存'),
+('8', 'DB', 'Sql', null, 'SQL'),
+('9', 'DB', 'ActiveConnection', null, '连接数');
 COMMIT;

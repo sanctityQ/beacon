@@ -95,7 +95,7 @@ public class AppServerController{
         map.put("sitePort",String.valueOf(siteListEntity.getSitePort()));
         map.put("interval",String.valueOf(siteListEntity.getInterval()));
         map.put("operation","<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> " +
-                "<a href='javascript:void(0)' class='eid' onclick='setTuxMergency()'>数据保存设置</a>"+
+                "<a href='javascript:void(0)' class='eid' onclick='setTuxMergency(this)'>数据保存设置</a>"+
                 "<a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>");
         return map;
     }

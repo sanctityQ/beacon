@@ -17,9 +17,9 @@ import com.sinosoft.one.util.encode.JaxbBinder;
  */
 public class TuxSite extends MonitorSite{
 
-    private JaxbBinder jaxbBinder = new JaxbBinder(TuxInTimeData.class, TuxsvrsEntity.class);
-
-    private JaxbBinder iniBinder = new JaxbBinder(SysrecsEntity.class,TuxIniData.class,TuxsvrsEntity.class);
+//    private JaxbBinder jaxbBinder = new JaxbBinder(TuxInTimeData.class, TuxsvrsEntity.class);
+//
+//    private JaxbBinder iniBinder = new JaxbBinder(SysrecsEntity.class,TuxIniData.class,TuxsvrsEntity.class);
 
 
     private TuxService tuxService;
@@ -59,7 +59,7 @@ public class TuxSite extends MonitorSite{
         TuxInTimeData thisData = (TuxInTimeData)inTimeData;
         //first load
         iniHisData();
-        tuxService.processInTimeData(this.getSiteName(),this.getPeriod(),thisData,tuxHisData,super.saveDbFlag);
+        tuxService.processInTimeData(this.getSiteName(),this.getPeriod(),thisData,tuxHisData);
         //record monitorData
         tuxHisData.setMonitorCount(++monitorCount);
     }

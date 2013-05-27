@@ -83,7 +83,6 @@ public class SystemServiceImpl implements SystemService{
        siteSettings.setSiteType(siteListEntity.getSiteType());
        configSiteSetting(siteSettings);
 
-
     }
 
     @Override

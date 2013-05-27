@@ -32,15 +32,9 @@ public abstract class MonitorSite<E> {
 
     private String siteName;
 
-//    protected Connect connect;
-
     protected int monitorCount = 0;
 
     protected String siteIp;
-
-//    public void setConnect(Connect connect) {
-//        this.connect = connect;
-//    }
 
     public String getSiteName() {
         return siteName;
@@ -97,6 +91,7 @@ public abstract class MonitorSite<E> {
        this.saveDbFlag = this.saveDbFlag?false:true;
        return this.saveDbFlag;
     }
+
 
     @PostConstruct
 	public void checkSetting() {

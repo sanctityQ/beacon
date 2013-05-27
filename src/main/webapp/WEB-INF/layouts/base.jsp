@@ -5,7 +5,8 @@
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-
+<link href="${ctx}/global/images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="${ctx}/global/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/bussiness.css" rel="stylesheet" type="text/css" />

@@ -9,7 +9,7 @@
     <title>Tuxedo - 批量配置视图</title>
 
     <%@include file="/WEB-INF/layouts/base.jsp" %>
-
+    <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
         $(function(){
             var grid = $("#thresholdList").Grid({
@@ -105,11 +105,13 @@
             });
         }
 
-        function setTuxMergency(){
+        function setTuxMergency(e){
+            var rows = $(e).parent().parent();
+            var id = rows.attr('id');
             var temWin = $("body").window({
                 "id":"window",
                 "title":'数据保存设置',
-                "url":"${ctx}/views/appServer/tuxedoSetting.jsp",
+                "url":"${ctx}/appServer/tuxedo/setting/"+id.substring(4),
                 "hasIFrame":true,
                 "width": 740,
                 "height":240,
@@ -119,8 +121,14 @@
                     "value": "保存",
                     "onclickEvent" : "selectLear",
                     "btFun": function() {
-
-                        msgSuccess("系统消息", "操作成功，配置已保存！");
+                        var form = $("#window_iframe").contents().find("#settingForm");
+                        form.ajaxForm(function(data) {
+                            if(data=='success'){
+                                msgSuccess("系统消息", "操作成功，配置已保存");
+                            }else{
+                                msgFailed("系统消息","操作失败");
+                            }
+                        }).submit();
                         temWin.closeWin();
                     }
                 },

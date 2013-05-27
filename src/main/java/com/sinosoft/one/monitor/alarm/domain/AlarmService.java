@@ -93,8 +93,8 @@ public class AlarmService {
 		return null;
     }
 
-    public Page<Alarm> queryLatestAlarmsByPageNo(int currentPageNumber) {
-        PageRequest pageRequest = new PageRequest(currentPageNumber,10);
+    public Page<Alarm> queryAlarmsByPage(PageRequest pageRequest) {
+        Assert.notNull(pageRequest);
         Page<Alarm> page = alarmRepository.selectAlarmsBySeverity(pageRequest, new String[]{SeverityLevel.CRITICAL.name(), SeverityLevel.WARNING.name()});
         return  page;
     }

@@ -6,6 +6,7 @@ import com.fusionspy.beacon.site.MonitorManage;
 import com.fusionspy.beacon.site.tux.TuxHisData;
 import com.fusionspy.beacon.site.tux.TuxSite;
 import com.fusionspy.beacon.site.tux.entity.*;
+import com.fusionspy.beacon.system.entity.DataSave;
 import com.fusionspy.beacon.system.entity.SiteListEntity;
 import com.fusionspy.beacon.system.entity.SiteSettings;
 import com.fusionspy.beacon.system.service.SystemService;
@@ -534,8 +535,15 @@ public class TuxController {
     @Post("setting/save")
     public Reply saveSetting(SiteSettings settings){
         systemService.configSiteSetting(settings);
-        //Struts2Utils.renderText("success");
         return Replys.with("success").as(Text.class);
+    }
+
+    @Get("setting/{serverName}")
+    public String getSetting(@Param("serverName")String serverName,Invocation invocation){
+
+        invocation.addModel(systemService.getSiteSetting(serverName).getDataSave());
+        invocation.addModel("serverName",serverName);
+        return "tuxedoSetting";
     }
 
 }

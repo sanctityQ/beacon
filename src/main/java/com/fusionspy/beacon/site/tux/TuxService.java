@@ -103,20 +103,20 @@ public class TuxService {
      * @param prvData
      */
     @Transactional
-    public void processInTimeData(String siteName,int period,TuxInTimeData tuxInTimeData,TuxHisData prvData,boolean recordDB) {
+    public void processInTimeData(String siteName,int period,TuxInTimeData tuxInTimeData,TuxHisData prvData) {
         logger.debug("start process data");
         SiteSettings siteSettings =  systemService.getSiteSetting(siteName);
-        processData(siteName, period, tuxInTimeData, prvData,siteSettings ,recordDB);
+        processData(siteName, period, tuxInTimeData, prvData,siteSettings);
     }
 
-    ProcessInTimeResult processData(String siteName,int period, TuxInTimeData tuxInTimeData,TuxHisData prvData,SiteSettings siteSettings,boolean recordDB){
+    ProcessInTimeResult processData(String siteName,int period, TuxInTimeData tuxInTimeData,TuxHisData prvData,SiteSettings siteSettings){
 
       //  ProcessInTimeResult processInTimeResult = new ProcessData(siteName,period,tuxInTimeData,prvData,siteSettings,recordDB).process().log(siteName);
       //  TuxAlertMessage message =processInTimeResult.getTuxAlertMessage();
         //alarm采用每个属性都是一个独立的alarm方式
 
 
-        return new ProcessData(siteName,period,tuxInTimeData,prvData,siteSettings,recordDB).process().log(siteName).alarm(siteSettings.getAlertType());
+        return new ProcessData(siteName,period,tuxInTimeData,prvData,siteSettings).process().log(siteName);//.alarm(siteSettings.getAlertType());
     }
 
     private class ProcessData {
@@ -149,12 +149,12 @@ public class TuxService {
 
         private boolean recordDB;
 
-        ProcessData(String siteName,int period,TuxInTimeData tuxInTimeData,TuxHisData prvHisData,SiteSettings siteSettings,boolean recordDB) {
+        ProcessData(String siteName,int period,TuxInTimeData tuxInTimeData,TuxHisData prvHisData,SiteSettings siteSettings) {
             this.siteSettings = siteSettings;
             this.tuxInTimeData = tuxInTimeData;
             this.period = period;
             this.tuxHisData =  prvHisData;
-            this.recordDB = recordDB;
+            this.recordDB = siteSettings.getDataSave().getSaveAll().equals(DataSave.SaveFlag.ENABLE);
             processResult = new ProcessInTimeResult(siteName);
             this.resource = resourcesCache.getResource(siteSettings.getSiteName());
         }
@@ -500,7 +500,7 @@ public class TuxService {
         }
 
         private boolean checkSaveClts(SiteSettings siteSettings) {
-            return recordDB&&siteSettings.getDataSave().getSaveAllClient().equals(DataSave.Client.ENABLE);
+            return recordDB&&siteSettings.getDataSave().getSaveAllClient().equals(DataSave.SaveFlag.ENABLE);
         }
 
         private void alarmMessage(Attribute attribute, SeverityLevel severityLevel,String message){

@@ -206,13 +206,17 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 
     //查询24小时内的告警信息
     @SQL("select * from GE_MONITOR_ALARM a #if(:givenTime=='24') { where (a.CREATE_TIME between (select now() - interval '24' hour from dual) and  now())}" +
-            "#if(:givenTime=='30'){ where (a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate)}" +
+            "#if(:givenTime=='30'){ where (a.CREATE_TIME between (select now() - interval '30' day from dual) and  sysdate)}" +
             "#if(:givenType!=''){ and a.MONITOR_TYPE = :givenType} AND (a.severity='CRITICAL' or a.severity='WARNING') order by a.CREATE_TIME desc")
     Page<Alarm> findAlarmsWithGivenTimeAndType(@Param("givenTime") String givenTime,@Param("givenType") String givenType,Pageable pageable);
 
+
+
+    Page<Alarm> findByCreateTimeBetweenAndMonitorType(Date startTime,Date endTime,String monitorType);
+
     //查询指定时间的告警信息
-    @SQL("select * from GE_MONITOR_ALARM a #if(?1=='24') { where a.CREATE_TIME between (select sysdate - interval '24' hour from dual) and  sysdate}" +
-            "#if(?1=='30'){ where a.CREATE_TIME between (select sysdate - interval '30' day from dual) and  sysdate} AND (a.severity='CRITICAL' or a.severity='WARNING')  order by a.CREATE_TIME desc")
+    @SQL("select * from GE_MONITOR_ALARM a #if(?1=='24') { where a.CREATE_TIME between (select now() - interval '24' hour from dual) and  now()}" +
+            "#if(?1=='30'){ where a.CREATE_TIME between (select now() - interval '30' day from dual) and  sysdate} AND (a.severity='CRITICAL' or a.severity='WARNING')  order by a.CREATE_TIME desc")
     /*Page<Alarm> findAlarmsWithGivenTime(@Param("givenTime") String givenTime,Pageable pageable);*/
     Page<Alarm> findAlarmsWithGivenTime(String givenTime,Pageable pageable);
 

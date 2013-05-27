@@ -71,15 +71,15 @@ public class AlarmManagerController {
     }
 
     //没有选择时间和类型的ajax请求
-    @Post("alarm")
-    public void getAlarmListWithNoChoice(Invocation inv) throws Exception {
-        int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
-        Page<Alarm> allAlarms= alarmService.queryLatestAlarmsByPageNo(currentPageNumber);
+    @Post("alarm/")
+    public void getAlarmListWithNoChoice(@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv) throws Exception {
+        PageRequest pageRequest = new PageRequest(pageNo,rowNum);
+        Page<Alarm> allAlarms= alarmService.queryAlarmsByPage(pageRequest);
         getAlarmListWithGivenCondition(allAlarms, inv);
     }
 
     //只选择时间,或者只选择类型的ajax请求
-    @Post("onecondition/{givenTimeOrType}")
+    @Post("alarm/timeType/{givenTimeOrType}")
     public void getAlarmListWithGivenTimeOrType(@Param("givenTimeOrType")String givenTimeOrType,Invocation inv) throws Exception {
         int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
         PageRequest pageRequest = new PageRequest(currentPageNumber,10);
@@ -106,14 +106,14 @@ public class AlarmManagerController {
 
             getAlarmListWithGivenCondition(timeOrTypeAlarms, inv);
         }else {
-            timeOrTypeAlarms= alarmService.queryLatestAlarmsByPageNo(currentPageNumber);
+            timeOrTypeAlarms= alarmService.queryAlarmsByPage(pageRequest);
             getAlarmListWithGivenCondition(timeOrTypeAlarms, inv);
         }
     }
 
     //时间和类型都选择的ajax请求
-    @Post("twocondition/{givenTime}/{givenType}")
-    public void getAlarmListWithGivenTimeAndType(@Param("givenTime")String givenTime, @Param("givenType") String givenType,Invocation inv) throws Exception {
+    @Post("alarm/timeType/{givenTimeOrType}/resourceType/{givenType}")
+    public void getAlarmListWithGivenTimeAndType(@Param("givenTime")String givenTime, @Param("givenType") ResourceType givenType,Invocation inv) throws Exception {
         int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
         PageRequest pageRequest = new PageRequest(currentPageNumber,10);
         if("twentyFourHours".equals(givenTime)){
@@ -121,16 +121,7 @@ public class AlarmManagerController {
         }else if("thirtyDays".equals(givenTime)){
             givenTime=String.valueOf(30);
         }
-        if(ResourceType.APPLICATION.name().equals(givenType)){
-            givenType=ResourceType.APPLICATION.name();
-        }else if(ResourceType.OS.name().equals(givenType)){
-            givenType=ResourceType.OS.name();
-        }else if(ResourceType.DB.name().equals(givenType)){
-            givenType=ResourceType.DB.name();
-        }else if(ResourceType.APP_SERVER.name().equals(givenType)){
-            givenType=ResourceType.APP_SERVER.name();
-        }
-        Page<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType,pageRequest);
+        Page<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType.name(),pageRequest);
         getAlarmListWithGivenCondition(allAlarmsWithGivenTimeAndType,inv);
     }
 
@@ -198,6 +189,7 @@ public class AlarmManagerController {
         }
         return "";
     }
+
     //获得与前台页面相对应的图片
     private String getImageOfAlarm(SeverityLevel severityLevel){
         if(severityLevel!=null){

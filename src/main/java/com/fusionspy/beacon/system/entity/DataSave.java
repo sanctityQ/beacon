@@ -13,12 +13,15 @@ public class DataSave {
     public static final DataSave DEFAULT = new DataSave();
 
     static {
-         DEFAULT.setSaveAllClient(Client.DISABLE);
+         DEFAULT.setSaveAllClient(SaveFlag.DISABLE);
          DEFAULT.setSaveQueueData(Queue.ALL);
          DEFAULT.setSaveServerData(Server.ALL);
+         DEFAULT.setSaveAll(SaveFlag.DISABLE);
     }
 
-    public enum Client{ENABLE,DISABLE;}
+
+
+    public enum SaveFlag{ENABLE,DISABLE;}
 
     public enum Server{
         ALL,MEMORY,RQDONE,CPU;
@@ -29,18 +32,30 @@ public class DataSave {
     }
 
     //default
-    private Client saveAllClient = Client.DISABLE;
+    private SaveFlag saveFlag = SaveFlag.DISABLE;
+
+    //default
+    private SaveFlag saveAllClient = SaveFlag.DISABLE;
     //default
     private Server saveServerData = Server.ALL;
     //default
     private Queue saveQueueData = Queue.ALL;
 
+    @XmlElement(name="SaveAll")
+    public SaveFlag getSaveAll(){
+        return this.saveFlag;
+    }
+
+    public void setSaveAll(SaveFlag saveFlag) {
+        this.saveFlag = saveFlag;
+    }
+
     @XmlElement(name="SaveAllClient")
-    public Client getSaveAllClient() {
+    public SaveFlag getSaveAllClient() {
         return saveAllClient;
     }
 
-    public void setSaveAllClient(Client saveAllClient) {
+    public void setSaveAllClient(SaveFlag saveAllClient) {
        this.saveAllClient = saveAllClient;
     }
 
@@ -61,13 +76,5 @@ public class DataSave {
     public void setSaveQueueData(Queue saveQueueData) {
         this.saveQueueData = saveQueueData;
     }
-
-
-    public static void main(String[] args){
-
-
-       System.out.println(Client.valueOf("ENABLE")) ;
-    }
-
 
 }
