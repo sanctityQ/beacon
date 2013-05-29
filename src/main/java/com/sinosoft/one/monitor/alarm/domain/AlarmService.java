@@ -27,7 +27,8 @@ import java.util.List;
  */
 @Service
 public class AlarmService {
-	@Autowired
+
+    @Autowired
 	private AlarmRepository alarmRepository;
 
     @Autowired
@@ -95,7 +96,8 @@ public class AlarmService {
 
     public Page<Alarm> queryAlarmsByPage(PageRequest pageRequest) {
         Assert.notNull(pageRequest);
-        Page<Alarm> page = alarmRepository.selectAlarmsBySeverity(pageRequest, new String[]{SeverityLevel.CRITICAL.name(), SeverityLevel.WARNING.name()});
+        //Page<Alarm> page = alarmRepository.selectAlarmsBySeverity(pageRequest, new String[]{SeverityLevel.CRITICAL.name(), SeverityLevel.WARNING.name()});
+        Page<Alarm> page = alarmRepository.findAll(pageRequest);
         return  page;
     }
 

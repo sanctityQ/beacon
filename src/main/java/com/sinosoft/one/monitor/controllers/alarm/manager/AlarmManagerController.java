@@ -21,6 +21,7 @@ import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,7 +38,7 @@ import java.util.List;
  * Date: 13-3-8
  * Time: 下午3:11
  */
-@Path("alarmmanager")
+@Path
 public class AlarmManagerController {
 
     @Autowired
@@ -71,7 +72,7 @@ public class AlarmManagerController {
     }
 
     //没有选择时间和类型的ajax请求
-    @Post("alarm/")
+    @Get("")
     public void getAlarmListWithNoChoice(@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv) throws Exception {
         PageRequest pageRequest = new PageRequest(pageNo,rowNum);
         Page<Alarm> allAlarms= alarmService.queryAlarmsByPage(pageRequest);
@@ -79,49 +80,31 @@ public class AlarmManagerController {
     }
 
     //只选择时间,或者只选择类型的ajax请求
-    @Post("alarm/timeType/{givenTimeOrType}")
-    public void getAlarmListWithGivenTimeOrType(@Param("givenTimeOrType")String givenTimeOrType,Invocation inv) throws Exception {
-        int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
-        PageRequest pageRequest = new PageRequest(currentPageNumber,10);
-        Page<Alarm> timeOrTypeAlarms = null;
-        String givenTime="";
-        String givenType="";
-        if(!StringUtils.isBlank(givenTimeOrType)){
-            if("twentyFourHours".equals(givenTimeOrType)){
-                givenTime=String.valueOf(24);
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenTime(givenTime,pageRequest);
-            }else if("thirtyDays".equals(givenTimeOrType)){
-                givenTime=String.valueOf(30);
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenTime(givenTime,pageRequest);
-            }else if(ResourceType.APPLICATION.name().equals(givenTimeOrType)){
-                givenType=ResourceType.APPLICATION.name();
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType,pageRequest);
-            }else if(ResourceType.OS.name().equals(givenTimeOrType)){
-                givenType=ResourceType.OS.name();
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType,pageRequest);
-            }else if(ResourceType.DB.name().equals(givenTimeOrType)){
-                givenType=ResourceType.DB.name();
-                timeOrTypeAlarms=alarmRepository.findAlarmsWithGivenType(givenType,pageRequest);
-            }
+    @Get("day/{givenTime}")
+    public void getAlarmListWithGivenTimeOrType(@Param("givenTime")int givenTime,@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv) throws Exception {
 
-            getAlarmListWithGivenCondition(timeOrTypeAlarms, inv);
-        }else {
-            timeOrTypeAlarms= alarmService.queryAlarmsByPage(pageRequest);
-            getAlarmListWithGivenCondition(timeOrTypeAlarms, inv);
-        }
+        PageRequest pageRequest = new PageRequest(pageNo,rowNum);
+        DateTime now = DateTime.now();
+        DateTime startTime = now.minusDays(givenTime);
+        Page<Alarm> alarms=alarmRepository.findByCreateTimeBetween(startTime.toDate(),now.toDate(),pageRequest);
+        getAlarmListWithGivenCondition(alarms, inv);
+    }
+
+    @Get("resourceType/{givenType}")
+    public void findAlarmByResourceType(@Param("givenType") ResourceType givenType,@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv)throws Exception{
+        PageRequest pageRequest = new PageRequest(pageNo,rowNum);
+        Page<Alarm> alarms=alarmRepository.findByMonitorType(givenType.name(),pageRequest);
+        getAlarmListWithGivenCondition(alarms, inv);
     }
 
     //时间和类型都选择的ajax请求
-    @Post("alarm/timeType/{givenTimeOrType}/resourceType/{givenType}")
-    public void getAlarmListWithGivenTimeAndType(@Param("givenTime")String givenTime, @Param("givenType") ResourceType givenType,Invocation inv) throws Exception {
-        int currentPageNumber=Integer.valueOf(inv.getRequest().getParameter("pageNo"))-1;
-        PageRequest pageRequest = new PageRequest(currentPageNumber,10);
-        if("twentyFourHours".equals(givenTime)){
-            givenTime=String.valueOf(24);
-        }else if("thirtyDays".equals(givenTime)){
-            givenTime=String.valueOf(30);
-        }
-        Page<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType.name(),pageRequest);
+    @Get("day/{givenTime}/resourceType/{givenType}")
+    public void getAlarmListWithGivenTimeAndType(@Param("givenTime")int givenTime, @Param("givenType") ResourceType resourceType,
+                                                 @Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv) throws Exception {
+        PageRequest pageRequest = new PageRequest(pageNo,rowNum);
+        DateTime now = DateTime.now();
+        DateTime startTime = now.minusDays(givenTime);
+        Page<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findByCreateTimeBetweenAndMonitorType(startTime.toDate(),now.toDate(),resourceType.name(),pageRequest);
         getAlarmListWithGivenCondition(allAlarmsWithGivenTimeAndType,inv);
     }
 

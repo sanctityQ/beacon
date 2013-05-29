@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * 告警信息持久化接口
  */
+@Component
 public interface AlarmRepository extends PagingAndSortingRepository<Alarm, String> {
 
 	@SQL("select ma.*, r.resource_name from ge_monitor_alarm ma, ge_monitor_resources r where ma.monitor_id=r.resource_id and ma.severity in (?2) order by ma.create_time desc")
@@ -211,9 +213,6 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
     Page<Alarm> findAlarmsWithGivenTimeAndType(@Param("givenTime") String givenTime,@Param("givenType") String givenType,Pageable pageable);
 
 
-
-    Page<Alarm> findByCreateTimeBetweenAndMonitorType(Date startTime,Date endTime,String monitorType);
-
     //查询指定时间的告警信息
     @SQL("select * from GE_MONITOR_ALARM a #if(?1=='24') { where a.CREATE_TIME between (select now() - interval '24' hour from dual) and  now()}" +
             "#if(?1=='30'){ where a.CREATE_TIME between (select now() - interval '30' day from dual) and  sysdate} AND (a.severity='CRITICAL' or a.severity='WARNING')  order by a.CREATE_TIME desc")
@@ -226,5 +225,12 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 
     @SQL("delete from GE_MONITOR_ALARM where monitor_id in (?1)")
     void deleteByMonitorIds(List<String> monitorId);
+
+    Page<Alarm> findByCreateTimeBetweenAndMonitorType(Date startTime,Date endTime,String monitorType,Pageable pageable);
+
+    Page<Alarm> findByMonitorType(String monitorType,Pageable pageable);
+
+    Page<Alarm> findByCreateTimeBetween(Date startTime,Date endTime,Pageable pageable);
+
 }
 

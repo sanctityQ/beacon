@@ -2,54 +2,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>查看预警配置文件</title>
     <%@ include file="/WEB-INF/layouts/base.jsp" %>
-    <link href="${ctx }/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
-    <script language="javascript" src="${ctx }/global/js/sinosoft.tabs.js"></script>
-    <script language="javascript" src="${ctx }/global/js/highcharts.src.js"></script>
     <script language="javascript" src="${ctx }/global/js/oracleMonitor.js"></script>
     <script type="text/javascript">
         var editFlag = '${!empty oracleInfo.id}'=='true';
         $(function(){
-            $("body").layout({
-                top:{topHeight:100},
-                bottom:{bottomHeight:30}
-            });
             $("#monitorType option[id='oracle_option']").attr({"selected":"selected"});
             if(editFlag) {$("#monitorType").attr({"disabled":true})};
-            $("#myDesk").height($("#layout_center").height());
-            $("#nav").delegate('li', 'mouseover mouseout', navHover);
-            $("#nav,#menu").delegate('li', 'click', navClick);
         });
-        function navHover(){
-            $(this).toggleClass("hover")
-        }
-        function navClick(){
-            $(this).addClass("seleck").siblings().removeClass("seleck");
-            if($(this).hasClass('has_sub')){
-                var subMav = $(this).children("ul.add_sub_menu");
-                var isAdd = false;
-                if($(this).parent().attr("id") == "menu"){
-                    isAdd = true;
-                };
-                subMav.slideDown('fast',function(){
-                    $(document).bind('click',{dom:subMav,add:isAdd},hideNav);
-                    return false;
-                });
-            };
-        }
-        function hideNav(e){
-            var subMenu = e.data.dom;
-            var isAdd = e.data.add;
-            subMenu.slideUp('fast',function(){
-                if(isAdd){
-                    subMenu.parent().removeClass('seleck');
-                };
-            });
-            $(document).unbind();
-        }
-        function saveOracleMonitor(){zzzz
+        function saveOracleMonitor(){
             var action = rootPath+ "/db/oracle/";
             if(editFlag) {
                 action = action + "edit";
@@ -139,8 +101,6 @@
         </div>
     </div>
 </div>
-<div id="layout_bottom">
-    <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp"%>
 </body>
 </html>

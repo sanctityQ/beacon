@@ -1,29 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="ctx" value="<%=request.getContextPath()%>"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <meta http-equiv="Cache-Control" content="no-store"/>
-    <meta http-equiv="Pragma" content="no-cache"/>
-    <meta http-equiv="Expires" content="0"/>
-
-    <title>用户管理</title>
-    <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css"/>
-    <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-    <script language="javascript" src="${ctx}/global/js/jquery.form.js"></script>
-    <script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-    <script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
+    <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
         $(function () {
-            $("body").layout({
-                top: {topHeight: 100},
-                bottom: {bottomHeight: 30}
-            });
-            saveUserForm
 
             $('#saveUserForm').ajaxForm({
                 dataType: "json",
@@ -105,10 +86,10 @@
                         <td>状态<span class="mandatory">*</span></td>
                         <td><input id="normalStatus" name="status" type="radio"
                                    value="1" ${user.status eq "1"  ? "checked='checked'" : ''} />
-                            <label for="status">正常</label>
+                            <label for="normalStatus">正常</label>
                             　 <input id="lockStatus" type="radio" name="status"
                                      value="0"  ${user.status eq "0"  ? "checked='checked'" : ''} />
-                            <label for="status">锁定</label></td>
+                            <label for="lockStatus">锁定</label></td>
                     </tr>
                     <tr>
                         <td colspan="2" class="group_name">基本信息</td>
@@ -139,8 +120,6 @@
         </div>
     </div>
 </div>
-<div id="layout_bottom">
-    <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>

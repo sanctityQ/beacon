@@ -8,6 +8,10 @@
         $("#myDesk").height($("#layout_center").height());
         $("#nav").delegate('li', 'mouseover mouseout', navHover);
         $("#nav,#menu").delegate('li', 'click', navClick);
+        if($.browser.msie && ($.browser.version == "7.0")){
+            var center = $("#layout_center");
+            $("#main").width(center.width() - 31).height(center.height() - 30);
+        }
     });
     function navHover() {
         $(this).toggleClass("hover")
@@ -59,7 +63,7 @@
                 <li class="has_sub">
                     <a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
                     <ul class="add_sub_menu" id="subNav">
-                        <li class="action" style="border:none"><span class="middleware">中间件</span>
+                        <li class="action" style="border:none"><span class="middleware">应用服务器</span>
                             <ul class="list">
                                 <li><a href="${ctx}/appServer/list/tuxedo">Tuxedo</a></li>
                             </ul>
@@ -84,7 +88,7 @@
 
                 </li>
                 <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a></li>
-                <li><a href="${ctx}/alarm/manager/alarmmanager/list">告警</a></li>
+                <li><a href="${ctx}/alarm/manager/list">告警</a></li>
                 <li><a href="${ctx}/account/user/list">用户管理</a></li>
             </ul>
         </div>

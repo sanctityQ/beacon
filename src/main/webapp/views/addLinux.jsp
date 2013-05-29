@@ -96,20 +96,17 @@
                     </tr>
                     <tr>
                         <td class="group_name">&nbsp;</td>
-                        <td class="group_name"><input type="button" class="buttons"
-                                                      value="确定添加" onclick="savelinux()"/> <input type="reset"
-                                                                                             class="buttons"
-                                                                                             value="重 置"/> <input
-                                type="button" class="buttons" value="取 消"
-                                onclick="window.history.back()"/></td>
+                        <td class="group_name">
+                            <input type="button" class="buttons" value="确定添加" onclick="savelinux()"/>
+                            <input type="reset" class="buttons" value="重 置"/>
+                            <input type="button" class="buttons" value="取 消" onclick="window.history.back()"/>
+                        </td>
                     </tr>
                 </table>
             </form>
         </div>
     </div>
 </div>
-<div id="layout_bottom">
-    <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp"%>
 </body>
 </html>

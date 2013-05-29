@@ -7,7 +7,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.os.linux.model.Os;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface OsRepository extends PagingAndSortingRepository<Os, String> {
 	
 	@SQL("select * from ge_monitor_os where OS_INFO_ID=?1")

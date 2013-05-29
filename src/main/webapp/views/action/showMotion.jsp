@@ -1,36 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="ctx" value="<%=request.getContextPath()%>"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <meta http-equiv="Cache-Control" content="no-store"/>
-    <meta http-equiv="Pragma" content="no-cache"/>
-    <meta http-equiv="Expires" content="0"/>
-
     <title>查看预警配置文件</title>
-    <link href="${ctx }/global/css/base.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx }/global/css/style.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx }/global/css/sinosoft.message.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx }/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx }/global/css/sinosoft.window.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx }/global/css/bussiness.css" rel="stylesheet" type="text/css"/>
-    <script language="javascript" src="${ctx }/global/js/jquery-1.7.1.js"></script>
-    <script language="javascript" src="${ctx }/global/js/sinosoft.layout.js"></script>
-    <script language="javascript" src="${ctx }/global/js/sinosoft.grid.js"></script>
-    <script language="javascript" src="${ctx }/global/js/sinosoft.window.js"></script>
-    <script language="javascript" src="${ctx }/global/js/sinosoft.message.js"></script>
+    <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
         $(function () {
-            $("body").layout({
-                top: {topHeight: 100},
-                bottom: {bottomHeight: 30}
-            });
-            if ($.browser.msie && ($.browser.version == "7.0")) {
-                var center = $("#layout_center");
-                $("#main").width(center.width() - 31).height(center.height() - 30);
-            }
             $("#thresholdList").Grid({
                 type: "post",
                 url: "${ctx}/action/email/data",
@@ -52,40 +27,7 @@
                 number: false,
                 multiselect: false
             });
-            $("#myDesk").height($("#layout_center").height());
-            $("#nav").delegate('li', 'mouseover mouseout', navHover);
-            $("#nav,#menu").delegate('li', 'click', navClick);
         });
-        //$(function(){
-        //	$("body").layout({
-        //		top:{topHeight:100},
-        //		bottom:{bottomHeight:30}
-        //	});
-        //	$("#thresholdList2").Grid({
-        //		type:"post",
-        //		url : "",
-        //		dataType: "json",
-        //		colDisplay: false,
-        //		clickSelect: true,
-        //		draggable:false,
-        //		colums:[
-        //			{id:'1',text:'名称',name:"name",index:'1',align:''},
-        //			{id:'2',text:'发件人',name:"fromAddress",index:'1',align:''},
-        //			{id:'3',text:'到',name:"toAddress",index:'1',align:''},
-        //			{id:'4',text:'主题',name:"subject",index:'1',align:''},
-        //			{id:'5',text:'一直运行',name:"content",index:'1',align:''},
-        //			{id:'6',text:'操作',name:"operation",index:'1',align:''}
-        //
-        //		],
-        //		rowNum:9999,
-        //		pager : false,
-        //		number:false,
-        //		multiselect: false
-        //	});
-        //	$("#myDesk").height($("#layout_center").height());
-        //	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-        //	$("#nav,#menu").delegate('li', 'click', navClick);
-        //});
 
         function updRow(e) {
             var rows = $(e).parent().parent();
@@ -189,8 +131,6 @@
     <%--</div>--%>
     <%--</div>--%>
 </div>
-<div id="layout_bottom">
-    <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>

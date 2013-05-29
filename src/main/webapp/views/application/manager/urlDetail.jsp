@@ -1,44 +1,25 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://mvc.one.sinosoft.com/tags/pipe" prefix="mvcpipe"%>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="Cache-Control" content="no-store" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
 
     <title>业务仿真</title>
-<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
+    <%@include file="/WEB-INF/layouts/base.jsp"%>
 <link href="${ctx}/global/css/sinosoft.base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/timeinfo/timeinfo.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/status.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/sinosoft.core.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/global/css/sinosoft.datepicker.theme.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/global/css/sinosoft.theme.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/global/css/OneDatapicker.css" rel="stylesheet" type="text/css">
-<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
 <script language="javascript" src="${ctx}/global/js/timeinfo/timeinfo.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
-<script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.core.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.widget.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.datepicker.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.datepicker-zh-CN.js"></script>
 <script type="text/javascript">
-    var ctx = "${ctx}";
     var applicationId = "${applicationId}";
     var urlId = "${urlId}";
     $(function(){
@@ -245,9 +226,6 @@
         </div>
     </div>
 </div>
-
-<div id="layout_bottom">
-    <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp"%>
 </body>
 </html>

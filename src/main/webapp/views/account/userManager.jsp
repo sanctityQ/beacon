@@ -1,17 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="ctx" value="<%=request.getContextPath()%>"></c:set>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <title>用户管理</title>
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
 $(function(){
-
-    if($.browser.msie && ($.browser.version == "7.0")){
-        var center = $("#layout_center");
-        $("#main").width(center.width() - 31).height(center.height() - 30);
-    }
 	$("#thresholdList").Grid({
 		type : "post",
 		url : "${ctx}/account/user/data",  

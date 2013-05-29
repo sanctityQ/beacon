@@ -1,8 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://www.springframework.org/schema/beans">
 <head>
@@ -10,9 +8,6 @@
     <%@include file="/WEB-INF/layouts/base.jsp"%>
     <script type="text/javascript">
 
-        function save() {
-            msgSuccess("系统消息", "操作成功，监视器已保存！");
-        }
         /*校验数据*/
         function isValid(form) {
             String.prototype.trim = function(){
@@ -52,11 +47,7 @@
 </head>
 
 <body>
-<div id="layout_top">
-    <div class="header">
-        <%@include file="/WEB-INF/layouts/menu.jsp"%>
-    </div>
-</div>
+<%@include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
     <div class="main">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -163,8 +154,6 @@
         </table>
     </div>
 </div>
-<div id="layout_bottom">
-    <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp"%>
 </body>
 </html>

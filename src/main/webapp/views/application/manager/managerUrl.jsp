@@ -1,7 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -11,10 +9,6 @@
     <link href="${ctx}/global/css/manageBusScene/manageBusScene.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 $(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
 	$("#thresholdList").Grid({
         type:"post",
 		url : "${ctx}/application/manager/urlmanager/urllist/${bizScenarioId}",
@@ -36,37 +30,8 @@ $(function(){
 		number:false,  
 		multiselect: true
 	});
-	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
 });
-function navHover(){
-	$(this).toggleClass("hover")
-}
-function navClick(){
-	$(this).addClass("seleck").siblings().removeClass("seleck");
-	if($(this).hasClass('has_sub')){
-		var subMav = $(this).children("ul.add_sub_menu");
-		var isAdd = false;
-		if($(this).parent().attr("id") == "menu"){
-			isAdd = true;
-		};
-		subMav.slideDown('fast',function(){
-			$(document).bind('click',{dom:subMav,add:isAdd},hideNav);
-			return false;
-		});		
-	};
-}
-function hideNav(e){
-	var subMenu = e.data.dom;
-	var isAdd = e.data.add;
-	subMenu.slideUp('fast',function(){
-		if(isAdd){
-			subMenu.parent().removeClass('seleck');
-		};
-	});	
-	$(document).unbind();
-}
+
 function delRow(e){
     msgConfirm('系统消息','确定要删除当前的URL吗？',function(){
         var rows = $(e).parent().parent();
@@ -147,11 +112,7 @@ function batchDel(){
 </head>
 
 <body>
-<div id="layout_top">
-	<div class="header">
-        <%@include file="/WEB-INF/layouts/menu.jsp"%>
-    </div>
-</div>
+<%@include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
     <div class="main">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -200,8 +161,6 @@ function batchDel(){
         </table>
     </div>
 </div>
-<div id="layout_bottom">
-	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp"%>
 </body>
 </html>

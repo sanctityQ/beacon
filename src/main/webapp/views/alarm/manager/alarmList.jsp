@@ -1,19 +1,11 @@
-<%@ page language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>查看预警配置文件</title>
 <%@include file="/WEB-INF/layouts/base.jsp"%>
 <script type="text/javascript">
 $(function(){
-    if($.browser.msie && ($.browser.version == "7.0")){
-        var center = $("#layout_center");
-        $("#main").width(center.width() - 31).height(center.height() - 30);
-    }
     getAlarmListOfGivenTimeAndType();
     $("#timeSelect").bind("change",getAlarmListOfGivenTimeAndType);
     $("#typeSelect").bind("change",getAlarmListOfGivenTimeAndType);
@@ -23,27 +15,22 @@ $(function(){
 function getAlarmListOfGivenTimeAndType(){
     var _givenTime=$("#timeSelect").val();
     var _givenType=$("#typeSelect").val();
-    var _url="${ctx}/alarm/manager/alarmmanager/alarm";
-    /*没有选择*/
-    if(''==_givenTime&&''==_givenType){
-        _url="${ctx}/alarm/manager/alarmmanager/alarm";
-        /*只选择时间段*/
-    }else if(''!=_givenTime&&''==_givenType){
-        _url="${ctx}/alarm/manager/alarmmanager/onecondition/"+_givenTime;
-        /*只选择类型*/
-    }else if(''==_givenTime&&''!=_givenType){
-        _url="${ctx}/alarm/manager/alarmmanager/onecondition/"+_givenType;
-        /*时间和类型都选择*/
-    }else{
-        _url="${ctx}/alarm/manager/alarmmanager/twocondition/"+_givenTime+"/"+_givenType;
+    var _url="${ctx}/alarm/manager";
+    if(_givenTime){
+        _url = _url+"/day/"+_givenTime;
     }
+    if(_givenType){
+        _url = _url+"/resourceType/"+_givenType;
+    }
+    var _data = {};
     var $mn = $("#thresholdList");
     //防止每次查询时，表格中的数据不断累积
     $mn.html("");
     $("#thresholdList").Grid({
-        type:"post",
+        type:"get",
         url : _url,
         dataType: "json",
+        data:_data,
         colDisplay: false,
         clickSelect: true,
         draggable:false,
@@ -139,11 +126,7 @@ function viewRelevance(){
 </head>
 
 <body>
-<div id="layout_top">
-	<div class="header">
-    	<%@include file="/WEB-INF/layouts/menu.jsp"%>
-    </div>
-</div>
+<%@include file="/WEB-INF/layouts/menu.jsp"%>
 <div id="layout_center">
 	<div class="main" id="main">
     	<div class="threshold_file alerts">

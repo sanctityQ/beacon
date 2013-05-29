@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -21,15 +21,6 @@ var columStyle2 =
 		{id:'5',text:'时间',name:"appellation",index:'1',align:''}
 	];
 $(function(){
-	$("body").layout({
-		top:{topHeight:100},
-		bottom:{bottomHeight:30}
-	});
-    if($.browser.msie && ($.browser.version == "7.0")){
-        var center = $("#layout_center");
-        $("#main").width(center.width() - 31).height(center.height() - 30);
-    }
-
 
     //thresholdList emergencyList systemList oracleList
 	var gridList = new Array();
@@ -54,7 +45,6 @@ $(function(){
 			multiselect: false  
 		});
 	});
-	$("#myDesk").height($("#layout_center").height());
 });
 
 </script>
