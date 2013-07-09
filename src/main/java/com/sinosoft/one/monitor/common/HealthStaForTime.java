@@ -83,10 +83,10 @@ public class HealthStaForTime {
 		}
 		if(criticalCount == warningCount && criticalCount == normalCount) {
 			if(criticalCount == 0) {
-				return SeverityLevel.UNKNOW;
+				return SeverityLevel.UNKNOWN;
 			}
 			return SeverityLevel.CRITICAL;
 		}
-		return SeverityLevel.UNKNOW;
+		return SeverityLevel.UNKNOWN;
 	}
 }

@@ -5,23 +5,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-<link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/bussiness.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.message.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.message.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
-<script language="javascript" src="${ctx}/global/js/highcharts.js"></script>
+<title>Linux站点</title>
+<%@include file="/WEB-INF/layouts/base.jsp"%>
 <script language="javascript" src="${ctx}/global/js/exporting.js"></script>
-<script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
 <script language="javascript" src="${ctx}/global/js/os/linuxcentos.js"></script>
 <script language="javascript" src="${ctx}/global/js/os/higcharDraw.js"></script>
 <script type="text/javascript">
@@ -168,7 +154,7 @@
                         </tr>
                       </tbody>
                     </table>
-                    
+
                     <!--$Id$--></td>
                 </tr>
               </tbody>
@@ -186,7 +172,7 @@
                         </tr>
                       </tbody>
                     </table>
-                    
+
                     <!--$Id$-->
               </tbody>
             </table>
@@ -207,12 +193,12 @@
       <tr>
         <td width="49%" style="vertical-align:top">
         	<div id="grid_Memory"></div>
-      	
+
         </td>
         <td width="2%">&nbsp;</td>
         <td width="49%" style="vertical-align:top">
         	<div id="grid_cpu"> </div>
-     	 
+
         </td>
       </tr>
     </table>
@@ -235,7 +221,7 @@
 	 <div class="threshold_file">
             <h2 class="title3">磁盘空间明细</h2>
             <div id="cipan_space_detail" style="width:100%"></div>
-          	<div class="tool_bar_top">
+          	<div class="tool_bar_top" style="width:100%">
             <%--   <img  src="${ctx }/global/images/legend-green.png" /><span>空闲%</span>
              <img  src="${ctx }/global/images/legend-red.png" /><span>已用%</span> --%>
             </div>
@@ -245,8 +231,6 @@
 
 </div>
 </div>
-<div id="layout_bottom">
-	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>

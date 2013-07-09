@@ -18,7 +18,6 @@ import com.sinosoft.one.monitor.os.linux.util.OsUtil;
  * 内存部分数据库操作类
  * @author chenxiongxi
  * @version 1.0
- * @created 27-����-2013 14:42:30
  */
 @Component
 public class OsRamService {
@@ -40,8 +39,8 @@ public class OsRamService {
 	}
 	/**
 	 * 获取内存采集数据
-	 * @param ram
-	 * @param begin起始时间
+	 * @param osInfoId
+	 * @param begin 起始时间
 	 * @param end 结束时间
 	 */
 	public List<OsRam> getRamByDate(String osInfoId,Date begin,Date end){

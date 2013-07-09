@@ -321,8 +321,8 @@ function createThirtyDayHitRate() {
                 <li>SGA</li>
             </ul>
   	 <br />
-    
-    
+
+
     <div id="db_overview" >
   	<table class="main_table" width="100%" cellpadding="0" cellspacing="0" >
       <tr >
@@ -341,7 +341,7 @@ function createThirtyDayHitRate() {
               <tr><td>最后轮询时间</td><td>${oracleInfoModel.lastExecTime }</td></tr>
               <tr><td>下次轮询时间</td><td>${oracleInfoModel.nextExecTime }</td></tr>
             </table>
-          </div>  
+          </div>
         </td>
         <td style="vertical-align:top" width="50%">
           <div class="threshold_file"  style="width:100%">
@@ -376,7 +376,7 @@ function createThirtyDayHitRate() {
                 <tr><td colspan="3"><a href="#" ><div class="warn_set">警告配置</div></a></td></tr>
               --></table>
          	</div>
-         
+
       	</td>
         <td style="vertical-align:top" >
         	 <div class="threshold_file">
@@ -497,7 +497,7 @@ function createThirtyDayHitRate() {
             <div id="share_sga" ></div>
           </div>
         </td>
-        
+
       </tr>
       <!--<tr>
       	<td colspan="2">
@@ -517,7 +517,7 @@ function createThirtyDayHitRate() {
       </tr>
   	--></table>
     </div>
-    
+
     <div id="table_space" >
     	 <div class="threshold_file">
             <div class="sub_title">表空间明细</div>
@@ -572,9 +572,7 @@ function createThirtyDayHitRate() {
     </div>
   </div>
 </div></div>
-<div id="layout_bottom">
-	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>
 

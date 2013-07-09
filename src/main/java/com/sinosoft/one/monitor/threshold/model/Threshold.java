@@ -313,7 +313,7 @@ public class Threshold  implements java.io.Serializable {
                 }
             }
         }
-        return SeverityLevel.UNKNOW;
+        return SeverityLevel.UNKNOWN;
     }
 
 
@@ -354,7 +354,7 @@ public class Threshold  implements java.io.Serializable {
             }
 
         }
-		return SeverityLevel.UNKNOW;
+		return SeverityLevel.UNKNOWN;
 	}
 
     /**

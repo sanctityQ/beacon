@@ -34,7 +34,7 @@
             var flag = false;
             $.ajax({
                 type:"Post",
-                url:"/monitor/os/isIpExists",
+                url:"${ctx}/os/isIpExists",
                 data:"ipAddr=" + $("#ipAddr").val(),
                 success:function (data) {
                     if (data == false) {

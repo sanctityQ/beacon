@@ -79,10 +79,10 @@ var day30ColumnStyle =
 
 
 function getForm() {
-	 systemMonitorTable("/monitor/os/systemMonitorTable/24");
+	 systemMonitorTable(rootPath+"/os/systemMonitorTable/24");
 	$.ajax({
 		type : "post",
-		url : "/monitor/os/performanceList",
+		url : rootPath+"/os/performanceList",
 		dataType : "json",
 		cache : false,
 		success : function(data) {
@@ -152,7 +152,7 @@ function getForm() {
 			}
 		}
 	});
-	healthGrid("/monitor/os/healthList/24");
+	healthGrid(rootPath+"/os/healthList/24");
 	osThresholdList(rootPath + "/os/systemList");
 	
 }
@@ -175,10 +175,10 @@ function osThresholdList(url){
 }
 function healthGrid(url) {
 	var columnStyle;
-	if(url=="/monitor/os/healthList/24"){
+	if(url==rootPath+"/os/healthList/24"){
 		columnStyle=day1ColumnStyle;
 	}
-	if(url=="/monitor/os/healthList/30"){
+	if(url==rootPath+"/os/healthList/30"){
 		columnStyle=day30ColumnStyle;
 	}
 	$("#healthList").empty();
@@ -210,19 +210,19 @@ function systemMonitorTable(url) {
 
 function healthChange(ele) {
 	if ($(ele).val() == '24') {
-		healthGrid("/monitor/os/healthList/24");
+		healthGrid(rootPath+"/os/healthList/24");
 	}
 	if ($(ele).val() == '30') {
-		healthGrid("/monitor/os/healthList/30");
+		healthGrid(rootPath+"/os/healthList/30");
 	}
 }
 //点击可用性下拉
 function availableChange(ele) {
 	if ($(ele).val() == '24') {
-		systemMonitorTable("/monitor/os/systemMonitorTable/24");
+		systemMonitorTable(rootPath+"/os/systemMonitorTable/24");
 	}
 	if ($(ele).val() == '30') {
-		availableList("/monitor/os/systemMonitorTable/30");
+		availableList(rootPath+"/os/systemMonitorTable/30");
 	}
 }
 function navHover() {

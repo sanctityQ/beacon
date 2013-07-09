@@ -19,7 +19,7 @@
                 rowNum    : "auto",
                 number    : true,
                 hasSpan   : false,
-                queryData : {"age":1},
+                //queryData : {"age":1},
                 multiselect: true,
                 hasAllCheckbox:true,//如果为true，有全选的checkbox；如果不为true的haunted，没有全选的checkbox
                 autoColWidth: true,
@@ -54,7 +54,7 @@
             };
             var defaults = $.extend(defaults, opts);
             var g = $(this);
-            var $gBox = $('<div class="grid_box"></div>');
+            var $gBox = $('<div class="grid_box"></div>').width('100%');
 
             var $gHeader = $('<div class="grid_head"></div>');
             var $gHeadBox = $('<div class="head_box"></div>');
@@ -105,8 +105,9 @@
 
             g.append($gBox);
 
-            var $gW = $gBox.width();
+           // alert($gBox.width());
 
+            var $gW = $gBox.width();
             var buttonLeft = 0;
             var $thisTr = "";
 
@@ -375,7 +376,9 @@
                 var obj = {};
                 obj.pageNo = 1;
                 obj.rowNum = defaults.rowNum;
-                obj.queryData = defaults.queryData;
+                //obj.queryData = defaults.queryData;
+                //console.log(defaults.data)
+                obj = $.extend(defaults.data,obj);
                 $.ajax({
                     url: url,
                     dataType : dataType,
@@ -397,6 +400,7 @@
             };
 
             function initGrid(data, startParam, endParam, colParams) {
+                console.log(data);
                 readJson(data, startParam, endParam, colParams);
                 $load.hide();
                 $('tr',$gView).hover(function(){
@@ -418,6 +422,7 @@
                 rows = data.rows;
                 total = data.total;
                 var colLen = defaults.colums.length;
+                console.log(colLen);
                 var allW = 0;
                 gTable = gTable + '<tr class="th_rows">';
                 if(defaults.multiselect) {
@@ -505,15 +510,21 @@
 			
 			//grid的前端查询
 			if(defaults.searchClass != "") {
-				$("." + defaults.searchClass).bind("keyup", searchFun);	
+				$("." + defaults.searchClass).bind("keyup",
+                    function(e){
+                        searchFun(e,$("." + defaults.searchClass).val())
+                    });
 			}
 			if(defaults.searchBtn != "") {
-				$("." + defaults.searchBtn).bind("click", {btn:"button"}, searchFun);	
+				$("." + defaults.searchBtn).bind("click", {btn:"button"},
+                    function(e){
+                        searchFun(e,$("." + defaults.searchClass).val())
+                    });
 			}
 			
-			function searchFun(e) {
+			function searchFun(e,searchVal) {
 				if(e.keyCode == "13" || e.data) {
-					var searchVal = $("." + defaults.searchClass).val();
+					//var searchVal = $("." + defaults.searchClass).val();
 					if(searchVal == "") {
 						_data = originGridData;
 						$gView.html("");
@@ -928,7 +939,9 @@
                             var newObj = {};
                             newObj.pageNo = pB;
                             newObj.rowNum = defaults.rowNum;
-                            newObj.queryData = defaults.queryData;
+                            //obj.queryData = defaults.queryData;
+                            //console.log(defaults.data)
+                            newObj = $.extend(defaults.data,newObj);
                             $.ajax({
                                 url: defaults.url,
                                 dataType: "json",
@@ -1266,7 +1279,8 @@
                 var obj = {};
                 obj.pageNo = pB;
                 obj.rowNum = defaults.rowNum;
-                obj.queryData = defaults.queryData;
+              //  obj.queryData = defaults.queryData;
+                obj = $.extend(defaults.data,obj);
 				if(defaults.afterRepage) {
 					$.ajax({
 						url: defaults.url,
@@ -1289,11 +1303,13 @@
 							} else {
 								end = pB * defaults.rowNum;
 							}
+                            str = 0;
 							cancelCheck();
+                            hids=[];
+                            //alert(str)
 						}
 					});	
 				}
-                
                 $('table', $gView).remove();
                 loading();
                 if(hids.length > 0){
@@ -2060,7 +2076,8 @@
                                             var obj = {};
                                             obj.pageNo = pB;
                                             obj.rowNum = defaults.rowNum;
-                                            obj.queryData = defaults.queryData;
+                                       //     obj.queryData = defaults.queryData;
+                                            obj = $.extend(defaults.data,obj);
                                             $.ajax({
                                                 type: defaults.type,
                                                 url: defaults.url,
@@ -2104,8 +2121,8 @@
                                             var obj = {};
                                             obj.pageNo = pB - 1;
                                             obj.rowNum = defaults.rowNum;
-                                            obj.queryData = defaults.queryData;
-
+                                      //      obj.queryData = defaults.queryData;
+                                            obj = $.extend(defaults.data,obj);
                                             $.ajax({
                                                 type: defaults.type,
                                                 url: defaults.url,
@@ -2193,7 +2210,8 @@
                         var newObj = {};
                         newObj.pageNo = pB;
                         newObj.rowNum = defaults.rowNum;
-                        newObj.queryData = defaults.queryData;
+                    //    newObj.queryData = defaults.queryData;
+                        newObj = $.extend(defaults.data,newObj);
                         $.ajax({
                             url: defaults.url,
                             dataType: "json",
@@ -2280,7 +2298,8 @@
                                             var obj = {};
                                             obj.pageNo = pB;
                                             obj.rowNum = defaults.rowNum;
-                                            obj.queryData = defaults.queryData;
+                                        //    obj.queryData = defaults.queryData;
+                                            obj = $.extend(defaults.data,obj);
                                             $.ajax({
                                                 type: defaults.type,
                                                 url: defaults.url,
@@ -2321,7 +2340,8 @@
                                             }
 
                                             obj.rowNum = defaults.rowNum;
-                                            obj.queryData = defaults.queryData;
+                                     //       obj.queryData = defaults.queryData;
+                                            obj = $.extend(defaults.data,obj);
                                             $.ajax({
                                                 type: defaults.type,
                                                 url: defaults.url,

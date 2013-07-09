@@ -3,6 +3,7 @@ package com.sinosoft.one.monitor.application.repository;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.application.model.UrlResponseTime;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.List;
  * Date: 13-3-4
  * Time: 下午4:55
  */
+@Repository
 public interface UrlResponseTimeRepository extends PagingAndSortingRepository<UrlResponseTime, String> {
 	@SQL("SELECT * FROM GE_MONITOR_URL_RESPONSE_TIME t WHERE t.application_id=?1 and t.record_time >= ?2 AND t.record_time <= ?3")
 	List<UrlResponseTime> selectUrlResponseTimes(String applicationId, Date startDate, Date endDate);

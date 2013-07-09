@@ -3,24 +3,8 @@
 <html>
 <head>
     <%@include file="/WEB-INF/layouts/base.jsp" %>
+    <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
-        $(function () {
-
-            $('#saveUserForm').ajaxForm({
-                dataType: "json",
-                success: function(data) {
-                    if(data.status == "success") {
-                        msgSuccess("系统消息", "用户保存成功！", function() {
-                            location.href = "${ctx}/account/user/list";
-                        });
-                    }
-                },
-                error: function() {
-                    msgSuccess("系统消息", "用户保存失败！");
-                }
-            });
-
-        });
 
         function toSaveUser() {
             var loginName = $("#loginName").val();
@@ -50,7 +34,20 @@
                 return;
             }
 
-            $("#saveUserForm").submit();
+            $('#saveUserForm').ajaxForm({
+                dataType: "json",
+                success: function(data) {
+                    if(data.status == "success") {
+                        msgSuccess("系统消息", "用户保存成功！", function() {
+                            location.href = "${ctx}/account/user/list";
+                        });
+                    }
+                },
+                error: function() {
+                    msgSuccess("系统消息", "用户保存失败！");
+                }
+            }).submit();
+            //$("#saveUserForm").submit();
         }
 
     </script>

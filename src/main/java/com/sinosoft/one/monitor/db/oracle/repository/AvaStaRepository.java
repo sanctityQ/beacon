@@ -7,7 +7,9 @@ import java.util.List;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.db.oracle.model.AvaSta;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface AvaStaRepository extends PagingAndSortingRepository<AvaSta, String> {
 
     @SQL("select a.* from " +

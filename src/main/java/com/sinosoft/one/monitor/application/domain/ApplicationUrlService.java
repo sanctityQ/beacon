@@ -58,7 +58,7 @@ public class ApplicationUrlService {
 
 	public ApplicationUrlInfoViewModel generateUrlInfoViewModel(String applicationId, String urlId) {
 		// 获得健康度
-		SeverityLevel severityLevel  = SeverityLevel.UNKNOW;
+		SeverityLevel severityLevel  = SeverityLevel.UNKNOWN;
 		Application application = applicationRepository.findApplicationbyId(applicationId);
 		int interval = application.getInterval().intValue();
 

@@ -26,7 +26,7 @@
 
 		$("#sevenday_grid").Grid({
 			type : "post",
-			url : '/monitor/os/historyDiskStatiGrid/30/' + id,
+			url : '${ctx}/os/historyDiskStatiGrid/30/' + id,
 			dataType : "json",
 			height : 'auto',
 			colums : [ {

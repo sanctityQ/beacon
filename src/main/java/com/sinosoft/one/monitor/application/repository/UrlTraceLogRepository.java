@@ -8,9 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 
+@Repository
 public interface UrlTraceLogRepository extends PagingAndSortingRepository<UrlTraceLog, String> {
 	@SQL("select l.id, l.user_id, l.user_ip,l.record_time, a.severity, i.id as exceptionId from ge_monitor_url_trace_log l, ge_monitor_alarm a, ge_monitor_exception_info i\n" +
 			"where l.alarm_id=a.id(+) and l.id=i.url_trace_log_id(+) and l.url_id=?2 AND l.record_time BETWEEN ?3 AND ?4 ORDER BY l.record_time DESC")

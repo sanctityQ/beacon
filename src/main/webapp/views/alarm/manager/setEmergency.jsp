@@ -8,6 +8,14 @@
 
         $(function(){
             $("#monitorType").bind("change",getMonitorNames);
+            <c:if test="${not empty resourceType}" >
+                $("#monitorType").val('${resourceType}');
+                getMonitorNames();
+            </c:if>
+            <c:if test="${not empty serverName}" >
+                $("#monitorName").val('${serverName}');
+                getNewGrid($($('#monitorType').val(),$('#monitorName').val()));
+            </c:if>
         });
 
         function setHealthOrAvailable(monitorType,monitorId,attributeType,attributeId){

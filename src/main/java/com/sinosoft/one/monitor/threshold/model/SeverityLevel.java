@@ -11,7 +11,7 @@ public enum SeverityLevel {
 	CRITICAL("严重"),
 	WARNING("警告"),
 	INFO("正常"),
-	UNKNOW("未知");
+	UNKNOWN("未知");
 
 	private String _cnName;
 	private SeverityLevel(String cnName) {

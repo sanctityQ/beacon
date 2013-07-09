@@ -20,8 +20,9 @@ import com.sinosoft.one.monitor.account.repository.AccountRepository;
 public class AccountService {
 
     //private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
-	
+    @Autowired
     private AccountRepository accountRepository;
+
     @Transactional(readOnly = false)
     public void saveAccount(Account account) {
         accountRepository.save(account);

@@ -189,7 +189,7 @@ public class OsService {
 	                         healthyFlag = "2";
 	                     } else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
 	                         healthyFlag = "3";
-	                     } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
+	                     } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOWN)) {
 	                         healthyFlag = "4";
 	                     }
 	                 }
@@ -271,7 +271,7 @@ public class OsService {
 	                            healthyFlag = "2";
 	                        } else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
 	                            healthyFlag = "3";
-	                        } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
+	                        } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOWN)) {
 	                            healthyFlag = "4";
 	                        }
 	                    }
@@ -306,7 +306,7 @@ public class OsService {
 	                            healthyFlag = "2";
 	                        } else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
 	                            healthyFlag = "3";
-	                        } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
+	                        } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOWN)) {
 	                            healthyFlag = "4";
 	                        }
 	                    }

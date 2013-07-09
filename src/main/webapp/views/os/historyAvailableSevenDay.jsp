@@ -37,7 +37,7 @@ $(function(){
 	$(document).ready(function(){
 		$.ajax({
 			type : "post",
-			url : "/monitor/os/historyAvailablePie/7/"+id,
+			url : "${ctx}/os/historyAvailablePie/7/"+id,
 			dataType : "json",
 			cache : false,
 			success : function(data){
@@ -90,7 +90,7 @@ $(function(){
 			});
 		$("#sevenday_grid").Grid({
 			type : "post",
-			url : "/monitor/os/historyAvailableGrid/7/"+id,
+			url : "${ctx}/os/historyAvailableGrid/7/"+id,
 			dataType: "json",
 			height: 'auto',
 			colums:[

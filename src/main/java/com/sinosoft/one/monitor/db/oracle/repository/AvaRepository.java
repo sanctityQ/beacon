@@ -11,8 +11,10 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.db.oracle.model.Ava;
 import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableCountsGroupByInterval;
 import com.sinosoft.one.monitor.utils.AvailableCalculate.AvailableInf;
+import org.springframework.stereotype.Repository;
 
 
+@Repository
 public interface AvaRepository extends PagingAndSortingRepository<Ava, String> {
 
     @SQL("select b.state from " +

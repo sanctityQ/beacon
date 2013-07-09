@@ -29,9 +29,7 @@
                 number:false,
                 multiselect: true
             });
-
-
-
+            $('#g_count').html(grid.grid.getDataTotalCount());
         });
         function delRow(e){
             var row = $(e).parent().parent();
@@ -151,7 +149,7 @@
     <div class="main">
         <ul class="crumbs">
             <li><a href="#">监视器</a> &gt;</li>
-            <li><b> Tuxedo - 批量配置视图 (总计 3 监视器)</b></li>
+            <li><b> Tuxedo - 批量配置视图 (总计<span id='g_count'></span>监视器)</b></li>
         </ul>
         <div class="threshold_file">
             <h2 class="title2"><b>Tuxedo列表视图</b></h2>
@@ -164,8 +162,6 @@
         </div>
     </div>
 </div>
-<div id="layout_bottom">
-    <p class="footer">Copyright &copy; 2013 Beacon Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>

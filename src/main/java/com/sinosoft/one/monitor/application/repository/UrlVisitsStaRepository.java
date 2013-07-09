@@ -3,6 +3,7 @@ package com.sinosoft.one.monitor.application.repository;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.application.model.UrlVisitsSta;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * Date: 13-3-4
  * Time: 下午10:17
  */
+@Repository
 public interface UrlVisitsStaRepository extends PagingAndSortingRepository<UrlVisitsSta, String> {
 	UrlVisitsSta findByUrlIdAndRecordTime(String urlId, Date currentHourDate);
 

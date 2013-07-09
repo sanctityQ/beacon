@@ -296,9 +296,9 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
 	                	    healthyFlag="2";
 	                		Map<String, List<List<String>>> map = maps.get(SeverityLevel.WARNING);
 	                  	  	getMessage(info, map);
-	                }else if(maps.containsKey(SeverityLevel.UNKNOW)){
+	                }else if(maps.containsKey(SeverityLevel.UNKNOWN)){
 	              	  	healthyFlag="4";
-	              		Map<String, List<List<String>>> map = maps.get(SeverityLevel.UNKNOW);
+	              		Map<String, List<List<String>>> map = maps.get(SeverityLevel.UNKNOWN);
 	              	  	getMessage(info, map);
 	                }
                 healthyPint[0] = healthyFlag;
@@ -343,9 +343,9 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
 		                	  healthyFlag="2";
 		                		Map<String, List<List<String>>> map = maps.get(SeverityLevel.WARNING);
 		                  	  	getMessage(info, map);
-		                }else if(maps.containsKey(SeverityLevel.UNKNOW)){
+		                }else if(maps.containsKey(SeverityLevel.UNKNOWN)){
 		              	  	healthyFlag="4";
-		              		Map<String, List<List<String>>> map = maps.get(SeverityLevel.UNKNOW);
+		              		Map<String, List<List<String>>> map = maps.get(SeverityLevel.UNKNOWN);
 		              	  	getMessage(info, map);
                 }
                 healthyPint[0] = healthyFlag;
@@ -407,7 +407,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
 		} else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
 			putMessage(alarm, criticalLists);
 			criticalMap.put(alarm.getAttributeId(), criticalLists);
-		} else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
+		} else if (alarm.getSeverity().equals(SeverityLevel.UNKNOWN)) {
 			putMessage(alarm, unknowLists);
 			unknowMap.put(alarm.getAttributeId(), unknowLists);
 		}
@@ -527,7 +527,7 @@ public class OracleBatchInfoServiceImpl implements OracleBatchInfoService {
                         } else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
                             criticalMsg.add(alarm.getMessage()) ;
                             set.add("3");
-                        } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
+                        } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOWN)) {
                             unknowMsg.add(alarm.getMessage()) ;
                             set.add("4");
                         }

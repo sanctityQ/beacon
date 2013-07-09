@@ -231,8 +231,8 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<configuration>
 					<uriEncoding>UTF-8</uriEncoding>
-					<path>/monitor</path>
-                    <port>7080</port>
+					<path>/beacon</path>
+                    <port>8080</port>
 				</configuration>
 			</plugin>
 		</plugins>

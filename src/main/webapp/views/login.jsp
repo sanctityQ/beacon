@@ -1,9 +1,8 @@
 <%@ page import="org.apache.shiro.web.filter.authc.FormAuthenticationFilter" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://mvc.one.sinosoft.com/tags/pipe" prefix="mvcpipe"%>
 <%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%@ include file="/WEB-INF/layouts/base.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -14,7 +13,6 @@
     <script type="text/javascript">
         $(function(){
             var msg = $("#msg").text();
-//            alert(msg);
             if(msg=="-1"){
                 $(".tip").css("visibility","visible");
             } else if(msg=="0"){

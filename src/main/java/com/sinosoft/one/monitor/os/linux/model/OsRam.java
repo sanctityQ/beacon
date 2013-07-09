@@ -21,8 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 
  */
 @Entity
-@Table(name="GE_MONITOR_OS_RAM"
-)
+@Table(name="GE_MONITOR_OS_RAM")
 public class OsRam  implements java.io.Serializable {
 
     /**

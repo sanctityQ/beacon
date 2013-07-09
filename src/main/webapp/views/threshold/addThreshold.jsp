@@ -10,9 +10,9 @@
         if('${threshold.type}'){
             $('#thresholdType').val('${threshold.type}');
             redirectToPattern('${threshold.type}');
-            $('input[name=criticalThresholdCondition]').val('${threshold.criticalThresholdCondition}');
-            $('input[name=warningThresholdCondition]').val('${threshold.warningThresholdCondition}');
-            $('input[name=infoThresholdCondition]').val('${threshold.infoThresholdCondition}');
+            $('select[name=criticalThresholdCondition]').val('${threshold.criticalThresholdCondition}');
+            $('select[name=warningThresholdCondition]').val('${threshold.warningThresholdCondition}');
+            $('select[name=infoThresholdCondition]').val('${threshold.infoThresholdCondition}');
 
         }
     });
@@ -69,12 +69,22 @@ function redirectToPattern(redirectTo){
                     addPatternOption($(this));
                 }
         )
+        $('.patternName').each(
+                function(index,data){
+                    $(this).html('字符名称');
+                }
+        )
         $('#patternTip').html('注意 : 多个阈值请以“,”号分割');
     }
     else if(redirectTo=='NUMERIC'){
         $('.thresholdCondition').each(
                 function (index,data){
                     addNumOption($(this));
+                }
+        )
+        $('.patternName').each(
+                function(index,data){
+                    $(this).html('阈值界限');
                 }
         )
         $('#patternTip').html('');
@@ -142,7 +152,7 @@ function addNumOption(selectObj, selected) {
                          <option value="NE"  ${threshold.criticalThresholdCondition eq "NE"  ? "selected='selected'" : ''}>!=</option>
                          <option value="LE"  ${threshold.criticalThresholdCondition eq "LE"  ? "selected='selected'" : ''}>&lt;=</option>
                          <option value="GE"  ${threshold.criticalThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
-                    </select>阈值界限
+                    </select><span class='patternName'>阈值界限</span>
                     <input  type="text" class="formtext"  size="20" id="criticalThresholdValue" name="criticalThresholdValue" value="${ threshold.criticalThresholdValue}"/>
                     <span style="margin-left:50px;" id="patternTip"></span>
                 </td>
@@ -168,7 +178,7 @@ function addNumOption(selectObj, selected) {
 		                  <option value="LE"  ${threshold.warningThresholdCondition eq "LE"  ? "selected='selected'" : ''}>&lt;=</option>
 		                  <option value="GE"  ${threshold.warningThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
                 </select>
-                阈值界限
+                <span class='patternName'>阈值界限</span>
 			    <input name="warningThresholdValue" id="warningThresholdValue" type="text" class="formtext" size="4" value="${ threshold.warningThresholdValue}" /></td>
               </tr>
               <tr>
@@ -191,7 +201,7 @@ function addNumOption(selectObj, selected) {
                         <option value="LE"  ${threshold.infoThresholdCondition eq "LE"  ? "selected='selected'" : ''}>&lt;=</option>
                         <option value="GE"  ${threshold.infoThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
                     </select>
-阈值界限
+                    <span class='patternName'>阈值界限</span>
 	                <input type="text" class="formtext"  size="4" id="infoThresholdValue" name="infoThresholdValue"  value="${ threshold.infoThresholdValue}"/></td>
               </tr>
               <tr>

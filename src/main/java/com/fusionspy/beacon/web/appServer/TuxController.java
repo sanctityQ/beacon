@@ -12,6 +12,7 @@ import com.fusionspy.beacon.system.entity.SiteSettings;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.fusionspy.beacon.web.BeaconLocale;
 import com.fusionspy.beacon.web.Chart;
+import com.google.common.collect.Maps;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.DefValue;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -27,6 +28,8 @@ import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
 import com.sinosoft.one.util.encode.JsonBinder;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,12 +79,13 @@ public class TuxController {
 
     @Get("view/{serverName}")
     public String showMonitor(@Param("serverName")String serverName,Invocation invocation){
+        SiteListEntity siteListEntity = systemService.getSite(serverName);
         TuxHisData hisData = monitorManage.getMonitorInf(serverName);
         invocation.addModel("serverName",serverName);
         invocation.addModel("serverType","tuxedo");
         invocation.addModel("tuxVersion",hisData.getTuxIniData().getSysrecsEntity().getProductver());
         invocation.addModel("systemboot",hisData.getTuxIniData().getSysrecsEntity().getSystemboot());
-        invocation.addModel("rectime", hisData.getTuxIniData().getSysrecsEntity().getRectime());
+        invocation.addModel("rectime", DateTimeFormat.forPattern(DATE_FORMAT).print(new DateTime(hisData.getTuxIniData().getSysrecsEntity().getRectime())) );
         invocation.addModel("tuxRunSvr", hisData.getProcessResult().getTuxRes().getTuxrunsvr());
         invocation.addModel("tuxRunQueue", hisData.getProcessResult().getTuxRes().getTuxrunqueue());
         invocation.addModel("tuxRunClt", hisData.getProcessResult().getTuxRes().getTuxrunclt());
@@ -90,8 +94,21 @@ public class TuxController {
         invocation.addModel("memFree", hisData.getProcessResult().getTuxRes().getMemfree());
         invocation.addModel("agentVer", hisData.getTuxIniData().getSysrecsEntity().getAgentver());
         invocation.addModel("count", hisData.getMonitorCount());
-
+        invocation.addModel("ip", siteListEntity.getSiteIp());
+        invocation.addModel("port", siteListEntity.getSitePort());
         return "tuxedoInfo";
+    }
+
+    @Get("view/{serverName}/latest")
+    public Reply showMonitorLatest(@Param("serverName")String serverName){
+        TuxHisData hisData = monitorManage.getMonitorInf(serverName);
+        Map<String,String> reply = Maps.newHashMap();
+        reply.put("cpuIdle",String.valueOf(hisData.getProcessResult().getTuxRes().getCpuidle()));
+        reply.put("tuxRunQueue",String.valueOf(hisData.getProcessResult().getTuxRes().getTuxrunqueue()));
+        reply.put("tuxRunClt", String.valueOf(hisData.getProcessResult().getTuxRes().getTuxrunclt()));
+        reply.put("memFree",String.valueOf(hisData.getProcessResult().getTuxRes().getMemfree()));
+        reply.put("count", String.valueOf(hisData.getMonitorCount()));
+        return Replys.with(reply).as(Json.class);
     }
 
      public String stopMonitor(String siteName){
@@ -303,7 +320,7 @@ public class TuxController {
         Map<String,String> map = new HashMap<String, String>();
         map.put("sort","<div class='"+SORT_CSS_CLASS[index]+"'></div>");
         map.put("name",que.getProgname());
-        map.put("queued",String.valueOf(que.getSvrcnt()));
+        map.put("queued",String.valueOf(que.getQueued()));
         return map;
     }
 
@@ -447,7 +464,7 @@ public class TuxController {
                    Map<String,Object> result = new HashMap<String,Object>();
                    result.put("x",resource.getRectime().getTime());
                    if(type.equals("cpu"))
-                       result.put("y",resource.getCpuidle());
+                       result.put("y",100-resource.getCpuidle());
                    else
                        result.put("y",resource.getMemfree());
                    jsonArray.add(result);
@@ -475,7 +492,7 @@ public class TuxController {
            else{
                jsonArray.add(resource.getRectime().getTime());
                if(type.equals("cpu"))
-                   jsonArray.add(resource.getCpuidle());
+                   jsonArray.add(100-resource.getCpuidle());
                else
                    jsonArray.add(resource.getMemfree());
            }

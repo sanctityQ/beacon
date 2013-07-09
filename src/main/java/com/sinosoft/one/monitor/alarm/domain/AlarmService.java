@@ -43,48 +43,22 @@ public class AlarmService {
         return alarmRepository.findOne(alarmId);
     }
 
-	/**
-	 * 根据监视器ID，查询当前天的alarm
-	 * @param monitorId 监视器ID
-	 * @return 所有告警信息
-	 */
-	public List<Alarm> queryCurrentDayAlarmsByResourceId(String monitorId) {
-        List<Alarm>  alarms = alarmRepository.findAlarmByMonitorId(monitorId,
-                DateUtil.getTodayBeginDate(), DateUtil.getTodayEndDate());
-        return fillAlarm(alarms);
-	}
-
-    /**
-     *
-      * @return
-     */
-    public List<Alarm> queryCurrentDayAlarms( String givenTime, String givenType){
-        Assert.hasText(givenTime);
-        Assert.hasText(givenType);
-        List<Alarm>  alarms = alarmRepository.findAlarmsWithGivenTimeAndType(givenTime,givenType);
-        return fillAlarm(alarms);
-    }
-
-    private List<Alarm> fillAlarm(List<Alarm>  alarms){
-        for(Alarm alarm:alarms){
-            Resource resource =  resourcesService.getResource(alarm.getMonitorId());
-            if(resource == null)
-                throw new RuntimeException("资源Id："+alarm.getMonitorId()+"获取不到相关resource，请检查");
-            alarm.setAppName(resource.getResourceName());
-        }
-        return alarms;
-    }
-
-
     /**
      * 获取最近的50条记录，按记录时间排序
      * @return
      */
-    public List<Alarm> queryLatestAlarmsRowsFifty(){
-        PageRequest pageRequest = new PageRequest(0,50);
-        List<Alarm>  alarms =   alarmRepository.selectAlarmsBySeverity(pageRequest, new String[]{SeverityLevel.CRITICAL.name(), SeverityLevel.WARNING.name()}).getContent();
+    public List<Alarm> queryLatestAlarmsRows(int rowNo){
+        Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"createTime"));
+        PageRequest pageRequest = new PageRequest(0,rowNo,sort);
+        List<Alarm> alarms = this.queryAlarmsByPage(pageRequest).getContent();
         return alarms;
     }
+
+    public List<Alarm> queryLatestAlarms(String monitorId,int size) {
+        Page<Alarm> alarmPage = alarmRepository.selectAlarmsByMonitorId(new PageRequest(0, size), monitorId);
+        return alarmPage.getContent();
+    }
+
 
 	public Alarm queryLatestAlarm(String monitorId) {
 		Page<Alarm> alarmPage = alarmRepository.selectAlarmsByMonitorId(new PageRequest(0, 1), monitorId);
@@ -96,9 +70,14 @@ public class AlarmService {
 
     public Page<Alarm> queryAlarmsByPage(PageRequest pageRequest) {
         Assert.notNull(pageRequest);
-        //Page<Alarm> page = alarmRepository.selectAlarmsBySeverity(pageRequest, new String[]{SeverityLevel.CRITICAL.name(), SeverityLevel.WARNING.name()});
         Page<Alarm> page = alarmRepository.findAll(pageRequest);
         return  page;
+    }
+
+    public Page<Alarm> queryAlarmsByPageAndSeverityLevel(PageRequest pageRequest,SeverityLevel severityLevel){
+        Assert.notNull(pageRequest);
+        Assert.notNull(severityLevel);
+        return alarmRepository.findBySeverity(severityLevel,pageRequest);
     }
 
 }

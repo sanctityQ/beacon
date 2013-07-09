@@ -4,11 +4,12 @@ package com.sinosoft.one.monitor.db.oracle.repository;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.db.oracle.model.Lastevent;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
-
+@Repository
 public interface LasteventRepository extends PagingAndSortingRepository<Lastevent, String> {
     @SQL("select t.record_time from \n" +
             "(select * from ge_monitor_oracle_lastevent where DATABASE_ID=?1 order by record_time desc) t\n" +

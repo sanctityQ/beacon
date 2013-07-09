@@ -34,7 +34,7 @@ $(function(){
 	$("#nav,#menu").delegate('li', 'click', navClick);
 	
 	$("#sevenday_grid").Grid({
-		url : "/monitor/os/historyCpuGrid/",
+		url : "${ctx}/os/historyCpuGrid/",
 		dataType: "json",
 		height: 'auto',
 		colums:[
@@ -51,7 +51,7 @@ $(function(){
 	});
 });
 $(function(){
-	creatSimpleChart("/monitor/os/historyCpuChart", 'last_sevenday', 'CPU利用率%');
+	creatSimpleChart("${ctx}/os/historyCpuChart", 'last_sevenday', 'CPU利用率%');
 	})
 function navHover(){
 	$(this).toggleClass("hover")

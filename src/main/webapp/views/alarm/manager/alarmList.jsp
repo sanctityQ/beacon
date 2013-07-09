@@ -7,12 +7,14 @@
 <script type="text/javascript">
 $(function(){
     getAlarmListOfGivenTimeAndType();
-    $("#timeSelect").bind("change",getAlarmListOfGivenTimeAndType);
-    $("#typeSelect").bind("change",getAlarmListOfGivenTimeAndType);
+    $("#timeSelect").bind("change",function(){getAlarmListOfGivenTimeAndType(window.severityLevel)});
+    $("#typeSelect").bind("change",function(){getAlarmListOfGivenTimeAndType(window.severityLevel)});
 });
 
 /*得到指定时间段和指定类型的告警信息列表*/
-function getAlarmListOfGivenTimeAndType(){
+function getAlarmListOfGivenTimeAndType(severityLevel){
+    if(severityLevel)
+        window.severityLevel = severityLevel;
     var _givenTime=$("#timeSelect").val();
     var _givenType=$("#typeSelect").val();
     var _url="${ctx}/alarm/manager";
@@ -22,7 +24,7 @@ function getAlarmListOfGivenTimeAndType(){
     if(_givenType){
         _url = _url+"/resourceType/"+_givenType;
     }
-    var _data = {};
+    var _data = {severityLevel:severityLevel};
     var $mn = $("#thresholdList");
     //防止每次查询时，表格中的数据不断累积
     $mn.html("");
@@ -32,6 +34,7 @@ function getAlarmListOfGivenTimeAndType(){
         dataType: "json",
         data:_data,
         colDisplay: false,
+        afterRepage:true,
         clickSelect: true,
         draggable:false,
         height: "auto",
@@ -55,7 +58,7 @@ function alarmDetailInfo(e){
     /*id前面多了“rows”*/
     var _alarmId=id.substr(4,32);
     /*告警详细信息页面*/
-    window.location.href="${ctx}/alarm/manager/alarmmanager/detail/"+_alarmId;
+    window.location.href="${ctx}/alarm/manager/detail/"+_alarmId;
 }
 
 function delRow(e){
@@ -122,6 +125,10 @@ function viewRelevance(){
 		]
 	});
 }
+
+function alert(){
+
+}
 </script>
 </head>
 
@@ -146,10 +153,10 @@ function viewRelevance(){
                 </select>
             </strong>
           	<b>告警信息列表　</b>
-              <a href="javascript:void(0)" class="itemize">全部告警</a>
-              <a href="javascript:void(0)" class="itemize">严重</a>
-              <a href="javascript:void(0)" class="itemize">警告</a>
-              <a href="javascript:void(0)" class="itemize">正常</a>
+              <a href="javascript:void(0)" onclick="javascript:getAlarmListOfGivenTimeAndType()" class="itemize">全部告警</a>
+              <a href="javascript:void(0)" onclick="javascript:getAlarmListOfGivenTimeAndType('CRITICAL')" class="itemize">严重</a>
+              <a href="javascript:void(0)" onclick="javascript:getAlarmListOfGivenTimeAndType('WARNING')" class="itemize">警告</a>
+              <a href="javascript:void(0)" onclick="javascript:getAlarmListOfGivenTimeAndType('INFO')" class="itemize">正常</a>
           </h2>
           <div class="tool_bar_top"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></div>
           <div id="thresholdList"></div>
@@ -163,6 +170,7 @@ function viewRelevance(){
         </table>
     </div>
 </div>
+
 <%@include file="/WEB-INF/layouts/foot.jsp"%>
 </body>
 </html>

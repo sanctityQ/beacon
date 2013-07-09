@@ -14,7 +14,6 @@ public enum ResourceType {
 	OS("操作系统"),
 	DB("数据库"),
     APP_SERVER("应用服务器"),
-    ALL("所有"),
 	NONE("");
 
 	private String _cnName;

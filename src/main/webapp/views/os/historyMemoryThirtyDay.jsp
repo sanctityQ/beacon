@@ -22,7 +22,7 @@
 		
 			$("#sevenday_grid").Grid({
 				type : "post",
-				url :  '/monitor/os/historyMemStatiGrid/30/'+id,
+				url :  '${ctx}/os/historyMemStatiGrid/30/'+id,
 				dataType: "json",
 				height: 'auto',
 				colums:[

@@ -86,6 +86,13 @@ public class ConfigEmergencyController {
         return "setEmergency";
     }
 
+    @Get("config/${resourceType}/${serverName}")
+    public String configEmergencyByTypeAndServerName(@Param("serverName")String serverName,@Param("resourceType")String resourceType,Invocation inv){
+        inv.addModel("resourceType",resourceType);
+        inv.addModel("serverName",serverName);
+        return "setEmergency";
+    }
+
     //配置告警页面，选择监视器类型时，得到相应类型下的所有可用的监视器
     @Post("monitornames/{resourceType}")
     public Reply getMonitorNames(@Param("resourceType") String resourceType, Invocation inv) throws Exception {

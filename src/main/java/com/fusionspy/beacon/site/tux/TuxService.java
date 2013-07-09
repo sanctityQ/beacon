@@ -221,7 +221,7 @@ public class TuxService {
             }
             //获取阈值
             Threshold threshold = thresholdService.queryThreshold(this.siteSettings.getSiteName(), attribute.getId());
-            SeverityLevel severityLevel = SeverityLevel.UNKNOW;
+            SeverityLevel severityLevel = SeverityLevel.UNKNOWN;
             for (int i = 0; i < this.queSize; i++) {
                 TuxquesEntity t = tuxquesList.get(i);
                 t.setSitename(siteSettings.getSiteName());
@@ -271,8 +271,8 @@ public class TuxService {
             Threshold cpuThreshold = thresholdService.queryThreshold(this.siteSettings.getSiteName(), cpuAttribute.getId());
             Threshold memThreshold = thresholdService.queryThreshold(this.siteSettings.getSiteName(), memAttribute.getId());
 
-            SeverityLevel cpuSeverityLevel = SeverityLevel.UNKNOW;
-            SeverityLevel memSeverityLevel = SeverityLevel.UNKNOW;
+            SeverityLevel cpuSeverityLevel = SeverityLevel.UNKNOWN;
+            SeverityLevel memSeverityLevel = SeverityLevel.UNKNOWN;
 
             Map<String,TuxsvrsEntity> processMap = new HashMap<String,TuxsvrsEntity>();
             for(int i=0;i<svrSize;i++){
@@ -327,9 +327,9 @@ public class TuxService {
 
             //if(this.alartEnable(this.siteSettings.getConditions().getQueued().getAlert())&&queLimit<que.getQueued()){
             if(threshold==null)
-                return SeverityLevel.UNKNOW;
+                return SeverityLevel.UNKNOWN;
             SeverityLevel severityLevel = threshold.match(String.valueOf(que.getQueued()));
-            if(severityLevel!= SeverityLevel.UNKNOW) {
+            if(severityLevel!= SeverityLevel.UNKNOWN) {
                 processResult.addQueueAlarm(que.getProgname());
             }
             return severityLevel;
@@ -338,10 +338,10 @@ public class TuxService {
         private SeverityLevel memAlarm(TuxsvrsEntity svr, Threshold threshold){
             //int memLimit = this.siteSettings.getConditions().getProcessMemory().getUsedMemory();
             if(threshold == null)
-                return SeverityLevel.UNKNOW;
+                return SeverityLevel.UNKNOWN;
             SeverityLevel severityLevel = threshold.match(String.valueOf(svr.getMemoryuse()));
             //if(alartEnable(this.siteSettings.getConditions().getProcessMemory().getAlert())&&memLimit<svr.getMemoryuse()){
-            if(severityLevel!=SeverityLevel.UNKNOW){
+            if(severityLevel!=SeverityLevel.UNKNOWN){
                 processResult.addMemAlarm(svr.getProgname());
             }
             return severityLevel;
@@ -350,10 +350,10 @@ public class TuxService {
         private SeverityLevel cpuAlarm(TuxsvrsEntity svr,Threshold threshold){
             //  float cpuLimit = this.siteSettings.getConditions().getOsCpu().getUsed();
             if(threshold == null)
-                return SeverityLevel.UNKNOW;
+                return SeverityLevel.UNKNOWN;
             SeverityLevel severityLevel = threshold.match(String.valueOf(100-svr.getCpuuse()));
             //  threshold.match();     cpuLimit<(100-svr.getCpuuse())
-            if(severityLevel!=SeverityLevel.UNKNOW){
+            if(severityLevel!=SeverityLevel.UNKNOWN){
                 processResult.addCpuAlarm(svr.getProgname());
             }
             return severityLevel;
@@ -395,7 +395,7 @@ public class TuxService {
             }
             //获取阈值
             Threshold diedServerThreshold = thresholdService.queryThreshold(this.siteSettings.getSiteName(), serverDiedAttribute.getId());
-            SeverityLevel diedServerSeverityLevel = SeverityLevel.UNKNOW;
+            SeverityLevel diedServerSeverityLevel = SeverityLevel.UNKNOWN;
             //获取serverDied属性
             Attribute noTransAttribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.ServerNoTrans.name());
             Attribute busyServerAttribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.ServerBusy.name());
@@ -406,8 +406,8 @@ public class TuxService {
             //获取阈值
             Threshold noTransThreshold = thresholdService.queryThreshold(this.siteSettings.getSiteName(), noTransAttribute.getId());
             Threshold busyServerThreshold = thresholdService.queryThreshold(this.siteSettings.getSiteName(), busyServerAttribute.getId());
-            SeverityLevel noTransSeverityLevel = SeverityLevel.UNKNOW;
-            SeverityLevel busyServerSeverityLevel = SeverityLevel.UNKNOW;
+            SeverityLevel noTransSeverityLevel = SeverityLevel.UNKNOWN;
+            SeverityLevel busyServerSeverityLevel = SeverityLevel.UNKNOWN;
 
             for (TuxsvrsEntity old : oldSvrs) {
                 String processId = genProcessFlag(old.getProgname(), old.getProcessid());
@@ -417,7 +417,7 @@ public class TuxService {
                         continue;
                     SeverityLevel severityLevel = diedServerThreshold.match(old.getProgname());
                     //config server data contains serverName
-                    if (severityLevel!=SeverityLevel.UNKNOW) {
+                    if (severityLevel!=SeverityLevel.UNKNOWN) {
                         processResult.addDiedServerName(old.getProgname());
                     }
                     if(diedServerSeverityLevel.ordinal()>severityLevel.ordinal()){
@@ -436,7 +436,7 @@ public class TuxService {
                             if(noTransSeverityLevel.ordinal()>severityLevel.ordinal()){
                                 noTransSeverityLevel = severityLevel;
                             }
-                            if(now.getCurrenctsvc().equals("IDLE")&&severityLevel!=SeverityLevel.UNKNOW)
+                            if(now.getCurrenctsvc().equals("IDLE")&&severityLevel!=SeverityLevel.UNKNOWN)
                                 processResult.addNoTrans(now.getProgname());
                         }
                         //long busy
@@ -445,7 +445,7 @@ public class TuxService {
                             if(busyServerSeverityLevel.ordinal()>severityLevel.ordinal()){
                                 busyServerSeverityLevel = severityLevel;
                             }
-                            if(now.getCurrenctsvc().equals("BUSY")&&old.getCurrenctsvc().equals("BUSY")&&severityLevel!=SeverityLevel.UNKNOW)
+                            if(now.getCurrenctsvc().equals("BUSY")&&old.getCurrenctsvc().equals("BUSY")&&severityLevel!=SeverityLevel.UNKNOWN)
                              processResult.addLongBusy(now.getProgname());
                         }
                     }
@@ -504,7 +504,7 @@ public class TuxService {
         }
 
         private void alarmMessage(Attribute attribute, SeverityLevel severityLevel,String message){
-            if(attribute==null||severityLevel == SeverityLevel.UNKNOW ||StringUtils.isBlank(message))
+            if(attribute==null||severityLevel == SeverityLevel.UNKNOWN ||StringUtils.isBlank(message))
                 return;
             Alarm alarm = new Alarm(UUID.randomUUID().toString().replaceAll("-", ""));
             alarm.setAttributeId(attribute.getId());

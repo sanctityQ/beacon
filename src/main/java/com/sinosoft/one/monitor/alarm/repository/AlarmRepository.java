@@ -1,16 +1,19 @@
 package com.sinosoft.one.monitor.alarm.repository;
 // Generated 2013-3-1 10:29:54 by One Data Tools 1.0.0
 
+import com.google.common.annotations.VisibleForTesting;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.common.HealthStaForMonitor;
 import com.sinosoft.one.monitor.common.HealthStaForTime;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +21,7 @@ import java.util.List;
 /**
  * 告警信息持久化接口
  */
-@Component
+@Repository
 public interface AlarmRepository extends PagingAndSortingRepository<Alarm, String> {
 
 	@SQL("select ma.*, r.resource_name from ge_monitor_alarm ma, ge_monitor_resources r where ma.monitor_id=r.resource_id and ma.severity in (?2) order by ma.create_time desc")
@@ -226,11 +229,19 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
     @SQL("delete from GE_MONITOR_ALARM where monitor_id in (?1)")
     void deleteByMonitorIds(List<String> monitorId);
 
+
     Page<Alarm> findByCreateTimeBetweenAndMonitorType(Date startTime,Date endTime,String monitorType,Pageable pageable);
+
+    Page<Alarm> findByCreateTimeBetweenAndMonitorTypeAndSeverity(Date startTime,Date endTime,String monitorType,SeverityLevel severityLevel,Pageable pageable);
 
     Page<Alarm> findByMonitorType(String monitorType,Pageable pageable);
 
+    Page<Alarm> findByMonitorTypeAndSeverity(String monitorType,SeverityLevel severityLevel,Pageable pageable);
+
     Page<Alarm> findByCreateTimeBetween(Date startTime,Date endTime,Pageable pageable);
 
+    Page<Alarm> findByCreateTimeBetweenAndSeverity(Date startTime,Date endTime,SeverityLevel severityLevel,Pageable pageable);
+
+    Page<Alarm> findBySeverity(SeverityLevel severityLevel, Pageable pageable);
 }
 

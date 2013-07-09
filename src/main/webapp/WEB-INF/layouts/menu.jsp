@@ -80,7 +80,7 @@
                         </li>
                         <li class="action" style="border:none"><span>数据库</span>
                             <ul class="list">
-                                <li><a href="${ctx}/db/oracle/oracleMonitor">oracle</a></li>
+                                <li><a href="${ctx}/db/oracle/oracleMonitor">Oracle</a></li>
                             </ul>
                         </li>
                         <li class="clear"></li>

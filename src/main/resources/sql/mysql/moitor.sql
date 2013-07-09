@@ -78,9 +78,9 @@ drop table if exists GE_MONITOR_URL_VISITS_STA;
 create table ge_monitor_alarm
 (
    ID                   varchar(32) not null comment '主键ID',
-   SEVERITY             varchar(1) comment '严重级别(severity)',
+   SEVERITY             varchar(10) comment '严重级别(severity)',
    MESSAGE              varchar(3000) comment '警报信息(message)',
-   ALARM_FROM           varchar(20) comment '警报来源(日志,异常)',
+   ALARM_SOURCE         varchar(20) comment '警报来源(日志,异常)',
    MONITOR_ID           varchar(32) comment '监视器ID',
    MONITOR_TYPE         varchar(50) comment '监视器类型',
    ATTRIBUTE_ID         varchar(32) comment '属性ID',
@@ -578,7 +578,7 @@ create table GE_MONITOR_OS_STATI
    OSID                 varchar(32) comment '操作系统OS',
    TYPE                 varchar(2) comment '类型',
    RECORD_TIME          datetime comment '时间',
-   LEAST_VALUE          varchar(20) comment '最小值',
+   MIN_VALUE            varchar(20) comment '最小值',
    MAX_VALUE            varchar(20) comment '最大值',
    AVERAGE_VALUE        varchar(20) comment '平均值',
    primary key (ID)

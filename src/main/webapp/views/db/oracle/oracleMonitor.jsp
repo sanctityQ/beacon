@@ -183,8 +183,6 @@ function hideNav(e){
     	
     </div>
 </div>
-<div id="layout_bottom">
-	<p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>

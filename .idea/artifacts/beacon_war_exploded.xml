@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="beacon:war exploded">
+    <output-path>$PROJECT_DIR$/target/monitor</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="beacon/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="beacon" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

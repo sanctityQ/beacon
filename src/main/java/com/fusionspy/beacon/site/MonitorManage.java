@@ -63,7 +63,7 @@ public class MonitorManage {
         if (!monitorSite.isRunning()) {
             monitor(monitorSite);
             //logger.info("Site Name: {} start now", siteName);
-            String msg = alertMessage.getMessage(AlarmMessageFormat.START,df.format(new Date()),siteName);
+            String msg = alertMessage.getMessage(AlarmMessageFormat.START,siteName);
             logger.info(msg);
             siteInfoLogger.logInf(siteName,msg);
         } else {
@@ -111,7 +111,7 @@ public class MonitorManage {
         MonitorSite monitorSite = sitesHolder.getMonitorSite(siteName);
         if (monitorSite.isRunning()) {
             monitorSite.stop();
-            String msg = alertMessage.getMessage(AlarmMessageFormat.END,df.format(new Date()),siteName);
+            String msg = alertMessage.getMessage(AlarmMessageFormat.END,siteName);
             logger.info("Site Name:{} ", msg);
             siteInfoLogger.logInf(siteName, msg);
         } else {

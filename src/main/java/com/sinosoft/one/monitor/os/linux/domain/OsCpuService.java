@@ -19,7 +19,6 @@ import com.sinosoft.one.monitor.os.linux.util.OsUtil;
  * Cpu部分数据库操作类
  * @author chenxiongxi
  * @version 1.0
- * @created 27-����-2013 14:42:30
  */
 @Component
 public class OsCpuService {
@@ -27,7 +26,7 @@ public class OsCpuService {
 	private OsCpuRepository osCpuRepository;
 	/**
 	 * 保存CPU采集数据
-	 * @param cpu
+	 * @param
 	 */
 	public boolean saveCpu(String osInfoId,OsCpu osCpu ,Date sampleTime){
 		Os os =new Os();
@@ -41,11 +40,12 @@ public class OsCpuService {
 	
 	/**
 	 * 获取CPU采集数据
-	 * @param cpu
+	 * @param
 	 */
 	public List<OsCpu>  getCpuByDate(String osInfoId,Date begin,Date end){
-		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
-		return osCpuRepository.findOsCpuByDate(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end) ,OsUtil.ORCL_DATEFORMATE);
+		//SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
+		//return osCpuRepository.findOsCpuByDate(osInfoId, simpleDateFormat.format(begin), simpleDateFormat.format(end) ,OsUtil.ORCL_DATEFORMATE);
+        return osCpuRepository.findByOs_osInfoIdAndSampleDateBetween(osInfoId, begin, end);
 	}
 
 	/**

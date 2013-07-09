@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,9 @@ import com.sinosoft.one.monitor.os.linux.util.OsTransUtil;
 
 @Component
 public class OsProcessService {
-	@Autowired
+
+    private Logger logger = LoggerFactory.getLogger(OsProcessService.class);
+    @Autowired
 	private OsCpuService osCpuService;
 	@Autowired
 	private OsDiskService osDiskService;
@@ -46,6 +50,9 @@ public class OsProcessService {
 	 * @param sampleTime 采集时间
 	 */
 	public void saveSampleData(String osInfoId,String cpuInfo,String ramInfo,String diskInfo,String respondTime ,Date sampleTime){
+        logger.debug("cpu info:{}",cpuInfo);
+        logger.debug("os disk:{}",diskInfo);
+        logger.debug("os ram:{}",ramInfo);
 		Calendar c  = Calendar.getInstance();
 		////获取当前时间的小时数 取整时点
 		c.setTime(sampleTime);
@@ -58,10 +65,14 @@ public class OsProcessService {
 		messageBase.addAlarmAttribute(AttributeName.CPUUtilization, osCpu.getUtiliZation());
 		
 		List<OsDisk> osDisks=OsTransUtil.getDiskInfo(diskInfo);
+
+
 		osDiskService.saveDisk(osInfoId,osDisks, sampleTime);//保存磁盘采样
 		messageBase.addAlarmAttribute(AttributeName.DiskUtilization, osDisks.get(0).getTotalUtiliZation());
 		
  		OsRam osRam=OsTransUtil.getRamInfo(ramInfo);
+
+
 		osRamService.saveRam(osInfoId,osRam , sampleTime);//保存内存采样
 		messageBase.addAlarmAttribute(AttributeName.PhysicalMemoryUtilization, osRam.getMemUtiliZation());
 		messageBase.addAlarmAttribute(AttributeName.SwapMemoryUtilization, osRam.getSwapUtiliZation());
@@ -88,8 +99,6 @@ public class OsProcessService {
 	
 	/**
 	 * 轮询任务 保存可用性采样 //并更新统计记录
-	 * @param osId
-	 * @param time
 	 * @param Status
 	 */
 	@Transactional
@@ -133,34 +142,5 @@ public class OsProcessService {
  		OsAvailabletemp osAvailabletemp=OsAvailableServcie.getLastAvailable(osInfoId, currentTime);
 		return osAvailabletemp;
 	}
-	
-	
-
-//	/**
-//	 *  可用性的 定点任务调用方法
-//	 *  每天保存上一天（上24/昨天）可用性采样数据到 可用性统计 表
-//	 *  每天删除统计表中上一天可（上48/前天）用性采样数据
-//	 *  时间段 00:00:00--(删除)--00:00:00--(保存)---00:00:00(当前点)
-//	 * @param osInfoId
-//	 * @param currentTime
-//	 */
-//	public  void saveStatiEveryDayAvailableStati(String osInfoId ,Date currentTime,int interCycleTime){
-//		//当前天数
-//		Calendar c  = Calendar.getInstance();
-//		c.setTime(currentTime);
-////		c.set(Calendar.DAY_OF_MONTH,  currentTime.getDay());
-//		c.set(Calendar.HOUR_OF_DAY,0);
-//		c.set(Calendar.MINUTE, 0);
-//		c.set(Calendar.SECOND, 0);
-//		//取当天的前24小时整时点
-//		Date d1 = c.getTime();
-//		c.add(Calendar.HOUR_OF_DAY, -24);
-//		//取当天的前48小时整时点
-//		Date d2 = c.getTime();
-//		//统计并保存 //保存为时间为昨天的日期
-//		osDataMathService.statiAvailable(osInfoId, d1, d2, interCycleTime, d2);
-//		//删除前天
-//		OsAvailableServcie.deleteLTFHourAvailale(osInfoId, currentTime);
-//	}
 	
 }

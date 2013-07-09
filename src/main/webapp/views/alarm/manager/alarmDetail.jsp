@@ -8,9 +8,10 @@
         $(function () {
             $("#thresholdList").Grid({
                 type: "post",
-                url: "${ctx}/alarm/manager/alarmmanager/history/${monitorId}",
+                url: "${ctx}/alarm/manager/history/${monitorId}",
                 dataType: "json",
                 colDisplay: false,
+                afterRepage:true,
                 clickSelect: true,
                 draggable: false,
                 height: "auto",
@@ -66,16 +67,12 @@
 </head>
 
 <body>
-<div id="layout_top">
-    <div class="header">
-        <%@include file="/WEB-INF/layouts/menu.jsp" %>
-    </div>
-</div>
+<%@include file="/WEB-INF/layouts/menu.jsp" %>
 <div id="layout_center">
     <div class="main" id="main">
         <div class="add_monitor alertDef">
-            <h2 class="title2"><strong class="right" onclick="window.history.back()"><a href="javascript:void(0);"
-                                                                                        onclick="${ctx}/alarm/manager/alarmmanager/list">返回告警</a></strong><b>告警明细　</b>
+            <h2 class="title2"><strong class="right" onclick="window.history.back()">
+                <a href="javascript:void(0);" onclick="${ctx}/alarm/manager/list">返回告警</a></strong><b>告警明细　</b>
             </h2>
 
             <form>
@@ -123,8 +120,6 @@
         </div>
     </div>
 </div>
-<div id="layout_bottom">
-    <p class="footer">Copyright &copy; 2013 Sinosoft Co.,Lt</p>
-</div>
+<%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>

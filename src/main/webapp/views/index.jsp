@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <%@ include file="/WEB-INF/layouts/base.jsp" %>
-<title>monitor监控系统</title>
+<title>Beacon监控预警平台</title>
 
 <script type="text/javascript">
 var columStyle1 =

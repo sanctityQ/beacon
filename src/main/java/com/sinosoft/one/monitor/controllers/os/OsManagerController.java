@@ -278,7 +278,7 @@ public class OsManagerController {
 	
 	/**
 	 * 编辑操作
-	 * @param oracleInfo
+	 * @param os
 	 * @param inv
 	 * @return
 	 */
@@ -295,7 +295,7 @@ public class OsManagerController {
 	
 	/**
 	 * 删除操作(包含删除一个和批量删除操作)
-	 * @param monitorId
+	 * @param monitorIds
 	 * @param inv
 	 * @return
 	 */

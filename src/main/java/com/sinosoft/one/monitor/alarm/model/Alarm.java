@@ -99,7 +99,7 @@ public class Alarm  implements java.io.Serializable {
     this.id = id;
     }
     
-    @Column(name="severity", length=1)
+    @Column(name="severity", length=10)
     @Enumerated(value = EnumType.STRING)
     public SeverityLevel getSeverity() {
     return this.severity;
@@ -226,7 +226,11 @@ public class Alarm  implements java.io.Serializable {
 
 	@Transient
 	public String getResourceName() {
-		return resourceName;
+        if(resourceName!=null)
+		    return resourceName;
+       //TODO 正常来说应该调整为resource的resourceName，此处先临时处理
+        else
+            return this.getMonitorId();
 	}
 
 	public void setResourceName(String resourceName) {

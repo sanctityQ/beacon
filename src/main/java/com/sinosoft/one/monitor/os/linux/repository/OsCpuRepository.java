@@ -16,20 +16,22 @@ public interface OsCpuRepository extends PagingAndSortingRepository<OsCpu, Strin
 	//根据时间
 	@SQL("select * from GE_MONITOR_OS_CPU o where o.SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and o.OS_INFO_ID= ?1 ORDER by o.SAMPLE_DATE")
 	public List<OsCpu> findOsCpuByDate(String osid,String beginTime,String endTime,String dateFormat);
+
+    public List<OsCpu> findByOs_osInfoIdAndSampleDateBetween(String osId,Date begin,Date end);
 	
 	//CPU利用率最大值
-	@SQL("select MAX(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and OS_INFO_ID= ?1 ")
+	@SQL("select MAX(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between str_to_date(?2,?4) and str_to_date(?3,?4) and OS_INFO_ID= ?1 ")
 	public String findMaxCpuUtilZation(String osInfoId,String beginTime,String endTime,String dateFormat);
 	
 	//CPU利用率最小值
-	@SQL("select MIN(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between to_date(?2,?4) and to_date(?3,?4) and OS_INFO_ID= ?1 ")
+	@SQL("select MIN(UTILI_ZATION) from GE_MONITOR_OS_CPU where SAMPLE_DATE between str_to_date(?2,?4) and str_to_date(?3,?4) and OS_INFO_ID= ?1 ")
 	public String findMinCpuUtilZation(String osInfoId,String beginTime,String endTime,String dateFormat);
 
 	//小于目标时间删除
-	@SQL("delete from GE_MONITOR_OS_CPU o where o.SAMPLE_DATE< ?2 and o.OS_INFO_ID= ?1 ")
+	@Query("delete from OsCpu o where o.sampleDate< ?2 and o.os.osInfoId= ?1 ")
 	public void deleteCpuByLessThanTime(String osid,Date date);
 	
-	@SQL("select * from GE_MONITOR_OS_CPU o where o.SAMPLE_DATE=(select max(SAMPLE_DATE) from GE_MONITOR_OS_CPU where SAMPLE_DATE between to_date(?3,?4) and to_date(?2,?4) and OS_INFO_ID=?1 ) and o.OS_INFO_ID = ?1")
+	@SQL("select * from GE_MONITOR_OS_CPU o where o.SAMPLE_DATE=(select max(SAMPLE_DATE) from GE_MONITOR_OS_CPU where SAMPLE_DATE between str_to_date(?3,?4) and str_to_date(?2,?4) and OS_INFO_ID=?1 ) and o.OS_INFO_ID = ?1")
 	public OsCpu findNealyCpu(String osid,String currentTime,String currentTime2,String dateFormat );
 }
 

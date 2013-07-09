@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
@@ -22,25 +24,6 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 
 @Path
 public class OsAgentController {
-	private static String ID = "";
-	public static String pollingTime = "0";
-	public static String osCmd_vmstat = "";
-	public static String osCmd_ramInfo = "";
-	public static String osCmd_diskInfo = "";
-	public static String osCmd_getIp = "";
-	public static String osAgentIp = "";
-	public static String osAgentID = "";
-	public static String ip = "";
-	public static Map<String, String> shellAndIp = new HashMap<String, String>();
-
-	public static String cpuInfo = "";
-	public static String ramInfo = "";
-	public static String diskInfo = "";
-	public static String agentIp = "";
-	public static String respondTime="";
-	public static String thisInterCycleTime="";
-	public static Map<String, String[]> osAgentInfo = new HashMap<String, String[]>();
-
 	/**
 	 * 系统基本信息几脚本service
 	 */
@@ -49,44 +32,34 @@ public class OsAgentController {
 	
 	@Autowired
 	private OsProcessService osProcessService;
-	
-	@Autowired
-	private AlarmMessageBuilder alarmMessageBuilder;
-
 
 	/**
 	 * 响应Angent，发送基本信息的脚本
 	 */
 	@Post("recieveOsInfo")
 	@Get("recieveOsInfo")
-	public void recieveOsInfo(Invocation inv) {
-		try {
-			osAgentInfo = inv.getRequest().getParameterMap();
-			osAgentIp = getValue("ip", osAgentInfo);
+	public void receiveOsInfo(Invocation inv) throws IOException {
+            Map<String, String[]> osAgentInfo  = inv.getRequest().getParameterMap();
+			String osAgentIp = getValue("ip", osAgentInfo);
 			Os  os = osService.getOsBasicByIp(osAgentIp);
 			ObjectOutputStream oos = new ObjectOutputStream(inv.getResponse()
 					.getOutputStream());
 			System.out.println(getValue("ID", osAgentInfo));
-			if(os!=null||os.getOsInfoId().toString().equals(getValue("ID", osAgentInfo))){
+            Map<String, String> shellAndIp = Maps.newHashMap();
+            if(os!=null){
 				shellAndIp.put("ID", os.getOsInfoId());
-				shellAndIp.put("pollingTime", os.getIntercycleTime()+"");
+				shellAndIp.put("pollingTime", String.valueOf(os.getIntercycleTime()));
 				List<OsShell>osShells=osService.getOsShell();
 				for (OsShell osShell : osShells) {
 					shellAndIp.put(osShell.getType(),osShell.getTemplate());
 				}
 				
-				System.out.println("正确返回");
-//						break;
-				System.gc();
 			}else {
 				shellAndIp.put("ID", null);
 			}
 			oos.writeObject(shellAndIp);
 			oos.close();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 	}
 
@@ -95,16 +68,21 @@ public class OsAgentController {
 	 */
 	@Post("recieveOsResult")
 	@Get("recieveOsResult")
-	public void recieveOsResult(Invocation inv) {
+	public void receiveOsResult(Invocation inv) {
 		try {
 			Calendar calendar=Calendar.getInstance();
 			calendar.set(Calendar.MILLISECOND, 0);
-			osAgentInfo =  inv.getRequest().getParameterMap();
-			osAgentID = getValue("ID", osAgentInfo);
+            Map<String, String[]> osAgentInfo   =  inv.getRequest().getParameterMap();
+			String osAgentID = getValue("ID", osAgentInfo);
 			Os os = osService.getOsBasicById(osAgentID);
 			ObjectOutputStream oos = new ObjectOutputStream(inv.getResponse().getOutputStream());
-			Map<String, String>responsInfo=new HashMap<String, String>();//返回代理端的响应信息;
-			if(os!=null){
+			Map<String, String> responsInfo=new HashMap<String, String>();//返回代理端的响应信息;
+            String cpuInfo = StringUtils.EMPTY;
+            String ramInfo = StringUtils.EMPTY;
+            String diskInfo = StringUtils.EMPTY;
+            String respondTime = StringUtils.EMPTY;
+            String thisInterCycleTime = StringUtils.EMPTY;
+            if(os!=null){
 				//采样时间
 				cpuInfo = getValue("cpuInfo", osAgentInfo);
 				ramInfo = getValue("ramInfo", osAgentInfo);
@@ -126,7 +104,7 @@ public class OsAgentController {
 	
 	
 	
-	public String getValue(String key, Map<String, String[]> osInfo) {
+	private String getValue(String key, Map<String, String[]> osInfo) {
 		return osInfo.get(key)[0];
 	}
 }

@@ -1,5 +1,6 @@
 package com.fusionspy.beacon.system.service;
 
+import com.fusionspy.beacon.site.MonitorManage;
 import com.fusionspy.beacon.system.dao.SiteListDao;
 import com.fusionspy.beacon.system.dao.SitesSettingsDao;
 import com.fusionspy.beacon.system.dao.SysrecsDao;
@@ -88,9 +89,8 @@ public class SystemServiceImpl implements SystemService{
     @Override
     public void delSite(String siteName) {
          siteListDao.delete(siteName);
-      //   sitesSettingsDao.delete(siteName);
-
-     //    sysrecsDao.deleteBySiteName(siteName);
+         sitesSettingsDao.delete(siteName);
+         sysrecsDao.deleteBySiteName(siteName);
     }
 
     @Override

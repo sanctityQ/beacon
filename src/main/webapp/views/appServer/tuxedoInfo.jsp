@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>tuxedo站点</title>
+<title>Tuxedo站点</title>
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
 $(function(){
@@ -15,7 +15,7 @@ $(function(){
     $("#cipan_space_detail").width(autoWidth + 65)
 
     $("#emergencyList").Grid({
-        url : "${ctx}/Tuxedocentos.json",
+        url : "${ctx}/alarm/manager/resource/${serverName}",
         dataType: "json",
         colDisplay: false,
         clickSelect: true,
@@ -42,7 +42,7 @@ $(function(){
         colums:[
             {id:'1',text:'排名',name:"sort",index:'1',align:''},
             {id:'2',text:'名称',name:"name",index:'1',align:''},
-            {id:'3',text:'列队数',name:"queued",index:'1',align:''}
+            {id:'3',text:'队列消息数',name:"queued",index:'1',align:''}
         ],
         rowNum:10,
         pager : false,
@@ -84,89 +84,10 @@ $(function(){
         number:false,
         multiselect: false
     });
-    $("#tuxSERVER").Grid({
-        url : "${ctx}/appServer/tuxedo/data/server/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'Server',name:"server",index:'1',align:''},
-            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
-            {id:'3',text:'ProcessID',name:"processId",index:'1',align:''},
-            {id:'4',text:'Rpdone',name:"rqDone",index:'1',align:''},
-            {id:'5',text:'CurrSvc',name:"currentSvc",index:'1',align:''},
-            {id:'6',text:'SvrMin',name:"svrMin",index:'1',align:''},
-            {id:'7',text:'SvrMax',name:"svrMax",index:'1',align:''},
-            {id:'8',text:'UseMem',name:"memUsed",index:'1',align:''},
-            {id:'9',text:'UseCPU',name:"cpuUsed",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-    $("#tuxQUEUE").Grid({
-        url : "${ctx}/appServer/tuxedo/data/queue/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'Server',name:"server",index:'1',align:''},
-            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
-            {id:'3',text:'SrvCnt',name:"srvCnt",index:'1',align:''},
-            {id:'4',text:'Queued',name:"queued",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-    $("#tuxCLIENT").Grid({
-        url : "${ctx}/appServer/tuxedo/data/client/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'Name',name:"name",index:'1',align:''},
-            {id:'2',text:'ClentPID',name:"pid",index:'1',align:''},
-            {id:'3',text:'ClentAddr',name:"addr",index:'1',align:''},
-            {id:'4',text:'Status',name:"status",index:'1',align:''},
-            {id:'5',text:'Contime',name:"conTime",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-    $("#tuxSYSTEM").Grid({
-        url : "${ctx}/appServer/tuxedo/data/system/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'CoreFind',name:"coreFind",index:'1',align:''},
-            {id:'2',text:'ErrorFind',name:"errorFind",index:'1',align:''},
-            {id:'3',text:'WarnFind',name:"warnFind",index:'1',align:''},
-            {id:'4',text:'LargueFind',name:"largueFile",index:'1',align:''},
-            {id:'5',text:'FreeMem',name:"freeMem",index:'1',align:''},
-            {id:'6',text:'IdleCPU',name:"idleCPU",index:'1',align:''},
-            {id:'7',text:'SvrCnt',name:"svrCnt",index:'1',align:''},
-            {id:'8',text:'QueCnt',name:"queCnt",index:'1',align:''},
-            {id:'9',text:'CltCnt',name:"cltCnt",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
+
+
+    new DataState().init();
+    //setInterval(dataState(), 1000 * 30);
 
     $("#tabs").tabs({closeTab:false});
     if($.browser.msie && ($.browser.version == "7.0")){
@@ -407,7 +328,9 @@ $(function(){
         yAxis: {
             title: {
                 text: '值'
-            }
+            },
+            min:0,
+            tickInterval: 1
         },
         tooltip: {
             formatter: function() {
@@ -464,6 +387,27 @@ $(function(){
         colors: ['#e77c52']
     });
 
+    function getServerLatestData(){
+        $.ajax({
+            url: '${ctx}/appServer/tuxedo/view/${serverName}/latest',
+            dataType : 'json',
+            type : 'get',
+            async : false,
+            error : function (XMLHttpRequest,errorThrown) {
+                alert("数据加载出错！" + errorThrown);
+            },
+            success: function(data){
+               $('#count').html(data.count);
+               $('#cpuIdle').html(data.cpuIdle);
+               $('#memFree').html(data.memFree);
+               $('#tuxRunQueue').html(data.tuxRunQueue);
+               $('#tuxRunClt').html(data.tuxRunClt);
+            }
+        });
+    }
+
+    setInterval(getServerLatestData, 1000 * 30);
+
     //吞吐量
     new Highcharts.Chart({
         chart: {
@@ -505,7 +449,9 @@ $(function(){
         yAxis: {
             title: {
                 text: '值'
-            }
+            },
+            min:0,
+            tickInterval: 0.5
         },
         tooltip: {
             formatter: function() {
@@ -671,6 +617,161 @@ function viewWindowCP(e){
         ]
     });
 }
+
+
+
+/**
+* DataState 数据状态对象
+* @constructor
+ */
+var DataState = function(){}
+DataState.prototype.init = function(){
+    (new Server()).start();
+    (new Queue()).start();
+    (new Client()).start();
+    (new System()).start();
+    //this.start();
+}
+DataState.prototype.start = function(){
+}
+DataState.prototype.toggle = function(){
+    if(this.intervalId){
+        $(this).removeClass('refresh_dynamic');
+        $(this).addClass('refresh');
+        clearInterval(this.intervalId);
+        this.intervalId = null;
+    }else{
+        $(this).removeClass('refresh');
+        $(this).addClass('refresh_dynamic');
+        this.intervalId = setInterval(this.start,1000 * 30);
+      //  alert('2:'+this.intervalId);
+    }
+}
+
+
+/**
+* Server对象
+* @constructor
+*/
+var Server = function(){};
+Server.prototype = new DataState();
+Server.prototype.start = function(){
+    $("#tuxSERVER").empty();
+    $("#tuxSERVER").Grid({
+        url : "${ctx}/appServer/tuxedo/data/server/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        searchClass:"serverRefreshInput",
+        searchBtn:"serverRefreshButton",
+        colums:[
+            {id:'1',text:'Server',name:"server",index:'1',align:''},
+            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
+            {id:'3',text:'ProcessID',name:"processId",index:'1',align:''},
+            {id:'4',text:'Rpdone',name:"rqDone",index:'1',align:''},
+            {id:'5',text:'CurrSvc',name:"currentSvc",index:'1',align:''},
+            {id:'6',text:'SvrMin',name:"svrMin",index:'1',align:''},
+            {id:'7',text:'SvrMax',name:"svrMax",index:'1',align:''},
+            {id:'8',text:'UseMem',name:"memUsed",index:'1',align:''},
+            {id:'9',text:'UseCPU',name:"cpuUsed",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: false
+    });
+}
+//alert(Server.prototype.constructor);
+var Queue = function(){
+    var refreshId = '#queRefresh';
+    $(refreshId).click(this.toggle);
+}
+Queue.prototype = new DataState();
+Queue.prototype.constructor =  Queue.constructor;
+Queue.prototype.start = function(){
+    //alert()
+    $("#tuxQUEUE").empty();
+    $("#tuxQUEUE").Grid({
+        url : "${ctx}/appServer/tuxedo/data/queue/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        searchClass:"queRefreshInput",
+        searchBtn:"queRefreshButton",
+        colums:[
+            {id:'1',text:'Server',name:"server",index:'1',align:''},
+            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
+            {id:'3',text:'SrvCnt',name:"srvCnt",index:'1',align:''},
+            {id:'4',text:'Queued',name:"queued",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: false
+    });
+}
+
+var Client = function(){}
+Client.prototype = new DataState();
+Client.prototype.start = function(){
+    $("#tuxCLIENT").empty();
+    $("#tuxCLIENT").Grid({
+        url : "${ctx}/appServer/tuxedo/data/client/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        searchClass:"cltRefreshInput",
+        searchBtn:"cltRefreshButton",
+        colums:[
+            {id:'1',text:'Name',name:"name",index:'1',align:''},
+            {id:'2',text:'ClentPID',name:"pid",index:'1',align:''},
+            {id:'3',text:'ClentAddr',name:"addr",index:'1',align:''},
+            {id:'4',text:'Status',name:"status",index:'1',align:''},
+            {id:'5',text:'Contime',name:"conTime",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: false
+    });
+}
+
+var System = function(){};
+System.prototype = new DataState();
+System.prototype.start = function(){
+    $("#tuxSYSTEM").empty();
+    $("#tuxSYSTEM").Grid({
+        url : "${ctx}/appServer/tuxedo/data/system/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        searchClass:"sysRefreshInput",
+        searchBtn:"sysRefreshButton",
+        colums:[
+            {id:'1',text:'CoreFind',name:"coreFind",index:'1',align:''},
+            {id:'2',text:'ErrorFind',name:"errorFind",index:'1',align:''},
+            {id:'3',text:'WarnFind',name:"warnFind",index:'1',align:''},
+            {id:'4',text:'LargueFind',name:"largueFile",index:'1',align:''},
+            {id:'5',text:'FreeMem',name:"freeMem",index:'1',align:''},
+            {id:'6',text:'IdleCPU',name:"idleCPU",index:'1',align:''},
+            {id:'7',text:'SvrCnt',name:"svrCnt",index:'1',align:''},
+            {id:'8',text:'QueCnt',name:"queCnt",index:'1',align:''},
+            {id:'9',text:'CltCnt',name:"cltCnt",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: false
+    });
+}
 </script>
 </head>
 
@@ -706,9 +807,9 @@ function viewWindowCP(e){
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">IP地址：</td>
-                                    <td class="monitorinfoeven">192.179.92.8</td>
+                                    <td class="monitorinfoeven">${ip}</td>
                                     <td align="right" class="monitorinfoodd"> 端口：</td>
-                                    <td class="monitorinfoeven">4008</td>
+                                    <td class="monitorinfoeven">${port}</td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd" >产品版本： </td>
@@ -723,26 +824,26 @@ function viewWindowCP(e){
                                     <td class="monitorinfoeven">${tuxRunSvr}</td>
                                 </tr>
                                 <tr>
-                                    <td align="right" class="monitorinfoodd">列队个数：</td>
-                                    <td class="monitorinfoeven">${tuxRunQueue}</td>
+                                    <td align="right" class="monitorinfoodd">排队消息：</td>
+                                    <td class="monitorinfoeven"><span id='tuxRunQueue'>${tuxRunQueue}</span></td>
                                     <td align="right" class="monitorinfoodd">客户端个数： </td>
-                                    <td class="monitorinfoeven"> ${tuxRunClt}</td>
+                                    <td class="monitorinfoeven"><span id='tuxRunClt'>${tuxRunClt}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd"> 操作系统：</td>
                                     <td class="monitorinfoeven">${osVersion}</td>
                                     <td align="right" class="monitorinfoodd">CPU空余：</td>
-                                    <td class="monitorinfoeven">${cpuIdle}</td>
+                                    <td class="monitorinfoeven"><span id='cpuIdle'>${cpuIdle}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd"> 内存空余：</td>
-                                    <td class="monitorinfoeven">${memFree}M</td>
+                                    <td class="monitorinfoeven"><span id='memFree'>${memFree}</span>M</td>
                                     <td align="right" class="monitorinfoodd">Agent版本：</td>
                                     <td class="monitorinfoeven">${agentVer}</td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">监控次数：</td>
-                                    <td class="monitorinfoeven">${count}</td>
+                                    <td class="monitorinfoeven"><span id='count'>${count}</span></td>
                                     <td align="right" class="monitorinfoodd">&nbsp;</td>
                                     <td class="monitorinfoeven">&nbsp;</td>
                                 </tr>
@@ -764,7 +865,7 @@ function viewWindowCP(e){
                                     预警消息最近10条
                                 </div>
                                 <div id="emergencyList"></div>
-                                <div class="cpu-text"><b><a class="bodytext-img" href="setEmergency.html">警告配置</a></b></div>
+                                <div class="cpu-text"><b><a class="bodytext-img" href="${ctx}/alarm/manager/configemergency/config/APP_SERVER/${serverName}">警告配置</a></b></div>
                             </div>
                         </td>
                     </tr>
@@ -836,32 +937,34 @@ function viewWindowCP(e){
             <div class="second">
                 <div class="hr_box h_b">
                     <div class="head-cpu">
-                        <a href="javascript:void(0)" class="refresh ico_seo" title="刷新"></a>
-                        <input type="text" class="formtext list_seach" />TUX_SERVER
+                        <a href="javascript:void(0)" class="refresh ico_seo serverRefreshButton" title="刷新"></a>
+                        <input type="text" class="formtext list_seach serverRefreshInput" />TUX_SERVER
                     </div>
                     <div id="tuxSERVER"></div>
                 </div>
                 <br />
                 <div class="hr_box h_b">
                     <div class="head-cpu">
-                        <a href="javascript:void(0)" class="refresh ico_seo" title="刷新"></a>
-                        <input type="text" class="formtext list_seach" />TUX_QUEUE
+                        <a href="javascript:void(0)" class="refresh ico_seo queRefreshButton" title="刷新"></a>
+                        <input type="text" class="formtext list_seach queRefreshInput" />
+                        <span style="float: left">TUX_QUEUE</span>
+                        <a id="queRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
                     </div>
                     <div id="tuxQUEUE"></div>
                 </div>
                 <br />
                 <div class="hr_box h_b">
                     <div class="head-cpu">
-                        <a href="javascript:void(0)" class="refresh ico_seo" title="刷新"></a>
-                        <input type="text" class="formtext list_seach" />TUX_CLIENT
+                        <a href="javascript:void(0)" class="refresh ico_seo cltRefreshButton" title="刷新"></a>
+                        <input type="text" class="formtext list_seach cltRefreshInput" />TUX_CLIENT
                     </div>
                     <div id="tuxCLIENT"></div>
                 </div>
                 <br />
                 <div class="hr_box h_b">
                     <div class="head-cpu">
-                        <a href="javascript:void(0)" class="refresh ico_seo" title="刷新"></a>
-                        <input type="text" class="formtext list_seach" />TUX_CLIENT
+                        <a href="javascript:void(0)" class="refresh ico_seo sysRefreshButton" title="刷新"></a>
+                        <input type="text" class="formtext list_seach sysRefreshInput" />TUX_SYSTEM
                     </div>
                     <div id="tuxSYSTEM"></div>
                 </div>

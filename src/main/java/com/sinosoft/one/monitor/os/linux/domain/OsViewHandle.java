@@ -50,7 +50,7 @@ public class OsViewHandle {
 	
 	/**
 	 * 构建多个操作系统的线
-	 *  @param currentTime页面当前时间
+	 * @param currentTime 页面当前时间
 	 * @param interCycle 页面轮询时间
 	 * @param timespan 需要的时间段 如 1为1小时内
 	 * @return

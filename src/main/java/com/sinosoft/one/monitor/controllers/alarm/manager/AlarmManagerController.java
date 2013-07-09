@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.controllers.alarm.manager;
 
+import com.fusionspy.beacon.system.dao.SiteListDao;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
@@ -10,27 +11,36 @@ import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.instruction.reply.EntityReply;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
+import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.datetime.joda.JodaTimeFormatterRegistrar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 告警列表和告警详细信息处理Controller.
@@ -71,42 +81,82 @@ public class AlarmManagerController {
         }
     }
 
+    @Get("/resource/{resourceId}")
+    public Reply getAlarmByResourceId(@Param("resourceId") String resourceId, Invocation inv){
+        String contextPath =  inv.getServletContext().getContextPath();
+        List<Alarm> alarms = alarmService.queryLatestAlarms(resourceId,10);
+        /* 封装表格行数据信息List->rows*/
+        List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
+        /* 循环构建表格行数据*/
+        for(Alarm alarm : alarms) {
+            Map<String, Object> row = new HashMap<String, Object>();
+            List<String> cell = new ArrayList<String>();
+
+			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
+            String healthyClass = MessageUtils.SeverityLevel2CssClass(alarm.getSeverity());
+			/* 构建预警详细信息地址*/
+            String url = contextPath + "/alarm/manager/detail/"+alarm.getId();
+			/* 格式化表格数据信息*/
+            cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, healthyClass));
+            String title = alarm.getMessage();
+            String subTitle = title.length()>70 ? title.substring(0, 69)+"...." : title;
+            cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORM_A_SUBTITLE, url, title, subTitle));
+          //  DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+            cell.add(DateFormatUtils.format(alarm.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+            row.put("cell", cell);
+            rows.add(row);
+        }
+        Map<String, Object> grid = new HashMap<String, Object>();
+        grid.put("rows", rows);
+        return Replys.with(grid).as(Json.class);
+    }
+
     //没有选择时间和类型的ajax请求
-    @Get("")
-    public void getAlarmListWithNoChoice(@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv) throws Exception {
-        PageRequest pageRequest = new PageRequest(pageNo,rowNum);
-        Page<Alarm> allAlarms= alarmService.queryAlarmsByPage(pageRequest);
+    @Get
+    public void getAlarmListWithNoChoice(@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,@Param("severityLevel")SeverityLevel severityLevel,
+                                         Invocation inv) throws Exception {
+        PageRequest pageRequest = new PageRequest(pageNo-1,rowNum, Sort.Direction.DESC,"createTime");
+        Page<Alarm> allAlarms= severityLevel ==null?alarmService.queryAlarmsByPage(pageRequest):alarmService.queryAlarmsByPageAndSeverityLevel(pageRequest,severityLevel);
         getAlarmListWithGivenCondition(allAlarms, inv);
     }
 
     //只选择时间,或者只选择类型的ajax请求
     @Get("day/{givenTime}")
-    public void getAlarmListWithGivenTimeOrType(@Param("givenTime")int givenTime,@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv) throws Exception {
-
-        PageRequest pageRequest = new PageRequest(pageNo,rowNum);
+    public void getAlarmListWithGivenTimeOrType(@Param("givenTime")int givenTime,@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,
+                                                @Param("severityLevel")SeverityLevel severityLevel,Invocation inv) throws Exception {
+        PageRequest pageRequest = new PageRequest(pageNo-1,rowNum,Sort.Direction.DESC,"createTime");
         DateTime now = DateTime.now();
         DateTime startTime = now.minusDays(givenTime);
-        Page<Alarm> alarms=alarmRepository.findByCreateTimeBetween(startTime.toDate(),now.toDate(),pageRequest);
+        Page<Alarm> alarms = severityLevel == null?
+                alarmRepository.findByCreateTimeBetween(startTime.toDate(),now.toDate(),pageRequest)
+                :alarmRepository.findByCreateTimeBetweenAndSeverity(startTime.toDate(),now.toDate(),severityLevel,pageRequest);
         getAlarmListWithGivenCondition(alarms, inv);
     }
 
     @Get("resourceType/{givenType}")
-    public void findAlarmByResourceType(@Param("givenType") ResourceType givenType,@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv)throws Exception{
-        PageRequest pageRequest = new PageRequest(pageNo,rowNum);
-        Page<Alarm> alarms=alarmRepository.findByMonitorType(givenType.name(),pageRequest);
+    public void findAlarmByResourceType(@Param("givenType") ResourceType givenType,@Param("pageNo")int pageNo,@Param("rowNum")int rowNum,
+                                        @Param("severityLevel")SeverityLevel severityLevel,Invocation inv)throws Exception{
+        PageRequest pageRequest = new PageRequest(pageNo-1,rowNum,Sort.Direction.DESC,"createTime");
+
+        Page<Alarm> alarms= severityLevel == null?alarmRepository.findByMonitorType(givenType.name(),pageRequest)
+                :alarmRepository.findByMonitorTypeAndSeverity(givenType.name(),severityLevel,pageRequest);
         getAlarmListWithGivenCondition(alarms, inv);
     }
 
     //时间和类型都选择的ajax请求
     @Get("day/{givenTime}/resourceType/{givenType}")
     public void getAlarmListWithGivenTimeAndType(@Param("givenTime")int givenTime, @Param("givenType") ResourceType resourceType,
+                                                 @Param("severityLevel")SeverityLevel severityLevel,
                                                  @Param("pageNo")int pageNo,@Param("rowNum")int rowNum,Invocation inv) throws Exception {
-        PageRequest pageRequest = new PageRequest(pageNo,rowNum);
+        PageRequest pageRequest = new PageRequest(pageNo-1,rowNum,Sort.Direction.DESC,"createTime");
         DateTime now = DateTime.now();
         DateTime startTime = now.minusDays(givenTime);
-        Page<Alarm> allAlarmsWithGivenTimeAndType=alarmRepository.findByCreateTimeBetweenAndMonitorType(startTime.toDate(),now.toDate(),resourceType.name(),pageRequest);
+        Page<Alarm> allAlarmsWithGivenTimeAndType=severityLevel == null?alarmRepository.findByCreateTimeBetweenAndMonitorType(startTime.toDate(),now.toDate(),resourceType.name(),pageRequest)
+                :alarmRepository.findByCreateTimeBetweenAndMonitorTypeAndSeverity(startTime.toDate(),now.toDate(),resourceType.name(),severityLevel,pageRequest);
         getAlarmListWithGivenCondition(allAlarmsWithGivenTimeAndType,inv);
     }
+
+
 
     //各种条件组个统一调用这个方法，获得告警列表
     private void getAlarmListWithGivenCondition(Page<Alarm> pageAlarms,Invocation inv) throws Exception {
@@ -115,7 +165,7 @@ public class AlarmManagerController {
             List<Alarm> dbAlarms=pageAlarms.getContent();
                 String statusStart="<div class='";
                 /*String statusEnd="' onclick='viewRelevance()'></div>";*/
-                String statusEnd="'</div>";
+                String statusEnd="'></div>";
                 String messageNameStart="<a href='javascript:void(0)' onclick='alarmDetailInfo(this)'>";
                 String messageNameEnd="</a>";
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -144,6 +194,8 @@ public class AlarmManagerController {
                     tempAlarm.setAppName(osRepository.findOne(tempAlarm.getMonitorId()).getName());
                 }else if(ResourceType.DB.name().equals(tempAlarm.getMonitorType())){
                     tempAlarm.setAppName(infoRepository.findOne(tempAlarm.getMonitorId()).getName());
+                }else {
+                    tempAlarm.setAppName(tempAlarm.getMonitorId());
                 }
                 //获得类型对应的中文名
                 tempAlarm.setMonitorType(ResourceType.valueOf(tempAlarm.getMonitorType()).cnName());
@@ -151,11 +203,9 @@ public class AlarmManagerController {
                 tempAlarm.setRecordTime(formatter.format(tempAlarm.getCreateTime()));
             }
                 getJsonDataOfAlarms(pageAlarms,inv);
-                return;
             /*gridable.setCellStringField("status,message,appName,monitorType,recordTime,ownerName");*/
         }else {
             getJsonDataOfAlarms(pageAlarms,inv);
-            return;
         }
     }
 
@@ -206,6 +256,8 @@ public class AlarmManagerController {
             inv.addModel("monitorName",osRepository.findOne(dbAlarm.getMonitorId()).getName());
         }else if(ResourceType.DB.name().equals(dbAlarm.getMonitorType())){
             inv.addModel("monitorName",infoRepository.findOne(dbAlarm.getMonitorId()).getName());
+        }else{
+            inv.addModel("monitorName",dbAlarm.getMonitorId());
         }
         inv.addModel("alarm",dbAlarm);
         inv.addModel("_cnName",dbAlarm.getSeverity().cnName());

@@ -27,7 +27,7 @@
 		
 			$("#sevenday_grid").Grid({
 				type : "post",
-				url :  '/monitor/os/historyCPUStatiGrid/30/'+id,
+				url :  '${ctx}/os/historyCPUStatiGrid/30/'+id,
 				dataType: "json",
 				height: 'auto',
 				colums:[

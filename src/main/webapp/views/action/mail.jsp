@@ -4,6 +4,7 @@
 <head>
     <title>创建新的邮件动作</title>
     <%@include file="/WEB-INF/layouts/base.jsp" %>
+    <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
         $(function () {
             $('#emailForm').ajaxForm({

@@ -72,8 +72,10 @@ public class LinuxcentosController {
 	private OsDiskViewHandle osDiskViewHandle;
 	@Autowired
 	private AlarmRepository alarmRepository;
+
+
 	@Post("osInfo/{osId}")
-	public Reply osInfo(@Param("osId") String osId ) {
+	public Reply osInfo(@Param("osId") String osId ,Invocation invocation) {
 		Map<String, String> map = new HashMap<String, String>();
 		Date currentTime=new Date();
 		//获取操作系统基本信息】【
@@ -99,17 +101,19 @@ public class LinuxcentosController {
 			map.put("lastTime", simpleDateFormat.format(lastSampleTime.getSampleDate()));
 			map.put("nextTime", simpleDateFormat.format(nextSampleTime)); 
 		}
-		String healthyFlag= "<img src='/monitor/global/images/bussinessY.gif'>&nbsp;&nbsp;健康状态为正常.";
+
+        String contextPath = invocation.getServletContext().getContextPath();
+		String healthyFlag= "<img src='"+contextPath+"/global/images/bussinessY.gif'>&nbsp;&nbsp;健康状态为正常.";
 		List<Alarm> alarmList = alarmRepository.findAlarmByMonitorId(os.getOsInfoId(),  new DateTime(currentTime).minusMinutes(os.getIntercycleTime()).toDate(), currentTime);
 		for (Alarm alarm : alarmList) {
 			if (alarm.getSeverity().equals(SeverityLevel.INFO)) {
-				healthyFlag = "<img src='/monitor/global/images/bussinessY.gif'>&nbsp;&nbsp;健康状态为正常.&nbsp;没有出现告警。";
+				healthyFlag = "<img src='"+contextPath+"/global/images/bussinessY.gif'>&nbsp;&nbsp;健康状态为正常.&nbsp;没有出现告警。";
             } else if (alarm.getSeverity().equals(SeverityLevel.WARNING)) {
-                healthyFlag = "<img src='/monitor/global/images/bussinessY3.gif'>&nbsp;&nbsp;健康状态为警告.&nbsp;出现中等的告警。";
+                healthyFlag = "<img src='"+contextPath+"/global/images/bussinessY3.gif'>&nbsp;&nbsp;健康状态为警告.&nbsp;出现中等的告警。";
             } else if (alarm.getSeverity().equals(SeverityLevel.CRITICAL)) {
-                healthyFlag = "<img src='/monitor/global/images/bussinessY2.gif'>&nbsp;&nbsp;健康状态为严重.&nbsp;出现出现严重的告警。";
-            } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOW)) {
-                healthyFlag = "<img src='/monitor/global/images/icon_health_unknown.gif'>&nbsp;&nbsp;健康状态为未知.";
+                healthyFlag = "<img src='"+contextPath+"/global/images/bussinessY2.gif'>&nbsp;&nbsp;健康状态为严重.&nbsp;出现出现严重的告警。";
+            } else if (alarm.getSeverity().equals(SeverityLevel.UNKNOWN)) {
+                healthyFlag = "<img src='"+contextPath+"/global/images/icon_health_unknown.gif'>&nbsp;&nbsp;健康状态为未知.";
             }
 		}
 		map.put("healthy", healthyFlag);

@@ -7,10 +7,12 @@ import com.sinosoft.one.monitor.application.model.Method;
 import com.sinosoft.one.monitor.application.model.Url;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Repository
 public interface ApplicationRepository extends PagingAndSortingRepository<Application, String> {
 
     Application findByApplicationName(String applicationName);

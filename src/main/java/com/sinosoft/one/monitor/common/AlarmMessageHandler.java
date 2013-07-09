@@ -104,13 +104,13 @@ public class AlarmMessageHandler {
 			//获取阈值级别
 			SeverityLevel severityLevel = threshold.evalSeverityLevel(alarmAttribute.getAttributeValue());
 
-			if(severityLevel == SeverityLevel.UNKNOW) {
+			if(severityLevel == SeverityLevel.UNKNOWN) {
 				continue;
 			}
 
             //如果非unknown，且小于unknown时将
             //TODO 由于循环是否存在下一次遍历过程把上一次的级别覆盖，所以增加以最严重级别为准
-			if(thresholdAlarmParams.severityLevel == SeverityLevel.UNKNOW || severityLevel.ordinal() < thresholdAlarmParams.severityLevel.ordinal()) {
+			if(thresholdAlarmParams.severityLevel == SeverityLevel.UNKNOWN || severityLevel.ordinal() < thresholdAlarmParams.severityLevel.ordinal()) {
 				thresholdAlarmParams.severityLevel = severityLevel;
 			}
 
@@ -137,7 +137,7 @@ public class AlarmMessageHandler {
 	 */
 	private void doAlarm(ThresholdAlarmParams thresholdAlarmParams) {
 
-		if(thresholdAlarmParams.severityLevel == SeverityLevel.UNKNOW) {
+		if(thresholdAlarmParams.severityLevel == SeverityLevel.UNKNOWN) {
 			return;
 		}
 
@@ -267,7 +267,7 @@ public class AlarmMessageHandler {
 		private boolean isAvailabilityAlarmError;
 		private boolean isAvailabilityAlarmNormal;
 		private boolean isExceptionAlarm;
-		private SeverityLevel severityLevel = SeverityLevel.UNKNOW;
+		private SeverityLevel severityLevel = SeverityLevel.UNKNOWN;
 		private String healthAttributeId;
 		private ResourceType subResourceType;
 		private String subResourceId;

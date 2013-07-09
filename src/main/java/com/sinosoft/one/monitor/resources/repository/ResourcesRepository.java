@@ -4,10 +4,11 @@ package com.sinosoft.one.monitor.resources.repository;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.resources.model.Resource;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+@Repository
 public interface ResourcesRepository extends PagingAndSortingRepository<Resource, String> {
 
     @SQL("delete from GE_MONITOR_RESOURCES where RESOURCE_ID in (?1)")

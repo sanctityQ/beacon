@@ -51,7 +51,7 @@ public class IndexController {
 		/* 封装表格行数据信息List->rows*/
 		List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
 		/* 查询数据库健康列表数据*/
-		List<Alarm> alarmList = alarmService.queryLatestAlarmsRowsFifty();
+		List<Alarm> alarmList = alarmService.queryLatestAlarmsRows(20);
 		/* 循环构建表格行数据*/
 		for(Alarm alarm : alarmList) {
 			Map<String, Object> row = new HashMap<String, Object>();
@@ -60,11 +60,11 @@ public class IndexController {
 			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
 			String healthyClass = MessageUtils.SeverityLevel2CssClass(alarm.getSeverity());
 			/* 构建预警详细信息地址*/
-			String url = contextPath + "/alarm/manager/alarmmanager/detail/"+alarm.getId();
+			String url = contextPath + "/alarm/manager/detail/"+alarm.getId();
 			/* 格式化表格数据信息*/
 			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, healthyClass));
 			String title = alarm.getMessage();
-			String subTitle = title.length()>10 ? title.substring(0, 9)+"...." : title;
+			String subTitle = title.length()>20 ? title.substring(0, 19)+"...." : title;
 			cell.add(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORM_A_SUBTITLE, url, title, subTitle));
 			cell.add(alarm.getResourceName());
 			cell.add(alarm.getMonitorType());

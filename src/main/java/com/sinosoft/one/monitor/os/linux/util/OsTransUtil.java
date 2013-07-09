@@ -10,6 +10,7 @@ import java.util.List;
 import com.sinosoft.one.monitor.os.linux.model.OsCpu;
 import com.sinosoft.one.monitor.os.linux.model.OsDisk;
 import com.sinosoft.one.monitor.os.linux.model.OsRam;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 拆分采样信息字符生成对象
@@ -22,6 +23,9 @@ public class OsTransUtil {
 		// 运行队列，阻塞进程，用户时间%，系统时间%，i/o等待%，空闲时间%，中断/秒
 		String[] cpuInfos = cpuInfo.split(" ");
 		OsCpu osCpu = new OsCpu();
+        if(StringUtils.isBlank(cpuInfo)){
+            return  osCpu;
+        }
 		osCpu.setRunQueue(cpuInfos[0].trim());
 		osCpu.setBlockProcess(cpuInfos[1].trim());
 		osCpu.setUserTime(cpuInfos[2].trim());
@@ -47,7 +51,6 @@ public class OsTransUtil {
 				osRam.setMemUsed(mem[0]);
 			}
 		}
-		System.out.println(countUtilZation("3", "2"));
 		osRam.setMemUtiliZation(countUtilZation(osRam.getMemTotal(),
 				osRam.getMemUsed()));
 		for (String swaps : SwapInfo.split(",")) {
@@ -70,10 +73,10 @@ public class OsTransUtil {
 		long totalCount = 0;
 		long UsedCount = 0;
 		String totalUtiliZation;
-		String[] lastelements=diskInfos[0].split(":");
+		String[] lastelements=diskInfos[0].split("-");
 		for (int i = 0; i < diskInfos.length; i++) {
 			String line = diskInfos[i];
-			elements = line.split(":");
+			elements = line.split("-");
 			
 			if (i == 0||elements[1].trim().equals("")) {
 				lastelements=elements;
@@ -92,7 +95,7 @@ public class OsTransUtil {
 		totalUtiliZation = countUtilZation(totalCount + "", UsedCount + "");
 		for (int i = 0; i < diskInfos.length; i++) {
 			String line = diskInfos[i];
-			elements = line.split(":");
+			elements = line.split("-");
 			if (i == 0||elements[1].trim().equals("")) {
 				lastelements=elements;
 				continue;
@@ -159,39 +162,8 @@ public class OsTransUtil {
 		return utilZation.toString();
 	}
 
-	/**
-	 * long数字转换成日期
-	 * @param lang
-	 * @return
-	 */
 
-	public static String LongToHMS(long lg) {
-		long hours = (lg) / (1000 * 60 * 60);
-		long minutes = (lg - hours * 60 * 60 * 1000) / (1000 * 60);
-		long seconds = (lg - hours * 60 * 60 * 1000 - minutes * 60 * 1000) / (1000l);
-		if (seconds >= 60) {
-			minutes += seconds / 60;
-			seconds = seconds % 60;
-		}
-		if (minutes >= 60) {
-			hours += minutes / 60;
-			minutes = minutes % 60;
-		}
-		if (hours == 0) {
-			return minutes + "分" + seconds + "秒";
-		}
-		if (minutes == 0) {
-			return seconds + "秒";
-		}
-		return hours + "小时" + minutes + "分" + seconds + "秒";
-	}
 
-//	public static void main(String[] args) {
-//		double a = 2.2;
-//		int b = 2;
-//		System.out.println(countUtilZation("98", "33"));
-//	}
-	
 	public static String countAve(Object dividend, int divisor) {
 		Object ave = null;
 		if (dividend.getClass().equals(Double.class)) {
@@ -260,4 +232,20 @@ public class OsTransUtil {
 		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}
+
+
+
+    public static void main(String[] args){
+        String s ="Filesystem - 1K-blocks - Used - Available - Use% - Mounted ,"+
+                "/dev/sda3 - 13102744 - 6684936 - 5741472 - 54% - / ," +
+                " /dev/sda1 - 101086 - 11641 - 84226 - 13% - /boot ," +
+                " tmpfs - 257452 - 0 - 257452 - 0% - /dev/shm ," +
+                " /dev/sdb1 - 41279536 - 748780 - 38433876 - 2% - /data ," +
+                " /dev/sda4 - 5154884 - 141440 - 4751588 - 3% - /var/opt ,";
+       System.out.println (OsTransUtil.getDiskInfo(s));
+
+
+        String m ="Mem: 514908k total, 508648k used, 6260k free, 11480k buffersSwap: 2096472k total, 19204k used, 2077268k free, 217096k cached";
+        System.out.println (OsTransUtil.getRamInfo(m));
+    }
 }

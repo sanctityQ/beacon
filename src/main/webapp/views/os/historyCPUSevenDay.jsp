@@ -25,7 +25,7 @@
 			creatSimpleChart('${ctx}/os/historyCPUStatiLine/7/'+id, 'last_sevenday', 'CPU利用率%');
 			$("#sevenday_grid").Grid({
 				type : "post",
-				url :  '/monitor/os/historyCPUStatiGrid/7/'+id,
+				url :  '${ctx}/os/historyCPUStatiGrid/7/'+id,
 				dataType: "json",
 				height: 'auto',
 				colums:[

@@ -4,10 +4,11 @@ package com.sinosoft.one.monitor.db.oracle.repository;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.sinosoft.one.monitor.db.oracle.model.Info;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+@Repository
 public interface InfoRepository extends PagingAndSortingRepository<Info, String> {
     @SQL("delete from ge_monitor_oracle_info where id in (?1)")
     void deleteByIds(List<String> monitorId);

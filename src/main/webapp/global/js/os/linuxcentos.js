@@ -14,10 +14,11 @@ function refresh() {
 	var autoWidth = $("#layout_center").width() - 100;
 	$("#grid_cpudo,#grid_cpudo_tool").width(autoWidth)
 	$("#cipan_space_detail").width(autoWidth + 65)
+    //alert(autoWidth + 65);
 	// 基本信息 （完成）	
 	$.ajax({
 		type : "post",
-		url : "/monitor/os/osInfo/" + osid,
+		url : rootPath+"/os/osInfo/" + osid,
 		dataType : "json",
 		cache : false,
 		success : function(data) {
@@ -32,7 +33,7 @@ function refresh() {
 	// 可用性饼图（完成）
 	$.ajax({
 		type : "post",
-		url : "/monitor/os/getUsability/" + osid,
+		url : rootPath+"/os/getUsability/" + osid,
 		dataType : "json",
 		cache : false,
 		success : function(data) {
@@ -93,7 +94,7 @@ function refresh() {
 	// cpu,ram,disk使用率表盘（完成）
 	$.ajax({
 		type : "post",
-		url : "/monitor/os/getUtilzation/" + osid,
+		url : rootPath+"/os/getUtilzation/" + osid,
 		dataType : "json",
 		cache : false,
 		success : function(data) {
@@ -202,13 +203,13 @@ function refresh() {
 
 		}
 	});
-	creatSimpleChart("/monitor/os/getCpuAndRam/" + osid, 'CPU_line', 'CPU内存利用率%',false);
-	creatSimpleChart("/monitor/os/getCpuInfo/" + osid, 'CPU_line2', 'CPU分解利用率%',false);
+	creatSimpleChart(rootPath+"/os/getCpuAndRam/" + osid, 'CPU_line', 'CPU内存利用率%',false);
+	creatSimpleChart(rootPath+"/os/getCpuInfo/" + osid, 'CPU_line2', 'CPU分解利用率%',false);
 	
 	// 物理和交换内存利用率列表
 	$("#grid_Memory").Grid({
 		type : "post",
-		url : "/monitor/os/gridMemory/" + osid,
+		url : rootPath+"/os/gridMemory/" + osid,
 		dataType : "json",
 		height : 'auto',
 		colums : [ {
@@ -250,7 +251,7 @@ function refresh() {
 	// cpu使用率列表
 	$("#grid_cpu").Grid({
 		type : "post",
-		url : "/monitor/os/gridCpu/" + osid,
+		url : rootPath+"/os/gridCpu/" + osid,
 		dataType : "json",
 		height : 'auto',
 		colums : [ {
@@ -288,7 +289,7 @@ function refresh() {
 	
 	$("#grid_cpudo").Grid({
 		type : "post",
-		url : "/monitor/os/gridCpuResolve/" + osid,
+		url : rootPath+"/os/gridCpuResolve/" + osid,
 		dataType : "json",
 		colDisplay : false,
 		clickSelect : true,
@@ -315,16 +316,18 @@ function refresh() {
 
 	});
 
+
+
 	$("#cipan_space_detail").Grid({
 		type : "post",
-		url : "/monitor/os/gridDiskGrid/"+osid,
+		url : rootPath+"/os/gridDiskGrid/"+osid,
 		dataType : "json",
 		height : 'auto',
 		colums : [ {
 			id : '1',
 			text : '磁盘',
 			name : "diskPath",
-			width : '',
+			//width : '',
 			index : '1',
 			align : '',
 			color : ''
@@ -332,7 +335,7 @@ function refresh() {
 			id : '2',
 			text : '磁盘总空间',
 			name : "total",
-			width : '',
+			//width : '',
 			index : '1',
 			align : '',
 			color : ''
@@ -340,7 +343,7 @@ function refresh() {
 			id : '3',
 			text : '已用%',
 			name : "usedUtiliZation",
-			width : '',
+			//width : '',
 			index : '1',
 			align : '',
 			color : ''
@@ -348,7 +351,7 @@ function refresh() {
 			id : '4',
 			text : '已用 (kb) ',
 			name : "used",
-			width : '',
+			//width : '',
 			index : '1',
 			align : '',
 			color : ''
@@ -356,7 +359,7 @@ function refresh() {
 			id : '5',
 			text : '空闲% ',
 			name : "freeUtiliZation",
-			width : '',
+			//width : '',
 			index : '1',
 			align : '',
 			color : ''
@@ -364,54 +367,20 @@ function refresh() {
 			id : '6',
 			text : '空间(kb) ',
 			name : "free",
-			width : '',
+			//width : '',
 			index : '1',
 			align : '',
 			color : ''
 		}  ],
-		rowNum : 20,
-		rowList : [ 10, 20, 30 ],
+		//rowNum : 20,
+		//rowList : [ 10, 20, 30 ],
 		pager : false,
-		number : false,
+		//number : false,
 		multiselect : false
 	});
-	$("#myDesk").height($("#layout_center").height());
-	$("#nav").delegate('li', 'mouseover mouseout', navHover);
-	$("#nav,#menu").delegate('li', 'click', navClick);
-	
 }
 
-function navHover() {
-	$(this).toggleClass("hover")
-}
-function navClick() {
-	$(this).addClass("seleck").siblings().removeClass("seleck");
-	if ($(this).hasClass('has_sub')) {
-		var subMav = $(this).children("ul.add_sub_menu");
-		var isAdd = false;
-		if ($(this).parent().attr("id") == "menu") {
-			isAdd = true;
-		};
-		subMav.slideDown('fast', function() {
-			$(document).bind('click', {
-				dom : subMav,
-				add : isAdd
-			}, hideNav);
-			return false;
-		});
-	}
-	;
-}
-function hideNav(e) {
-	var subMenu = e.data.dom;
-	var isAdd = e.data.add;
-	subMenu.slideUp('fast', function() {
-		if (isAdd) {
-			subMenu.parent().removeClass('seleck');
-		};
-	});
-	$(document).unbind();
-}
+
 function viewWindow(e, url) {
 	var rows = $(e).parent().parent();
 	var id = rows.attr('id');
@@ -420,7 +389,7 @@ function viewWindow(e, url) {
 	var temWin = $("body").window({
 		"id" : "window",
 		"title" : title,
-		"url" : "/monitor/os/" + url + "/" + osid,
+		"url" : rootPath+"/os/" + url + "/" + osid,
 		"hasIFrame" : true,
 		"width" : 740,
 		"height" : 440,
@@ -435,4 +404,5 @@ function viewWindow(e, url) {
 		} ]
 	});
 }
-	setInterval(refresh, 1000 * 5* 60);
+
+setInterval(refresh, 1000 * 5* 60);

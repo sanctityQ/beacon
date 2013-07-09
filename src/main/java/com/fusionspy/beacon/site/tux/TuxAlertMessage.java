@@ -90,7 +90,7 @@ class TuxAlertMessage extends AlertMessage {
         resultAdd(result,AlarmMessageFormat.TUX_MEM,this.memAlarmServerName);
         resultAdd(result,AlarmMessageFormat.TUX_CPU,this.cpuAlarmServerName);
         if(StringUtils.isNotEmpty(stopServerName))
-             result.add(this.getMessage(AlarmMessageFormat.TUX_STOP, receiveDate, this.stopServerName));
+             result.add(this.getMessage(AlarmMessageFormat.TUX_STOP, this.stopServerName));
         return result;
     }
 
@@ -122,13 +122,13 @@ class TuxAlertMessage extends AlertMessage {
             case TUX_NOTRAN:
                 return appendServerName(alarmMessageFormat, this.noTransServerName);
             case TUX_BUSY:
-                break;
+                return appendServerName(alarmMessageFormat, this.longBusyServerName);
             case TUX_QUE:
-                break;
+                return appendServerName(alarmMessageFormat, this.queueAlarmServerName);
             case TUX_MEM:
-                break;
+                return appendServerName(alarmMessageFormat, this.memAlarmServerName);
             case TUX_CPU:
-                break;
+                return appendServerName(alarmMessageFormat, this.cpuAlarmServerName);
             case TUX_STOP:
                 break;
         }
@@ -141,10 +141,10 @@ class TuxAlertMessage extends AlertMessage {
        for(String serverName:serverNames){
             str.append("(").append(serverName).append(")");
        }
-       return this.getMessage(format, df.format(receiveDate), str.toString());
+       return this.getMessage(format,str.toString());
     }
 
     String noAppendServerName(AlarmMessageFormat format){
-       return this.getMessage(format, df.format(receiveDate),StringUtils.EMPTY);
+       return this.getMessage(format,StringUtils.EMPTY);
     }
 }

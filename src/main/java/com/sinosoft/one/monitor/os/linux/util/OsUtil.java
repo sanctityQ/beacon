@@ -5,8 +5,9 @@ public class OsUtil {
 	
 	/**
 	 * 数据库日期格式
+     * TODO 调整成了mysql
 	 */
-	public static String ORCL_DATEFORMATE="yyyy-MM-dd hh24:mi:ss";
+	public static String ORCL_DATEFORMATE="%Y-%m-%d %T";
 	
 	/**
 	 * 小时数日期格式
