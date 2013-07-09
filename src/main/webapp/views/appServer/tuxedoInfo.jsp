@@ -23,7 +23,7 @@ $(function(){
         height: "auto",
         colums:[
             {id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
-            {id:'2',text:'消息',name:"appellation",index:'1',align:''},
+            {id:'2',text:'消息',name:"appellation",index:'1',align:'',width:'420'},
             {id:'5',text:'时间',name:"appellation",index:'1',align:''}
         ],
         rowNum:10,
@@ -861,7 +861,7 @@ System.prototype.start = function(){
                             <div class="tableheadingbborder" style="height:320px;width:100%">
                                 <div class="head-cpu">
                                     <a href="javascript:void(0)" class="refresh" title="刷新"></a>
-                                    <a href="alertList.html" class="alerts_list">历史预警</a>
+                                    <a href="${ctx}/alarm/manager/resource/${serverName}/history" class="alerts_list">历史预警</a>
                                     预警消息最近10条
                                 </div>
                                 <div id="emergencyList"></div>

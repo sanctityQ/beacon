@@ -76,6 +76,10 @@
                         <td><input name="password" id="password" type="password" class="formtext" value="${user.password }"/></td>
                     </tr>
                     <tr>
+                        <td>角色<span class="mandatory">*</span></td>
+                        <td><input name="role" id="role" type="password" class="formtext" value="${user.password }"/></td>
+                    </tr>
+                    <tr>
                         <td>确认密码<span class="mandatory">*</span></td>
                         <td><input name="passwordConfirm" id="passwordConfirm" type="password" class="formtext" value="${user.password }"/></td>
                     </tr>

@@ -10,6 +10,8 @@ import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
+import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
@@ -63,9 +65,13 @@ public class AlarmManagerController {
     InfoRepository infoRepository;
     @Autowired
     UrlTraceLogRepository urlTraceLogRepository;
+    @Autowired
+    ResourcesRepository resourcesRepository;
 
     @Get("list")
     public String getAlarmList(Invocation inv){
+        String resourceId=inv.getParameter("resourceId");
+        inv.setAttribute("resourceId",resourceId);
         return "alarmList";
     }
 
@@ -142,6 +148,8 @@ public class AlarmManagerController {
                 :alarmRepository.findByMonitorTypeAndSeverity(givenType.name(),severityLevel,pageRequest);
         getAlarmListWithGivenCondition(alarms, inv);
     }
+
+
 
     //时间和类型都选择的ajax请求
     @Get("day/{givenTime}/resourceType/{givenType}")
@@ -265,6 +273,14 @@ public class AlarmManagerController {
         //用以发送ajax，获得当前监视器的历史告警信息
         inv.addModel("monitorId",dbAlarm.getMonitorId());
         return "alarmDetail";
+    }
+
+    @Get("resource/{resourceId}/history")
+    public String getHistoryAlarm(@Param("resourceId")String resourceId,Invocation inv){
+       Resource resource = resourcesRepository.findOne(resourceId);
+       inv.addModel("monitorId",resourceId);
+       inv.addModel("monitorName",resource.getResourceName());
+       return "history";
     }
 
     //当前监视器的历史告警信息
