@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.sinosoft.one.monitor.account.model.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,6 +23,8 @@ import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author Administrator
@@ -57,7 +60,7 @@ public class AccountController {
 			throw new Exception("json数据转换出错!", e);
 		}
 	}
-    
+
     @Get("create")
     @Post("errorCreate")
     public String createForm(Invocation inv) {
@@ -66,15 +69,19 @@ public class AccountController {
     }
 
     @Post("save")
-    public Reply save(Account account, Invocation inv) {
+    public Reply save(Account account, Invocation inv,@Param("role")long groupId) {
+        String role = inv.getParameter("role");
+        List<Group> groups = newArrayList();
+        groups.add(new Group(groupId,null));
+        account.setGroupList(groups);
         account.setCreateTime(new Date());
         if("".equals(account.getStatus())||account.getStatus()==null){
-        	account.setStatus(String.valueOf(1));
+            account.setStatus(String.valueOf(1));
         }
         accountService.saveAccount(account);
         return Replys.simple().success();
     }
-    
+
     @Get("update/{id}")
 	public String update(@Param("id")String id,Invocation inv){
 		inv.addModel("user", accountService.getAccount(id));

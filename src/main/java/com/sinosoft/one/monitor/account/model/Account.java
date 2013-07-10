@@ -3,19 +3,19 @@ package com.sinosoft.one.monitor.account.model;
 
 
 import java.util.Date;
-import javax.persistence.Column;
+import java.util.List;
+import javax.persistence.*;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * Account.
@@ -151,7 +151,7 @@ public class Account  implements java.io.Serializable {
     }
 
     public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
+        this.createTime = createTime;
 	    createTimeStr = DateFormatUtils.format(createTime, "yyyy-MM-dd HH:mm:ss");
     }
 
@@ -170,6 +170,26 @@ public class Account  implements java.io.Serializable {
 	public String getStatusStr() {
 		return statusStr;
 	}
+
+
+    private List<Group> groupList = newArrayList();// 有序的关联对象集合
+
+    // 多对多定义
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "GE_MONITOR_ACCOUNT_GROUP", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "group_id") })
+    // Fecth策略定义
+    @Fetch(FetchMode.SUBSELECT)
+    // 集合按id排序.
+    @OrderBy("id")
+    // 集合中对象id的缓存.
+//    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    public List<Group> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(List<Group> groupList) {
+        this.groupList = groupList;
+    }
 
 }
 

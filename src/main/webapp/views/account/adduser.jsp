@@ -77,7 +77,11 @@
                     </tr>
                     <tr>
                         <td>角色<span class="mandatory">*</span></td>
-                        <td><input name="role" id="role" type="password" class="formtext" value="${user.password }"/></td>
+                        <td><select name="role" id="role">
+                             <option value="1">管理员</option>
+                             <option value="2">用户</option>
+                           </select>
+                        </td>
                     </tr>
                     <tr>
                         <td>确认密码<span class="mandatory">*</span></td>
@@ -124,3 +128,8 @@
 <%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>
+<script>
+    <c:forEach var="group" items="${user.groupList}">
+       $('#role').val('<c:out value="${group.id}" />');
+    </c:forEach>
+</script>

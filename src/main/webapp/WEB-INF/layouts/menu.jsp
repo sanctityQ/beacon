@@ -1,4 +1,14 @@
+<%@ page import="org.apache.shiro.SecurityUtils" %>
+<%@ page import="com.sinosoft.one.monitor.account.model.Account" %>
 <%@ page language="java" pageEncoding="UTF-8" %>
+<%
+    Account account = (Account)SecurityUtils.getSubject().getPrincipal();
+    String name = "管理员";
+    if(!account.getGroupList().isEmpty())
+        name = account.getGroupList().iterator().next().getName();
+    request.setAttribute("name",name);
+%>
+
 <script type="text/javascript">
     $(function () {
         $("body").layout({
@@ -56,7 +66,7 @@
 </script>
 <div id="layout_top">
     <div class="header">
-        <p class="user">您好,系统管理员 <span>|</span> <a href="${ctx}/login">退出系统</a></p>
+        <p class="user">您好,${name} <span>|</span> <a href="${ctx}/login">退出系统</a></p>
         <div class="menu_box">
             <ul class="nav" id="nav">
                 <li><a href="${ctx }/index">首页</a></li>

@@ -38,7 +38,8 @@
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
 		<property name="jpaProperties">
 			<props>
-			</props>
+
+            </props>
 		</property>
 	</bean>
 

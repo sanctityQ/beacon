@@ -13,8 +13,7 @@ import javax.persistence.*;
 * 应用系统邮件动作信息表
  */
 @Entity
-@Table(name="GE_MONITOR_EMAIL_ACTION"
-)
+@Table(name="GE_MONITOR_EMAIL_ACTION")
 public class MailAction implements java.io.Serializable {
 
 	/**
