@@ -14,80 +14,7 @@ $(function(){
     $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth)
     $("#cipan_space_detail").width(autoWidth + 65)
 
-    $("#emergencyList").Grid({
-        url : "${ctx}/alarm/manager/resource/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
-            {id:'2',text:'消息',name:"appellation",index:'1',align:'',width:'420'},
-            {id:'5',text:'时间',name:"appellation",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-
-    $("#rank_top").Grid({
-        url : "${ctx}/appServer/tuxedo/queue/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'排名',name:"sort",index:'1',align:''},
-            {id:'2',text:'名称',name:"name",index:'1',align:''},
-            {id:'3',text:'队列消息数',name:"queued",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-    $("#RAM_top5").Grid({
-        url : "${ctx}/appServer/tuxedo/memory/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'排名',name:"sort",index:'1',align:''},
-            {id:'2',text:'PID',name:"pid",index:'1',align:''},
-            {id:'3',text:'使用内存',name:"used",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-    $("#trade_top5").Grid({
-        url : "${ctx}/appServer/tuxedo/transcation/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'排名',name:"sort",index:'1',align:''},
-            {id:'2',text:'rqdone',name:"rqdone",index:'1',align:''},
-            {id:'3',text:'progname',name:"progname",index:'1',align:''},
-            {id:'4',text:'pid',name:"pid",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-
-
     new DataState().init();
-    //setInterval(dataState(), 1000 * 30);
 
     $("#tabs").tabs({closeTab:false});
     if($.browser.msie && ($.browser.version == "7.0")){
@@ -626,10 +553,17 @@ function viewWindowCP(e){
  */
 var DataState = function(){}
 DataState.prototype.init = function(){
+    //--状态监控---
+    (new EmergencyMsg()).start();
+    (new QueueTop()).start();
+    (new RamTop()).start();
+    (new TransTop()).start();
+    //---数据监控---
     (new Server()).start();
     (new Queue()).start();
     (new Client()).start();
     (new System()).start();
+
     //this.start();
 }
 DataState.prototype.start = function(){
@@ -649,11 +583,123 @@ DataState.prototype.toggle = function(){
 }
 
 
+var TransTop = function(){
+    var refreshId = '#transTopRefresh';
+    $(refreshId).click(this.toggle);
+    $(refreshId).trigger('click');
+};
+TransTop.prototype = new DataState();
+TransTop.prototype.start = function(){
+    $("#trade_top5").empty();
+    $("#trade_top5").Grid({
+        url : "${ctx}/appServer/tuxedo/transcation/top/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'排名',name:"sort",index:'1',align:''},
+            {id:'2',text:'rqdone',name:"rqdone",index:'1',align:''},
+            {id:'3',text:'progname',name:"progname",index:'1',align:''},
+            {id:'4',text:'pid',name:"pid",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : false,
+        number:false,
+        multiselect: false
+    });
+}
+var RamTop = function(){
+    var refreshId = '#memTopRefresh';
+    $(refreshId).click(this.toggle);
+    $(refreshId).trigger('click');
+};
+RamTop.prototype = new DataState();
+RamTop.prototype.start = function(){
+    $("#RAM_top5").empty();
+    $("#RAM_top5").Grid({
+        url : "${ctx}/appServer/tuxedo/memory/top/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'排名',name:"sort",index:'1',align:''},
+            {id:'2',text:'PID',name:"pid",index:'1',align:''},
+            {id:'3',text:'使用内存',name:"used",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : false,
+        number:false,
+        multiselect: false
+    });
+}
+
+var QueueTop = function(){
+    var refreshId = '#queTopRefresh';
+    $(refreshId).click(this.toggle);
+    $(refreshId).trigger('click');
+};
+QueueTop.prototype = new DataState();
+QueueTop.prototype.start = function(){
+    $("#rank_top").empty();
+    $("#rank_top").Grid({
+        url : "${ctx}/appServer/tuxedo/queue/top/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'排名',name:"sort",index:'1',align:''},
+            {id:'2',text:'名称',name:"name",index:'1',align:''},
+            {id:'3',text:'队列消息数',name:"queued",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : false,
+        number:false,
+        multiselect: false
+    });
+}
+
+var EmergencyMsg = function(){
+    var refreshId = '#emergencyRefresh';
+    $(refreshId).click(this.toggle);
+    $(refreshId).trigger('click');
+};
+EmergencyMsg.prototype = new DataState();
+EmergencyMsg.prototype.start = function(){
+    $("#emergencyList").empty();
+    $("#emergencyList").Grid({
+        url : "${ctx}/alarm/manager/resource/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
+            {id:'2',text:'消息',name:"appellation",index:'1',align:'',width:'420'},
+            {id:'5',text:'时间',name:"appellation",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : false,
+        number:false,
+        multiselect: false
+    });
+}
+
 /**
 * Server对象
 * @constructor
 */
-var Server = function(){};
+var Server = function(){
+    var refreshId = '#serverRefresh';
+    $(refreshId).click(this.toggle);
+    $(refreshId).trigger('click');
+};
 Server.prototype = new DataState();
 Server.prototype.start = function(){
     $("#tuxSERVER").empty();
@@ -687,6 +733,7 @@ Server.prototype.start = function(){
 var Queue = function(){
     var refreshId = '#queRefresh';
     $(refreshId).click(this.toggle);
+    $(refreshId).trigger('click');
 }
 Queue.prototype = new DataState();
 Queue.prototype.constructor =  Queue.constructor;
@@ -715,7 +762,11 @@ Queue.prototype.start = function(){
     });
 }
 
-var Client = function(){}
+var Client = function(){
+    var refreshId = '#cltRefresh';
+    $(refreshId).click(this.toggle);
+    $(refreshId).trigger('click');
+}
 Client.prototype = new DataState();
 Client.prototype.start = function(){
     $("#tuxCLIENT").empty();
@@ -742,7 +793,11 @@ Client.prototype.start = function(){
     });
 }
 
-var System = function(){};
+var System = function(){
+    var refreshId = '#sysRefresh';
+    $(refreshId).click(this.toggle);
+    $(refreshId).trigger('click');
+};
 System.prototype = new DataState();
 System.prototype.start = function(){
     $("#tuxSYSTEM").empty();
@@ -860,7 +915,7 @@ System.prototype.start = function(){
                         <td style="vertical-align:top" width="49%">
                             <div class="tableheadingbborder" style="height:320px;width:100%">
                                 <div class="head-cpu">
-                                    <a href="javascript:void(0)" class="refresh" title="刷新"></a>
+                                    <a id="emergencyRefresh" href="javascript:void(0)" class="refresh" title="刷新"></a>
                                     <a href="${ctx}/alarm/manager/resource/${serverName}/history" class="alerts_list">历史预警</a>
                                     预警消息最近10条
                                 </div>
@@ -876,7 +931,7 @@ System.prototype.start = function(){
 
                 <div class="hr_box">
                     <div class="head-cpu">
-                        <a href="javascript:void(0)" class="refresh" title="刷新"></a>
+                        <a id="queTopRefresh" href="javascript:void(0)" class="refresh" title="刷新"></a>
                         列队统计TOP5
                     </div>
                     <div id="rank_top"></div>
@@ -888,7 +943,7 @@ System.prototype.start = function(){
                         <td width="49%">
                             <div class="hr_box h_b">
                                 <div class="head-cpu">
-                                    <a href="javascript:void(0)" class="refresh" title="刷新"></a>
+                                    <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>
                                     CPU使用率-最近6小时
                                 </div>
                                 <div id="CPU_line" style="height:230px;padding-top:15px"></div>
@@ -898,7 +953,7 @@ System.prototype.start = function(){
                         <td width="49%">
                             <div class="hr_box h_b">
                                 <div class="head-cpu">
-                                    <a href="javascript:void(0)" class="refresh" title="刷新"></a>
+                                    <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>
                                     内存使用率-最近6小时
                                 </div>
                                 <div id="RAM_line" style="height:230px;padding-top:15px"></div>
@@ -909,12 +964,12 @@ System.prototype.start = function(){
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="49%"><div class="hr_box h_b">
-                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh" title="刷新"></a> 内存使用最多TOP5</div>
+                            <div class="head-cpu"> <a id="memTopRefresh" href="javascript:void(0)" class="refresh" title="刷新"></a> 内存使用最多TOP5</div>
                             <div id="RAM_top5"></div>
                         </div></td>
                         <td width="2%">&nbsp;</td>
                         <td width="49%"><div class="hr_box h_b">
-                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh" title="刷新"></a> 交易调用最多TOP5 </div>
+                            <div class="head-cpu"> <a id="transTopRefresh" href="javascript:void(0)" class="refresh" title="刷新"></a> 交易调用最多TOP5 </div>
                             <div id="trade_top5"></div>
                         </div></td>
                     </tr>
@@ -922,12 +977,12 @@ System.prototype.start = function(){
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="49%"><div class="hr_box h_b">
-                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh" title="刷新"></a> 客户端统计</div>
+                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> 客户端统计</div>
                             <div id="client_line" style="height:230px;padding-top:15px"></div>
                         </div></td>
                         <td width="2%">&nbsp;</td>
                         <td width="49%"><div class="hr_box h_b">
-                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh" title="刷新"></a> 吞吐量 </div>
+                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> 吞吐量 </div>
                             <div id="throughput_line" style="height:230px;padding-top:15px"></div>
                         </div></td>
                     </tr>
@@ -938,7 +993,9 @@ System.prototype.start = function(){
                 <div class="hr_box h_b">
                     <div class="head-cpu">
                         <a href="javascript:void(0)" class="refresh ico_seo serverRefreshButton" title="刷新"></a>
-                        <input type="text" class="formtext list_seach serverRefreshInput" />TUX_SERVER
+                        <input type="text" class="formtext list_seach serverRefreshInput" />
+                        <span style="float: left">TUX_SERVER</span>
+                        <a id="serverRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
                     </div>
                     <div id="tuxSERVER"></div>
                 </div>
@@ -956,7 +1013,9 @@ System.prototype.start = function(){
                 <div class="hr_box h_b">
                     <div class="head-cpu">
                         <a href="javascript:void(0)" class="refresh ico_seo cltRefreshButton" title="刷新"></a>
-                        <input type="text" class="formtext list_seach cltRefreshInput" />TUX_CLIENT
+                        <input type="text" class="formtext list_seach cltRefreshInput" />
+                        <span style="float: left">TUX_CLIENT</span>
+                        <a id="cltRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
                     </div>
                     <div id="tuxCLIENT"></div>
                 </div>
@@ -964,7 +1023,9 @@ System.prototype.start = function(){
                 <div class="hr_box h_b">
                     <div class="head-cpu">
                         <a href="javascript:void(0)" class="refresh ico_seo sysRefreshButton" title="刷新"></a>
-                        <input type="text" class="formtext list_seach sysRefreshInput" />TUX_SYSTEM
+                        <input type="text" class="formtext list_seach sysRefreshInput" />
+                        <span style="float: left">TUX_SYSTEM</span>
+                        <a id="sysRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
                     </div>
                     <div id="tuxSYSTEM"></div>
                 </div>
