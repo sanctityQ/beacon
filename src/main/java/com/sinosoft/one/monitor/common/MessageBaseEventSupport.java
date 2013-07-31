@@ -1,9 +1,6 @@
 package com.sinosoft.one.monitor.common;
 
-import com.lmax.disruptor.MultiThreadedClaimStrategy;
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.SingleThreadedClaimStrategy;
-import com.lmax.disruptor.SleepingWaitStrategy;
+import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +33,7 @@ public class MessageBaseEventSupport {
 		messageBaseEventHandler.setAlarmMessageHandler(alarmMessageHandler);
 		Disruptor<MessageBaseEvent> disruptor = new Disruptor<MessageBaseEvent>(MessageBaseEvent.EVENT_FACTORY, Executors.newSingleThreadExecutor(),
 						new SingleThreadedClaimStrategy(ringSize),
-						new SleepingWaitStrategy());
+						new BlockingWaitStrategy());
 		disruptor.handleEventsWith(messageBaseEventHandler);
 		ringBuffer = disruptor.start();
 	}

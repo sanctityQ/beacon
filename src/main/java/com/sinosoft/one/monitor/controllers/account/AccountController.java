@@ -70,7 +70,6 @@ public class AccountController {
 
     @Post("save")
     public Reply save(Account account, Invocation inv,@Param("role")long groupId) {
-        String role = inv.getParameter("role");
         List<Group> groups = newArrayList();
         groups.add(new Group(groupId,null));
         account.setGroupList(groups);

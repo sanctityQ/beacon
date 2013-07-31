@@ -41,7 +41,7 @@ public class AppServerController{
 
 
     @Autowired
-    private MonitorManage monitorManage ;
+    private MonitorManage monitorManage;
 
     @Get("list/{type}")
     public String list(@Param("type")String type){
@@ -115,8 +115,10 @@ public class AppServerController{
 
     @Delete("delete/{type}/{serverName}")
     public Reply delete(@Param("type")String type,@Param("serverName")String serverName) {
+        monitorManage.cancel(serverName);
         systemService.delSite(serverName);
         logger.debug("delete server type is {} ,name is",type,serverName);
+
         return Replys.with("success").as(Text.class);
     }
 
@@ -132,9 +134,6 @@ public class AppServerController{
     }
 
 
-
-
-
     private SiteSettings settings;
 
     public SiteSettings getSettings() {
@@ -145,12 +144,6 @@ public class AppServerController{
         this.settings = settings;
     }
 
-//    public void prepareInputSetting(){
-//      logger.debug("prepareInputSetting settings.siteName = {}" ,settings.getSiteName());
-//      SiteSettings settings =  systemService.getSiteSetting(this.settings.getSiteName());
-//      settings.setSiteType(this.settings.getSiteType());
-//      this.settings= settings;
-//    }
 
     public String inputSetting(){
       return "tuxSetting";

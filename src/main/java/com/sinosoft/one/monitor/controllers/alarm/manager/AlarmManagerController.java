@@ -1,6 +1,5 @@
 package com.sinosoft.one.monitor.controllers.alarm.manager;
 
-import com.fusionspy.beacon.system.dao.SiteListDao;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
@@ -19,7 +18,6 @@ import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
-import com.sinosoft.one.mvc.web.instruction.reply.EntityReply;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
@@ -29,14 +27,10 @@ import com.sinosoft.one.uiutil.UIUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.datetime.joda.JodaTimeFormatterRegistrar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -206,7 +200,7 @@ public class AlarmManagerController {
                     tempAlarm.setAppName(tempAlarm.getMonitorId());
                 }
                 //获得类型对应的中文名
-                tempAlarm.setMonitorType(ResourceType.valueOf(tempAlarm.getMonitorType()).cnName());
+                tempAlarm.setMonitorType(ResourceType.valueOf(tempAlarm.getMonitorType()).getDescription());
                 //格式化时间，供页面显示
                 tempAlarm.setRecordTime(formatter.format(tempAlarm.getCreateTime()));
             }

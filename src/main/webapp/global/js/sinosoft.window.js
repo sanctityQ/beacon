@@ -103,7 +103,7 @@
                     setPositionCenter();
                     if (defaults.url != "") {
                         if (defaults.hasIFrame == true) {
-                            tem = window.setInterval(ajaxMethod, 500);
+                            tem = window.setTimeout(ajaxMethod, 500);
                         } else {
                             noFrameAjaxMethod();
                         }

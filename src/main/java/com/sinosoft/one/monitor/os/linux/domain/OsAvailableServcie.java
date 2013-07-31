@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.os.linux.domain;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,7 +36,6 @@ public class OsAvailableServcie {
 	private OsAvailableRepository osAvailableRepository;
 	/**
 	 * 保存可用性统计表数据 //每天00点保存
-	 * @param ava
 	 */
 	public void saveAvailable(String osId,long nomorRun,long crashtime,long aveRepair,long aveFault ,Date timeSpan, int stopCount){
 		OsAvailable osAvailable =new OsAvailable();
@@ -53,7 +53,7 @@ public class OsAvailableServcie {
 	
 	/**
 	 * 获取可用性统计表数据 （统计表中时间为天的整点）
-	 * @param ava
+	 * @param osInfoId
 	 * @param date（一天时间整点）
 	 */
 	public OsAvailable getAvailable(String osInfoId,Date date){
@@ -92,7 +92,7 @@ public class OsAvailableServcie {
 	}
 	/**
 	 * 保存可用性临时数据//每个采样点保存
-	 * @param ava
+	 * @param osAvailabletemp
 	 */
 	public OsAvailabletemp saveAvailableTemp(OsAvailabletemp osAvailabletemp){
 		return osAvailabletempRepository.save(osAvailabletemp);
@@ -153,7 +153,7 @@ public class OsAvailableServcie {
 	public void deleteAvailableTemp(String osInfoId,Date beginTime,Date endTime){
 //		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(OsUtil.DATEFORMATE);
 //		osAvailabletempRepository.deleteOsAvailabletempByDate(osInfoId, simpleDateFormat.format(beginTime), simpleDateFormat.format(endTime),OsUtil.ORCL_DATEFORMATE);
-		osAvailabletempRepository.deleteOsAvailabletempByDate(osInfoId, beginTime, endTime);
+		osAvailabletempRepository.deleteOsAvailabletempByDate(osInfoId, new Timestamp(beginTime.getTime()), new Timestamp(endTime.getTime()));
 
 	}
 	

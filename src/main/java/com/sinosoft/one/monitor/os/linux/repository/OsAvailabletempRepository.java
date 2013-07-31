@@ -1,6 +1,7 @@
 package com.sinosoft.one.monitor.os.linux.repository;
 // Generated 2013-2-27 21:43:52 by One Data Tools 1.0.0
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface OsAvailabletempRepository extends PagingAndSortingRepository<Os
 	
 	//根据时间段删除
 	@SQL("delete from GE_MONITOR_OS_AVAILABLETEMP o where o.record_time between ?2 and ?3 and o.OS_INFO_ID= ?1 ")
-	public void deleteOsAvailabletempByDate(String osid,Date beginTime,Date endTime );
+	public void deleteOsAvailabletempByDate(String osid,Timestamp beginTime,Timestamp endTime );
 	
 	//获取最后一次轮询记录点时间
 //	@SQL("select * from GE_MONITOR_OS_AVAILABLETEMP o where o.sample_date=(select max(sample_date) from GE_MONITOR_OS_AVAILABLETEMP where sample_date<to_date(?2,?3)) and o.OS_INFO_ID= ?1")

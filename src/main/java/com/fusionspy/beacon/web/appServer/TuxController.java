@@ -165,14 +165,6 @@ public class TuxController {
       return Replys.with(data).as(Json.class);
     }
 
-//    public Reply getInTimeData(String siteName) {
-//        TuxHisData hisData = monitorManage.getMonitorInf(siteName);
-//        jsonBinder.setDateFormat(TIME_FORMAT);
-//        TuxInTimeData tuxInTimeData = hisData.getTuxInTimeData();
-//        String data = jsonBinder.toJson(tuxInTimeData);
-//        return Replys.with(data).as(Json.class);
-//    }
-
     @Get("data/{type}/{serverName}")
     public void getInTimeData(@Param("type")String type,@Param("serverName")String serverName,Invocation invocation){
         TuxHisData hisData = monitorManage.getMonitorInf(serverName);
@@ -526,28 +518,8 @@ public class TuxController {
     }
 
 
-    public Reply logInf(String siteName){
-        String log = jsonBinder.toJson(monitorManage.getLogger(siteName));
-        return  Replys.with(log).as(Json.class);
-    }
 
-    private void addLineSeries(Chart.LineChart chart,Date time) {
-        Chart.Value ser = new Chart.Value();
-        ser.setValue(df.format(time));
-        chart.addSeries(ser);
-    }
 
-    private void addLineValue(Chart.Graph graph,String value) {
-        Chart.Value tv = new Chart.Value();
-        tv.setValue(value);
-        graph.addValue(tv);
-    }
-
-    private void lineChartCheck(Chart.LineChart chart ){
-        if(chart.getSeries().isEmpty()){
-          addLineSeries(chart,new Date());
-        }
-    }
 
     @Post("setting/save")
     public Reply saveSetting(SiteSettings settings){
@@ -557,7 +529,6 @@ public class TuxController {
 
     @Get("setting/{serverName}")
     public String getSetting(@Param("serverName")String serverName,Invocation invocation){
-
         invocation.addModel(systemService.getSiteSetting(serverName).getDataSave());
         invocation.addModel("serverName",serverName);
         return "tuxedoSetting";

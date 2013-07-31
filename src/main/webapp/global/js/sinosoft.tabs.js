@@ -14,7 +14,7 @@
                 quckList:false, //是否有快速选择
                 slideTab:false, //切换动画
                 minHeight:'auto', //最小高度
-                maxHeight:'auto'  //最大高度
+                maxHeight:'auto',  //最大高度
             }
             var defaults = $.extend(defaults, opts);
             var tab = $(this);
@@ -35,11 +35,9 @@
             if (defaults.maxHeight != 'auto') {
                 maxHeightFn();
             }
-            ;
             if (defaults.minHeight != 'auto') {
                 minHeightFn();
             }
-            ;
 
             $('ul.tabs_titles li', tab).hover(function () {
                 $(this).addClass('li_hover');
@@ -133,11 +131,9 @@
                     $('ul.tabs_titles li b', tab).removeClass('has_close');
                     $('div.tabs_cont', tab).addClass('tabs_show');
                 }
-                ;
                 if (defaults.quckList == true) {
                     $('div.quck_sec li', tab).eq(showIndex).remove();
                 }
-                ;
             }
 
             ;
@@ -150,10 +146,8 @@
                     $('div.tabs_cont', tab).removeClass('tabs_show');
                     $('div.tabs_cont', tab).eq(tabIndex).addClass('tabs_show');
                 }
-                ;
             }
 
-            ;
             //最大高度
             function maxHeightFn() {
                 $('div.tabs_cont', tab).addClass('tabs_show').wrapInner('<div class="inner_box"></div>');

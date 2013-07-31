@@ -99,7 +99,10 @@
             var _x;
 
             var _data;
-			
+			if(defaults.girdData){
+                _data = defaults.girdData;
+            }
+
 			//初始化的时候data的值
 			var originGridData = "";
 
@@ -400,7 +403,6 @@
             };
 
             function initGrid(data, startParam, endParam, colParams) {
-                console.log(data);
                 readJson(data, startParam, endParam, colParams);
                 $load.hide();
                 $('tr',$gView).hover(function(){
@@ -422,7 +424,6 @@
                 rows = data.rows;
                 total = data.total;
                 var colLen = defaults.colums.length;
-                console.log(colLen);
                 var allW = 0;
                 gTable = gTable + '<tr class="th_rows">';
                 if(defaults.multiselect) {

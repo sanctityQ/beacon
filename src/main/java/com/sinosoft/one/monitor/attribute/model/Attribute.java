@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="GE_MONITOR_ATTRIBUTE"
 )
-public class Attribute  implements java.io.Serializable {
+public class Attribute  implements java.io.Serializable ,java.lang.Comparable<Attribute>{
 
 	public final static Attribute EMPTY = new Attribute();
 
@@ -127,6 +127,10 @@ public class Attribute  implements java.io.Serializable {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
+    @Override
+    public int compareTo(Attribute o) {
+        return this.attribute.compareTo(o.attribute);
+    }
 }
 
 

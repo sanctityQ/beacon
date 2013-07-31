@@ -14,6 +14,7 @@ public enum ResourceType {
 	OS("操作系统"),
 	DB("数据库"),
     APP_SERVER("应用服务器"),
+    Tuxedo("Tuxedo"),
 	NONE("");
 
 	private String _cnName;
@@ -22,7 +23,7 @@ public enum ResourceType {
 		this._cnName = cnName;
 	}
 
-	public String cnName() {
+	public String getDescription() {
 		return _cnName;
 	}
 

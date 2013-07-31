@@ -99,6 +99,7 @@
                 </li>
                 <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a></li>
                 <li><a href="${ctx}/alarm/manager/list">告警</a></li>
+                <li><a href="${ctx}/report">报表</a></li>
                 <li><a href="${ctx}/account/user/list">用户管理</a></li>
             </ul>
         </div>

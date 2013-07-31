@@ -14,14 +14,14 @@ $(function(){
     $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth)
     $("#cipan_space_detail").width(autoWidth + 65)
 
-    new DataState().init();
-
     $("#tabs").tabs({closeTab:false});
+    var toggle = new DataState().start();
+    $("#state_tab").click(function(){setTimeout(toggle.stateShow,50)});
+    $("#data_tab").click(function(){setTimeout(toggle.dataShow,50)});
     if($.browser.msie && ($.browser.version == "7.0")){
         var center = $("#layout_center")
         $("#main").width(center.width() - 31).height(center.height() - 30)
     };
-
 
     Highcharts.setOptions({
         global: {
@@ -423,197 +423,129 @@ $(function(){
 });
 
 
-
-function viewWindow(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    var name = rows.children("td").eq(1).text();
-    var title = "历史记录: " + name;
-    var temWin = $("body").window({
-        "id":"window",
-        "title":title,
-        "url":"sevenDayAvailableLinux.html",
-        "hasIFrame":true,
-        "width": 740,
-        "height":440,
-        "diyButton":[{
-            "id": "btOne",
-            "btClass": "buttons",
-            "value": "关闭",
-            "onclickEvent" : "selectLear",
-            "btFun": function() {
-                temWin.closeWin();
-            }
-        }
-        ]
-    });
-}
-function viewWindow30(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    var name = rows.children("td").eq(1).text();
-    var title = "历史记录: " + name;
-    var temWin = $("body").window({
-        "id":"window",
-        "title":title,
-        "url":"thirdthDayAvailableLinux.html",
-        "hasIFrame":true,
-        "width": 740,
-        "height":440,
-        "diyButton":[{
-            "id": "btOne",
-            "btClass": "buttons",
-            "value": "关闭",
-            "onclickEvent" : "selectLear",
-            "btFun": function() {
-                temWin.closeWin();
-            }
-        }
-        ]
-    });
-}
-function viewWindowCPU(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    var name = rows.children("td").eq(1).text();
-    var title = "历史记录: " + name;
-    var temWin = $("body").window({
-        "id":"window",
-        "title":title,
-        "url":"historyCPULinux.html",
-        "hasIFrame":true,
-        "width": 740,
-        "height":440,
-        "diyButton":[{
-            "id": "btOne",
-            "btClass": "buttons",
-            "value": "关闭",
-            "onclickEvent" : "selectLear",
-            "btFun": function() {
-                temWin.closeWin();
-            }
-        }
-        ]
-    });
-}
-function viewWindowNC(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    var name = rows.children("td").eq(1).text();
-    var title = "历史记录: " + name;
-    var temWin = $("body").window({
-        "id":"window",
-        "title":title,
-        "url":"historyDiskLinux.html",
-        "hasIFrame":true,
-        "width": 740,
-        "height":440,
-        "diyButton":[{
-            "id": "btOne",
-            "btClass": "buttons",
-            "value": "关闭",
-            "onclickEvent" : "selectLear",
-            "btFun": function() {
-                temWin.closeWin();
-            }
-        }
-        ]
-    });
-}
-function viewWindowCP(e){
-    var rows = $(e).parent().parent();
-    var id = rows.attr('id');
-    var name = rows.children("td").eq(1).text();
-    var title = "历史记录: " + name;
-    var temWin = $("body").window({
-        "id":"window",
-        "title":title,
-        "url":"historyMemoryLinux.html",
-        "hasIFrame":true,
-        "width": 740,
-        "height":440,
-        "diyButton":[{
-            "id": "btOne",
-            "btClass": "buttons",
-            "value": "关闭",
-            "onclickEvent" : "selectLear",
-            "btFun": function() {
-                temWin.closeWin();
-            }
-        }
-        ]
-    });
-}
-
-
-
+var TAB_STATE = {data:0,state:1};
 /**
 * DataState 数据状态对象
 * @constructor
  */
 var DataState = function(){}
-DataState.prototype.init = function(){
-    //--状态监控---
-    (new EmergencyMsg()).start();
-    (new QueueTop()).start();
-    (new RamTop()).start();
-    (new TransTop()).start();
-    //---数据监控---
-    (new Server()).start();
-    (new Queue()).start();
-    (new Client()).start();
-    (new System()).start();
+DataState.prototype.init = function(refreshId){
+    var _target = this;
+    this.switch = $(refreshId);
+    this.switch.click(
+            function () {
+                _target.toggle(_target);
+            });
+   // $(refreshId).trigger('click');
+}
 
-    //this.start();
-}
 DataState.prototype.start = function(){
+    //--状态监控---
+
+    var dynamic_ = {state:[],data:[]}
+    dynamic_.state.push(new TransTop());
+    dynamic_.state.push(new EmergencyMsg());
+    dynamic_.state.push(new QueueTop());
+    dynamic_.state.push(new RamTop());
+
+    dynamic_.data.push(new Server());
+    dynamic_.data.push(new Queue());
+    dynamic_.data.push(new Client());
+    dynamic_.data.push(new System());
+    $(dynamic_.state).each(function(){
+      //  this.init();
+        this.run();
+        this.start();
+    })
+    return {
+        stateShow: function () {
+            $(dynamic_.state).each(function () {
+                this.run();
+                this.start();
+            });
+            $(dynamic_.data).each(function () {
+                this.cancel();
+            })
+        },
+        dataShow: function () {
+            $(dynamic_.state).each(function () {
+                this.cancel();
+            });
+            $(dynamic_.data).each(function () {
+                this.run();
+                this.start();
+            })
+        }
+    }
+//    return function(){
+//        $(dynamic_.state).each(function(){
+//            this.toggle();
+//        })
+//        $(dynamic_.data).each(function(){
+//            this.toggle();
+//        })
+//    }
+
+//    return dynamic_;
+//    $(this.state).each(function(){
+//        this.start();
+//    })
+
+//    (new TransTop()).start();
+//    (new EmergencyMsg()).start();
+//    (new QueueTop()).start();
+//    (new RamTop()).start();
+
+    //---数据监控---
+//    (new Server()).start();
+//    (new Queue()).start();
+//    (new Client()).start();
+//    (new System()).start();
 }
-DataState.prototype.toggle = function(){
-    if(this.intervalId){
-        $(this).removeClass('refresh_dynamic');
-        $(this).addClass('refresh');
-        clearInterval(this.intervalId);
-        this.intervalId = null;
+
+DataState.prototype.toggle = function(obj){
+    if(obj.intervalId){
+        obj.cancel();
     }else{
-        $(this).removeClass('refresh');
-        $(this).addClass('refresh_dynamic');
-        this.intervalId = setInterval(this.start,1000 * 30);
-      //  alert('2:'+this.intervalId);
+        obj.run();
     }
 }
-
-
+DataState.prototype.run = function(){
+    this.switch.removeClass('refresh').addClass('refresh_dynamic')
+    this.intervalId = setInterval(this.start,1000 * 30);
+}
+DataState.prototype.cancel = function(){
+    this.switch.removeClass('refresh_dynamic').addClass('refresh')
+    clearInterval(this.intervalId);
+    this.intervalId = null;
+}
 var TransTop = function(){
-    var refreshId = '#transTopRefresh';
-    $(refreshId).click(this.toggle);
-    $(refreshId).trigger('click');
+    this.init('#transTopRefresh');
 };
 TransTop.prototype = new DataState();
-TransTop.prototype.start = function(){
+TransTop.prototype.start = function () {
     $("#trade_top5").empty();
     $("#trade_top5").Grid({
-        url : "${ctx}/appServer/tuxedo/transcation/top/${serverName}",
+        url: "${ctx}/appServer/tuxedo/transcation/top/${serverName}",
         dataType: "json",
         colDisplay: false,
         clickSelect: true,
-        draggable:false,
+        draggable: false,
         height: "auto",
-        colums:[
-            {id:'1',text:'排名',name:"sort",index:'1',align:''},
-            {id:'2',text:'rqdone',name:"rqdone",index:'1',align:''},
-            {id:'3',text:'progname',name:"progname",index:'1',align:''},
-            {id:'4',text:'pid',name:"pid",index:'1',align:''}
+        colums: [
+            {id: '1', text: '排名', name: "sort", index: '1', align: ''},
+            {id: '2', text: 'rqdone', name: "rqdone", index: '1', align: ''},
+            {id: '3', text: 'progname', name: "progname", index: '1', align: ''},
+            {id: '4', text: 'pid', name: "pid", index: '1', align: ''}
         ],
-        rowNum:10,
-        pager : false,
-        number:false,
+        rowNum: 10,
+        pager: false,
+        number: false,
         multiselect: false
     });
 }
 var RamTop = function(){
-    var refreshId = '#memTopRefresh';
-    $(refreshId).click(this.toggle);
-    $(refreshId).trigger('click');
+    this.init('#memTopRefresh');
 };
 RamTop.prototype = new DataState();
 RamTop.prototype.start = function(){
@@ -638,9 +570,7 @@ RamTop.prototype.start = function(){
 }
 
 var QueueTop = function(){
-    var refreshId = '#queTopRefresh';
-    $(refreshId).click(this.toggle);
-    $(refreshId).trigger('click');
+    this.init('#queTopRefresh');
 };
 QueueTop.prototype = new DataState();
 QueueTop.prototype.start = function(){
@@ -665,9 +595,7 @@ QueueTop.prototype.start = function(){
 }
 
 var EmergencyMsg = function(){
-    var refreshId = '#emergencyRefresh';
-    $(refreshId).click(this.toggle);
-    $(refreshId).trigger('click');
+    this.init('#emergencyRefresh');
 };
 EmergencyMsg.prototype = new DataState();
 EmergencyMsg.prototype.start = function(){
@@ -696,9 +624,7 @@ EmergencyMsg.prototype.start = function(){
 * @constructor
 */
 var Server = function(){
-    var refreshId = '#serverRefresh';
-    $(refreshId).click(this.toggle);
-    $(refreshId).trigger('click');
+    this.init('#serverRefresh');
 };
 Server.prototype = new DataState();
 Server.prototype.start = function(){
@@ -729,16 +655,12 @@ Server.prototype.start = function(){
         multiselect: false
     });
 }
-//alert(Server.prototype.constructor);
 var Queue = function(){
-    var refreshId = '#queRefresh';
-    $(refreshId).click(this.toggle);
-    $(refreshId).trigger('click');
+    this.init('#queRefresh');
 }
 Queue.prototype = new DataState();
-Queue.prototype.constructor =  Queue.constructor;
+Queue.prototype.constructor =  Queue;
 Queue.prototype.start = function(){
-    //alert()
     $("#tuxQUEUE").empty();
     $("#tuxQUEUE").Grid({
         url : "${ctx}/appServer/tuxedo/data/queue/${serverName}",
@@ -763,9 +685,7 @@ Queue.prototype.start = function(){
 }
 
 var Client = function(){
-    var refreshId = '#cltRefresh';
-    $(refreshId).click(this.toggle);
-    $(refreshId).trigger('click');
+    this.init('#cltRefresh');
 }
 Client.prototype = new DataState();
 Client.prototype.start = function(){
@@ -794,9 +714,7 @@ Client.prototype.start = function(){
 }
 
 var System = function(){
-    var refreshId = '#sysRefresh';
-    $(refreshId).click(this.toggle);
-    $(refreshId).trigger('click');
+    this.init('#sysRefresh');
 };
 System.prototype = new DataState();
 System.prototype.start = function(){
@@ -835,14 +753,14 @@ System.prototype.start = function(){
 <div id="layout_center">
     <div class="main-linux" id="main">
         <ul class="crumbs">
-            <li><a href="#" target="_blank">Tuxedo监视器</a> ></li>
+            <li><a href="${ctx}/appServer/list/tuxedo" target="_blank">Tuxedo监视器</a> ></li>
             <li><b>${serverName}</b></li>
         </ul>
         <hr class="top_border" />
         <div id="tabs">
             <ul>
-                <li class="tabs_select">状态监控</li>
-                <li>数据监控</li>
+                <li id='state_tab' class="tabs_select">状态监控</li>
+                <li id='data_tab'>数据监控</li>
             </ul>
             <br />
             <div class="first">

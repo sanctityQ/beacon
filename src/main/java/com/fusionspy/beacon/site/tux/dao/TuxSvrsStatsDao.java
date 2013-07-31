@@ -1,7 +1,11 @@
 package com.fusionspy.beacon.site.tux.dao;
 
+import com.fusionspy.beacon.report.Statistics;
 import com.fusionspy.beacon.site.tux.entity.TuxsvrStatsEntity;
+import com.sinosoft.one.data.jade.annotation.SQL;
 import org.springframework.data.repository.PagingAndSortingRepository;
+
+import java.sql.Timestamp;
 
 /**
  * TuxSvrsStats Dao
@@ -10,4 +14,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * Time: 下午2:44
  */
 public interface TuxSvrsStatsDao extends PagingAndSortingRepository<TuxsvrStatsEntity, Integer> {
+
+    @SQL("select MAX(u.tpsDone) max,MIN(u.tpsDone) min,AVG(u.tpsDone) avg from GE_MONITOR_TUX_SVR_STATS u where u.sitename = ?1 and u.rectime >= ?2 and  u.rectime < ?3")
+    public Statistics statisticTpsByRectimeBetween(String siteName, Timestamp startTime, Timestamp endTime);
 }

@@ -123,19 +123,18 @@ public abstract class MonitorSite<E> {
             @Override
             public void run() {
 
-                try{
-                    //start
-                    if(!isRunning){
-                          logger.debug("siteName:{} started",siteName);
-                      //    String initXml = connect.startSiteThread(iniXml,siteName,siteIp,sitePort,0);
-                          isRunning=true;
-                          recordInitData(repository.getInitData(siteName,siteIp,sitePort));
-                    }
-                    //in time data
-                    recordInTimeData(repository.getInTimeData(siteName));
-                }catch (Exception e){
-                    logger.error("site monitor error",e);
+
+                //TODO check this site is exists，can do right
+                //start
+                if (!isRunning) {
+                    logger.debug("siteName:{} started", siteName);
+                    //    String initXml = connect.startSiteThread(iniXml,siteName,siteIp,sitePort,0);
+                    isRunning = true;
+                    recordInitData(repository.getInitData(siteName, siteIp, sitePort));
                 }
+                //in time data
+                recordInTimeData(repository.getInTimeData(siteName));
+
             }
         };
     }
