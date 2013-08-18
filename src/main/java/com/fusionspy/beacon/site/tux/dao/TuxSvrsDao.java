@@ -16,7 +16,7 @@ import java.util.Date;
 public interface TuxSvrsDao extends PagingAndSortingRepository<TuxsvrsEntity, Integer> {
 
 
-    public Page<TuxSvrsDao> findByRectimeBetweenAndSitename(Date startTime,Date endTime,String siteName,
+    public Page<TuxsvrsEntity> findByRectimeBetweenAndSitename(Date startTime,Date endTime,String siteName,
                                                                                 Pageable pageable);
 
 }

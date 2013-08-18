@@ -78,26 +78,26 @@
                                 <li><a href="${ctx}/appServer/list/tuxedo">Tuxedo</a></li>
                             </ul>
                         </li>
-                        <li class="action"><span class="sever">操作系统</span>
-                            <ul class="list">
-                                <li><a href="${ctx}/os/toSystemMonitor">Linux</a></li>
-                            </ul>
-                        </li>
-                        <li class="action"><span class="system">应用系统</span>
-                            <ul class="list">
-                                <li><a href="${ctx}/application/manager/appmanager/applist/1">应用系统</a></li>
-                            </ul>
-                        </li>
-                        <li class="action" style="border:none"><span>数据库</span>
-                            <ul class="list">
-                                <li><a href="${ctx}/db/oracle/oracleMonitor">Oracle</a></li>
-                            </ul>
-                        </li>
+                        <%--<li class="action"><span class="sever">操作系统</span>--%>
+                            <%--<ul class="list">--%>
+                                <%--<li><a href="${ctx}/os/toSystemMonitor">Linux</a></li>--%>
+                            <%--</ul>--%>
+                        <%--</li>--%>
+                        <%--<li class="action"><span class="system">应用系统</span>--%>
+                            <%--<ul class="list">--%>
+                                <%--<li><a href="${ctx}/application/manager/appmanager/applist/1">应用系统</a></li>--%>
+                            <%--</ul>--%>
+                        <%--</li>--%>
+                        <%--<li class="action" style="border:none"><span>数据库</span>--%>
+                            <%--<ul class="list">--%>
+                                <%--<li><a href="${ctx}/db/oracle/oracleMonitor">Oracle</a></li>--%>
+                            <%--</ul>--%>
+                        <%--</li>--%>
                         <li class="clear"></li>
                     </ul>
 
                 </li>
-                <li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a></li>
+                <%--<li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a></li>--%>
                 <li><a href="${ctx}/alarm/manager/list">告警</a></li>
                 <li><a href="${ctx}/report">报表</a></li>
                 <li><a href="${ctx}/account/user/list">用户管理</a></li>

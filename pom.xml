@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.sinosoft.one</groupId>
 			<artifactId>data</artifactId>
-			<version>1.0.4-SNAPSHOT</version>
+			<version>1.0.5-SNAPSHOT</version>
 		</dependency>
         <dependency>
             <groupId>${jdbc.driver.groupId}</groupId>
@@ -209,7 +209,26 @@
             <version>0.7.4</version>
         </dependency>
         <!--log4jdbc end-->
-	</dependencies>
+
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-transcoder</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext-asian</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+
+    </dependencies>
 
 	<build>
 		<finalName>monitor</finalName>

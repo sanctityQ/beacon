@@ -32,9 +32,9 @@
             dataType: "json",
             height: 'auto',
             colums:[
-                {id:'1',text:'进程名称',name:"max",width:'',index:'1',align:'',color:''},
-                {id:'2',text:'占用',name:"min",width:'',index:'1',align:'',color:''},
-                {id:'3',text:'进程ID',name:"avg",width:'',index:'1',align:'',color:''}
+                {id:'1',text:'进程名称',name:"processName",width:'',index:'1',align:'',color:''},
+                {id:'2',text:'占用',name:"occupy",width:'',index:'1',align:'',color:''},
+                {id:'3',text:'进程ID',name:"processId",width:'',index:'1',align:'',color:''}
             ],
             rowNum:100000,
             pager : false,
@@ -104,9 +104,49 @@
                 }
             }]
         });
+
+
+
+            $('#expPdf').click(function(e){
+                if(chart3.xAxis[0].categories.length == 0){
+                    msgAlert("Alert", "当前chart没有数据，无法导出.");
+                    return;
+                }
+                var svg=chart3.getSVG();
+                post_to_url('${ctx}/report/export',
+                        {'svg':svg,
+                         'attribute':'${attribute.attribute}',
+                         'title':'${dateSeries.description}-${type.description}的${attribute.attributeCn}(${attribute.units})',
+                         'gridData':'${gridData}',
+                         'gridTitle':"['进程名称','占用','进程ID']"
+                        });
+            });
+
         </c:if>
+
     });
 
+
+    //自动创建form并提交
+    function post_to_url(path, params, method) {
+        method = method || "post"; // Set method to post by default, if not specified.
+        // The rest of this code assumes you are not using a library.
+        // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key].toString());
+
+            form.appendChild(hiddenField);
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
 
 
 </script>
@@ -133,7 +173,7 @@
                 <td width="120">
 
                 </td>
-                <td width="100" align="right"><a href="javascript:void(0);" class="expor_pdf"><img src="${ctx}/global/images/icon_pdf.gif" width="16" height="16" />导出PDF</a></td>
+                <td width="100" align="right"><a id='expPdf' href="javascript:void(0);" class="expor_pdf"><img src="${ctx}/global/images/icon_pdf.gif" width="16" height="16" />导出PDF</a></td>
             </tr>
         </table>
         <c:if test="${empty gridData}">

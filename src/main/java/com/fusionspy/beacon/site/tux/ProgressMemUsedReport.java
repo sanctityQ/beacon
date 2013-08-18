@@ -2,6 +2,7 @@ package com.fusionspy.beacon.site.tux;
 
 import com.fusionspy.beacon.report.*;
 import com.fusionspy.beacon.site.tux.dao.TuxSvrsDao;
+import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import com.google.common.collect.Lists;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ class ProgressMemUsedReport<TuxsvrsEntity> implements TuxReport, StatisticTopRep
     public List<TuxsvrsEntity> statisticByTop(String resourceId, DateSeries dateSeries, TopFilter top) {
         PageRequest pageRequest = new PageRequest(0,top.getTopNum(), Sort.Direction.DESC,"memoryuse");
         ReportQuery query = dateSeries.getQuery();
-        Page page =svrsDao.findByRectimeBetweenAndSitename(query.getStartDateTime().toDate(),
+        Page page = svrsDao.findByRectimeBetweenAndSitename(query.getStartDateTime().toDate(),
                 query.getEndDateTime().toDate(),resourceId,pageRequest);
         return page.getContent();
     }

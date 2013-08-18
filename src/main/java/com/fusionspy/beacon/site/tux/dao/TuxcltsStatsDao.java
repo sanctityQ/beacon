@@ -4,6 +4,7 @@ import com.fusionspy.beacon.report.Statistics;
 import com.fusionspy.beacon.site.tux.entity.TuxcltsStatsEntity;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 
@@ -13,6 +14,7 @@ import java.sql.Timestamp;
  * Date: 11-9-16
  * Time: 上午9:32
  */
+@Repository
 public interface TuxcltsStatsDao extends PagingAndSortingRepository<TuxcltsStatsEntity, Integer> {
 
     @SQL("select MAX(u.totalCount) max,MIN(u.totalCount) min,AVG(u.totalCount) avg from GE_MONITOR_TUX_CLT_STATS u where u.sitename = ?1 and u.rectime >= ?2 and  u.rectime < ?3")

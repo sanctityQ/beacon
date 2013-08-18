@@ -40,7 +40,7 @@ class ServiceMemUsedReport implements TuxReport{
             attribute = new Attribute();
             attribute.setAttribute("SVR_MEM_USED");
             attribute.setAttributeCn("服务资源内存占用");
-            attribute.setUnits("M");
+           // attribute.setUnits("M");
         }
         return attribute;
     }

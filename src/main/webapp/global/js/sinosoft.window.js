@@ -31,7 +31,7 @@
             var $cusWindow_title = $('<div class="cusWindow_title"></div>');
             var $cusWindow_icon = $('<div class="close_window"></div>');
             var $cusWindow_cont = $('<div class="cusWindow_cont"></div>');
-            var $iframe = $('<iframe class="if1" name="iframe_name" style="z-index:150;"></iframe>');
+            var $iframe = $('<iframe scrolling="no" frameborder="0" class="if1" name="iframe_name" style="z-index:150;"></iframe>');
             var $shadow = $('<div class="shadow" style="z-index:180"></div>');
             var $left = $('<div class="left"></div>');
             var $right = $('<div class="right"></div>');
@@ -103,7 +103,7 @@
                     setPositionCenter();
                     if (defaults.url != "") {
                         if (defaults.hasIFrame == true) {
-                            tem = window.setTimeout(ajaxMethod, 500);
+                            tem = window.setInterval(ajaxMethod, 500);
                         } else {
                             noFrameAjaxMethod();
                         }
@@ -189,11 +189,11 @@
             function ajaxMethod() {
                 if ($(window.frames["iframe_name"].document).find("body").length > 0) {
                     window.clearInterval(tem);
-                    $.ajax({
-                        url:defaults.url,
-                        dataType:"html",
-                        type:"GET",
-                        success:function (data) {
+//                    $.ajax({
+//                        url:defaults.url,
+//                        dataType:"html",
+//                        type:"POST",
+//                        success:function (data) {
                             $ifr = $("#" + defaults.id + "_iframe");
                             $ifr.attr("src", defaults.url);
                             if (defaults.diyButton.length > 0) {
@@ -201,11 +201,11 @@
                             }
                             //$ifr = $("#"+ defaults.id + "_iframe");
                             //$ifr.attr("src", defaults.url);
-                        },
-                        error:function (XMLHttpRequest, errorThrown) {
-                            alert("数据加载出错！" + errorThrown);
-                        }
-                    });
+//                        },
+//                        error:function (XMLHttpRequest, errorThrown) {
+//                            alert("数据加载出错！" + errorThrown);
+//                        }
+//                    });
                 }
             }
 

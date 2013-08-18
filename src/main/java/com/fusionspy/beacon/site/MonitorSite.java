@@ -133,6 +133,7 @@ public abstract class MonitorSite<E> {
                     recordInitData(repository.getInitData(siteName, siteIp, sitePort));
                 }
                 //in time data
+
                 recordInTimeData(repository.getInTimeData(siteName));
 
             }

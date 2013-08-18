@@ -21,7 +21,7 @@ var monitorId = "${monitorId}";
 <script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.window.js"></script>
+<script language="javascript" src="${ctx}/global/js/sinosoft.window.js.bak"></script>
 <script language="javascript" src="${ctx}/global/js/oracle.js"></script>
 <script type="text/javascript">
 var ctx = '${ctx}';

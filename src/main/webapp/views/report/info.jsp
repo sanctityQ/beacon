@@ -110,9 +110,45 @@
                 }
             }]
         });
+
+        $('#expPdf').click(function(e){
+            var svg=chart3.getSVG();
+            post_to_url('${ctx}/report/export',
+                    {'svg':svg,
+                        'title':'${dateSeries.description}-${type.description}的${attribute.attributeCn}(${attribute.units})',
+                        'attribute':'${attribute.attribute}',
+                        'gridData':'${gridData}',
+                        'gridTitle':"['日期'," +
+                            <c:if test="${(dateSeries eq 'today') or (dateSeries eq 'yesterday')}">
+                                "'时间'," +
+                            </c:if>
+                                "'最大值','最小值','平均值']"
+                    });
+        });
         </c:if>
     });
-    $(function(){
+
+    //自动创建form并提交
+    function post_to_url(path, params, method) {
+        method = method || "post"; // Set method to post by default, if not specified.
+        // The rest of this code assumes you are not using a library.
+        // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key].toString());
+
+            form.appendChild(hiddenField);
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
+//    $(function(){
 //        var charts = new Highcharts.Chart({
 //            chart: {
 //                renderTo: 'memory_utilization',
@@ -159,7 +195,7 @@
 //        });
 
 
-    })
+//    })
 
 
 </script>
@@ -191,7 +227,7 @@
                         <option value="TPS_DONE">TPS</option>
                     </select>
                 </td>
-                <td width="100" align="right"><a href="javascript:void(0);" class="expor_pdf"><img src="${ctx}/global/images/icon_pdf.gif" width="16" height="16" />导出PDF</a></td>
+                <td width="100" align="right"><a id='expPdf' href="javascript:void(0);" class="expor_pdf"><img src="${ctx}/global/images/icon_pdf.gif" width="16" height="16" />导出PDF</a></td>
             </tr>
         </table>
         <c:if test="${empty gridData}">

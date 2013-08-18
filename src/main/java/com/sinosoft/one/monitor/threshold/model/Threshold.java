@@ -148,7 +148,16 @@ public class Threshold  implements java.io.Serializable {
 
     public void setType(ThresholdConstant.Type type) {
         this.type = type;
+
+
+        if(this.getType().equals(ThresholdConstant.Type.NUMERIC)){
+	        this.criticalThresholdConditionStr = ThresholdConditions.valueOf(criticalThresholdCondition).symbol();
+        }else{
+            this.criticalThresholdConditionStr = criticalThresholdCondition;
+        }
+
     }
+
 
     
     @Column(name="name", length=100)
@@ -176,12 +185,7 @@ public class Threshold  implements java.io.Serializable {
 
     public void setCriticalThresholdCondition(String criticalThresholdCondition) {
         this.criticalThresholdCondition = criticalThresholdCondition;
-//       TODO  由于hibernate赋值时setType在setCriticalThresholdCondition之后调用，导致此处报错，尚未解决
-//        if(this.getType().equals(ThresholdConstant.Type.NUMERIC)){
-//	        this.criticalThresholdConditionStr = ThresholdConditions.valueOf(criticalThresholdCondition).symbol();
-//        }else{
-//            this.criticalThresholdConditionStr = criticalThresholdCondition;
-//        }
+
     }
     
     @Column(name="critical_threshold_value", length = 250)
@@ -209,7 +213,7 @@ public class Threshold  implements java.io.Serializable {
 
     public void setWarningThresholdCondition(String warningThresholdCondition) {
         this.warningThresholdCondition = warningThresholdCondition;
-	//    this.warningThresholdConditionStr = ThresholdConditions.valueOf(warningThresholdCondition).symbol();
+	   // this.warningThresholdConditionStr = ThresholdConditions.valueOf(warningThresholdCondition).symbol();
     }
     
     @Column(name="warning_threshold_value", precision=22, scale=0)
@@ -237,7 +241,7 @@ public class Threshold  implements java.io.Serializable {
 
     public void setInfoThresholdCondition(String infoThresholdCondition) {
         this.infoThresholdCondition = infoThresholdCondition;
-//	    this.infoThresholdConditionStr = ThresholdConditions.valueOf(infoThresholdCondition).symbol();
+	  //  this.infoThresholdConditionStr = ThresholdConditions.valueOf(infoThresholdCondition).symbol();
     }
     
     @Column(name="info_threshold_value", precision=22, scale=0)

@@ -24,6 +24,7 @@
 <script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
+<script language="javascript" src="${ctx}/global/js/exporting.js"></script>
 <script type="text/javascript">
 	var rootPath = '${ctx}';
 </script>
