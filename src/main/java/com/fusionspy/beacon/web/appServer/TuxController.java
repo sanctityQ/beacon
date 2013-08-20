@@ -2,6 +2,7 @@ package com.fusionspy.beacon.web.appServer;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.fusionspy.beacon.site.HisData;
 import com.fusionspy.beacon.site.MonitorManage;
 import com.fusionspy.beacon.site.tux.TuxHisData;
 import com.fusionspy.beacon.site.tux.TuxSite;
@@ -12,7 +13,9 @@ import com.fusionspy.beacon.system.entity.SiteSettings;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.fusionspy.beacon.web.BeaconLocale;
 import com.fusionspy.beacon.web.Chart;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.DefValue;
 import com.sinosoft.one.mvc.web.annotation.Param;
@@ -68,6 +71,32 @@ public class TuxController {
 
     @Autowired
     private SystemService systemService;
+
+
+
+    @Get("list")
+    public void indexList(Invocation inv){
+        List<Map<String,String>> datas = Lists.newArrayList();
+        for(SiteListEntity siteListEntity:systemService.getSites()){
+
+            TuxHisData monitorInf = monitorManage.getMonitorInf(siteListEntity.getSiteName());
+            Map<String,String> map = Maps.newHashMap();
+            String url = inv.getServletContext().getContextPath()+"/appServer/tuxedo/view/"+siteListEntity.getSiteName();
+            map.put("siteName", MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, url, siteListEntity.getSiteName()));
+            map.put("availability",MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV,
+                    MessageUtils.available2CssClass(!monitorInf.getProcessResult().isStopAlarmSignal())));
+            map.put("rqDone", String.valueOf(monitorInf.getRqDoneCount()));
+            datas.add(map);
+        }
+
+
+        Page<Map<String,String>> page = new PageImpl<Map<String,String>>(datas);
+        Gridable<Map<String,String>> gridable = new Gridable<Map<String,String>> (page);
+        String cellString = new String("siteName,availability,rqDone");
+        gridable.setIdField("siteName");
+        gridable.setCellStringField(cellString);
+        UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+    }
 
     @Post("start/{serverName}")
     public Reply startMonitor(@Param("serverName")String serverName,@DefValue("zh_CN")Locale locale){
@@ -205,11 +234,8 @@ public class TuxController {
         String cellString = new String("server,queueId,processId,rqDone,currentSvc,svrMin,svrMax,memUsed,cpuUsed");
         gridable.setIdField("server");
         gridable.setCellStringField(cellString);
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
-        } catch (Exception e) {
-            throw new RuntimeException("json数据转换出错!", e);
-        }
+        UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
+
     }
 
 
@@ -229,11 +255,7 @@ public class TuxController {
         String cellString = new String("server,queueId,srvCnt,queued");
         gridable.setIdField("server");
         gridable.setCellStringField(cellString);
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
-        } catch (Exception e) {
-            throw new RuntimeException("json数据转换出错!", e);
-        }
+        UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
     }
 
     private void getClientDate(List<TuxcltsEntity> servers, Invocation invocation){

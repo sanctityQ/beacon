@@ -4,12 +4,14 @@ import com.fusionspy.beacon.site.tux.TuxService;
 import com.fusionspy.beacon.site.tux.TuxSite;
 import com.fusionspy.beacon.system.entity.SiteListEntity;
 import com.fusionspy.beacon.system.service.SystemService;
+import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -42,6 +44,11 @@ public class SitesHolder {
      */
     public void setDemo(boolean demo) {
         this.demo = demo;
+    }
+
+
+    public List<MonitorSite> getMonitorSites(){
+       return Lists.newArrayList(tuxSiteMap.values()) ;
     }
 
     public MonitorSite getMonitorSite(String siteName) {

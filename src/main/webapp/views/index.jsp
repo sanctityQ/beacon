@@ -20,6 +20,14 @@ var columStyle2 =
 		{id:'4',text:'类型',name:"appellation",index:'1',align:''},
 		{id:'5',text:'时间',name:"appellation",index:'1',align:''}
 	];
+
+var columnStyle3 =
+        [
+            {id:'1',text:'名称',name:"name",index:'1',align:''},
+            {id:'2',text:'可用性',name:"availability",index:'1',align:''},
+            {id:'3',text:'吞吐量',name:"rqdone",index:'1',align:''}
+        ];
+
 $(function(){
 
     //thresholdList emergencyList systemList oracleList
@@ -29,7 +37,8 @@ $(function(){
 	gridList.push({"renderId":"emergencyList","url":rootPath+"/alarmList?time=" + new Date().getTime(), "columStyle":columStyle2});
 	gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList?time=" + new Date().getTime(), "columStyle":columStyle1});
 	gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList?time=" + new Date().getTime(), "columStyle":columStyle1});
-	
+	gridList.push({"renderId":"tuxedoList","url":rootPath+"/appServer/tuxedo/list?time=" + new Date().getTime(), "columStyle":columnStyle3});
+
 	$(gridList).each(function(i, d){
 		$("#"+d.renderId).Grid({
 			url : d.url,  
@@ -69,6 +78,11 @@ $(function(){
 	        </td>
 	        <td width="4%">&nbsp;</td>
 	        <td rowspan="3" style="vertical-align:top">
+                <div class="threshold_file">
+                    <h3 class="title3">tuxedo服务器：</h3>
+                    <div id="tuxedoList"></div>
+                </div>
+                <br />
 	        	<div class="threshold_file">
 	                <h3 class="title3">操作系统：</h3>
 	                <div id="systemList"></div>

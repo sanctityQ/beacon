@@ -44,7 +44,6 @@ public class OsAgentController {
 			Os  os = osService.getOsBasicByIp(osAgentIp);
 			ObjectOutputStream oos = new ObjectOutputStream(inv.getResponse()
 					.getOutputStream());
-			System.out.println(getValue("ID", osAgentInfo));
             Map<String, String> shellAndIp = Maps.newHashMap();
             if(os!=null){
 				shellAndIp.put("ID", os.getOsInfoId());

@@ -86,8 +86,7 @@ public class IndexController {
 		List<Application> applications = applicationService.findValidateApplication();
 		/* 循环构建表格行数据*/
 		for(Application application : applications) {
-			ApplicationEnhance applicationEnhance = null;
-			applicationEnhance = applicationEnhanceFactory.enhanceApplication(application);
+			ApplicationEnhance applicationEnhance  = applicationEnhanceFactory.enhanceApplication(application);
 			Map<String, Object> row = new HashMap<String, Object>();
 			List<String> cell = new ArrayList<String>();
 			/* 健康状况 1-健康(绿色=fine) ；其它状态均不健康(红色=poor)*/
@@ -108,4 +107,6 @@ public class IndexController {
 		grid.put("rows", rows);
 		return Replys.with(grid).as(Json.class);
 	}
+
+
 }

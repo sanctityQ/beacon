@@ -52,6 +52,8 @@ public class AppServerController{
     }
 
 
+
+
     @Get("view/{type}/{serverName}")
     public String detail(@Param("type")String type,@Param("serverName")String name,Invocation invocation){
         SiteListEntity siteListEntity = systemService.getSite(name);

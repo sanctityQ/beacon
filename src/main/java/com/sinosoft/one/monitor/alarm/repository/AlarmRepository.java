@@ -240,6 +240,8 @@ public interface AlarmRepository extends PagingAndSortingRepository<Alarm, Strin
 
     Page<Alarm> findByCreateTimeBetween(Date startTime,Date endTime,Pageable pageable);
 
+    List<Alarm> findByCreateTimeBefore(Date startTime);
+
     Page<Alarm> findByCreateTimeBetweenAndSeverity(Date startTime,Date endTime,SeverityLevel severityLevel,Pageable pageable);
 
     Page<Alarm> findBySeverity(SeverityLevel severityLevel, Pageable pageable);
