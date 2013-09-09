@@ -394,6 +394,10 @@
                         alert("数据加载出错！" + errorThrown);
                     },
                     success: function(data){
+                    	if(data == null || data == undefined || data.total == 0 || data.rows.length == 0) {
+                    		data = '{"total":"0", "rows":[]}';
+                    		data = JSON.parse(data);
+                    	}
                         initGrid(data, str, end, colAttributes);
                         _data = data;
 						originGridData = _data;
@@ -423,6 +427,9 @@
                 var gTable = '<table border="0" cellspacing="0" cellpadding="0">';
                 rows = data.rows;
                 total = data.total;
+                if(rows == 0 || total == 0) {
+                	gTable  = gTable + '<div style="text-align:center;">暂无数据</div>';
+                }
                 var colLen = defaults.colums.length;
                 var allW = 0;
                 gTable = gTable + '<tr class="th_rows">';
@@ -439,7 +446,7 @@
                     allW += Math.abs(colParams.widths[i]);
                 };
                 gTable  = gTable + '</tr>';
-
+                
                 if(rows.length < endParam){
                     endParam = rows.length;
                     pageUnclik = true;

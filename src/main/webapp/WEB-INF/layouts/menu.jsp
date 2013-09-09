@@ -4,9 +4,13 @@
 <%
     Account account = (Account)SecurityUtils.getSubject().getPrincipal();
     String name = "管理员";
-    if(!account.getGroupList().isEmpty())
-        name = account.getGroupList().iterator().next().getName();
+    if(!account.getGroupList().isEmpty()){
+        if(!account.getGroupList().iterator().next().getName().equals("admin")){
+            name="用户";
+        }
+    }
     request.setAttribute("name",name);
+
 %>
 
 <script type="text/javascript">
@@ -63,9 +67,15 @@
         }
         return false;
     }
+
+    function go_index(){
+        window.location = '${ctx }/index';
+    }
+
 </script>
 <div id="layout_top">
     <div class="header">
+        <div style="float:left;width: 242px;height:40px;cursor:pointer;" onclick="javascript:go_index()"></div>
         <p class="user">当前登录用户【${sessionScope.loginUserName}】 身份【${name}】 <span>|</span> <a href="${ctx}/login">退出系统</a></p>
         <div class="menu_box">
             <ul class="nav" id="nav">

@@ -31,7 +31,7 @@ $(function(){
 			{id:'2',text:'描述',name:"appellation",index:'1',align:''},
 			{id:'3',text:'严重告警条件',name:"appellation",index:'1',align:''},
 			{id:'4',text:'警告告警条件',name:"appellation",index:'1',align:''},
-			{id:'5',text:'正常告警条件',name:"appellation",index:'1',align:''},
+			{id:'5',text:'正常告警条件',name:"appellation",index:'1',align:''}
 		],  
 		rowNum:9999,
 		pager : false,

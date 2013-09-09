@@ -23,6 +23,7 @@ class ClientBusyCountReport implements TuxReport{
         ReportQuery query = dateSeries.getQuery();
         List<TimePeriod> timePeriods = query.getPeriods();
         ReportResult reportResult = new ReportResult();
+
         for(TimePeriod timePeriod:timePeriods){
             Statistics statistics =  cltsStatsDao.statisticBusyCountByRectimeBetween(resourceId,
                     new Timestamp(timePeriod.getStartDateTime().getMillis()),

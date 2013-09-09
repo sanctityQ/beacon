@@ -18,7 +18,7 @@ public class StatisticFactory {
 
 
 
-    @Inject//只是为了调用StatisticReportFactory初始化方法
+    @Inject//只是为了调用StatisticReportFactory初始化方法,很隐性不是很好
     private Set<StatisticReportFactory> statisticReportFactorySet;
 
 

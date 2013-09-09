@@ -1,5 +1,5 @@
 html { height: 100%; }
-body { margin: 0; padding: 0; font-size: 12px; font-family: Verdana, Arial, Helvetica, sans-serif;}
+body { margin: 0; padding: 0; font-size: 12px; font-family: Microsoft Yahei,Verdana,"HelveticaNeue",Helvetica,Arial;color:#000;}
 ul,li,ol,p,span,img, label,input{ margin: 0; padding: 0; border: 0;}
 
 .fl { float: left; }
