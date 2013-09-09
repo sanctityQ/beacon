@@ -59,7 +59,7 @@ public class Account  implements java.io.Serializable {
 
 	private String createTimeStr;
 
-    private String operation="<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a><a href='javascript:void(0)' class='setPermission'>权限配置</a>";
+    private String operation="<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> <a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>";
     public Account() {
     }
 

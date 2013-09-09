@@ -19,8 +19,8 @@ $(function(){
 			{id:'3',text:'状态',name:"status",index:'1',align:''},
 			{id:'4',text:'手机号',name:"phone",index:'1',align:''},
 			{id:'5',text:'邮箱',name:"email",index:'1',align:''},
-			{id:'6',text:'创建时间',name:"createTime",index:'1',align:''},
-			{id:'7',text:'操作',name:"operation",index:'1',align:''}
+			{id:'6',text:'创建时间',name:"createTime",index:'1',align:''}<shiro:hasPermission name="admin">,
+			{id:'7',text:'操作',name:"operation",index:'1',align:''}</shiro:hasPermission>
 		],  
 		rowNum:10,
 		pager : false,
@@ -112,8 +112,17 @@ function viewRelevance(e){
 <div id="layout_center">
 	<div class="main" id="main">
     	<div class="threshold_file user_manager">
-       	  <h2 class="title2"><strong class="right"><a href="${ctx}/account/user/create">创建新用户</a></strong><b>用户列表　</b></h2>
-          <div class="tool_bar_top"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></div>
+       	  <h2 class="title2">
+            <shiro:hasPermission name="admin">
+              <strong class="right"><a href="${ctx}/account/user/create">创建新用户</a></strong>
+            </shiro:hasPermission>
+            <b>用户列表　</b>
+          </h2>
+          <div class="tool_bar_top">
+            <shiro:hasPermission name="admin">
+              <a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a>
+            </shiro:hasPermission>
+          </div>
           <div id="thresholdList"></div>
           <div class="tool_bar"></div>
         </div>

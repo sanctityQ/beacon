@@ -6,9 +6,9 @@ drop table if exists ge_monitor_attribute;
 
 drop table if exists ge_monitor_attribute_action;
 
-drop table if exists GE_MONITOR_ATTRIBUTE_THRESHOLD;
+drop table if exists ge_monitor_attribute_threshold;
 
-drop table if exists GE_MONITOR_BIZ_SCENARIO;
+drop table if exists ge_monitor_biz_scenario;
 
 drop table if exists GE_MONITOR_BIZ_SCENARIO_URL;
 
@@ -148,7 +148,7 @@ alter table ge_monitor_attribute_action comment '属性动作信息表';
 /*==============================================================*/
 /* Table: GE_MONITOR_ATTRIBUTE_THRESHOLD                        */
 /*==============================================================*/
-create table GE_MONITOR_ATTRIBUTE_THRESHOLD
+create table ge_monitor_attribute_threshold
 (
    ID                   varchar(32) not null comment '主键ID',
    RESOURCE_ID          varchar(32) not null comment '资源ID',
@@ -157,12 +157,12 @@ create table GE_MONITOR_ATTRIBUTE_THRESHOLD
    primary key (ID)
 );
 
-alter table GE_MONITOR_ATTRIBUTE_THRESHOLD comment '属性阈值信息表';
+alter table ge_monitor_attribute_threshold comment '属性阈值信息表';
 
 /*==============================================================*/
 /* Table: GE_MONITOR_BIZ_SCENARIO                               */
 /*==============================================================*/
-create table GE_MONITOR_BIZ_SCENARIO
+create table ge_monitor_biz_scenario
 (
    ID                   varchar(32) not null comment '主键ID',
    NAME                 varchar(300) not null comment '业务场景名称',
@@ -176,18 +176,18 @@ create table GE_MONITOR_BIZ_SCENARIO
    primary key (ID)
 );
 
-alter table GE_MONITOR_BIZ_SCENARIO comment '存储指定应用系统的业务场景信息';
+alter table ge_monitor_biz_scenario comment '存储指定应用系统的业务场景信息';
 
 /*==============================================================*/
 /* Table: GE_MONITOR_BIZ_SCENARIO_URL                           */
 /*==============================================================*/
-create table GE_MONITOR_BIZ_SCENARIO_URL
+create table ge_monitor_biz_scenario_url
 (
    URL_ID               varchar(32) not null comment 'URLID',
    BIZ_SCENARIO_ID      varchar(32) comment '业务场景ID'
 );
 
-alter table GE_MONITOR_BIZ_SCENARIO_URL comment '应用系统业务场景URL信息表';
+alter table ge_monitor_biz_scenario_url comment '应用系统业务场景URL信息表';
 
 /*==============================================================*/
 /* Table: GE_MONITOR_EMAIL_ACTION                               */

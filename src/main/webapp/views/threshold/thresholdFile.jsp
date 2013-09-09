@@ -27,8 +27,9 @@ $(function(){
 			{id:'8',text:'警告告警信息',name:"warningThresholdMessage",index:'1',align:''},
 			{id:'9',text:'正常告警条件',name:"infoThresholdCondition",index:'1',align:''},
 			{id:'10',text:'正常告警阈值',name:"infoThresholdValue",index:'1',align:''},
-			{id:'11',text:'正常告警信息',name:"infoThresholdMessage",index:'1',align:''},
+			{id:'11',text:'正常告警信息',name:"infoThresholdMessage",index:'1',align:''}<shiro:hasPermission name="admin">,
 			{id:'12',text:'操作',name:"operation",index:'1',align:''}
+            </shiro:hasPermission>
 		],  
 		rowNum:9999,
 		pager : false,
@@ -118,7 +119,7 @@ function viewRelevance(e){
 	<div class="main" id="main">
     	<div class="threshold_file">
        	  <h2 class="title2"><b>查看阈值配置文件　</b></h2>
-          <div class="tool_bar_top"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></div>
+          <div class="tool_bar_top"><shiro:hasPermission name="admin"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></shiro:hasPermission></div>
           <div id="thresholdList"></div>
           <div class="tool_bar"></div>
         </div>

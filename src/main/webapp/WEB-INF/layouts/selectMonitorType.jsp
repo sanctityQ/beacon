@@ -4,15 +4,15 @@
         <optgroup label="应用服务器">
             <option selected="selected" value="${ctx}/addmonitor/server/tuxedo">Tuxedo</option>
         </optgroup>
-        <optgroup label="应用服务器">
-            <option selected="selected" value="${ctx}/addmonitor/addapp">应用系统</option>
-        </optgroup>
-        <optgroup label="数据库">
-            <option value="${ctx}/addmonitor/addoracle">Oracle</option>
-        </optgroup>
-        <optgroup label="操作系统">
-            <option value="${ctx}/addmonitor/addos">Linux</option>
-        </optgroup>
+        <%--<optgroup label="应用服务器">--%>
+            <%--<option selected="selected" value="${ctx}/addmonitor/addapp">应用系统</option>--%>
+        <%--</optgroup>--%>
+        <%--<optgroup label="数据库">--%>
+            <%--<option value="${ctx}/addmonitor/addoracle">Oracle</option>--%>
+        <%--</optgroup>--%>
+        <%--<optgroup label="操作系统">--%>
+            <%--<option value="${ctx}/addmonitor/addos">Linux</option>--%>
+        <%--</optgroup>--%>
     </select>
 </h2>
 </h2>

@@ -49,16 +49,10 @@ public class AccountController {
 		}
 		Page<Account> page = new PageImpl<Account>(accounts);
 		Gridable<Account>  gridable = new Gridable<Account> (page);
-//		名称 发件人 到 主题 一直运行 操作
-		String cellString = new String(
-				"loginName,name,statusStr,phone,email,createTimeStr,operation");
+		String cellString = new String("loginName,name,statusStr,phone,email,createTimeStr,operation");
 		gridable.setIdField("id");
 		gridable.setCellStringField(cellString);
-		try {
-			UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-		} catch (Exception e) {
-			throw new Exception("json数据转换出错!", e);
-		}
+	    UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
 	}
 
     @Get("create")

@@ -18,9 +18,9 @@
                     {id: '2', text: '发件人', name: "fromAddress", index: '1', align: ''},
                     {id: '3', text: '到', name: "toAddress", index: '1', align: ''},
                     {id: '4', text: '主题', name: "subject", index: '1', align: ''},
-                    {id: '5', text: '附加消息', name: "content", index: '1', align: ''},
+                    {id: '5', text: '附加消息', name: "content", index: '1', align: ''}<shiro:hasPermission name="admin">,
                     {id: '6', text: '操作', name: "operation", index: '1', align: ''}
-
+                    </shiro:hasPermission>
                 ],
                 rowNum: 9999,
                 pager: false,

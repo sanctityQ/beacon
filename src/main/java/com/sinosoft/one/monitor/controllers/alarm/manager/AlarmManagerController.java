@@ -70,15 +70,11 @@ public class AlarmManagerController {
     }
 
     //向页面返回json数据
-    private void getJsonDataOfAlarms(Page<Alarm> alarms,Invocation inv) throws Exception {
+    private void getJsonDataOfAlarms(Page<Alarm> alarms,Invocation inv) {
         Gridable<Alarm> gridable=new Gridable<Alarm>(alarms);
         gridable.setIdField("id");
         gridable.setCellStringField("status,message,appName,monitorType,recordTime");
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-        } catch (Exception e) {
-            throw new Exception("JSON数据转化出错！",e);
-        }
+        UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
     }
 
     @Get("/resource/{resourceId}")

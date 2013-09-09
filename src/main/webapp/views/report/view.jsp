@@ -7,7 +7,7 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
         $(function(){
-            $("#reporMenu li").on('click',reporMenu);
+         //   $("#reporMenu li").on('click',reporMenu);
 
             $.ajax({
                 type:"post",
@@ -78,15 +78,15 @@
                     <td class="repor_box">
                         <div class="report_title">报表</div>
                         <ul id="reporMenu" class="report_menu">
-                            <li><img src="${ctx}/global/images/icon_hyper_vhost.gif" width="15" height="16" />Linux</li>
+                            <%--<li><img src="${ctx}/global/images/icon_hyper_vhost.gif" width="15" height="16" />Linux</li>--%>
                             <li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>
                         </ul>
                     </td>
                     <td>
                         <div id="contant">
-                            <div class="reporCont">
-                                <p class="hint">此功能暂未开放。</p>
-                            </div>
+                            <%--<div class="reporCont">--%>
+                                <%--<p class="hint">此功能暂未开放。</p>--%>
+                            <%--</div>--%>
 
                             <div class="reporCont" style="display:block">
                                 <div class="selec_list">

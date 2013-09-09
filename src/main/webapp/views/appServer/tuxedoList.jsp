@@ -21,8 +21,9 @@
                     {id:'1',text:'站点名称',name:"siteName",index:'1',align:''},
                     {id:'2',text:'IP地址',name:"siteIp",index:'1',align:''},
                     {id:'3',text:'端口',name:"sitePort",index:'1',align:''},
-                    {id:'4',text:'轮询间隔',name:"interval",index:'1',align:''},
+                    {id:'4',text:'轮询间隔',name:"interval",index:'1',align:''}<shiro:hasPermission name="admin">,
                     {id:'5',text:'操作',name:"operation",index:'1',align:''}
+                    </shiro:hasPermission>
                 ],
                 rowNum:9999,
                 pager : false,
@@ -154,8 +155,10 @@
         <div class="threshold_file">
             <h2 class="title2"><b>Tuxedo列表视图</b></h2>
             <div class="tool_bar_top">
+               <shiro:hasPermission name="admin">
                 <a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a>
                 <a href="${ctx}/addmonitor/server/tuxedo" class="add">新建Tuxedo</a>
+               </shiro:hasPermission>
             </div>
             <div id="thresholdList"></div>
             <div class="tool_bar"></div>

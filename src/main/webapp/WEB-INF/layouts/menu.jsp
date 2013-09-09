@@ -66,7 +66,7 @@
 </script>
 <div id="layout_top">
     <div class="header">
-        <p class="user">您好,${name} <span>|</span> <a href="${ctx}/login">退出系统</a></p>
+        <p class="user">当前登录用户【${sessionScope.loginUserName}】 身份【${name}】 <span>|</span> <a href="${ctx}/login">退出系统</a></p>
         <div class="menu_box">
             <ul class="nav" id="nav">
                 <li><a href="${ctx }/index">首页</a></li>
@@ -104,11 +104,15 @@
             </ul>
         </div>
         <ul class="add_menu" id="menu">
+            <shiro:hasPermission name="admin">
             <li><a href="${ctx}/addmonitor/list">新建监视器</a></li>
+            </shiro:hasPermission>
             <li class="has_sub">
                 <a href="javascript:void(0);"><span>阈值配置文件</span></a>
                 <ul class="add_sub_menu">
+                    <shiro:hasPermission name="admin">
                     <li><a class="addThreshold" href="${ctx}/threshold/create">新建阈值文件</a></li>
+                    </shiro:hasPermission>
                     <li><a class="thresholdFile" href="${ctx}/threshold/list">查看阈值配置文件</a></li>
                 </ul>
             </li>
@@ -116,11 +120,15 @@
                 <a href="javascript:viod(0)"><span>动作</span></a>
                 <ul class="add_sub_menu">
                     <li class="title"><a href="${ctx}/action/email/list">显示动作</a></li>
+                    <shiro:hasPermission name="admin">
                     <li class="action">创建新动作</li>
                     <li><a class="email" href="${ctx}/action/email/create">邮件</a></li>
+                    </shiro:hasPermission>
                 </ul>
             </li>
+            <shiro:hasPermission name="admin">
             <li><a href="${ctx}/alarm/manager/configemergency/config">配置告警</a></li>
+            </shiro:hasPermission>
         </ul>
     </div>
 </div>

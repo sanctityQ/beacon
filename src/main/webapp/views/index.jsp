@@ -33,10 +33,10 @@ $(function(){
     //thresholdList emergencyList systemList oracleList
 	var gridList = new Array();
 	
-	gridList.push({"renderId":"thresholdList","url":rootPath+"/applicationList?time=" + new Date().getTime(), "columStyle":columStyle1});
+	//gridList.push({"renderId":"thresholdList","url":rootPath+"/applicationList?time=" + new Date().getTime(), "columStyle":columStyle1});
 	gridList.push({"renderId":"emergencyList","url":rootPath+"/alarmList?time=" + new Date().getTime(), "columStyle":columStyle2});
-	gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList?time=" + new Date().getTime(), "columStyle":columStyle1});
-	gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList?time=" + new Date().getTime(), "columStyle":columStyle1});
+	//gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList?time=" + new Date().getTime(), "columStyle":columStyle1});
+	//gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList?time=" + new Date().getTime(), "columStyle":columStyle1});
 	gridList.push({"renderId":"tuxedoList","url":rootPath+"/appServer/tuxedo/list?time=" + new Date().getTime(), "columStyle":columnStyle3});
 
 	$(gridList).each(function(i, d){
@@ -66,11 +66,11 @@ $(function(){
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 	      <tr>
 	        <td width="48%" rowspan="3" style="vertical-align:top">
-	            <div class="threshold_file">
-	                <h3 class="title3">应用系统：</h3>
-	                <div id="thresholdList"></div>
-	            </div>
-	            <br/>
+	            <%--<div class="threshold_file">--%>
+	                <%--<h3 class="title3">应用系统：</h3>--%>
+	                <%--<div id="thresholdList"></div>--%>
+	            <%--</div>
+	            <br/> --%>
 	        	<div class="threshold_file">
 	                <h3 class="title3">预警信息：</h3>
 	                <div id="emergencyList"></div>
@@ -83,15 +83,15 @@ $(function(){
                     <div id="tuxedoList"></div>
                 </div>
                 <br />
-	        	<div class="threshold_file">
-	                <h3 class="title3">操作系统：</h3>
-	                <div id="systemList"></div>
-	            </div>
-	            <br />
-	        	<div class="threshold_file">
-	                <h3 class="title3">数据库：</h3>
-	                <div id="oracleList"></div>
-	            </div>
+	        	<%--<div class="threshold_file">--%>
+	                <%--<h3 class="title3">操作系统：</h3>--%>
+	                <%--<div id="systemList"></div>--%>
+	            <%--</div>--%>
+	            <%--<br />--%>
+	        	<%--<div class="threshold_file">--%>
+	                <%--<h3 class="title3">数据库：</h3>--%>
+	                <%--<div id="oracleList"></div>--%>
+	            <%--</div>--%>
 	        </td>
 	      </tr>
 	      <tr>

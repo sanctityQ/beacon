@@ -52,6 +52,7 @@ import java.util.*;
 @Path("/tuxedo")
 public class TuxController {
 
+
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     JsonBinder jsonBinder =  JsonBinder.buildNonNullBinder();

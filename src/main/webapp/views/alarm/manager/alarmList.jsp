@@ -29,7 +29,7 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
     var $mn = $("#thresholdList");
     //防止每次查询时，表格中的数据不断累积
     $mn.html("");
-    $("#thresholdList").Grid({
+    var grid =  $("#thresholdList").Grid({
         type:"get",
         url : _url,
         dataType: "json",
@@ -51,7 +51,7 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
         pager : true,
         number:false,
         multiselect: true
-    });
+    }).grid;
 }
 function alarmDetailInfo(e){
     var rows = $(e).parent().parent();
@@ -159,7 +159,7 @@ function alert(){
               <a href="javascript:void(0)" onclick="javascript:getAlarmListOfGivenTimeAndType('WARNING')" class="itemize">警告</a>
               <a href="javascript:void(0)" onclick="javascript:getAlarmListOfGivenTimeAndType('INFO')" class="itemize">正常</a>
           </h2>
-          <div class="tool_bar_top"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></div>
+          <div class="tool_bar_top"><shiro:hasPermission name="admin"><a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a></shiro:hasPermission></div>
           <div id="thresholdList"></div>
         </div>
         <table border="0" cellspacing="0" cellpadding="0">
