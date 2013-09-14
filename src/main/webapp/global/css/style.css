@@ -141,7 +141,7 @@ display:block;height:22px;float:left}
 .explain li span{display:block;width:10px;height:10px;background:#f00;border:#333 1px solid;margin:10px 3px 0 12px}
 .explain li .ex_is{background:#84c65a}
 .explain li .ex_xp{background:#FF0}
-.grid_view .sys_up,.grid_view .fine,.grid_view .sys_down,.grid_view .poor,.grid_view .y_poor{background:url(../images/icon_availability_up.gif) no-repeat;width:13px;height:13px;cursor:pointer}
+.grid_view .sys_up,.grid_view .fine,.grid_view .sys_down,.grid_view .poor,.grid_view .y_poor{background:url(../images/icon_availability_up.gif) no-repeat;width:13px;height:13px;}
 .grid_view .sys_down{background-image:url(../images/icon_availability_down.gif)}
 .grid_view .fine{background-image:url(../images/bussinessY.gif)}
 .grid_view .poor{background-image:url(../images/icon_health_critical.gif)}

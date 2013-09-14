@@ -52,6 +52,9 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
         number:false,
         multiselect: true
     }).grid;
+
+    var rows = grid.checked();
+    var rows = [row,row]
 }
 function alarmDetailInfo(e){
     var rows = $(e).parent().parent();
@@ -147,10 +150,10 @@ function alert(){
                 </select>
                 <select id="typeSelect" name="typeSelect" class="diySelect">
                     <option value="">选择类型</option>
-                    <option value="APP_SERVER">应用服务器</option>
-                    <option value="APPLICATION">应用系统</option>
-                    <option value="OS">操作系统</option>
-                    <option value="DB">数据库</option>
+                    <option value="APP_SERVER">TUXEDO</option>
+                    <%--<option value="APPLICATION">应用系统</option>--%>
+                    <%--<option value="OS">操作系统</option>--%>
+                    <%--<option value="DB">数据库</option>--%>
                 </select>
             </strong>
           	<b>告警信息列表　</b>
