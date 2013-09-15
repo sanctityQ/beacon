@@ -18,6 +18,13 @@
             } else if(msg=="0"){
                 $(".tip").css("visibility","visible").html("用户被锁定，请联系管理员");
             }
+
+            $('.side_top input').bind('keypress', function(e) {
+                if(e.keyCode==13){
+                    trigger();
+                }
+            });
+
         });
 
         function trigger()
