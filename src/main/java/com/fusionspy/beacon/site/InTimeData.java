@@ -7,4 +7,5 @@ package com.fusionspy.beacon.site;
  * Time: 下午5:15
  */
 public interface InTimeData{
+
 }

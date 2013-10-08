@@ -48,7 +48,7 @@
     <div class="content">
         <div class="login_side fr">
             <div class="logo fl"></div>
-            <form action="" method="post"  name="loginform">
+            <form action="${ctx}/login" method="post"  name="loginform">
                 <div class="side_left fl"></div>
                 <div class="side_middle fl">
                     <ul>

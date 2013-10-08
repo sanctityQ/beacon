@@ -101,5 +101,5 @@
         <property name="demo" value="${demo.is}"></property>
     </bean>
 
- 
+    <bean id="MonitorManage" class="com.fusionspy.beacon.site.MonitorManage"></bean>
 </beans>

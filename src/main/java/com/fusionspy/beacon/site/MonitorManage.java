@@ -22,7 +22,6 @@ import java.util.concurrent.*;
  * Date: 11-9-13
  * Time: 下午8:49
  */
-@Component(value = "monitorManage")
 public class MonitorManage {
 
     private static Logger logger = LoggerFactory.getLogger(MonitorManage.class);

@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
   <artifact type="war" name="beacon:war">
     <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="monitor.war">
+    <root id="archive" name="beacon.war">
       <element id="artifact" artifact-name="beacon:war exploded" />
     </root>
   </artifact>

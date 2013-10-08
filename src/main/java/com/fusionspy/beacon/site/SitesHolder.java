@@ -2,6 +2,8 @@ package com.fusionspy.beacon.site;
 
 import com.fusionspy.beacon.site.tux.TuxService;
 import com.fusionspy.beacon.site.tux.TuxSite;
+import com.fusionspy.beacon.site.wls.WlsService;
+import com.fusionspy.beacon.site.wls.WlsSite;
 import com.fusionspy.beacon.system.entity.SiteListEntity;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.google.common.collect.Lists;
@@ -23,6 +25,7 @@ import java.util.concurrent.ConcurrentMap;
 public class SitesHolder {
 
     private static ConcurrentMap<String, MonitorSite> tuxSiteMap = new MapMaker().concurrencyLevel(32).makeMap();//监控站点线程
+    private static ConcurrentMap<String, MonitorSite> siteMap = new MapMaker().concurrencyLevel(32).makeMap();//监控站点线程
 
     @Autowired
     private SystemService systemService;
@@ -33,8 +36,19 @@ public class SitesHolder {
     @Resource(name="tuxDataSimulationRep")
     private MonitorDataRepository  demoRep;
 
+    /** weblogic监控数据仓库 */
+    @Resource(name = "wlsDataRepository")
+    private MonitorDataRepository wlsRep;
+
+    /** weblogic监控数据示例仓库 */
+    @Resource(name = "wlsDataSimulationRepository")
+    private MonitorDataRepository wlsDemoRep;
+
     @Autowired
     private TuxService tuxService;
+
+    @Autowired
+    private WlsService wlsService;
 
     private boolean demo=false;
 
@@ -83,6 +97,23 @@ public class SitesHolder {
         }
 
         return tuxSite;
+    }
+
+    /**
+     * 初始化weblogic站点，并设置监控仓库及持久层service
+     * @return
+     */
+    @Bean
+    public MonitorSite getWlsSite() {
+        WlsSite wlsSite = new WlsSite();
+        wlsSite.setWlsService(wlsService);
+        if (demo) {
+            wlsSite.setMonitorDataRepository(wlsDemoRep);
+        } else {
+            wlsSite.setMonitorDataRepository(wlsRep);
+        }
+
+        return wlsSite;
     }
 
 
