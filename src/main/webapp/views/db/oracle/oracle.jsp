@@ -9,18 +9,18 @@
 <link href="${ctx}/global/css/base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.grid.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.window.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/one.grid.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/one.tabs.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/one.window.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 var monitorId = "${monitorId}";
 </script>
 <script language="javascript" src="${ctx}/global/js/jquery-1.7.1.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.layout.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.grid.js"></script>
+<script language="javascript" src="${ctx}/global/js/one.layout.js"></script>
+<script language="javascript" src="${ctx}/global/js/one.grid.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts.src.js"></script>
 <script language="javascript" src="${ctx}/global/js/highcharts-more.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.tabs.js"></script>
+<script language="javascript" src="${ctx}/global/js/one.tabs.js"></script>
 <script language="javascript" src="${ctx}/global/js/sinosoft.window.js.bak"></script>
 <script language="javascript" src="${ctx}/global/js/oracle.js"></script>
 <script type="text/javascript">

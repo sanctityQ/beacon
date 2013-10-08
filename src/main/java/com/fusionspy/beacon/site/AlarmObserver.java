@@ -1,7 +1,7 @@
 package com.fusionspy.beacon.site;
 
-import com.fusionspy.beacon.system.entity.AlarmType;
-import com.fusionspy.beacon.system.entity.AlertType;
+import com.fusionspy.beacon.site.tux.entity.AlarmType;
+import com.fusionspy.beacon.site.tux.entity.AlertType;
 
 import java.util.HashMap;
 import java.util.Iterator;

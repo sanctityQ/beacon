@@ -25,6 +25,7 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
         _url = _url+"/resourceType/"+_givenType;
     }
 
+
     var _data = {severityLevel:severityLevel};
     var $mn = $("#thresholdList");
     //防止每次查询时，表格中的数据不断累积

@@ -5,9 +5,6 @@ import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
 import com.fusionspy.beacon.site.tux.entity.TuxIniData;
-import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
-import com.fusionspy.beacon.system.entity.SysrecsEntity;
-import com.sinosoft.one.util.encode.JaxbBinder;
 
 /**
  * tuxSite
@@ -17,9 +14,6 @@ import com.sinosoft.one.util.encode.JaxbBinder;
  */
 public class TuxSite extends MonitorSite{
 
-//    private JaxbBinder jaxbBinder = new JaxbBinder(TuxInTimeData.class, TuxsvrsEntity.class);
-//
-//    private JaxbBinder iniBinder = new JaxbBinder(SysrecsEntity.class,TuxIniData.class,TuxsvrsEntity.class);
 
 
     private TuxService tuxService;

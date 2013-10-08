@@ -2,7 +2,6 @@ package com.fusionspy.beacon.site.tux.entity;
 
 import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorData;
-import com.fusionspy.beacon.system.entity.SysrecsEntity;
 import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.annotation.XmlElement;

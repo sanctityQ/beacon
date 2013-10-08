@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>monitor监控系统</title>
     <%@ include file="/WEB-INF/layouts/base.jsp" %>
-    <link href="${ctx }/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx }/global/css/one.tabs.css" rel="stylesheet" type="text/css"/>
 
     <script type="text/javascript">
         var ctx = '${ctx}';

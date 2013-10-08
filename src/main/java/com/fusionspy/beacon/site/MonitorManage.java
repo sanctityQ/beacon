@@ -1,6 +1,6 @@
 package com.fusionspy.beacon.site;
 
-import com.fusionspy.beacon.system.entity.SiteListEntity;
+import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.sinosoft.one.util.thread.ThreadUtils;
 import org.slf4j.Logger;
@@ -12,7 +12,6 @@ import org.springframework.util.Assert;
 import javax.annotation.PostConstruct;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -117,6 +116,7 @@ public class MonitorManage {
         } else {
             logger.info("Site Name:{}  had stopped,so do nothing ", siteName);
         }
+        sitesHolder.removeMonitorSite(siteName);
     }
 
     /**
@@ -144,6 +144,8 @@ public class MonitorManage {
         MonitorSite monitorSite = sitesHolder.getMonitorSite(siteName);
         return monitorSite.switchSaveFlag();
     }
+
+
 
 
     /**

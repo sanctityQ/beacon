@@ -57,7 +57,7 @@ public class Connect {
 		}
 	}
 
-	private final class SiteThread implements Runnable {
+	private final class SiteThread {
 
 		private volatile boolean signal;
 
@@ -168,7 +168,6 @@ public class Connect {
 							}
 						}
 						break;
-
 					case 93:
 						System.out.println("GETSVRDATA");
 						out.write((char) Integer.parseInt((String) coreMap
@@ -281,26 +280,26 @@ public class Connect {
             return this.getData("GETSVRDATA", iniXml);
         }
 
-		public void run() {
-			System.out.println("Site Thread running now...");
-			try {
-
-				String iniXml = loadXML(iniXmlName);
-				// System.out.println(iniXml);
-
-				if (siteSocket == null || siteSocket.isClosed()) {
-					getData("HANDINIT", null);
-				}
-
-				getData("GETINITDATA", iniXml);
-				while (this.signal == true) {
-					getData("GETSVRDATA", iniXml);
-					Thread.sleep(sampleInterval);
-				}
-			} catch (InterruptedException ie) {
-				ie.printStackTrace();
-			}
-		}
+//		public void run() {
+//			System.out.println("Site Thread running now...");
+//			try {
+//
+//				String iniXml = loadXML(iniXmlName);
+//				// System.out.println(iniXml);
+//
+//				if (siteSocket == null || siteSocket.isClosed()) {
+//					getData("HANDINIT", null);
+//				}
+//
+//				getData("GETINITDATA", iniXml);
+//				while (this.signal == true) {
+//					getData("GETSVRDATA", iniXml);
+//					Thread.sleep(sampleInterval);
+//				}
+//			} catch (InterruptedException ie) {
+//				ie.printStackTrace();
+//			}
+//		}
 
 	}
 
@@ -312,11 +311,8 @@ public class Connect {
                task = new SiteThread(iniXmlNameP, siteName, agentIPP,
 					sitePortP, sampleIntervalP);
                 siteThreadMap.put(siteName, task);
-                return task.init();
             }
-            else{
-               throw new RuntimeException("site has cache");
-            }
+            return task.init();
 
 		} catch (Exception ioe) {
 			System.out.println("Got IOException while creating site thread");

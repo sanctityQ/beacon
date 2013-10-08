@@ -1,15 +1,11 @@
 package com.fusionspy.beacon.web.appServer;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.fusionspy.beacon.site.HisData;
 import com.fusionspy.beacon.site.MonitorManage;
 import com.fusionspy.beacon.site.tux.TuxHisData;
-import com.fusionspy.beacon.site.tux.TuxSite;
 import com.fusionspy.beacon.site.tux.entity.*;
-import com.fusionspy.beacon.system.entity.DataSave;
-import com.fusionspy.beacon.system.entity.SiteListEntity;
-import com.fusionspy.beacon.system.entity.SiteSettings;
+import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
+import com.fusionspy.beacon.site.tux.entity.SiteSettings;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.fusionspy.beacon.web.BeaconLocale;
 import com.fusionspy.beacon.web.Chart;
@@ -20,13 +16,14 @@ import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.DefValue;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Delete;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
+import com.sinosoft.one.mvc.web.annotation.rest.Put;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Text;
-import com.sinosoft.one.mvc.web.instruction.reply.transport.Xml;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
@@ -73,6 +70,93 @@ public class TuxController {
     @Autowired
     private SystemService systemService;
 
+    @Put("/save")
+    public Reply update(SiteListEntity appServer,Invocation invocation){
+        systemService.addSite(appServer);
+        monitorManage.cancel(appServer.getSiteName());
+        monitorManage.monitor(appServer.getSiteName());
+        return Replys.with("success").as(Text.class);
+    }
+
+    @Delete("/delete/{serverName}")
+    public Reply delete(@Param("serverName")String serverName) {
+        monitorManage.cancel(serverName);
+        systemService.delSite(serverName);
+
+        return Replys.with("success").as(Text.class);
+    }
+
+
+    @Post("/save")
+    public Reply save(SiteListEntity appServer,@DefValue("zh_CN")Locale locale){
+        systemService.addSite(appServer);
+        BeaconLocale.setLocale(locale);
+        monitorManage.monitor(appServer.getSiteName());
+        return Replys.with("success").as(Text.class);
+    }
+
+    @Get("manager")
+    public String list(){
+        return "tuxedoList";
+    }
+
+
+    @Get("manager/add")
+    public String add(){
+        return "tuxedoAdd";
+    }
+
+
+    @Get("manager/list")
+    public void list(@Param("type")String type,Invocation inv) throws Exception {
+
+        List<SiteListEntity> siteList = systemService.getSites();
+        List<Map<String,String>> l = new ArrayList<Map<String, String>>(siteList.size());
+        for (Iterator<SiteListEntity> iter = siteList.iterator(); iter.hasNext();) {
+            l.add(convertGrid(iter.next(),inv.getRequest().getContextPath(),type));
+        }
+        Page<Map<String,String>> page = new PageImpl<Map<String,String>>(l);
+        Gridable<Map<String,String>> gridable = new Gridable<Map<String,String>> (page);
+        String cellString = new String("siteName,siteIp,sitePort,interval,operation");
+        gridable.setIdField("id");
+        gridable.setCellStringField(cellString);
+        UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
+    }
+
+    @Get("manager/view/{serverName}")
+    public String detail(@Param("serverName")String name,Invocation invocation){
+        SiteListEntity siteListEntity = systemService.getSite(name);
+        invocation.addModel("server",siteListEntity);
+        return "/appServer/tuxedo/manager/add";
+    }
+
+
+    private Map<String,String> convertGrid(SiteListEntity siteListEntity, String contextPath, String type) {
+
+        Map<String,String> map = new HashMap<String, String>();
+        map.put("id",siteListEntity.getSiteName());
+        String siteName = "<a href='"+contextPath+"/appServer/tuxedo/view/"+siteListEntity.getSiteName()
+                +"' target='_blank'>" +siteListEntity.getSiteName()+"</a>";
+        map.put("siteName",siteName);
+        map.put("siteIp",siteListEntity.getSiteIp());
+        map.put("sitePort",String.valueOf(siteListEntity.getSitePort()));
+        map.put("interval",String.valueOf(siteListEntity.getInterval()));
+        map.put("operation","<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> " +
+                "<a href='javascript:void(0)' class='eid' onclick='setTuxMergency(this)'>数据保存设置</a>"+
+                "<a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>");
+        return map;
+    }
+
+
+
+    @Delete("delete/{serverName}")
+    public Reply delete(@Param("type")String type,@Param("serverName")String serverName) {
+        monitorManage.cancel(serverName);
+        systemService.delSite(serverName);
+        logger.debug("delete server type is {} ,name is",type,serverName);
+
+        return Replys.with("success").as(Text.class);
+    }
 
 
     @Get("list")
@@ -89,7 +173,6 @@ public class TuxController {
             map.put("rqDone", String.valueOf(monitorInf.getRqDoneCount()));
             datas.add(map);
         }
-
 
         Page<Map<String,String>> page = new PageImpl<Map<String,String>>(datas);
         Gridable<Map<String,String>> gridable = new Gridable<Map<String,String>> (page);
@@ -141,40 +224,6 @@ public class TuxController {
         return Replys.with(reply).as(Json.class);
     }
 
-     public String stopMonitor(String siteName){
-        monitorManage.cancel(siteName);
-        //return showMonitor("tuxedo");
-         return null;
-     }
-
-    public Reply changePeriod(String siteName,int period){
-        monitorManage.changePeriod(siteName, period);
-        return Replys.with("success").as(Text.class);
-    }
-
-    public Reply switchSave(String siteName){
-        String msg = monitorManage.switchSave(siteName)?"yes":"not";
-        return Replys.with(msg).as(Text.class);
-    }
-
-    public Reply runState(String siteName) {
-        boolean isRunning = monitorManage.siteRunning(siteName);
-        return  Replys.with(isRunning?"1":"0").as(Text.class);
-    }
-
-    public Reply saveState(String siteName){
-        boolean state = monitorManage.isSave(siteName);
-        return  Replys.with(state?"1":"0").as(Text.class);
-    }
-
-    public String showData(){
-        return "data";
-    }
-    
-    
-    public String showStatistics(){
-        return "statistics";
-    }
 
     public Reply getMonitorInf(String siteName){
       TuxHisData hisData = monitorManage.getMonitorInf(siteName);
@@ -276,11 +325,7 @@ public class TuxController {
         String cellString = new String("name,pid,addr,status,conTime");
         gridable.setIdField("name");
         gridable.setCellStringField(cellString);
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
-        } catch (Exception e) {
-            throw new RuntimeException("json数据转换出错!", e);
-        }
+        UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
     }
 
     private void getSystemDate(TuxSysData sys, Invocation invocation) {
@@ -301,11 +346,7 @@ public class TuxController {
         String cellString = new String("coreFind,errorFind,warnFind,largueFile,freeMem,idleCPU,svrCnt,queCnt,cltCnt");
         gridable.setIdField("coreFind");
         gridable.setCellStringField(cellString);
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
-        } catch (Exception e) {
-            throw new RuntimeException("json数据转换出错!", e);
-        }
+        UIUtil.with(gridable).as(UIType.Json).render(invocation.getResponse());
     }
 
 
@@ -340,26 +381,6 @@ public class TuxController {
     }
 
 
-    private String renderXml(Chart chart){
-       return chart.getJaxbBinder().toXml(chart, "UTF-8");
-    }
-
-    private String addColumnSeries(int index, Chart chart){
-         Chart.Value sv = new Chart.Value();
-         String title =   TOP + String.valueOf(index);
-         sv.setValue(title);
-         chart.addSeries(sv);
-         return title;
-    }
-
-
-    void checkColumnChart(Chart chart) {
-        if (chart.getSeries().isEmpty()) {
-            for (int i = 1; i < 6; i++) {
-               addColumnSeries(i,chart);
-            }
-        }
-    }
 
     @Get("memory/top/{serverName}")
     public void chartMem(@Param("serverName")String serverName,Invocation inv){
@@ -375,11 +396,7 @@ public class TuxController {
         String cellString = new String("sort,pid,used");
         gridable.setIdField("pid");
         gridable.setCellStringField(cellString);
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-        } catch (Exception e) {
-            throw new RuntimeException("json数据转换出错!", e);
-        }
+        UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
     }
 
     private Map<String, String> convertMemGrid(TuxsvrsEntity svr, int index) {
@@ -389,18 +406,6 @@ public class TuxController {
         map.put("used",String.valueOf(svr.getMemoryuse()));
         return map;
     }
-
-    private void addColumnValue(Chart.ColumnGraph graph,String value,String des){
-        Chart.ColumnValue gv = new Chart.ColumnValue();
-        gv.setValue(value);
-        gv.setDescription(des);
-        graph.addValue(gv);
-    }
-
-    private String newMemTranMessage(String serverName,String pid){
-        return  serverName + "(pid:"+pid+")";
-    }
-
 
     @Get("transcation/top/{serverName}")
     public void chartTrans(@Param("serverName")String siteName,Invocation inv){
@@ -417,11 +422,7 @@ public class TuxController {
         String cellString = new String("sort,rqdon,progname,pid");
         gridable.setIdField("pid");
         gridable.setCellStringField(cellString);
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-        } catch (Exception e) {
-            throw new RuntimeException("json数据转换出错!", e);
-        }
+        UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
     }
 
     private Map<String, String> convertTransGrid(TuxsvrsEntity svr, int index) {
@@ -540,7 +541,16 @@ public class TuxController {
         return jsonArray;
     }
 
-
+    /**
+     * 支持使用Jquery.validate Ajax检验站点名称是否重复.
+     */
+    @Get("check/{siteName}")
+    public Reply checkSite(@Param("siteName")String siteName,Invocation inv) {
+        logger.debug("sitename = {}", siteName);
+        String result = String.valueOf(systemService.checkSiteExists(siteName));
+        logger.debug("siteName validate is {}", result);
+        return Replys.with(result).as(Text.class);
+    }
 
 
 

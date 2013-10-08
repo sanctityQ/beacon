@@ -23,11 +23,7 @@ $(function(){
         $("#main").width(center.width() - 31).height(center.height() - 30)
     };
 
-    Highcharts.setOptions({
-        global: {
-            useUTC: false
-        }
-    });
+
 
     //cpu chart
     new Highcharts.Chart({
@@ -59,6 +55,7 @@ $(function(){
                 }
             }
         },
+
         title: {
             text: ''
         },
@@ -753,7 +750,7 @@ System.prototype.start = function(){
 <div id="layout_center">
     <div class="main-linux" id="main">
         <ul class="crumbs">
-            <li><a href="${ctx}/appServer/list/tuxedo" target="_blank">Tuxedo监视器</a> ></li>
+            <li><a href="${ctx}/appServer/tuxedo/manager" target="_blank">Tuxedo监视器</a> ></li>
             <li><b>${serverName}</b></li>
         </ul>
         <hr class="top_border" />
