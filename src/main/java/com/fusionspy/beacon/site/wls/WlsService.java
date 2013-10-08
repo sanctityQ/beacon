@@ -45,8 +45,6 @@ public class WlsService {
     private WlsThreadDao wlsThreadDao;
     @Resource
     private WlsWebappDao wlsWebappDao;
-    @Resource
-    private WlsServerDao wlsServerDao;
 
     /**
      * process init data
@@ -110,26 +108,5 @@ public class WlsService {
         }
         wlsResourceDao.save(resource);
 
-    }
-
-    @Transactional
-    public void save(WlsServer wlsServer) {
-        wlsServer.setRecTime(new Date());
-        wlsServerDao.save(wlsServer);
-        //TODO 确认是否要保存 WlsResources
-    }
-
-    @Transactional(readOnly = true)
-    public WlsServer getSite(String serverName) {
-        return wlsServerDao.findOne(serverName);
-    }
-
-    public List<WlsServer> getSites() {
-        return (List<WlsServer>) wlsServerDao.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public List<WlsServer> list() {
-        return (List<WlsServer>) wlsServerDao.findAll();
     }
 }
