@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.sinosoft.one.monitor.attribute.domain.AttributeService;
 import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.util.encode.EncodeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,8 @@ public class ResourcesCache {
 
 	public Resource getResource(String resourceId) {
 		try {
-			return resourcesCache.get(resourceId);
+            //fix 中文在windows系统中不能作为key出现
+            return resourcesCache.get(resourceId);
 		} catch (ExecutionException e) {
 			logger.warn("get resource exception :" + e.getMessage());
 			return Resource.EMPTY;

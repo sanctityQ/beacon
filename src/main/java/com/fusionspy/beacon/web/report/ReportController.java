@@ -113,6 +113,7 @@ public class ReportController {
         StatisticTopReport statisticReport = (StatisticTopReport)factory.getInstance(type, attribute);
         //set top default value
         if(top ==null)top=TopFilter.five;
+        logger.debug("/resourceType/{type}/attribute/{attribute}/top resourceId:{}",resourceId);
         List list = statisticReport.statisticByTop(resourceId,series,top);
         topDeal(list,statisticReport.reportAttribute(),inv);
 

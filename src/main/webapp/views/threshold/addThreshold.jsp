@@ -153,7 +153,7 @@ function addNumOption(selectObj, selected) {
                          <option value="LE"  ${threshold.criticalThresholdCondition eq "LE"  ? "selected='selected'" : ''}>&lt;=</option>
                          <option value="GE"  ${threshold.criticalThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
                     </select><span class='patternName'>阈值界限</span>
-                    <input  type="text" class="formtext"  size="20" id="criticalThresholdValue" name="criticalThresholdValue" value="${ threshold.criticalThresholdValue}"/>
+                    <input  type="text" class="formtext"  size="38" id="criticalThresholdValue" name="criticalThresholdValue" value="${ threshold.criticalThresholdValue}"/>
                     <span style="margin-left:50px;" id="patternTip"></span>
                 </td>
               </tr>
@@ -179,7 +179,7 @@ function addNumOption(selectObj, selected) {
 		                  <option value="GE"  ${threshold.warningThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
                 </select>
                 <span class='patternName'>阈值界限</span>
-			    <input name="warningThresholdValue" id="warningThresholdValue" type="text" class="formtext" size="4" value="${ threshold.warningThresholdValue}" /></td>
+			    <input name="warningThresholdValue" id="warningThresholdValue" type="text" class="formtext" size="38" value="${ threshold.warningThresholdValue}" /></td>
               </tr>
               <tr>
                 <td>&nbsp;</td>
@@ -202,7 +202,7 @@ function addNumOption(selectObj, selected) {
                         <option value="GE"  ${threshold.infoThresholdCondition eq "GE"  ? "selected='selected'" : ''}>&gt;=</option>
                     </select>
                     <span class='patternName'>阈值界限</span>
-	                <input type="text" class="formtext"  size="4" id="infoThresholdValue" name="infoThresholdValue"  value="${ threshold.infoThresholdValue}"/></td>
+	                <input type="text" class="formtext"  size="38" id="infoThresholdValue" name="infoThresholdValue"  value="${ threshold.infoThresholdValue}"/></td>
               </tr>
               <tr>
                 <td>&nbsp;</td>

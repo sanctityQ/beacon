@@ -177,7 +177,7 @@ $(function(){
             href: ''
         },
         series: [{
-            name: '内存使用率',
+            name: '物理内存剩余',
             data: (function() {
                 // generate an array of random data
                 var data = [];
@@ -746,7 +746,11 @@ System.prototype.start = function(){
 </head>
 
 <body>
+
 <%@include file="/WEB-INF/layouts/menu.jsp"%>
+<c:if test="${stop}" >
+<div id="errorMsg" class="alert alert-danger"><strong>错误：</strong>Tuxedo系统监控已经停止，请检查agent端/Tuxedo是否正常运行!</div>
+</c:if>
 <div id="layout_center">
     <div class="main-linux" id="main">
         <ul class="crumbs">
@@ -869,7 +873,7 @@ System.prototype.start = function(){
                             <div class="hr_box h_b">
                                 <div class="head-cpu">
                                     <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>
-                                    内存使用率-最近6小时
+                                    物理内存剩余-最近6小时
                                 </div>
                                 <div id="RAM_line" style="height:230px;padding-top:15px"></div>
                             </div>

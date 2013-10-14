@@ -27,6 +27,7 @@ import com.sinosoft.one.mvc.web.instruction.reply.transport.Text;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
+import com.sinosoft.one.util.encode.EncodeUtils;
 import com.sinosoft.one.util.encode.JsonBinder;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -166,7 +167,7 @@ public class TuxController {
 
             TuxHisData monitorInf = monitorManage.getMonitorInf(siteListEntity.getSiteName());
             Map<String,String> map = Maps.newHashMap();
-            String url = inv.getServletContext().getContextPath()+"/appServer/tuxedo/view/"+siteListEntity.getSiteName();
+            String url = inv.getServletContext().getContextPath()+"/appServer/tuxedo/view/"+EncodeUtils.urlEncode(siteListEntity.getSiteName());
             map.put("siteName", MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, url, siteListEntity.getSiteName()));
             map.put("availability",MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV,
                     MessageUtils.available2CssClass(!monitorInf.getProcessResult().isStopAlarmSignal())));
@@ -209,6 +210,7 @@ public class TuxController {
         invocation.addModel("count", hisData.getMonitorCount());
         invocation.addModel("ip", siteListEntity.getSiteIp());
         invocation.addModel("port", siteListEntity.getSitePort());
+        invocation.addModel("stop",hisData.getProcessResult().isStopAlarmSignal());
         return "tuxedoInfo";
     }
 
