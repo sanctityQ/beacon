@@ -118,4 +118,9 @@ public class WlsService {
         wlsServerDao.save(wlsServer);
         //TODO 确认是否要保存 WlsResources
     }
+
+    @Transactional(readOnly = true)
+    public List<WlsServer> list() {
+        return (List<WlsServer>) wlsServerDao.findAll();
+    }
 }

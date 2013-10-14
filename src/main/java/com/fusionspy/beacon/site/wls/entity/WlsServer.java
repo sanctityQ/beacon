@@ -23,52 +23,47 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class WlsServer  implements java.io.Serializable {
 
     /**
-    * PK，自动增长.
-    */
-    private Integer id;
-    /**
+     * weblogic版本
         */
     private String version;
     /**
+     * Server名称
         */
     private String serverName;
     /**
+     * 记录时间
         */
     private Date recTime;
     /**
+     * IP地址
         */
     private String listenAddress;
     /**
+     * 端口
         */
     private String listenPort;
     /**
+     * 轮询时间
         */
     private Integer interval;
     /**
+     * 用户名
         */
     private String userName;
     /**
+     * 密码
         */
     private String password;
     /**
         */
     private Integer isSsl;
 
+    private Integer status;
+
     public WlsServer() {
     }
 
-   
-    @Id @GeneratedValue(strategy=IDENTITY)
-    @Column(name="id", unique=true)
-    public Integer getId() {
-    return this.id;
-    }
-
-    public void setId(Integer id) {
-    this.id = id;
-    }
-
-    @Column(name="version", length=10)
+    @Column(name="version", length=20)
     public String getVersion() {
     return this.version;
     }
@@ -76,8 +71,9 @@ public class WlsServer  implements java.io.Serializable {
     public void setVersion(String version) {
     this.version = version;
     }
-    
-    @Column(name="server_name")
+
+    @Id
+    @Column(name="server_name", unique=true)
     public String getServerName() {
     return this.serverName;
     }
@@ -113,7 +109,7 @@ public class WlsServer  implements java.io.Serializable {
     this.listenPort = listenPort;
     }
     
-    @Column(name="interval")
+    @Column(name="interval_")
     public Integer getInterval() {
     return this.interval;
     }
@@ -149,8 +145,16 @@ public class WlsServer  implements java.io.Serializable {
     this.isSsl = isSsl;
     }
 
+    @Column(name="status")
+    public Integer getStatus() {
+        return status;
+    }
 
-	@Override
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    @Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
