@@ -108,4 +108,20 @@ public class Grid {
 
     }
 
+    public static interface RowHandler<T> {
+
+        public Row buildRow(T t);
+    }
+
+    public static Grid buildGrid(List recordList, RowHandler handler) {
+        if(recordList!=null) {
+            Grid grid = new Grid(recordList.size()+"", null);
+            for(Object o : recordList) {
+                grid.addRow(handler.buildRow(o));
+            }
+            return grid;
+        }
+        return null;
+    }
+
 }

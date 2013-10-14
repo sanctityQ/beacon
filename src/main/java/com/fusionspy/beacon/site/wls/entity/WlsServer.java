@@ -24,6 +24,7 @@ public class WlsServer  implements java.io.Serializable {
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
      * weblogic版本
         */
     private String version;
@@ -58,34 +59,48 @@ public class WlsServer  implements java.io.Serializable {
     */
     private Integer id;
     /**
+=======
+     * weblogic版本
+>>>>>>> f9e9463... wls
         */
     private String version;
     /**
+     * Server名称
         */
     private String serverName;
     /**
+     * 记录时间
         */
     private Date recTime;
     /**
+     * IP地址
         */
     private String listenAddress;
     /**
+     * 端口
         */
     private String listenPort;
     /**
+     * 轮询时间
         */
     private Integer interval;
     /**
+     * 用户名
         */
     private String userName;
     /**
+<<<<<<< HEAD
 >>>>>>> 9906aa6... WlsResource add prop mem_free
+=======
+     * 密码
+>>>>>>> f9e9463... wls
         */
     private String password;
     /**
         */
     private Integer isSsl;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     private Integer status;
 
@@ -103,13 +118,19 @@ public class WlsServer  implements java.io.Serializable {
     public Integer getId() {
     return this.id;
     }
+=======
+    private Integer status;
+>>>>>>> f9e9463... wls
 
-    public void setId(Integer id) {
-    this.id = id;
+    public WlsServer() {
     }
 
+<<<<<<< HEAD
     @Column(name="version", length=10)
 >>>>>>> 9906aa6... WlsResource add prop mem_free
+=======
+    @Column(name="version", length=20)
+>>>>>>> f9e9463... wls
     public String getVersion() {
     return this.version;
     }
@@ -118,6 +139,7 @@ public class WlsServer  implements java.io.Serializable {
     this.version = version;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     @Id
     @Column(name="server_name", unique=true)
@@ -125,6 +147,11 @@ public class WlsServer  implements java.io.Serializable {
     
     @Column(name="server_name")
 >>>>>>> 9906aa6... WlsResource add prop mem_free
+=======
+
+    @Id
+    @Column(name="server_name", unique=true)
+>>>>>>> f9e9463... wls
     public String getServerName() {
     return this.serverName;
     }
@@ -161,10 +188,14 @@ public class WlsServer  implements java.io.Serializable {
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Column(name="interval_")
 =======
     @Column(name="interval")
 >>>>>>> 9906aa6... WlsResource add prop mem_free
+=======
+    @Column(name="interval_")
+>>>>>>> f9e9463... wls
     public Integer getInterval() {
     return this.interval;
     }
@@ -201,6 +232,9 @@ public class WlsServer  implements java.io.Serializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f9e9463... wls
     @Column(name="status")
     public Integer getStatus() {
         return status;
@@ -209,12 +243,17 @@ public class WlsServer  implements java.io.Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
+<<<<<<< HEAD
 
     @Override
 =======
 
 	@Override
 >>>>>>> 9906aa6... WlsResource add prop mem_free
+=======
+
+    @Override
+>>>>>>> f9e9463... wls
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
