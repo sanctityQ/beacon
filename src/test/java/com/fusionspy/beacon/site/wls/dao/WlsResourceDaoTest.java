@@ -4,6 +4,7 @@ import com.fusionspy.beacon.site.wls.WlsHisData;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
+import com.fusionspy.beacon.site.wls.entity.WlsServer;
 import com.sinosoft.one.util.encode.JaxbBinder;
 import com.sinosoft.one.util.test.SpringTxTestCase;
 import org.dom4j.Document;
@@ -14,6 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import javax.annotation.Resource;
 import java.io.InputStream;
 
 @DirtiesContext
@@ -23,6 +25,9 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
 
     @Autowired
     private WlsService wlsService;
+
+    @Resource
+    private WlsServerDao wlsServerDao;
 
     @Test
     public void testProcessInitData() {
@@ -53,5 +58,20 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
         JaxbBinder jaxbBinder = new JaxbBinder(WlsInTimeData.class);
         WlsInTimeData inTimeData = jaxbBinder.fromXml(resp);
         wlsService.processInTimeData("", 5, inTimeData.defaultData(), hisData);
+    }
+
+    @Test
+    public void testSave() {
+        WlsServer wlsServer = new WlsServer();
+        wlsServer.setServerName("aaa");
+        wlsServer.setListenAddress("aaa");
+        wlsServer.setListenPort("20");
+        wlsServer.setInterval(30);
+        wlsServer.setUserName("aaa");
+        wlsServer.setPassword("aaa");
+        wlsServer.setIsSsl(0);
+        wlsServer.setVersion("aaa");
+        wlsServer.setStatus(0);
+        wlsServerDao.save(wlsServer);
     }
 }
