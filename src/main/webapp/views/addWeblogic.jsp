@@ -56,7 +56,11 @@
               <tr>
                   <td width="25%">版本<span class="mandatory">*</span></td>
                   <td>
+<<<<<<< HEAD
                       <select id="version" name="version" type="text" class="formtext" value="${server.version}">
+=======
+                      <select id="version" name="version" type="text" class="formtext" value="${server.siteName}">
+>>>>>>> 09f2248... wls
                       <option value="weblogic 8.x">weblogic 8.x</option>
                       <option value="weblogic 9.x">weblogic 9.x</option>
                       <option value="weblogic 10.x">weblogic 10.x</option>
@@ -73,7 +77,11 @@
               <tr>
                 <td>IP地址<span class="mandatory">*</span></td>
                 <td id="v_listenAddress">
+<<<<<<< HEAD
                     <input id="listenAddress" name="listenAddress" type="text" class="validate {required:true,IP_v:true} formtext" size="30" value="${server.listenAddress}" />
+=======
+                    <input id="listenAddress" name="listenAddress" type="text" class="validate {required:true,IP_v:true} formtext" size="30" value="${server.siteIp}" />
+>>>>>>> 09f2248... wls
                     <span id="v_listenAddress_validate"></span>
                 </td>
               </tr>
@@ -87,7 +95,11 @@
               <tr>
                 <td>端口<span class="mandatory">*</span></td>
                 <td id="v_listenPort">
+<<<<<<< HEAD
                     <input id="listenPort" name="listenPort" type="text" class="validate {required:true,port_v:true} formtext" maxlength="5" size="5" value="${server.listenPort}"/>
+=======
+                    <input id="listenPort" name="listenPort" type="text" class="validate {required:true,port_v:true} formtext" maxlength="5" size="5" value="${server.sitePort}"/>
+>>>>>>> 09f2248... wls
                     <span id="v_listenPort_validate"></span>
                 </td>
               </tr>
@@ -97,22 +109,34 @@
               <tr>
                 <td>用户名<span class="mandatory">*</span></td>
                 <td id="v_userName">
+<<<<<<< HEAD
                     <input id="userName" name="userName" type="text" class="validate {required:true} formtext" value="${server.userName}"/>
+=======
+                    <input id="userName" name="userName" type="text" class="validate {required:true} formtext" value="${server.siteAuth}"/>
+>>>>>>> 09f2248... wls
                     <span id="v_userName_validate"></span>
                 </td>
               </tr>
               <tr>
                 <td>密码<span class="mandatory">*</span></td>
                 <td id="v_password">
+<<<<<<< HEAD
                     <input name="password" type="text" class="validate {required:true} formtext" value="${server.password}" />
+=======
+                    <input name="password" type="text" class="validate {required:true} formtext" value="${server.siteWd}" />
+>>>>>>> 09f2248... wls
                     <span id="v_password_validate"></span>
                 </td>
               </tr>
               <tr>
                 <td>使用SSL<span class="mandatory">*</span></td>
                 <td id="v_isSsl">
+<<<<<<< HEAD
                     <input type="checkbox" class="validate {required:true}" checked="${server.isSsl==0?'checked':''}" name="isSsl" value="0"/>未使用
                     <input type="checkbox" class="validate {required:true}" checked="${server.isSsl==1?'checked':''}" name="isSsl" value="1"/>使用
+=======
+                    <input type="checkbox" class="validate {required:true}" name="isSsl" value="0"/>未使用<input type="checkbox" class="validate {required:true}" name="isSsl" value="1"/>使用
+>>>>>>> 09f2248... wls
                     <span id="v_isSsl_validate"></span>
                 </td>
               </tr>
