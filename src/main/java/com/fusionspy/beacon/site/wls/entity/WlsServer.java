@@ -23,6 +23,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class WlsServer  implements java.io.Serializable {
 
     /**
+<<<<<<< HEAD
      * weblogic版本
         */
     private String version;
@@ -52,18 +53,63 @@ public class WlsServer  implements java.io.Serializable {
     private String userName;
     /**
      * 密码
+=======
+    * PK，自动增长.
+    */
+    private Integer id;
+    /**
+        */
+    private String version;
+    /**
+        */
+    private String serverName;
+    /**
+        */
+    private Date recTime;
+    /**
+        */
+    private String listenAddress;
+    /**
+        */
+    private String listenPort;
+    /**
+        */
+    private Integer interval;
+    /**
+        */
+    private String userName;
+    /**
+>>>>>>> 9906aa6... WlsResource add prop mem_free
         */
     private String password;
     /**
         */
     private Integer isSsl;
 
+<<<<<<< HEAD
     private Integer status;
 
     public WlsServer() {
     }
 
     @Column(name="version", length=20)
+=======
+    public WlsServer() {
+    }
+
+   
+    @Id @GeneratedValue(strategy=IDENTITY)
+    @Column(name="id", unique=true)
+    public Integer getId() {
+    return this.id;
+    }
+
+    public void setId(Integer id) {
+    this.id = id;
+    }
+
+    @Column(name="version", length=10)
+>>>>>>> 9906aa6... WlsResource add prop mem_free
     public String getVersion() {
     return this.version;
     }
@@ -71,9 +117,14 @@ public class WlsServer  implements java.io.Serializable {
     public void setVersion(String version) {
     this.version = version;
     }
+<<<<<<< HEAD
 
     @Id
     @Column(name="server_name", unique=true)
+=======
+    
+    @Column(name="server_name")
+>>>>>>> 9906aa6... WlsResource add prop mem_free
     public String getServerName() {
     return this.serverName;
     }
@@ -109,7 +160,11 @@ public class WlsServer  implements java.io.Serializable {
     this.listenPort = listenPort;
     }
     
+<<<<<<< HEAD
     @Column(name="interval_")
+=======
+    @Column(name="interval")
+>>>>>>> 9906aa6... WlsResource add prop mem_free
     public Integer getInterval() {
     return this.interval;
     }
@@ -145,6 +200,7 @@ public class WlsServer  implements java.io.Serializable {
     this.isSsl = isSsl;
     }
 
+<<<<<<< HEAD
     @Column(name="status")
     public Integer getStatus() {
         return status;
@@ -155,6 +211,10 @@ public class WlsServer  implements java.io.Serializable {
     }
 
     @Override
+=======
+
+	@Override
+>>>>>>> 9906aa6... WlsResource add prop mem_free
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
