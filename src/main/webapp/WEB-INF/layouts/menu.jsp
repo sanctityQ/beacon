@@ -86,6 +86,7 @@
                         <li class="action" style="border:none"><span class="middleware">应用服务器</span>
                             <ul class="list">
                                 <li><a href="${ctx}/appServer/list/tuxedo">Tuxedo</a></li>
+                                <li><a href="${ctx}/appServer/weblogic/listUI">Weblogic</a></li>
                             </ul>
                         </li>
                         <%--<li class="action"><span class="sever">操作系统</span>--%>

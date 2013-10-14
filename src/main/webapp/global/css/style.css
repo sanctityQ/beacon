@@ -218,3 +218,4 @@ padding-left:25px}
 .hint{background:#c05251;border:#750706 1px solid;padding:0 10px;line-height:20px;color:#fff;text-shadow:0 1px 0 #291315;font-weight:bold;border-radius:3px;}
 .repor_view .hint{margin:20px;}
 .reporCont{display:none}
+.error_validate {color: red;}
