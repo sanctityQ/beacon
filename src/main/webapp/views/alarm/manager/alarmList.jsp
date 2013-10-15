@@ -54,8 +54,8 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
         multiselect: true
     }).grid;
 
-    var rows = grid.checked();
-    var rows = [row,row]
+//    var rows = grid.checked();
+//    var rows = [row,row]
 }
 function alarmDetailInfo(e){
     var rows = $(e).parent().parent();
