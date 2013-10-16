@@ -470,7 +470,7 @@
                 if(defaults.rowNum != "") {
                 	totalPage = Math.ceil(data.total/defaults.rowNum);
                 }              
-                if(rows == 0 || total == 0) {
+                if(rows.length == 0 || total == 0) {
                 	gTable  = gTable + '<div style="text-align:center;">暂无数据......</div>';
                 }
                 var colLen = defaults.colums.length;
@@ -524,7 +524,8 @@
 //                if(!defaults.pager) {
 //                	endParam = data.total;
 //                }
-                for(var j = startParam; j < endParam; j++){
+
+                for(var j = startParam; j < endParam&&rows.length>0; j++){
                     var cell = rows[j].cell;
                     //判断id是否是某一列的值
                     if(col_name_is_id) {

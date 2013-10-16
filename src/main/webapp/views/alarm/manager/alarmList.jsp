@@ -34,7 +34,7 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
         type:"get",
         url : _url,
         dataType: "json",
-        data:_data,
+        queryData:_data,
         colDisplay: false,
         afterRepage:true,
         clickSelect: true,
