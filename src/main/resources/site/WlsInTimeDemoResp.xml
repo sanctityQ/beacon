@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MONITOR Date="2009-10-19 16:10:42">
+    <ServerRuntime ActivationTime="1255939107375" HealthState="State:HEALTH_OK,ReasonCode:[,]" State="RUNNING" Name="examplesServer" OpenSocketsCurrentCount="3" WeblogicVersion="WebLogic Server 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 WebLogic XMLX Module 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 " ListenAddress="hdang-cn/10.182.228.108" ListenPort="7001" RestartsTotalCount="0" serverName="examplesServer"/>
+    <!--wxT("HEALTH_OK"),wxT("HEALTH_WARN"),wxT("HEALTH_CRITICAL"),wxT("HEALTH_FAILED"),-->`
+
+    <JVMRuntime HeapFreeCurrent="17181728" HeapSizeCurrent="32347824" HeapFreePercent="null" serverName="m1"/>
+
+    <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="2" ExecuteThreadIdleCount="2" StandbyThreadCount="0" serverName="examplesServer" QueueLength="0" />
+
+    <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="demoPool" State="Running" ConnectionsTotalCount="2" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="2" ActiveConnectionsHighCount="2" ActiveConnectionsCurrentCount="2" serverName="examplesServer" />
+
+    <ApplicationRuntimes.ComponentRuntimes  Name="" DeploymentState="" ComponentName="" Status="" OpenSessionsHighCount="" OpenSessionsCurrentCount="" SessionsOpenedTotalCount="" serverName=""/>
+
+    <JMSRuntime.JMSServers  Name="" BytesCurrentCount="" BytesHighCount="" BytesPendingCount="" BytesReceivedCount="" MessagesCurrentCount="" MessagesHighCount="" MessagesPendingCount="" MessagesReceivedCount="" serverName="examplesServer"/>
+
+    <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.PoolRuntime  Name="" BeansInUseCount="" BeansInUseCurrentCount="" AccessTotalCount="" DestroyedTotalCount="" IdleBeansCount="" MissTotalCount="" PooledBeansCurrentCount="" TimeoutTotalCount="" WaiterCurrentCount="" serverName="examplesServer"/>
+
+    <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime  Name="" CacheAccessCount="" ActivationCount="" CachedBeansCurrentCount="" CacheHitCount="" CacheMissCount="" PassivationCount="" serverName=""/>
+
+    <OSResource CPU="10" MEM="20M50"/>
+
+    <SYSTEM errMsg=""/>
+</MONITOR>
