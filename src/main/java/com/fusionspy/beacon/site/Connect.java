@@ -23,7 +23,7 @@ import java.util.Map;
  * Time: 下午1:25
  */
 @Component
-public class Connect {
+public class Connect{
 
     private final static int BUFFER_LEN = 8192;
 
@@ -31,7 +31,7 @@ public class Connect {
 
 	public final static Map<String,SiteThread> siteThreadMap = new HashMap<String,SiteThread>(100);
 
-    private Logger logger = LoggerFactory.getLogger(getClass());;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
 	static {
 		coreMap.put("HANDINIT", "91");
@@ -304,7 +304,7 @@ public class Connect {
 	}
 
 	public  String startSiteThread(String iniXmlNameP, String siteName,
-			String agentIPP, int sitePortP, int sampleIntervalP) {
+			String agentIPP, int sitePortP, int sampleIntervalP){
 		try {
             SiteThread task = siteThreadMap.get(siteName);
             if(task==null){
