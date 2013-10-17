@@ -1,6 +1,7 @@
 package com.fusionspy.beacon.web.appServer;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.fusionspy.beacon.site.MonitorManage;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
@@ -8,20 +9,21 @@ import com.fusionspy.beacon.web.BeaconLocale;
 import com.fusionspy.beacon.web.JsonGrid;
 =======
 import com.alibaba.fastjson.JSONArray;
+=======
+>>>>>>> a068eb6... none
 import com.fusionspy.beacon.site.MonitorManage;
-import com.fusionspy.beacon.site.tux.TuxHisData;
-import com.fusionspy.beacon.site.tux.entity.*;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
-import com.fusionspy.beacon.system.entity.SiteListEntity;
-import com.fusionspy.beacon.system.entity.SiteSettings;
-import com.fusionspy.beacon.system.service.SystemService;
 import com.fusionspy.beacon.web.BeaconLocale;
+<<<<<<< HEAD
 import com.fusionspy.beacon.web.Chart;
 import com.fusionspy.beacon.web.Grid;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 >>>>>>> f9e9463... wls
+=======
+import com.fusionspy.beacon.web.JsonGrid;
+>>>>>>> a068eb6... none
 import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.DefValue;
@@ -32,6 +34,7 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
+<<<<<<< HEAD
 <<<<<<< HEAD
 import com.sinosoft.one.util.encode.JsonBinder;
 import org.slf4j.Logger;
@@ -47,20 +50,24 @@ import com.sinosoft.one.mvc.web.instruction.reply.transport.Text;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
+=======
+>>>>>>> a068eb6... none
 import com.sinosoft.one.util.encode.JsonBinder;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 
 import javax.annotation.Resource;
+<<<<<<< HEAD
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 >>>>>>> f9e9463... wls
+=======
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+>>>>>>> a068eb6... none
 
 /**
  * tuxedo action
@@ -73,9 +80,13 @@ public class WlsController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 <<<<<<< HEAD
+<<<<<<< HEAD
     JsonBinder jsonBinder =  JsonBinder.buildNonNullBinder();
 =======
 >>>>>>> f9e9463... wls
+=======
+    JsonBinder jsonBinder =  JsonBinder.buildNonNullBinder();
+>>>>>>> a068eb6... none
 
     private Map<String, Object> message = new HashMap<String, Object>();
 
@@ -102,6 +113,7 @@ public class WlsController {
     public Reply list(Invocation inv) {
         List<WlsServer> wlsServerList = wlsService.list();
 <<<<<<< HEAD
+<<<<<<< HEAD
         final String viewUrl = inv.getServletContext().getContextPath()+"/appServer/weblogic/view/";
         final String eidUrl = inv.getServletContext().getContextPath()+"/appServer/weblogic/editUI/";
         JsonGrid grid = JsonGrid.buildGrid(wlsServerList, new JsonGrid.JsonRowHandler<WlsServer>() {
@@ -126,6 +138,19 @@ public class WlsController {
                 row.addCell(new Grid.Cell(wlsServer.getInterval()+""));
                 row.addCell(new Grid.Cell("bbb"));
 >>>>>>> f9e9463... wls
+=======
+        final String viewUrl = inv.getServletContext().getContextPath()+"/appServer/weblogic/view/";
+        final String eidUrl = inv.getServletContext().getContextPath()+"/appServer/weblogic/editUI/";
+        JsonGrid grid = JsonGrid.buildGrid(wlsServerList, new JsonGrid.JsonRowHandler<WlsServer>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsServer wlsServer) {
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, viewUrl + wlsServer.getServerName(), wlsServer.getServerName()));
+                row.addCell(wlsServer.getListenAddress());
+                row.addCell(wlsServer.getListenPort());
+                row.addCell(wlsServer.getInterval()+"");
+                row.addCell(MessageUtils.formateMessage(MessageUtils.HANDLER_FORMAT, eidUrl+wlsServer.getServerName()));
+>>>>>>> a068eb6... none
                 return row;
             }
         });
@@ -133,6 +158,9 @@ public class WlsController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a068eb6... none
     @Get("view/{serverName}")
     public String view(@Param("serverName")String serverName,Invocation invocation) {
         return null;
@@ -159,8 +187,11 @@ public class WlsController {
         return Replys.with(message).as(Json.class);
     }
 
+<<<<<<< HEAD
 =======
 >>>>>>> f9e9463... wls
+=======
+>>>>>>> a068eb6... none
     @Post("start/{serverName}")
     public Reply startMonitor(@Param("serverName")String serverName, @DefValue("zh_CN")Locale locale){
         BeaconLocale.setLocale(locale);
