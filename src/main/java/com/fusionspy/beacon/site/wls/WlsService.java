@@ -120,6 +120,15 @@ public class WlsService {
     }
 
     @Transactional(readOnly = true)
+    public WlsServer getSite(String serverName) {
+        return wlsServerDao.findOne(serverName);
+    }
+
+    public List<WlsServer> getSites() {
+        return (List<WlsServer>) wlsServerDao.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public List<WlsServer> list() {
         return (List<WlsServer>) wlsServerDao.findAll();
     }
