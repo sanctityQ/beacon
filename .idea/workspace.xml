@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d611c7a0-7065-440e-827c-7f5868447efd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/fusionspy/beacon/site/MonitorManage.java" afterPath="$PROJECT_DIR$/src/main/java/com/fusionspy/beacon/site/MonitorManage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/fusionspy/beacon/site/SitesHolder.java" afterPath="$PROJECT_DIR$/src/main/java/com/fusionspy/beacon/site/SitesHolder.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="beacon.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382276789556" ignored="false" />
+    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382276856770" ignored="false" />
     <file path="/pom.xml" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1380806644241" ignored="false" />
     <file path="/Test.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1379856109172" ignored="false" />
     <file path="/MonitorManage.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382261680056" ignored="false" />
@@ -1211,7 +1209,11 @@
       <created>1382276835537</created>
       <updated>1382276835537</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Merge branch 'master' of https://github.com/sanctityQ/beacon into wls&#10;&#10;Conflicts:&#10;&#9;src/main/java/com/fusionspy/beacon/site/MonitorManage.java&#10;&#9;src/main/java/com/fusionspy/beacon/site/SitesHolder.java&#10;&#9;src/main/webapp/WEB-INF/layouts/menu.jsp&#10;">
+      <created>1382276866063</created>
+      <updated>1382276866063</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
