@@ -4,6 +4,7 @@ import com.fusionspy.beacon.site.tux.TuxService;
 import com.fusionspy.beacon.site.tux.TuxSite;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.WlsSite;
+import com.fusionspy.beacon.site.wls.entity.WlsServer;
 import com.fusionspy.beacon.system.entity.SiteListEntity;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.google.common.collect.Lists;
@@ -25,7 +26,7 @@ import java.util.concurrent.ConcurrentMap;
 public class SitesHolder {
 
     private static ConcurrentMap<String, MonitorSite> tuxSiteMap = new MapMaker().concurrencyLevel(32).makeMap();//监控站点线程
-    private static ConcurrentMap<String, MonitorSite> siteMap = new MapMaker().concurrencyLevel(32).makeMap();//监控站点线程
+    private static ConcurrentMap<String, MonitorSite> wlsSiteMap = new MapMaker().concurrencyLevel(32).makeMap();//监控站点线程
 
     @Autowired
     private SystemService systemService;
@@ -67,21 +68,33 @@ public class SitesHolder {
 
     public MonitorSite getMonitorSite(String siteName) {
         Assert.hasText(siteName);
-        MonitorSite monitorSite = tuxSiteMap.get(siteName);
+        MonitorSite monitorSite = null;
+        monitorSite = tuxSiteMap.get(siteName);
         if (monitorSite == null) {
             SiteListEntity siteListEntity = systemService.getSite(siteName);
             MonitorSite newMonitorSite = null;
-            if (siteListEntity.getSiteType().equals("1")) {
+            if (siteListEntity != null && siteListEntity.getSiteType().equals("1")) {
                 newMonitorSite = getTuxSite();
                 newMonitorSite.setSiteName(siteName);
                 newMonitorSite.setSiteIp(siteListEntity.getSiteIp());
                 newMonitorSite.setSitePort(siteListEntity.getSitePort());
+                monitorSite = tuxSiteMap.putIfAbsent(siteName, newMonitorSite);
             } else {
-
             }
-            monitorSite = tuxSiteMap.putIfAbsent(siteName, newMonitorSite);
+
+            monitorSite = wlsSiteMap.get(siteName);
+            if(monitorSite == null) {
+                WlsServer wlsServer = wlsService.getSite(siteName);
+                if(wlsServer != null) {
+                    newMonitorSite = getWlsSite();
+                    newMonitorSite.setSiteName(siteName);
+                    newMonitorSite.setSiteIp(wlsServer.getListenAddress());
+                    newMonitorSite.setSitePort(wlsServer.getListenPort());
+                    monitorSite = wlsSiteMap.putIfAbsent(siteName, newMonitorSite);
+                }
+            }
             if(monitorSite == null)
-               monitorSite = newMonitorSite;
+                monitorSite = newMonitorSite;
         }
         return monitorSite;
     }

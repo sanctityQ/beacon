@@ -72,7 +72,7 @@ public class WlsService {
      */
     @Transactional
     public void processInTimeData(String siteName,int period,WlsInTimeData inTimeData,WlsHisData hisData) {
-        inTimeData.defaultData();
+        inTimeData.defaultData();  //赋默认值
         WlsSysrec sysrec = hisData.getWlsIniData().getWlsSysrec();
 
         List<WlsSvr> serverRuntimes = inTimeData.getServerRuntimes();
@@ -108,6 +108,7 @@ public class WlsService {
         } else {
             resource.setMemFree(0);
         }
+        hisData.setWlsInTimeData(inTimeData);
         wlsResourceDao.save(resource);
 
     }

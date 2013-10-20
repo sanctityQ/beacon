@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Tuxedo站点</title>
+<title>Weblogic站点</title>
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
 $(function(){
@@ -23,460 +23,59 @@ $(function(){
         $("#main").width(center.width() - 31).height(center.height() - 30)
     };
 
-    Highcharts.setOptions({
-        global: {
-            useUTC: false
-        }
-    });
-
-    //cpu chart
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'CPU_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/cpu/${serverName}/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(series.data.length < 20){
-                                    series.addPoint(back, true, false);
-                                }
-                                else{
-                                    series.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, 30000);
-                }
-            }
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值%'
-            }
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'%';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: 'CPU使用率',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/cpu/${serverName}/123",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#87bdc9']
-    });
-
-
-
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'RAM_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/memory/${serverName}/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(series.data.length < 20){
-                                    series.addPoint(back, true, false);
-                                }
-                                else{
-                                    series.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, 30000);
-                }
-            }
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值M'
-            }
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'M';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: '内存使用率',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/memory/${serverName}/all",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#769f5d']
-    });
-
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'client_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-
-                    // set up the updating of the chart each second
-                    var series0 = this.series[0];
-                    var series1 = this.series[1];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/latest/total",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(series0.data.length < 20){
-                                    series0.addPoint(back, true, false);
-                                }
-                                else{
-                                    series0.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, 30000);
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/latest/busy",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(series1.data.length < 20){
-                                    series1.addPoint(back, true, false);
-                                }
-                                else{
-                                    series1.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, 30000);
-                }
-            }
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值'
-            },
-            min:0,
-            tickInterval: 1
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'M';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: '全部客户端',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/all/total",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        },{
-            name: '繁忙客户端',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/all/busy",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#e77c52']
-    });
-
-    function getServerLatestData(){
-        $.ajax({
-            url: '${ctx}/appServer/tuxedo/view/${serverName}/latest',
-            dataType : 'json',
-            type : 'get',
-            async : false,
-            error : function (XMLHttpRequest,errorThrown) {
-                alert("数据加载出错！" + errorThrown);
-            },
-            success: function(data){
-               $('#count').html(data.count);
-               $('#cpuIdle').html(data.cpuIdle);
-               $('#memFree').html(data.memFree);
-               $('#tuxRunQueue').html(data.tuxRunQueue);
-               $('#tuxRunClt').html(data.tuxRunClt);
-            }
-        });
+    /**
+     * DataState 数据状态对象
+     * @constructor
+     */
+    var DataState = function(){}
+    DataState.prototype.init = function(refreshId){
+        var _target = this;
+        this.switch = $(refreshId);
+        this.switch.click(
+                function () {
+                    _target.toggle(_target);
+                });
+        // $(refreshId).trigger('click');
     }
 
-    setInterval(getServerLatestData, 1000 * 30);
+    DataState.prototype.start = function(){
+        //--状态监控---
 
-    //吞吐量
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'throughput_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/thoughtPut/${serverName}/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(series.data.length < 20){
-                                    series.addPoint(back, true, false);
-                                }
-                                else{
-                                    series.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, 30000);
-                }
-            }
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值'
-            },
-            min:0,
-            tickInterval: 0.5
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y;
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: '吞吐量',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/thoughtPut/${serverName}/all",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
+        var dynamic_ = {state:[],data:[]}
+        dynamic_.state.push(new TransTop());
+        dynamic_.state.push(new EmergencyMsg());
+        dynamic_.state.push(new QueueTop());
+        dynamic_.state.push(new RamTop());
+
+        dynamic_.data.push(new Server());
+        dynamic_.data.push(new Queue());
+        dynamic_.data.push(new Client());
+        dynamic_.data.push(new System());
+        $(dynamic_.state).each(function(){
+            //  this.init();
+            this.run();
+            this.start();
+        })
+        return {
+            stateShow: function () {
+                $(dynamic_.state).each(function () {
+                    this.run();
+                    this.start();
+                });
+                $(dynamic_.data).each(function () {
+                    this.cancel();
                 })
-                return data;
-            })()
-        }],
-        colors: ['#ffa200']
-    });
-
-});
-
-
-var TAB_STATE = {data:0,state:1};
-/**
-* DataState 数据状态对象
-* @constructor
- */
-var DataState = function(){}
-DataState.prototype.init = function(refreshId){
-    var _target = this;
-    this.switch = $(refreshId);
-    this.switch.click(
-            function () {
-                _target.toggle(_target);
-            });
-   // $(refreshId).trigger('click');
-}
-
-DataState.prototype.start = function(){
-    //--状态监控---
-
-    var dynamic_ = {state:[],data:[]}
-    dynamic_.state.push(new TransTop());
-    dynamic_.state.push(new EmergencyMsg());
-    dynamic_.state.push(new QueueTop());
-    dynamic_.state.push(new RamTop());
-
-    dynamic_.data.push(new Server());
-    dynamic_.data.push(new Queue());
-    dynamic_.data.push(new Client());
-    dynamic_.data.push(new System());
-    $(dynamic_.state).each(function(){
-      //  this.init();
-        this.run();
-        this.start();
-    })
-    return {
-        stateShow: function () {
-            $(dynamic_.state).each(function () {
-                this.run();
-                this.start();
-            });
-            $(dynamic_.data).each(function () {
-                this.cancel();
-            })
-        },
-        dataShow: function () {
-            $(dynamic_.state).each(function () {
-                this.cancel();
-            });
-            $(dynamic_.data).each(function () {
-                this.run();
-                this.start();
-            })
+            },
+            dataShow: function () {
+                $(dynamic_.state).each(function () {
+                    this.cancel();
+                });
+                $(dynamic_.data).each(function () {
+                    this.run();
+                    this.start();
+                })
+            }
         }
-    }
 //    return function(){
 //        $(dynamic_.state).each(function(){
 //            this.toggle();
@@ -496,255 +95,56 @@ DataState.prototype.start = function(){
 //    (new QueueTop()).start();
 //    (new RamTop()).start();
 
-    //---数据监控---
+        //---数据监控---
 //    (new Server()).start();
 //    (new Queue()).start();
 //    (new Client()).start();
 //    (new System()).start();
-}
-
-DataState.prototype.toggle = function(obj){
-    if(obj.intervalId){
-        obj.cancel();
-    }else{
-        obj.run();
     }
-}
-DataState.prototype.run = function(){
-    this.switch.removeClass('refresh').addClass('refresh_dynamic')
-    this.intervalId = setInterval(this.start,1000 * 30);
-}
-DataState.prototype.cancel = function(){
-    this.switch.removeClass('refresh_dynamic').addClass('refresh')
-    clearInterval(this.intervalId);
-    this.intervalId = null;
-}
-var TransTop = function(){
-    this.init('#transTopRefresh');
-};
-TransTop.prototype = new DataState();
-TransTop.prototype.start = function () {
-    $("#trade_top5").empty();
-    $("#trade_top5").Grid({
-        url: "${ctx}/appServer/tuxedo/transcation/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable: false,
-        height: "auto",
-        colums: [
-            {id: '1', text: '排名', name: "sort", index: '1', align: ''},
-            {id: '2', text: 'rqdone', name: "rqdone", index: '1', align: ''},
-            {id: '3', text: 'progname', name: "progname", index: '1', align: ''},
-            {id: '4', text: 'pid', name: "pid", index: '1', align: ''}
-        ],
-        rowNum: 10,
-        pager: false,
-        number: false,
-        multiselect: false
-    });
-}
-var RamTop = function(){
-    this.init('#memTopRefresh');
-};
-RamTop.prototype = new DataState();
-RamTop.prototype.start = function(){
-    $("#RAM_top5").empty();
-    $("#RAM_top5").Grid({
-        url : "${ctx}/appServer/tuxedo/memory/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'排名',name:"sort",index:'1',align:''},
-            {id:'2',text:'PID',name:"pid",index:'1',align:''},
-            {id:'3',text:'使用内存',name:"used",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-}
 
-var QueueTop = function(){
-    this.init('#queTopRefresh');
-};
-QueueTop.prototype = new DataState();
-QueueTop.prototype.start = function(){
-    $("#rank_top").empty();
-    $("#rank_top").Grid({
-        url : "${ctx}/appServer/tuxedo/queue/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'排名',name:"sort",index:'1',align:''},
-            {id:'2',text:'名称',name:"name",index:'1',align:''},
-            {id:'3',text:'队列消息数',name:"queued",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-}
+    DataState.prototype.toggle = function(obj){
+        if(obj.intervalId){
+            obj.cancel();
+        }else{
+            obj.run();
+        }
+    }
+    DataState.prototype.run = function(){
+        this.switch.removeClass('refresh').addClass('refresh_dynamic')
+        this.intervalId = setInterval(this.start,1000 * 30);
+    }
+    DataState.prototype.cancel = function(){
+        this.switch.removeClass('refresh_dynamic').addClass('refresh')
+        clearInterval(this.intervalId);
+        this.intervalId = null;
+    }
+    var TransTop = function(){
+        this.init('#transTopRefresh');
+    };
+    TransTop.prototype = new DataState();
+    TransTop.prototype.start = function () {
+        $("#trade_top5").empty();
+        $("#trade_top5").Grid({
+            url: "${ctx}/appServer/tuxedo/transcation/top/${serverName}",
+            dataType: "json",
+            colDisplay: false,
+            clickSelect: true,
+            draggable: false,
+            height: "auto",
+            colums: [
+                {id: '1', text: '排名', name: "sort", index: '1', align: ''},
+                {id: '2', text: 'rqdone', name: "rqdone", index: '1', align: ''},
+                {id: '3', text: 'progname', name: "progname", index: '1', align: ''},
+                {id: '4', text: 'pid', name: "pid", index: '1', align: ''}
+            ],
+            rowNum: 10,
+            pager: false,
+            number: false,
+            multiselect: false
+        });
+    }
 
-var EmergencyMsg = function(){
-    this.init('#emergencyRefresh');
-};
-EmergencyMsg.prototype = new DataState();
-EmergencyMsg.prototype.start = function(){
-    $("#emergencyList").empty();
-    $("#emergencyList").Grid({
-        url : "${ctx}/alarm/manager/resource/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
-            {id:'2',text:'消息',name:"appellation",index:'1',align:'',width:'420'},
-            {id:'5',text:'时间',name:"appellation",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-}
-
-/**
-* Server对象
-* @constructor
-*/
-var Server = function(){
-    this.init('#serverRefresh');
-};
-Server.prototype = new DataState();
-Server.prototype.start = function(){
-    $("#tuxSERVER").empty();
-    $("#tuxSERVER").Grid({
-        url : "${ctx}/appServer/tuxedo/data/server/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        searchClass:"serverRefreshInput",
-        searchBtn:"serverRefreshButton",
-        colums:[
-            {id:'1',text:'Server',name:"server",index:'1',align:''},
-            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
-            {id:'3',text:'ProcessID',name:"processId",index:'1',align:''},
-            {id:'4',text:'Rpdone',name:"rqDone",index:'1',align:''},
-            {id:'5',text:'CurrSvc',name:"currentSvc",index:'1',align:''},
-            {id:'6',text:'SvrMin',name:"svrMin",index:'1',align:''},
-            {id:'7',text:'SvrMax',name:"svrMax",index:'1',align:''},
-            {id:'8',text:'UseMem',name:"memUsed",index:'1',align:''},
-            {id:'9',text:'UseCPU',name:"cpuUsed",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-}
-var Queue = function(){
-    this.init('#queRefresh');
-}
-Queue.prototype = new DataState();
-Queue.prototype.constructor =  Queue;
-Queue.prototype.start = function(){
-    $("#tuxQUEUE").empty();
-    $("#tuxQUEUE").Grid({
-        url : "${ctx}/appServer/tuxedo/data/queue/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        searchClass:"queRefreshInput",
-        searchBtn:"queRefreshButton",
-        colums:[
-            {id:'1',text:'Server',name:"server",index:'1',align:''},
-            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
-            {id:'3',text:'SrvCnt',name:"srvCnt",index:'1',align:''},
-            {id:'4',text:'Queued',name:"queued",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-}
-
-var Client = function(){
-    this.init('#cltRefresh');
-}
-Client.prototype = new DataState();
-Client.prototype.start = function(){
-    $("#tuxCLIENT").empty();
-    $("#tuxCLIENT").Grid({
-        url : "${ctx}/appServer/tuxedo/data/client/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        searchClass:"cltRefreshInput",
-        searchBtn:"cltRefreshButton",
-        colums:[
-            {id:'1',text:'Name',name:"name",index:'1',align:''},
-            {id:'2',text:'ClentPID',name:"pid",index:'1',align:''},
-            {id:'3',text:'ClentAddr',name:"addr",index:'1',align:''},
-            {id:'4',text:'Status',name:"status",index:'1',align:''},
-            {id:'5',text:'Contime',name:"conTime",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-}
-
-var System = function(){
-    this.init('#sysRefresh');
-};
-System.prototype = new DataState();
-System.prototype.start = function(){
-    $("#tuxSYSTEM").empty();
-    $("#tuxSYSTEM").Grid({
-        url : "${ctx}/appServer/tuxedo/data/system/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        searchClass:"sysRefreshInput",
-        searchBtn:"sysRefreshButton",
-        colums:[
-            {id:'1',text:'CoreFind',name:"coreFind",index:'1',align:''},
-            {id:'2',text:'ErrorFind',name:"errorFind",index:'1',align:''},
-            {id:'3',text:'WarnFind',name:"warnFind",index:'1',align:''},
-            {id:'4',text:'LargueFind',name:"largueFile",index:'1',align:''},
-            {id:'5',text:'FreeMem',name:"freeMem",index:'1',align:''},
-            {id:'6',text:'IdleCPU',name:"idleCPU",index:'1',align:''},
-            {id:'7',text:'SvrCnt',name:"svrCnt",index:'1',align:''},
-            {id:'8',text:'QueCnt',name:"queCnt",index:'1',align:''},
-            {id:'9',text:'CltCnt',name:"cltCnt",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-}
+});
 </script>
 </head>
 
@@ -786,7 +186,7 @@ System.prototype.start = function(){
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd" >产品版本： </td>
-                                    <td class="monitorinfoeven">${tuxVersion}</td>
+                                    <td class="monitorinfoeven">${wlsVersion}</td>
                                     <td align="right" class="monitorinfoodd" >启动时间： </td>
                                     <td class="monitorinfoeven">${systemboot}</td>
                                 </tr>
@@ -912,17 +312,17 @@ System.prototype.start = function(){
                     <div class="head-cpu">
                         <a href="javascript:void(0)" class="refresh ico_seo serverRefreshButton" title="刷新"></a>
                         <input type="text" class="formtext list_seach serverRefreshInput" />
-                        <span style="float: left">TUX_SERVER</span>
+                        <span style="float: left">WLS_ServerRuntime</span>
                         <a id="serverRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
                     </div>
-                    <div id="tuxSERVER"></div>
+                    <div id="wlsSERVER"></div>
                 </div>
                 <br />
                 <div class="hr_box h_b">
                     <div class="head-cpu">
                         <a href="javascript:void(0)" class="refresh ico_seo queRefreshButton" title="刷新"></a>
                         <input type="text" class="formtext list_seach queRefreshInput" />
-                        <span style="float: left">TUX_QUEUE</span>
+                        <span style="float: left">WLS_JVMRuntime</span>
                         <a id="queRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
                     </div>
                     <div id="tuxQUEUE"></div>
@@ -932,7 +332,7 @@ System.prototype.start = function(){
                     <div class="head-cpu">
                         <a href="javascript:void(0)" class="refresh ico_seo cltRefreshButton" title="刷新"></a>
                         <input type="text" class="formtext list_seach cltRefreshInput" />
-                        <span style="float: left">TUX_CLIENT</span>
+                        <span style="float: left">WLS_ThreadPoolRuntime</span>
                         <a id="cltRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
                     </div>
                     <div id="tuxCLIENT"></div>
@@ -942,10 +342,50 @@ System.prototype.start = function(){
                     <div class="head-cpu">
                         <a href="javascript:void(0)" class="refresh ico_seo sysRefreshButton" title="刷新"></a>
                         <input type="text" class="formtext list_seach sysRefreshInput" />
-                        <span style="float: left">TUX_SYSTEM</span>
+                        <span style="float: left">WLS_JDBCDataSourceRuntimeMBeans</span>
                         <a id="sysRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
                     </div>
                     <div id="tuxSYSTEM"></div>
+                </div>
+                <br />
+                <div class="hr_box h_b">
+                    <div class="head-cpu">
+                        <a href="javascript:void(0)" class="refresh ico_seo sysRefreshButton" title="刷新"></a>
+                        <input type="text" class="formtext list_seach sysRefreshInput" />
+                        <span style="float: left">WLS_ComponentRuntimes</span>
+                        <a id="componentRuntimesRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
+                    </div>
+                    <div id="wlsComponentRuntimes"></div>
+                </div>
+                <br />
+                <div class="hr_box h_b">
+                    <div class="head-cpu">
+                        <a href="javascript:void(0)" class="refresh ico_seo sysRefreshButton" title="刷新"></a>
+                        <input type="text" class="formtext list_seach sysRefreshInput" />
+                        <span style="float: left">WLS_JMSServers</span>
+                        <a id="JMSServersRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
+                    </div>
+                    <div id="wlsJMSServers"></div>
+                </div>
+                <br />
+                <div class="hr_box h_b">
+                    <div class="head-cpu">
+                        <a href="javascript:void(0)" class="refresh ico_seo sysRefreshButton" title="刷新"></a>
+                        <input type="text" class="formtext list_seach sysRefreshInput" />
+                        <span style="float: left">WLS_ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.PoolRuntime</span>
+                        <a id="app_comp_ejb_poolRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
+                    </div>
+                    <div id="app_comp_ejb_pool"></div>
+                </div>
+                <br />
+                <div class="hr_box h_b">
+                    <div class="head-cpu">
+                        <a href="javascript:void(0)" class="refresh ico_seo sysRefreshButton" title="刷新"></a>
+                        <input type="text" class="formtext list_seach sysRefreshInput" />
+                        <span style="float: left">WLS_ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime</span>
+                        <a id="app_comp_ejb_cacheRefresh" href="javascript:void(0)"  class="refresh" style="float: left;margin-left:6px" title="刷新"></a>
+                    </div>
+                    <div id="app_comp_ejb_cache"></div>
                 </div>
                 <br />
             </div>

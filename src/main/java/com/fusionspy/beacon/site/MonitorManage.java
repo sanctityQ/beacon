@@ -1,5 +1,7 @@
 package com.fusionspy.beacon.site;
 
+import com.fusionspy.beacon.site.wls.WlsService;
+import com.fusionspy.beacon.site.wls.entity.WlsServer;
 import com.fusionspy.beacon.system.entity.SiteListEntity;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.sinosoft.one.util.thread.ThreadUtils;
@@ -40,6 +42,9 @@ public class MonitorManage {
     private SitesHolder sitesHolder;
 
     @Autowired
+    private WlsService wlsService;
+
+    @Autowired
     private SystemService systemService;
 
     private SiteInfoLogger siteInfoLogger = SiteInfoLogger.getInstance();
@@ -49,6 +54,10 @@ public class MonitorManage {
 
       for(SiteListEntity siteListEntity : systemService.getSites()){
           monitor(siteListEntity.getSiteName());
+      }
+
+      for(WlsServer wlsServer : wlsService.getSites()) {
+          monitor(wlsServer.getServerName());
       }
     }
 

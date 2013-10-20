@@ -5,12 +5,14 @@ import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorDataRepository;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
+import com.google.common.collect.MapMaker;
 import com.sinosoft.one.util.encode.JaxbBinder;
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Repository;
 
 import java.io.InputStream;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +23,10 @@ import java.io.InputStream;
  */
 @Repository
 public class WlsDataSimulationRepository implements MonitorDataRepository {
+
+    // private HashMap
+    private ConcurrentMap<String, InTimeData> last = new MapMaker().concurrencyLevel(32).makeMap();
+
     @Override
     public InitData getInitData(String siteName, String ip, int port) {
         try {
@@ -29,7 +35,8 @@ public class WlsDataSimulationRepository implements MonitorDataRepository {
             Document xmlDocument = (Document) xmlReader.read(in);
             String resp = xmlDocument.asXML();
             JaxbBinder jaxbBinder2 = new JaxbBinder(WlsIniData.class);
-            InitData initData = jaxbBinder2.fromXml(resp);
+            WlsIniData initData = jaxbBinder2.fromXml(resp);
+            initData.getWlsSysrec().setAdminServerName(siteName);
             return initData;
         } catch (Exception e) {
             return null;
@@ -44,7 +51,9 @@ public class WlsDataSimulationRepository implements MonitorDataRepository {
             Document xmlDocument = (Document) xmlReader.read(in);
             String resp = xmlDocument.asXML();
             JaxbBinder jaxbBinder2 = new JaxbBinder(WlsInTimeData.class);
-            return jaxbBinder2.fromXml(resp);
+            WlsInTimeData inTimeData = jaxbBinder2.fromXml(resp);
+
+            return inTimeData;
         } catch (Exception e) {
             return null;
         }

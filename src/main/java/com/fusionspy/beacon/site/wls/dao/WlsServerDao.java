@@ -7,14 +7,6 @@ import com.fusionspy.beacon.site.wls.entity.WlsServer;
 import org.springframework.stereotype.Repository;
 
 @Repository
-<<<<<<< HEAD
-<<<<<<< HEAD
 public interface WlsServerDao extends PagingAndSortingRepository<WlsServer, String> {
-=======
-public interface WlsServerDao extends PagingAndSortingRepository<WlsServer, Integer> {
->>>>>>> f08278b... none
-=======
-public interface WlsServerDao extends PagingAndSortingRepository<WlsServer, String> {
->>>>>>> e1ac271... none
 }
 
