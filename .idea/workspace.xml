@@ -6,7 +6,7 @@
     </list>
     <ignored path="beacon.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382276883002" ignored="false" />
+    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382276904259" ignored="false" />
     <file path="/pom.xml" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1380806644241" ignored="false" />
     <file path="/Test.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1379856109172" ignored="false" />
     <file path="/MonitorManage.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382261680056" ignored="false" />
@@ -1231,7 +1231,11 @@
       <created>1382276885429</created>
       <updated>1382276885429</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Merge branch 'master' of https://github.com/sanctityQ/beacon into wls&#10;&#10;Conflicts:&#10;&#9;src/main/java/com/fusionspy/beacon/site/MonitorManage.java&#10;&#9;src/main/java/com/fusionspy/beacon/site/SitesHolder.java&#10;&#9;src/main/webapp/WEB-INF/layouts/menu.jsp&#10;">
+      <created>1382276907972</created>
+      <updated>1382276907972</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
