@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d611c7a0-7065-440e-827c-7f5868447efd" name="Default" comment="delete workspace.xml">
+    <list default="true" id="d611c7a0-7065-440e-827c-7f5868447efd" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
     </list>
     <ignored path="beacon.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382275148826" ignored="false" />
+    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382275454806" ignored="false" />
     <file path="/pom.xml" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1380806644241" ignored="false" />
     <file path="/Test.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1379856109172" ignored="false" />
     <file path="/MonitorManage.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382261680056" ignored="false" />
@@ -1186,7 +1186,11 @@
       <created>1382275141803</created>
       <updated>1382275141803</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="delete workspace.xml">
+      <created>1382275460542</created>
+      <updated>1382275460542</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
