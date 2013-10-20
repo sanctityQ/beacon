@@ -6,7 +6,7 @@
     </list>
     <ignored path="beacon.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382277370807" ignored="false" />
+    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382277444100" ignored="false" />
     <file path="/pom.xml" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1380806644241" ignored="false" />
     <file path="/Test.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1379856109172" ignored="false" />
     <file path="/MonitorManage.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382261680056" ignored="false" />
@@ -575,20 +575,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="beacon" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="beacon" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value=".idea" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -1138,7 +1124,11 @@
       <created>1382277372885</created>
       <updated>1382277372885</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="none">
+      <created>1382277448302</created>
+      <updated>1382277448302</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
