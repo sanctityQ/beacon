@@ -87,6 +87,7 @@
                             <ul class="list">
                                 <li><a href="${ctx}/appServer/list/tuxedo">Tuxedo</a></li>
                                 <li><a href="${ctx}/appServer/weblogic/listUI">Weblogic</a></li>
+                                <li><a href="${ctx}/appServer/tuxedo/manager">Tuxedo</a></li>
                             </ul>
                         </li>
                         <%--<li class="action"><span class="sever">操作系统</span>--%>

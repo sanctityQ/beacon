@@ -1,23 +1,18 @@
 package com.fusionspy.beacon.system.service;
 
-import com.fusionspy.beacon.site.MonitorManage;
-import com.fusionspy.beacon.system.dao.SiteListDao;
-import com.fusionspy.beacon.system.dao.SitesSettingsDao;
-import com.fusionspy.beacon.system.dao.SysrecsDao;
-import com.fusionspy.beacon.system.entity.*;
+import com.fusionspy.beacon.site.tux.dao.SiteListDao;
+import com.fusionspy.beacon.site.tux.dao.SitesSettingsDao;
+import com.fusionspy.beacon.site.tux.dao.SysrecsDao;
+import com.fusionspy.beacon.site.tux.entity.*;
 import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesCache;
 import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.threshold.domain.ThresholdService;
-import com.sinosoft.one.monitor.threshold.model.Threshold;
 import com.sinosoft.one.util.encode.JaxbBinder;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -81,12 +75,13 @@ public class SystemServiceImpl implements SystemService{
        //增加缺省值
        SiteSettings siteSettings =   SiteSettings.DEFAULT;
        siteSettings.setSiteName(siteListEntity.getSiteName());
-       siteSettings.setSiteType(siteListEntity.getSiteType());
+       //siteSettings.setSiteType(siteListEntity.getSiteType());
        configSiteSetting(siteSettings);
 
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void delSite(String siteName) {
          siteListDao.delete(siteName);
          sitesSettingsDao.delete(siteName);
@@ -158,7 +153,6 @@ public class SystemServiceImpl implements SystemService{
     }
 
     @Override
-
     public boolean checkSiteExists(String siteName) {
         Assert.hasText(siteName);
         logger.debug("siteName is {}" ,siteName);

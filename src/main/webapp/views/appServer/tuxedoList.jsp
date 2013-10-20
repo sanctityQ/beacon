@@ -9,14 +9,15 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
+        var grid;
         $(function(){
-            var grid = $("#thresholdList").Grid({
-                url : "${ctx}/appServer/list/tuxedo/data",
+                grid = $("#thresholdList").Grid({
+                url : "${ctx}/appServer/tuxedo/manager/list",
                 dataType: "json",
+                isAsync:false,
                 colDisplay: false,
-                clickSelect: true,
+                clickSelect: false,
                 draggable:false,
-                height: "auto",
                 colums:[
                     {id:'1',text:'站点名称',name:"siteName",index:'1',align:''},
                     {id:'2',text:'IP地址',name:"siteIp",index:'1',align:''},
@@ -25,9 +26,8 @@
                     {id:'5',text:'操作',name:"operation",index:'1',align:''}
                     </shiro:hasPermission>
                 ],
-                rowNum:9999,
                 pager : false,
-                number:false,
+                number: false,
                 multiselect: true
             });
             $('#g_count').html(grid.grid.getDataTotalCount());
@@ -42,7 +42,7 @@
         function updRow(e){
             var rows = $(e).parent().parent();
             var id = rows.attr('id');
-            location.href="${ctx}/appServer/view/tuxedo/"+id.substring(4);
+            location.href="${ctx}/appServer/tuxedo/manager/view/"+id.substring(4);
         }
         function batchDel(){
             var $g = $("#thresholdList div.grid_view > table");
@@ -90,11 +90,12 @@
         function delServer(serverName,row){
             $.ajax({
                 type : "delete",
-                url : "${ctx}/appServer/delete/tuxedo/"+serverName,
+                url : "${ctx}/appServer/tuxedo/delete/"+serverName,
                 dataType : "text",
                 success : function(data) {
                     msgSuccess("系统消息", "操作成功，已删除！");
-                    row.remove();
+                    grid.grid.reload();
+                    $('#g_count').html(grid.grid.getDataTotalCount());
                 },
                 error:function(){
                     msgFailed("系统消息", "操作失败，未被删除！");

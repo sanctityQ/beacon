@@ -16,8 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 * 阈值信息表
  */
 @Entity
-@Table(name="GE_MONITOR_THRESHOLD"
-)
+@Table(name="GE_MONITOR_THRESHOLD")
 public class Threshold  implements java.io.Serializable {
 
     /**
@@ -150,11 +149,11 @@ public class Threshold  implements java.io.Serializable {
         this.type = type;
 
 
-        if(this.getType().equals(ThresholdConstant.Type.NUMERIC)){
-	        this.criticalThresholdConditionStr = ThresholdConditions.valueOf(criticalThresholdCondition).symbol();
-        }else{
-            this.criticalThresholdConditionStr = criticalThresholdCondition;
-        }
+//        if(this.getType().equals(ThresholdConstant.Type.NUMERIC)){
+//	        this.criticalThresholdConditionStr = ThresholdConditions.valueOf(criticalThresholdCondition).symbol();
+//        }else{
+//            this.criticalThresholdConditionStr = criticalThresholdCondition;
+//        }
 
     }
 

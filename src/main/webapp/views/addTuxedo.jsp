@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,7 +12,7 @@ function save(){
     $('#tuxedo_fm').ajaxForm(function(data) {
         if(data=='success'){
             msgSuccess("系统消息", "操作成功，监视器已保存",function(){
-                window.location.href="${ctx}/appServer/list/tuxedo";
+                window.location.href="${ctx}/appServer/tuxedo/manager";
             });
         }else{
             msgFailed("系统消息","操作失败");
@@ -32,7 +31,7 @@ function save(){
             <td>
             	<div class="add_monitor">
                     <%@include file="/WEB-INF/layouts/selectMonitorType.jsp"%>
-          <form id="tuxedo_fm" action="${ctx}/appServer/save/tuxedo" method="post">
+          <form id="tuxedo_fm" action="${ctx}/appServer/tuxedo/save" method="post">
           <table width="100%" border="0" cellspacing="0" cellpadding="0" class="add_monitor_box add_form">
               <tr>
                 <td colspan="2" class="group_name">基本信息</td>
@@ -73,9 +72,8 @@ function save(){
                   <c:if test="${not empty server}" >
                     <input type="button" class="buttons" value="确定修改" onclick="save()" />　
                   </c:if>
-
                     <input type="reset"  class="buttons" value="重 置" />　
-                  <input type="button" class="buttons" value="取 消" onclick="window.history.back()" />
+                    <input type="button" class="buttons" value="取 消" onclick="window.history.back()" />
                   </td>
               </tr>
             </table>
@@ -109,5 +107,7 @@ function save(){
 <c:if test="${not empty server}" >
 <script>
      $("#siteName").attr("readonly",true);
+     $('#tuxedo_fm').attr("action","${ctx}/appServer/tuxedo/update?_method=PUT");
+
 </script>
 </c:if>

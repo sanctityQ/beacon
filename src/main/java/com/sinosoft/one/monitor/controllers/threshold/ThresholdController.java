@@ -40,14 +40,12 @@ public class ThresholdController {
 		Page<Threshold> page = new PageImpl<Threshold>(thresholds);
 		Gridable<Threshold>  gridable = new Gridable<Threshold> (page);
 		String cellString = new String(
-				"name,type,criticalThresholdCondition,criticalThresholdValue,criticalThresholdMessage,warningThresholdCondition,warningThresholdValue,warningThresholdMessage,infoThresholdCondition,infoThresholdValue,infoThresholdMessage,operation");
+				"name,type,criticalThresholdCondition,criticalThresholdValue,criticalThresholdMessage," +
+                        "warningThresholdCondition,warningThresholdValue,warningThresholdMessage," +
+                        "infoThresholdCondition,infoThresholdValue,infoThresholdMessage,operation");
 		gridable.setIdField("id");
 		gridable.setCellStringField(cellString);
-//		try {
 	    UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-//		} catch (Exception e) {
-//			throw new Exception("json数据转换出错!", e);
-//		}
 	}
 
 	@Post("save")

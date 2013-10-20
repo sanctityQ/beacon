@@ -23,7 +23,7 @@ import java.util.Map;
  * Time: 下午1:25
  */
 @Component
-public class Connect {
+public class Connect{
 
     private final static int BUFFER_LEN = 8192;
 
@@ -31,7 +31,7 @@ public class Connect {
 
 	public final static Map<String,SiteThread> siteThreadMap = new HashMap<String,SiteThread>(100);
 
-    private Logger logger = LoggerFactory.getLogger(getClass());;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
 	static {
 		coreMap.put("HANDINIT", "91");
@@ -57,7 +57,7 @@ public class Connect {
 		}
 	}
 
-	private final class SiteThread implements Runnable {
+	private final class SiteThread {
 
 		private volatile boolean signal;
 
@@ -168,7 +168,6 @@ public class Connect {
 							}
 						}
 						break;
-
 					case 93:
 						System.out.println("GETSVRDATA");
 						out.write((char) Integer.parseInt((String) coreMap
@@ -281,42 +280,39 @@ public class Connect {
             return this.getData("GETSVRDATA", iniXml);
         }
 
-		public void run() {
-			System.out.println("Site Thread running now...");
-			try {
-
-				String iniXml = loadXML(iniXmlName);
-				// System.out.println(iniXml);
-
-				if (siteSocket == null || siteSocket.isClosed()) {
-					getData("HANDINIT", null);
-				}
-
-				getData("GETINITDATA", iniXml);
-				while (this.signal == true) {
-					getData("GETSVRDATA", iniXml);
-					Thread.sleep(sampleInterval);
-				}
-			} catch (InterruptedException ie) {
-				ie.printStackTrace();
-			}
-		}
+//		public void run() {
+//			System.out.println("Site Thread running now...");
+//			try {
+//
+//				String iniXml = loadXML(iniXmlName);
+//				// System.out.println(iniXml);
+//
+//				if (siteSocket == null || siteSocket.isClosed()) {
+//					getData("HANDINIT", null);
+//				}
+//
+//				getData("GETINITDATA", iniXml);
+//				while (this.signal == true) {
+//					getData("GETSVRDATA", iniXml);
+//					Thread.sleep(sampleInterval);
+//				}
+//			} catch (InterruptedException ie) {
+//				ie.printStackTrace();
+//			}
+//		}
 
 	}
 
 	public  String startSiteThread(String iniXmlNameP, String siteName,
-			String agentIPP, int sitePortP, int sampleIntervalP) {
+			String agentIPP, int sitePortP, int sampleIntervalP){
 		try {
             SiteThread task = siteThreadMap.get(siteName);
             if(task==null){
                task = new SiteThread(iniXmlNameP, siteName, agentIPP,
 					sitePortP, sampleIntervalP);
                 siteThreadMap.put(siteName, task);
-                return task.init();
             }
-            else{
-               throw new RuntimeException("site has cache");
-            }
+            return task.init();
 
 		} catch (Exception ioe) {
 			System.out.println("Got IOException while creating site thread");

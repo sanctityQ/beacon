@@ -6,19 +6,19 @@
 
     <title>业务仿真</title>
     <%@include file="/WEB-INF/layouts/base.jsp"%>
-<link href="${ctx}/global/css/sinosoft.base.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/global/css/one.base.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/timeinfo/timeinfo.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/status.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/global/css/oracle.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/global/css/sinosoft.core.css" rel="stylesheet" type="text/css">
-<link href="${ctx}/global/css/sinosoft.datepicker.theme.css" rel="stylesheet" type="text/css">
-<link href="${ctx}/global/css/sinosoft.theme.css" rel="stylesheet" type="text/css">
+<link href="${ctx}/global/css/one.core.css" rel="stylesheet" type="text/css">
+<link href="${ctx}/global/css/one.datepicker.theme.css" rel="stylesheet" type="text/css">
+<link href="${ctx}/global/css/one.theme.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/global/css/OneDatapicker.css" rel="stylesheet" type="text/css">
 <script language="javascript" src="${ctx}/global/js/timeinfo/timeinfo.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.core.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.widget.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.datepicker.js"></script>
-<script language="javascript" src="${ctx}/global/js/sinosoft.datepicker-zh-CN.js"></script>
+<script language="javascript" src="${ctx}/global/js/one.core.js"></script>
+<script language="javascript" src="${ctx}/global/js/one.widget.js"></script>
+<script language="javascript" src="${ctx}/global/js/one.datepicker.js"></script>
+<script language="javascript" src="${ctx}/global/js/one.datepicker-zh-CN.js"></script>
 <script type="text/javascript">
     var applicationId = "${applicationId}";
     var urlId = "${urlId}";

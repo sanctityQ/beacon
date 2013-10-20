@@ -2,7 +2,7 @@ package com.fusionspy.beacon.site.tux;
 
 import com.fusionspy.beacon.site.tux.entity.TuxquesEntity;
 import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
-import com.fusionspy.beacon.system.entity.DataSave;
+import com.fusionspy.beacon.site.tux.entity.DataSave;
 
 import java.util.Comparator;
 

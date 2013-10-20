@@ -1,8 +1,8 @@
 package com.fusionspy.beacon.system.service;
 
-import com.fusionspy.beacon.system.entity.SiteListEntity;
-import com.fusionspy.beacon.system.entity.SiteSettings;
-import com.fusionspy.beacon.system.entity.SysrecsEntity;
+import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
+import com.fusionspy.beacon.site.tux.entity.SiteSettings;
+import com.fusionspy.beacon.site.tux.entity.SysrecsEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

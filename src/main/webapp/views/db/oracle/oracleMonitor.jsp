@@ -5,8 +5,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>查看预警配置文件</title>
 <%@ include file="/WEB-INF/layouts/base.jsp" %>
-<link href="${ctx }/global/css/sinosoft.tabs.css" rel="stylesheet" type="text/css" />
-<script language="javascript" src="${ctx }/global/js/sinosoft.tabs.js"></script>
+<link href="${ctx }/global/css/one.tabs.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="${ctx }/global/js/one.tabs.js"></script>
 <script language="javascript" src="${ctx }/global/js/highcharts.src.js"></script>
 <script language="javascript" src="${ctx }/global/js/oracleMonitor.js"></script>
 <script type="text/javascript">

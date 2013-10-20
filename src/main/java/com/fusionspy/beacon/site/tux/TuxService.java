@@ -4,9 +4,9 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.site.AlarmMessageFormat;
 import com.fusionspy.beacon.site.tux.dao.*;
 import com.fusionspy.beacon.site.tux.entity.*;
-import com.fusionspy.beacon.system.entity.DataSave;
-import com.fusionspy.beacon.system.entity.SiteSettings;
-import com.fusionspy.beacon.system.entity.SysrecsEntity;
+import com.fusionspy.beacon.site.tux.entity.DataSave;
+import com.fusionspy.beacon.site.tux.entity.SiteSettings;
+import com.fusionspy.beacon.site.tux.entity.SysrecsEntity;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.sinosoft.one.monitor.action.domain.ActionService;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
@@ -351,7 +351,7 @@ public class TuxService {
             //  float cpuLimit = this.siteSettings.getConditions().getOsCpu().getUsed();
             if(threshold == null)
                 return SeverityLevel.UNKNOWN;
-            SeverityLevel severityLevel = threshold.match(String.valueOf(100-svr.getCpuuse()));
+            SeverityLevel severityLevel = threshold.match(String.valueOf(svr.getCpuuse()));
             //  threshold.match();     cpuLimit<(100-svr.getCpuuse())
             if(severityLevel!=SeverityLevel.UNKNOWN){
                 processResult.addCpuAlarm(svr.getProgname());
@@ -512,7 +512,7 @@ public class TuxService {
             alarm.setAlarmSource(AlarmSource.APP_SERVER);
             alarm.setMonitorType(ResourceType.APP_SERVER.name());
             alarm.setSeverity(severityLevel);
-            alarm.setMessage(message);
+            alarm.setMessage(message+severityLevel.cnName());
             alarm.setCreateTime(now);
             alarm.setSubResourceId(this.siteSettings.getSiteName());
             alarm.setSubResourceType(ResourceType.APP_SERVER);

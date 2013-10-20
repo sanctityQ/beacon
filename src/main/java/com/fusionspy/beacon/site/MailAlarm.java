@@ -1,6 +1,6 @@
 package com.fusionspy.beacon.site;
 
-import com.fusionspy.beacon.system.entity.AlarmType;
+import com.fusionspy.beacon.site.tux.entity.AlarmType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;

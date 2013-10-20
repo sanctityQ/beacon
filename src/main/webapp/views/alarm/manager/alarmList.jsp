@@ -25,6 +25,7 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
         _url = _url+"/resourceType/"+_givenType;
     }
 
+
     var _data = {severityLevel:severityLevel};
     var $mn = $("#thresholdList");
     //防止每次查询时，表格中的数据不断累积
@@ -33,7 +34,7 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
         type:"get",
         url : _url,
         dataType: "json",
-        data:_data,
+        queryData:_data,
         colDisplay: false,
         afterRepage:true,
         clickSelect: true,
@@ -53,8 +54,8 @@ function getAlarmListOfGivenTimeAndType(severityLevel){
         multiselect: true
     }).grid;
 
-    var rows = grid.checked();
-    var rows = [row,row]
+//    var rows = grid.checked();
+//    var rows = [row,row]
 }
 function alarmDetailInfo(e){
     var rows = $(e).parent().parent();

@@ -25,10 +25,11 @@ $(function(){
 		colDisplay: false,  
 		clickSelect: true,
 		draggable:false,
-		height: "auto",  
-		colums:[  
-			{id:'1',text:'名称',name:"appellation",index:'1',align:''},
-			{id:'2',text:'描述',name:"appellation",index:'1',align:''},
+		height: "auto",
+
+		colums:[
+			{id:'1',text:'名称',name:"siteName",index:'1',align:''},
+			{id:'2',text:'描述',name:"desc",index:'1',align:''},
 			{id:'3',text:'严重告警条件',name:"appellation",index:'1',align:''},
 			{id:'4',text:'警告告警条件',name:"appellation",index:'1',align:''},
 			{id:'5',text:'正常告警条件',name:"appellation",index:'1',align:''}
@@ -38,6 +39,15 @@ $(function(){
 		number:false,  
 		multiselect: false  
 	});
+
+    function view(row){
+        row={id:'',column:[
+
+        ]}
+
+
+    }
+
 	$("#MonitorList").Grid({
 		url : "MonitorList.json",  
 		dataType: "json",

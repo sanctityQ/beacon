@@ -981,15 +981,44 @@ CREATE TABLE GE_MONITOR_TUX_SYSRECS (
 -- ----------------------------
 --  `GE_MONITOR_ACCOUNT` 用户登陆
 -- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_account_group;
+CREATE TABLE ge_monitor_account_group (
+  user_id varchar(32) COLLATE utf8_bin NOT NULL,
+  group_id bigint(20) NOT NULL,
+  KEY `FKFE85CB3EDE3FB930` (group_id),
+  KEY `FKFE85CB3E836A7D10` (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
+
+BEGIN;
+INSERT INTO ge_monitor_account_group VALUES ('1', '1');
+COMMIT;
+
 BEGIN;
 INSERT INTO GE_MONITOR_ACCOUNT VALUES ('1', 'admin', 'admin', 'Admin', 'admin@springside.org.cn', '13800138001', '2012-12-25 19:36:34', '1');
+COMMIT;
+
+
+
+DROP TABLE IF EXISTS ge_monitor_group;
+CREATE TABLE ge_monitor_group (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  name varchar(255) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY name (name)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+--  Records of `ge_monitor_group`
+-- ----------------------------
+BEGIN;
+INSERT INTO ge_monitor_group VALUES ('1', 'admin'), ('2', 'user');
 COMMIT;
 
 -- ----------------------------
 --  `GE_MONITOR_ATTRIBUTE` 监控属性
 -- ----------------------------
 BEGIN;
-INSERT INTO `GE_MONITOR_ATTRIBUTE` VALUES ('1', 'APPLICATION', 'ResponseTime', 'ms', '响应时间'),
+INSERT INTO GE_MONITOR_ATTRIBUTE VALUES ('1', 'APPLICATION', 'ResponseTime', 'ms', '响应时间'),
 ('10', 'DB', 'Availability', null, '可用性'),
 ('11', 'DB', 'ResponseTime', 'ms', '响应时间'),
 ('12', 'DB', 'Health', null, '健康度'),

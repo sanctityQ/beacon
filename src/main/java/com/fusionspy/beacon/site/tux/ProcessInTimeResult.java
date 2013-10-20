@@ -3,14 +3,9 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.site.AlarmObserver;
 import com.fusionspy.beacon.site.SiteInfoLogger;
 import com.fusionspy.beacon.site.tux.entity.*;
-import com.fusionspy.beacon.system.entity.AlertType;
-import com.fusionspy.beacon.system.entity.DataSave;
+import com.fusionspy.beacon.site.tux.entity.AlertType;
+import com.fusionspy.beacon.site.tux.entity.DataSave;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
-import com.sinosoft.one.monitor.alarm.model.Alarm;
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.common.AlarmMessageBuilder;
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.common.MessageBase;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +46,7 @@ public class ProcessInTimeResult {
         tuxresourceEntity.setTuxrunqueue(0);
         tuxresourceEntity.setTuxrunsvr(0);
         EMPTY.recordTuxRes(tuxresourceEntity);
+        EMPTY.setStopServer(true,StringUtils.EMPTY);
     }
 
 

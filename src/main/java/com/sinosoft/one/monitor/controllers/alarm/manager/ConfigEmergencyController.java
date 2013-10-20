@@ -2,8 +2,8 @@ package com.sinosoft.one.monitor.controllers.alarm.manager;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fusionspy.beacon.system.dao.SiteListDao;
-import com.fusionspy.beacon.system.entity.SiteListEntity;
+import com.fusionspy.beacon.site.tux.dao.SiteListDao;
+import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.action.model.MailAction;
 import com.sinosoft.one.monitor.action.repository.MailActionRepository;
@@ -22,7 +22,6 @@ import com.sinosoft.one.monitor.db.oracle.model.Info;
 import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
 import com.sinosoft.one.monitor.os.linux.model.Os;
 import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
-import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.threshold.model.Threshold;
