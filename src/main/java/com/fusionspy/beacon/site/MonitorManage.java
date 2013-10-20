@@ -2,7 +2,6 @@ package com.fusionspy.beacon.site;
 
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
-import com.fusionspy.beacon.system.entity.SiteListEntity;
 import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.sinosoft.one.util.thread.ThreadUtils;

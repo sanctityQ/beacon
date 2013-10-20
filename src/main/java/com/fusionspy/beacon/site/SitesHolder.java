@@ -2,11 +2,10 @@ package com.fusionspy.beacon.site;
 
 import com.fusionspy.beacon.site.tux.TuxService;
 import com.fusionspy.beacon.site.tux.TuxSite;
+import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.WlsSite;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
-import com.fusionspy.beacon.system.entity.SiteListEntity;
-import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
@@ -81,7 +80,7 @@ public class SitesHolder {
         if (monitorSite == null) {
             SiteListEntity siteListEntity = systemService.getSite(siteName);
             MonitorSite newMonitorSite = null;
-            if (siteListEntity != null && siteListEntity.getSiteType().equals("1")) {
+            if (siteListEntity != null) {
             if (siteListEntity instanceof  SiteListEntity) {
                 newMonitorSite = getTuxSite();
                 newMonitorSite.setSiteName(siteName);
@@ -104,6 +103,7 @@ public class SitesHolder {
             }
             if(monitorSite == null)
                 monitorSite = newMonitorSite;
+            }
         }
         return monitorSite;
     }
@@ -137,8 +137,4 @@ public class SitesHolder {
 
         return wlsSite;
     }
-
-
-
-
 }
