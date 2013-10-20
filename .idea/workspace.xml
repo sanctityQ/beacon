@@ -6,7 +6,7 @@
     </list>
     <ignored path="beacon.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382277325235" ignored="false" />
+    <file path="/Dummy.txt" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382277370807" ignored="false" />
     <file path="/pom.xml" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1380806644241" ignored="false" />
     <file path="/Test.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1379856109172" ignored="false" />
     <file path="/MonitorManage.java" changelist="d611c7a0-7065-440e-827c-7f5868447efd" time="1382261680056" ignored="false" />
@@ -1134,7 +1134,11 @@
       <created>1382277329569</created>
       <updated>1382277329569</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="none">
+      <created>1382277372885</created>
+      <updated>1382277372885</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1232,7 +1236,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'master' of https://github.com/sanctityQ/beacon into wls&#10;&#10;Conflicts:&#10;&#9;src/main/java/com/fusionspy/beacon/site/MonitorManage.java&#10;&#9;src/main/java/com/fusionspy/beacon/site/SitesHolder.java&#10;&#9;src/main/webapp/WEB-INF/layouts/menu.jsp&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="none" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1254,8 +1258,8 @@
     <MESSAGE value="wls" />
     <MESSAGE value="JsonGrid" />
     <MESSAGE value="delete workspace.xml" />
-    <MESSAGE value="none" />
     <MESSAGE value="Merge branch 'master' of https://github.com/sanctityQ/beacon into wls&#10;&#10;Conflicts:&#10;&#9;src/main/java/com/fusionspy/beacon/site/MonitorManage.java&#10;&#9;src/main/java/com/fusionspy/beacon/site/SitesHolder.java&#10;&#9;src/main/webapp/WEB-INF/layouts/menu.jsp&#10;" />
+    <MESSAGE value="none" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
