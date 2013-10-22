@@ -16,7 +16,7 @@ public class DataSave {
          DEFAULT.setSaveAllClient(SaveFlag.DISABLE);
          DEFAULT.setSaveQueueData(Queue.ALL);
          DEFAULT.setSaveServerData(Server.ALL);
-         DEFAULT.setSaveAll(SaveFlag.DISABLE);
+         DEFAULT.setSaveAll(SaveFlag.ENABLE);
     }
 
 
