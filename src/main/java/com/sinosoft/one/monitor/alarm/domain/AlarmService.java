@@ -36,6 +36,7 @@ public class AlarmService {
 
 
 	public void saveAlarm(Alarm alarm) {
+
 		alarmRepository.save(alarm);
 	}
 

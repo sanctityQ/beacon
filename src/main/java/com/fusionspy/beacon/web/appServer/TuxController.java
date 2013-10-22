@@ -72,7 +72,7 @@ public class TuxController {
     private SystemService systemService;
 
     @Put("/save")
-    public Reply update(SiteListEntity appServer,Invocation invocation){
+    public Reply update(SiteListEntity appServer){
         systemService.addSite(appServer);
         monitorManage.cancel(appServer.getSiteName());
         monitorManage.monitor(appServer.getSiteName());
@@ -83,7 +83,6 @@ public class TuxController {
     public Reply delete(@Param("serverName")String serverName) {
         monitorManage.cancel(serverName);
         systemService.delSite(serverName);
-
         return Replys.with("success").as(Text.class);
     }
 

@@ -46,7 +46,7 @@ class ProgressMemUsedReport<TuxsvrsEntity> implements TuxReport, StatisticTopRep
             attribute = new Attribute();
             attribute.setAttribute("PROGRESS_MEM_USED");
             attribute.setAttributeCn("进程MEM占用大小");
-            attribute.setUnits("M");
+            attribute.setUnits("K");
         }
         return attribute;
     }

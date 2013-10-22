@@ -69,8 +69,7 @@ public class SitesHolder {
                 newMonitorSite.setSiteName(siteName);
                 newMonitorSite.setSiteIp(siteListEntity.getSiteIp());
                 newMonitorSite.setSitePort(siteListEntity.getSitePort());
-            } else {
-
+                newMonitorSite.setPeriod(siteListEntity.getInterval());
             }
             monitorSite = tuxSiteMap.putIfAbsent(siteName, newMonitorSite);
             if(monitorSite == null)

@@ -64,20 +64,26 @@ public class SystemServiceImpl implements SystemService{
 
     @Override
     public void addSite(SiteListEntity siteListEntity) {
-       siteListDao.save(siteListEntity);
-        // resource
-        Resource resource = new Resource();
-        resource.setResourceId(siteListEntity.getSiteName());
-        resource.setResourceName(siteListEntity.getSiteName());
-        resource.setResourceType(ResourceType.APP_SERVER.name());
-        resourcesRepository.save(resource);
+        siteListDao.save(siteListEntity);
 
-       //增加缺省值
-       SiteSettings siteSettings =   SiteSettings.DEFAULT;
-       siteSettings.setSiteName(siteListEntity.getSiteName());
-       //siteSettings.setSiteType(siteListEntity.getSiteType());
-       configSiteSetting(siteSettings);
+        Resource resource = resourcesRepository.findOne(siteListEntity.getSiteName());
+        if (resource == null) {
+            // resource
+            resource = new Resource();
+            resource.setResourceId(siteListEntity.getSiteName());
+            resource.setResourceName(siteListEntity.getSiteName());
+            resource.setResourceType(ResourceType.APP_SERVER.name());
+            resourcesRepository.save(resource);
+        }
 
+        //增加缺省值
+        SiteSettings siteSettings = getSiteSetting(siteListEntity.getSiteName());
+        if (siteSettings == null) {
+            siteSettings = SiteSettings.DEFAULT;
+            siteSettings.setSiteName(siteListEntity.getSiteName());
+            configSiteSetting(siteSettings);
+        }
+        //siteSettings.setSiteType(siteListEntity.getSiteType());
     }
 
     @Override
@@ -124,6 +130,8 @@ public class SystemServiceImpl implements SystemService{
 
         //todo 将此调整为读取站点数据设置信息
         SiteSettingsEntity siteSettingsEntity = sitesSettingsDao.findOne(siteName);
+        if(siteSettingsEntity == null)
+            return null;
 
         SiteSettings siteSettings = jaxbBinder.fromXml(siteSettingsEntity.getSiteSetting());
         siteSettings.setSiteName(siteName);

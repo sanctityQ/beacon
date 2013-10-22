@@ -526,7 +526,7 @@ public class TuxService {
             alarm.setAlarmSource(AlarmSource.APP_SERVER);
             alarm.setMonitorType(ResourceType.APP_SERVER.name());
             alarm.setSeverity(severityLevel);
-            alarm.setMessage(message+severityLevel.cnName());
+            alarm.setMessage(controlFixedLength(message));
             alarm.setCreateTime(now);
             alarm.setSubResourceId(this.siteSettings.getSiteName());
             alarm.setSubResourceType(ResourceType.APP_SERVER);
@@ -538,6 +538,17 @@ public class TuxService {
             if(thresholdAttributeActions != null && thresholdAttributeActions.size() > 0) {
                 actionService.doActions(thresholdAttributeActions, this.resource, attribute, severityLevel, message);
             }
+        }
+
+        private String controlFixedLength(String message){
+           String back=null;
+           if(message.length()>500){
+              back =  StringUtils.substring(message,0,500);
+              back =back + "...";
+           }else {
+               back = message;
+           }
+           return back;
         }
 
     }
