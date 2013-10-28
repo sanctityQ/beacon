@@ -4,6 +4,7 @@ import com.fusionspy.beacon.site.tux.entity.TuxresourceEntity;
 import com.fusionspy.beacon.report.Statistics;
 import com.sinosoft.one.data.jade.annotation.SQL;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 
@@ -13,6 +14,7 @@ import java.sql.Timestamp;
  * Date: 11-9-19
  * Time: 下午5:05
  */
+@Repository
 public interface TuxResourceDao extends PagingAndSortingRepository<TuxresourceEntity, Integer> {
 
     @SQL("select MAX(100-u.cpuidle) max,MIN(100-u.cpuidle) min,AVG(100-u.cpuidle) avg from GE_MONITOR_TUX_RESOURCE u where u.sitename = ?1 and u.rectime >= ?2 and  u.rectime < ?3")

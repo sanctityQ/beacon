@@ -4,6 +4,7 @@ import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import java.util.Date;
  * Date: 11-9-19
  * Time: 下午2:42
  */
+@Repository
 public interface TuxSvrsDao extends PagingAndSortingRepository<TuxsvrsEntity, Integer> {
 
 

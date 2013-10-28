@@ -80,8 +80,7 @@ public class SitesHolder {
         if (monitorSite == null) {
             SiteListEntity siteListEntity = systemService.getSite(siteName);
             MonitorSite newMonitorSite = null;
-            if (siteListEntity != null) {
-            if (siteListEntity instanceof  SiteListEntity) {
+            if (siteListEntity != null && siteListEntity instanceof  SiteListEntity) {
                 newMonitorSite = getTuxSite();
                 newMonitorSite.setSiteName(siteName);
                 newMonitorSite.setSiteIp(siteListEntity.getSiteIp());
@@ -103,7 +102,6 @@ public class SitesHolder {
             }
             if(monitorSite == null)
                 monitorSite = newMonitorSite;
-            }
         }
         return monitorSite;
     }

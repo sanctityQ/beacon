@@ -9,7 +9,6 @@ import com.fusionspy.beacon.site.tux.entity.TuxIniData;
 import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
-import com.fusionspy.beacon.system.entity.SysrecsEntity;
 import com.sinosoft.one.util.encode.JaxbBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

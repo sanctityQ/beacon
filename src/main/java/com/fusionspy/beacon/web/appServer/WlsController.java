@@ -3,10 +3,9 @@ package com.fusionspy.beacon.web.appServer;
 import com.fusionspy.beacon.site.MonitorManage;
 import com.fusionspy.beacon.site.wls.WlsHisData;
 import com.fusionspy.beacon.site.wls.WlsService;
-import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
-import com.fusionspy.beacon.site.wls.entity.WlsIniData;
-import com.fusionspy.beacon.site.wls.entity.WlsServer;
+import com.fusionspy.beacon.site.wls.entity.*;
 import com.fusionspy.beacon.web.BeaconLocale;
+import com.fusionspy.beacon.web.JsonChart;
 import com.fusionspy.beacon.web.JsonGrid;
 import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
@@ -18,17 +17,13 @@ import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
 import com.sinosoft.one.mvc.web.instruction.reply.Replys;
 import com.sinosoft.one.mvc.web.instruction.reply.transport.Json;
-import com.sinosoft.one.util.encode.JsonBinder;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * tuxedo action
@@ -40,7 +35,6 @@ import java.util.Map;
 public class WlsController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-    JsonBinder jsonBinder =  JsonBinder.buildNonNullBinder();
 
     private Map<String, Object> message = new HashMap<String, Object>();
 
@@ -50,6 +44,19 @@ public class WlsController {
     @Resource
     private WlsService wlsService;
 
+    @Get("addUI")
+    public String addUI() {
+        return "weblogicSaveUI";
+    }
+
+    @Get("editUI/{serverName}")
+    public String editUI(@Param("serverName")String serverName,Invocation invocation) {
+        //TODO 修改为从MonitorManage获取
+        WlsServer wlsServer = wlsService.getSite(serverName);
+        invocation.addModel("server", wlsServer);
+        return "weblogicSaveUI";
+    }
+
     @Post("save")
     public String save(WlsServer wlsServer) {
         wlsServer.setStatus(1);
@@ -57,9 +64,20 @@ public class WlsController {
         return "/appServer/weblogic/start/"+wlsServer.getServerName();
     }
 
-    @Get("listUI")
-    public String listUI(Invocation inv){
+    /**
+     * 删除操作(包含删除一个和批量删除操作)
+     * @param serverNames
+     * @return
+     */
+    @Get("delete/{serverNames}")
+    public Reply delete(@Param("serverNames")List<String> serverNames) {
+        //TODO 确认都要做哪些操作
+        message.put("result", true);
+        return Replys.with(message).as(Json.class);
+    }
 
+    @Get("manager")
+    public String listUI(){
         return "weblogicList";
     }
 
@@ -93,6 +111,9 @@ public class WlsController {
         invocation.addModel("wlsVersion", iniData.getWlsSysrec().getDomainVersion());
         invocation.addModel("rectime", DateTimeFormat.forPattern("yyyy-MM-dd").print(new DateTime(iniData.getWlsSysrec().getRecTime())));
         invocation.addModel("osVersion", iniData.getWlsSysrec().getOsVersion());
+        invocation.addModel("serverNum", iniData.getWlsSysrec().getServerNum());
+        invocation.addModel("domainName", iniData.getWlsSysrec().getName());
+        invocation.addModel("adminServerName", iniData.getWlsSysrec().getAdminServerName());
         invocation.addModel("cpuIdle", inTimeData.getResource().getCpuIdle());
         invocation.addModel("memFree", inTimeData.getResource().getMemFree());
         invocation.addModel("agentVer", iniData.getWlsSysrec().getAgentVersion());
@@ -103,27 +124,6 @@ public class WlsController {
         return "weblogicInfo";
     }
 
-    @Get("editUI/{serverName}")
-    public String editUI(@Param("serverName")String serverName,Invocation invocation) {
-        //TODO 修改为从MonitorManage获取
-        WlsServer wlsServer = wlsService.getSite(serverName);
-        invocation.addModel("server", wlsServer);
-        return "/views/addWeblogic";
-    }
-
-    /**
-     * 删除操作(包含删除一个和批量删除操作)
-     * @param serverNames
-     * @param inv
-     * @return
-     */
-    @Get("remove")
-    public Reply remove(@Param("serverNames")List<String> serverNames, Invocation inv) {
-        //TODO 确认都要做哪些操作
-        message.put("result", true);
-        return Replys.with(message).as(Json.class);
-    }
-
     @Post("start/{serverName}")
     public Reply startMonitor(@Param("serverName")String serverName, @DefValue("zh_CN")Locale locale){
         BeaconLocale.setLocale(locale);
@@ -131,6 +131,298 @@ public class WlsController {
         logger.debug("start server name is {} ", serverName);
         message.put("type", "success");
         return Replys.with(message).as(Json.class);
+    }
+
+    @Get("/chart/{type}/{serverName}/{operation}")
+    public Reply chartFree(@Param("type")String type, @Param("serverName")String serverName, @Param("operation")String operation) {
+        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+        WlsInTimeData inTimeData = hisData.getWlsInTimeData();
+        Object retVal = null; //返回char数据对象，用于转化为JSON
+        if(type.equals("cpu")||type.equals("memory")){
+            List<Object> list = new ArrayList<Object>(); //cpu和memory时，返回对象为数组形式
+            if(operation.equals("latest")){
+                list.add(inTimeData.getResource().getRecTime().getTime());
+                if("cpu".equals(type)) {
+                    //cpu使用率=100-cpu空闲率
+                    list.add(100 - inTimeData.getResource().getCpuIdle());
+                } else {
+                    //TODO 内存使用率取值 此时获取的是内存空闲
+                    list.add(inTimeData.getResource().getMemFree());
+                }
+            }else{
+                Map<String, Object> point = new HashMap<String, Object>();
+                point.put("x", inTimeData.getResource().getRecTime().getTime());
+                //TODO 非latest
+                if("cpu".equals(type)) {
+                    //cpu使用率=100-cpu空闲率
+                    point.put("y", 100 - inTimeData.getResource().getCpuIdle());
+                } else {
+                    //TODO 内存使用率取值 此时获取的是内存空闲
+                    point.put("y", inTimeData.getResource().getMemFree());
+                }
+                list.add(point);
+            }
+            retVal = list;
+        } else if("server_ram".equals(type)){
+            List<Object> list = new ArrayList<Object>();
+            if(operation.equals("latest")){
+                for(WlsJvm jvm : inTimeData.getJvmRuntimes()) {
+                    List<Object> point = new ArrayList<Object>();
+                    //lineSerie.addData(jvm.getRecTime().getTime());
+                    int freePercent = Integer.parseInt(jvm.getFreePercent());
+                    point.add(jvm.getRecTime().getTime());
+                    point.add(100-freePercent);
+                    list.add(point);
+                }
+            } else {
+                for(WlsJvm jvm : inTimeData.getJvmRuntimes()) {
+                    Map<String, Object> serie = new HashMap<String, Object>();
+                    serie.put("name", jvm.getServerName());
+                    List<Object> data = new ArrayList<Object>();
+                    Map<String, Object> point = new HashMap<String, Object>();
+                    data.add(point);
+                    int freePercent = Integer.parseInt(jvm.getFreePercent());
+                    point.put("x", jvm.getRecTime().getTime());
+                    point.put("y", 100 - freePercent);
+                    serie.put("data", data);
+                    list.add(serie);
+                }
+            }
+            retVal = list;
+        } else if("server_throughput".equals(type)) {
+            List<Object> list = new ArrayList<Object>();
+            if(operation.equals("latest")){
+                for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
+                    List<Object> point = new ArrayList<Object>();
+                    point.add(thread.getRecTime().getTime());
+                    point.add(thread.getThoughput());
+                    list.add(point);
+                }
+            } else {
+                for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
+                    Map<String, Object> serie = new HashMap<String, Object>();
+                    serie.put("name", thread.getServerName());
+                    List<Object> data = new ArrayList<Object>();
+                    Map<String, Object> point = new HashMap<String, Object>();
+                    data.add(point);
+                    point.put("x", thread.getRecTime().getTime());
+                    point.put("y", thread.getThoughput());
+                    serie.put("data", data);
+                    list.add(serie);
+                }
+            }
+            retVal = list;
+        }
+        Stack stack;
+        return Replys.with(retVal).as(Json.class);
+    }
+
+    @Get("data/{type}/{serverName}")
+    public Reply getInTimeData(@Param("type")String type,@Param("serverName")String serverName){
+        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+        WlsInTimeData wlsInTimeData = hisData.getWlsInTimeData();
+        if(type.equals("WlsServer")){
+            return getServerDate(wlsInTimeData.getServerRuntimes());
+        } else if(type.equals("JVM")){
+           return getJVMDate(wlsInTimeData.getJvmRuntimes());
+        } else if(type.equals("ThreadPool")){
+            return getThreadDate(wlsInTimeData.getThreadPoolRuntimes());
+        } else if(type.equals("JDBC")){
+            return getJDBCDate(wlsInTimeData.getJdbcDataSourceRuntimes());
+        } else if(type.equals("Component")){
+            return getComponentDate(wlsInTimeData.getComponentRuntimes());
+        } else if(type.equals("JMS")){
+            return getJMSDate(wlsInTimeData.getJmsServers());
+        } else if(type.equals("EjbPool")){
+            return getEjbPoolDate(wlsInTimeData.getPoolRuntimes());
+        } else if(type.equals("EjbCache")){
+            return getEjbCacheDate(wlsInTimeData.getCacheRuntime());
+        }
+        return null;
+    }
+
+    private Reply getServerDate(List<WlsSvr> serverRuntimes) {
+        JsonGrid grid = JsonGrid.buildGrid(serverRuntimes, new JsonGrid.JsonRowHandler<WlsSvr>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsSvr wlsSvr) {
+                int index = 0;
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(wlsSvr.getId()+"");
+                index = index +1;
+                row.addCell(index+"");
+                row.addCell(wlsSvr.getServerName());
+                row.addCell(wlsSvr.getListenAddress());
+                row.addCell(wlsSvr.getListenPort());
+                row.addCell(wlsSvr.getHealth());
+                row.addCell(wlsSvr.getState());
+                row.addCell(wlsSvr.getOpenSocketNum()+"");
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
+    }
+
+    private Reply getJVMDate(List<WlsJvm> jvmRuntimes) {
+        JsonGrid grid = JsonGrid.buildGrid(jvmRuntimes, new JsonGrid.JsonRowHandler<WlsJvm>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsJvm jvm) {
+                int index = 0;
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(jvm.getId()+"");
+                index = index +1;
+                row.addCell(index+"");
+                row.addCell(jvm.getServerName());
+                row.addCell(jvm.getFreeHeap());
+                row.addCell(jvm.getCurrentHeap());
+                row.addCell(jvm.getFreePercent());
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
+    }
+
+    private Reply getThreadDate(List<WlsThread> threadPoolRuntimes) {
+        JsonGrid grid = JsonGrid.buildGrid(threadPoolRuntimes, new JsonGrid.JsonRowHandler<WlsThread>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsThread thread) {
+                int index = 0;
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(thread.getId()+"");
+                index = index +1;
+                row.addCell(index+"");
+                row.addCell(thread.getServerName());
+                row.addCell(thread.getIdleCount()+"");
+                row.addCell(thread.getStandbyCount()+"");
+                row.addCell(thread.getTotalCount()+"");
+                row.addCell(thread.getThoughput()+"");
+                row.addCell(thread.getQueueLength()+"");
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
+    }
+
+    private Reply getJDBCDate(List<WlsJdbc> jdbcDataSourceRuntimes) {
+        JsonGrid grid = JsonGrid.buildGrid(jdbcDataSourceRuntimes, new JsonGrid.JsonRowHandler<WlsJdbc>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsJdbc jdbc) {
+                int index = 0;
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(jdbc.getId()+"");
+                index = index +1;
+                row.addCell(index+"");
+                row.addCell(jdbc.getServerName());
+                row.addCell(jdbc.getName()+"");
+                row.addCell(jdbc.getActiveCount()+"");
+                row.addCell(jdbc.getActiveHigh()+"");
+                row.addCell(jdbc.getCurrCapacity()+"");
+                row.addCell(jdbc.getLeakCount()+"");
+                row.addCell(jdbc.getState()+"");
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
+    }
+
+    private Reply getComponentDate(List<WlsWebapp> componentRuntimes) {
+        JsonGrid grid = JsonGrid.buildGrid(componentRuntimes, new JsonGrid.JsonRowHandler<WlsWebapp>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsWebapp webapp) {
+                int index = 0;
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(webapp.getId()+"");
+                index = index +1;
+                row.addCell(index+"");
+                row.addCell(webapp.getServerName());
+                row.addCell(webapp.getName()+"");
+                row.addCell(webapp.getName()+"");
+                row.addCell(webapp.getDeploymentState()+"");
+                row.addCell(webapp.getStatus()+"");
+                row.addCell(webapp.getComponentName()+"");
+                row.addCell(webapp.getOpenSessionsHighCount()+"");
+                row.addCell(webapp.getOpenSessionsCurrentCount()+"");
+                row.addCell(webapp.getSessionsOpenedTotalCount()+"");
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
+    }
+
+    private Reply getJMSDate(List<WlsJms> jmsServers) {
+        JsonGrid grid = JsonGrid.buildGrid(jmsServers, new JsonGrid.JsonRowHandler<WlsJms>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsJms jms) {
+                int index = 0;
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(jms.getId()+"");
+                index = index +1;
+                row.addCell(index+"");
+                row.addCell(jms.getServerName());
+                row.addCell(jms.getName()+"");
+                row.addCell(jms.getName()+"");
+                row.addCell(jms.getBytesCurrentCount()+"");
+                row.addCell(jms.getBytesHighCount()+"");
+                row.addCell(jms.getBytesPendingCount()+"");
+                row.addCell(jms.getBytesReceivedCount()+"");
+                row.addCell(jms.getMessagesCurrentCount()+"");
+                row.addCell(jms.getMessagesHighCount()+"");
+                row.addCell(jms.getMessagesPendingCount()+"");
+                row.addCell(jms.getMessagesReceivedCount()+"");
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
+    }
+
+    private Reply getEjbPoolDate(List<WlsEjbpool> poolRuntimes) {
+        JsonGrid grid = JsonGrid.buildGrid(poolRuntimes, new JsonGrid.JsonRowHandler<WlsEjbpool>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsEjbpool ejbPool) {
+                int index = 0;
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(ejbPool.getId()+"");
+                index = index +1;
+                row.addCell(index+"");
+                row.addCell(ejbPool.getServerName());
+                row.addCell(ejbPool.getName()+"");
+                row.addCell(ejbPool.getName()+"");
+                row.addCell(ejbPool.getBeansInUseCount()+"");
+                row.addCell(ejbPool.getBeansInUserCurrentCount()+"");
+                row.addCell(ejbPool.getAccessTotalCount()+"");
+                row.addCell(ejbPool.getDestroyedTotalCount()+"");
+                row.addCell(ejbPool.getIdleBeansCount()+"");
+                row.addCell(ejbPool.getMissTotalCount()+"");
+                row.addCell(ejbPool.getPooledBeansCurrentCount()+"");
+                row.addCell(ejbPool.getTimeoutTotalCount()+"");
+                row.addCell(ejbPool.getWaiterCurrentCount()+"");
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
+    }
+
+    private Reply getEjbCacheDate(List<WlsEjbcache> cacheRuntime) {
+        JsonGrid grid = JsonGrid.buildGrid(cacheRuntime, new JsonGrid.JsonRowHandler<WlsEjbcache>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsEjbcache ejbCache) {
+                int index = 0;
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(ejbCache.getId()+"");
+                index = index +1;
+                row.addCell(index+"");
+                row.addCell(ejbCache.getServerName());
+                row.addCell(ejbCache.getName()+"");
+                row.addCell(ejbCache.getName()+"");
+                row.addCell(ejbCache.getCacheAccessCount()+"");
+                row.addCell(ejbCache.getActivationCount()+"");
+                row.addCell(ejbCache.getCacheBeansCurrentCount()+"");
+                row.addCell(ejbCache.getCacheHitCount()+"");
+                row.addCell(ejbCache.getCacheMissCount()+"");
+                row.addCell(ejbCache.getPassivationCount()+"");
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
     }
 
 }
