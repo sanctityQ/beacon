@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MONITOR Date="2009-10-19 16:10:42">
-    <ServerRuntime ActivationTime="1255939107375" HealthState="State:HEALTH_OK,ReasonCode:[,]" State="RUNNING" Name="examplesServer" OpenSocketsCurrentCount="3" WeblogicVersion="WebLogic Server 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 WebLogic XMLX Module 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 " ListenAddress="hdang-cn/10.182.228.108" ListenPort="7001" RestartsTotalCount="0" serverName="examplesServer"/>
+    <ServerRuntime ActivationTime="1255939107375" HealthState="State:HEALTH_OK,ReasonCode:[,]" State="RUNNING" Name="examplesServer1" OpenSocketsCurrentCount="3" WeblogicVersion="WebLogic Server 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 WebLogic XMLX Module 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 " ListenAddress="hdang-cn/10.182.228.108" ListenPort="7001" RestartsTotalCount="0" serverName="examplesServer1"/>
+    <ServerRuntime ActivationTime="1255939107375" HealthState="State:HEALTH_OK,ReasonCode:[,]" State="RUNNING" Name="examplesServer2" OpenSocketsCurrentCount="3" WeblogicVersion="WebLogic Server 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 WebLogic XMLX Module 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 " ListenAddress="hdang-cn/10.182.228.108" ListenPort="7001" RestartsTotalCount="0" serverName="examplesServer2"/>
     <!--wxT("HEALTH_OK"),wxT("HEALTH_WARN"),wxT("HEALTH_CRITICAL"),wxT("HEALTH_FAILED"),-->`
 
-    <JVMRuntime HeapFreeCurrent="17181728" HeapSizeCurrent="32347824" HeapFreePercent="null" serverName="m1"/>
+    <JVMRuntime HeapFreeCurrent="17181728" HeapSizeCurrent="32347824" HeapFreePercent="50" serverName="examplesServer1"/>
+    <JVMRuntime HeapFreeCurrent="17181728" HeapSizeCurrent="32347824" HeapFreePercent="50" serverName="examplesServer2"/>
 
-    <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="2" ExecuteThreadIdleCount="2" StandbyThreadCount="0" serverName="examplesServer" QueueLength="0" />
+    <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="2" ExecuteThreadIdleCount="2" StandbyThreadCount="0" serverName="examplesServer1" QueueLength="0" />
+    <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="2" ExecuteThreadIdleCount="2" StandbyThreadCount="0" serverName="examplesServer2" QueueLength="0" />
 
-    <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="demoPool" State="Running" ConnectionsTotalCount="2" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="2" ActiveConnectionsHighCount="2" ActiveConnectionsCurrentCount="2" serverName="examplesServer" />
+    <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="demoPool1" State="Running" ConnectionsTotalCount="2" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="2" ActiveConnectionsHighCount="2" ActiveConnectionsCurrentCount="2" serverName="examplesServer1" />
+    <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="demoPool2" State="Running" ConnectionsTotalCount="2" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="2" ActiveConnectionsHighCount="2" ActiveConnectionsCurrentCount="2" serverName="examplesServer1" />
+    <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="demoPool3" State="Running" ConnectionsTotalCount="2" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="2" ActiveConnectionsHighCount="2" ActiveConnectionsCurrentCount="2" serverName="examplesServer2" />
+    <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="demoPool4" State="Running" ConnectionsTotalCount="2" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="2" ActiveConnectionsHighCount="2" ActiveConnectionsCurrentCount="2" serverName="examplesServer2" />
 
-    <ApplicationRuntimes.ComponentRuntimes  Name="" DeploymentState="" ComponentName="" Status="" OpenSessionsHighCount="" OpenSessionsCurrentCount="" SessionsOpenedTotalCount="" serverName=""/>
+    <ApplicationRuntimes.ComponentRuntimes  Name="WebApp1" DeploymentState="1" ComponentName="ComponentName1" Status="1" OpenSessionsHighCount="10" OpenSessionsCurrentCount="5" SessionsOpenedTotalCount="20" serverName="examplesServer1"/>
+    <ApplicationRuntimes.ComponentRuntimes  Name="WebApp2" DeploymentState="1" ComponentName="ComponentName2" Status="1" OpenSessionsHighCount="10" OpenSessionsCurrentCount="4" SessionsOpenedTotalCount="20" serverName="examplesServer2"/>
 
-    <JMSRuntime.JMSServers  Name="" BytesCurrentCount="" BytesHighCount="" BytesPendingCount="" BytesReceivedCount="" MessagesCurrentCount="" MessagesHighCount="" MessagesPendingCount="" MessagesReceivedCount="" serverName="examplesServer"/>
+    <JMSRuntime.JMSServers  Name="JMSServer1" BytesCurrentCount="3123" BytesHighCount="312" BytesPendingCount="321" BytesReceivedCount="312" MessagesCurrentCount="3131" MessagesHighCount="31213" MessagesPendingCount="312" MessagesReceivedCount="3213" serverName="examplesServer1"/>
 
-    <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.PoolRuntime  Name="" BeansInUseCount="" BeansInUseCurrentCount="" AccessTotalCount="" DestroyedTotalCount="" IdleBeansCount="" MissTotalCount="" PooledBeansCurrentCount="" TimeoutTotalCount="" WaiterCurrentCount="" serverName="examplesServer"/>
+    <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.PoolRuntime  Name="PoolRuntime1" BeansInUseCount="321321" BeansInUseCurrentCount="312" AccessTotalCount="31231" DestroyedTotalCount="3131" IdleBeansCount="3121" MissTotalCount="" PooledBeansCurrentCount="32131" TimeoutTotalCount="3213" WaiterCurrentCount="321" serverName="examplesServer1"/>
 
-    <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime  Name="" CacheAccessCount="" ActivationCount="" CachedBeansCurrentCount="" CacheHitCount="" CacheMissCount="" PassivationCount="" serverName=""/>
+    <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime  Name="CacheRuntime1" CacheAccessCount="321" ActivationCount="31" CachedBeansCurrentCount="32" CacheHitCount="131" CacheMissCount="312" PassivationCount="311" serverName="examplesServer1"/>
 
-    <OSResource CPU="10" MEM="20M50"/>
+    <OSResource CPU="10" MEM="1800M4048"/>
 
     <SYSTEM errMsg=""/>
 </MONITOR>
