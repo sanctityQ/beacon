@@ -5,7 +5,6 @@ import com.fusionspy.beacon.site.wls.WlsHisData;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.entity.*;
 import com.fusionspy.beacon.web.BeaconLocale;
-import com.fusionspy.beacon.web.JsonChart;
 import com.fusionspy.beacon.web.JsonGrid;
 import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
