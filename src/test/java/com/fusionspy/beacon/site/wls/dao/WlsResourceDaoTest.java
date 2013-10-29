@@ -65,7 +65,7 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
         WlsServer wlsServer = new WlsServer();
         wlsServer.setServerName("aaa");
         wlsServer.setListenAddress("aaa");
-        wlsServer.setListenPort("20");
+        wlsServer.setListenPort(11);
         wlsServer.setInterval(30);
         wlsServer.setUserName("aaa");
         wlsServer.setPassword("aaa");
