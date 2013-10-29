@@ -133,10 +133,10 @@ $(function() {
 
                 <div class="hr_box">
                     <div class="head-cpu">
-                        <a id="queTopRefresh" href="javascript:void(0)" class="refresh" title="刷新"></a>
-                        列队统计TOP5
+                        <a id="serverInfoRefresh" href="javascript:void(0)" class="refresh" title="刷新"></a>
+                        server信息
                     </div>
-                    <div id="rank_top"></div>
+                    <div id="serverInfo"></div>
                 </div>
 
 
@@ -189,12 +189,12 @@ $(function() {
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="49%"><div class="hr_box h_b">
-                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> 客户端统计</div>
+                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> server线程信息</div>
                             <div id="client_line" style="height:230px;padding-top:15px"></div>
                         </div></td>
                         <td width="2%">&nbsp;</td>
                         <td width="49%"><div class="hr_box h_b">
-                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> 吞吐量 </div>
+                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> server session信息 </div>
                             <div id="throughput_line" style="height:230px;padding-top:15px"></div>
                         </div></td>
                     </tr>

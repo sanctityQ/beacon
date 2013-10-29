@@ -109,6 +109,7 @@ public class WlsService {
             resource.setMemFree(0);
         }
         hisData.setWlsInTimeData(inTimeData);
+        hisData.addWlsIntimeData(siteName, inTimeData);
         wlsResourceDao.save(resource);
 
     }

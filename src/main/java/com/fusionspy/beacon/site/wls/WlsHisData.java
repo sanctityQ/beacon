@@ -1,14 +1,25 @@
 package com.fusionspy.beacon.site.wls;
 
 import com.fusionspy.beacon.site.HisData;
+import com.fusionspy.beacon.site.tux.entity.TuxcltsStatsEntity;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
+import com.fusionspy.beacon.util.QueuesHolder;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.util.Assert;
+
+import java.util.Iterator;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * wls history data (only last data)
  * User: bao
  */
 public class WlsHisData implements HisData {
+
+    private final static int point = 20;
+
+    private static final String INTIMEDATA = "_INTIMEDATA";
 
     public final static WlsHisData EMPTY;
 
@@ -56,5 +67,18 @@ public class WlsHisData implements HisData {
 
     public void setWlsIniData(WlsIniData wlsIniData) {
         this.wlsIniData = wlsIniData;
+    }
+
+    public void addWlsIntimeData(String siteName, WlsInTimeData wlsInTimeData) {
+        try {
+            QueuesHolder.getQueue(siteName + INTIMEDATA, point).put(wlsInTimeData);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Iterator<WlsInTimeData> getIntimeDatasQue(String siteName) {
+        BlockingQueue<WlsInTimeData> wlsInTimeDataQueue =  QueuesHolder.getQueue(siteName + INTIMEDATA, point);
+        return wlsInTimeDataQueue.iterator();
     }
 }

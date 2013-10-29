@@ -358,6 +358,8 @@ DataState.prototype.start = function(){
     //--状态监控---
 
     var dynamic_ = {state:[],data:[]}
+    dynamic_.state.push(new ServerInfo());
+
     dynamic_.state.push(new WlsServer());
     dynamic_.state.push(new JVM());
     dynamic_.state.push(new ThreadPool());
@@ -461,6 +463,33 @@ function buildDataList(type, colums) {
     return DataList;
 }
 
+var ServerInfo = function(){
+    this.init('#serverInfoRefresh');
+};
+ServerInfo.prototype = new DataState();
+ServerInfo.prototype.start = function () {
+    $("#serverInfo").empty();
+    $("#serverInfo").Grid({
+        url: rootPath + "/appServer/weblogic/serverInfo/"+serverName,
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable: false,
+        height: "auto",
+        colums: [
+            {id: '1', text: '服务器名称', name: "server_name", index: '1', align: ''},
+            {id: '2', text: '监听地址', name: "listen_address", index: '1', align: ''},
+            {id: '3', text: '监听端口', name: "listen_port", index: '1', align: ''},
+            {id: '4', text: '健康状态', name: "health", index: '1', align: ''},
+            {id: '5', text: '运行状态', name: "state", index: '1', align: ''}
+        ],
+        rowNum: 10,
+        pager: false,
+        number: false,
+        multiselect: false
+    });
+}
+
 var WlsServer = buildDataList("WlsServer", [
     {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'ServerName', name: "ServerName", index: '1', align: ''},
@@ -479,7 +508,7 @@ var JVM = buildDataList("JVM", [
     {id: '4', text: '当前heap使用数', name: "CurrentHeap", index: '1', align: ''},
     {id: '5', text: '空闲heap百分比', name: "FreePercent", index: '1', align: ''}
 ]);
-var ThreadPool = buildDataList("ThreadPoll", [
+var ThreadPool = buildDataList("ThreadPool", [
     {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'Server名称', name: "ServerName", index: '1', align: ''},
     {id: '3', text: '空闲数量', name: "IdleCount", index: '1', align: ''},

@@ -1,5 +1,6 @@
 package com.fusionspy.beacon.web.appServer;
 
+import com.fusionspy.beacon.report.DateSeries;
 import com.fusionspy.beacon.site.MonitorManage;
 import com.fusionspy.beacon.site.wls.WlsHisData;
 import com.fusionspy.beacon.site.wls.WlsService;
@@ -123,6 +124,38 @@ public class WlsController {
         return "weblogicInfo";
     }
 
+    @Get("serverInfo/{serverName}")
+    public Reply serverInfo(@Param("serverName")String serverName) {
+        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+        List<WlsSvr> serverRuntimes = hisData.getWlsInTimeData().getServerRuntimes();
+        JsonGrid grid = JsonGrid.buildGrid(serverRuntimes, new JsonGrid.JsonRowHandler<WlsSvr>() {
+            @Override
+            public JsonGrid.JsonRow buildRow(WlsSvr wlsSvr) {
+                JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(wlsSvr.getId()+"");
+                row.addCell(wlsSvr.getServerName());
+                row.addCell(wlsSvr.getListenAddress());
+                row.addCell(wlsSvr.getListenPort()+"");
+                //HEALTH_OK，HEALTH_WARN，HEALTH_CRITICAL，HEALTH_FAILED
+                String health = wlsSvr.getHealth();
+                String cssClass = "";
+                if(health.indexOf("HEALTH_OK")!=-1) {
+                    cssClass = "fine";
+                } else if(health.indexOf("HEALTH_WARN")!=-1) {
+                    cssClass = "y_poor";
+                } else if(health.indexOf("HEALTH_CRITICAL")!=-1) {
+                    cssClass = "poor";
+                } else if(health.indexOf("HEALTH_FAILED")!=-1) {
+                    cssClass = "poor";
+                }
+                row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, cssClass));
+                row.addCell(wlsSvr.getState());
+                return row;
+            }
+        });
+        return Replys.with(grid).as(Json.class);
+    }
+
     @Post("start/{serverName}")
     public Reply startMonitor(@Param("serverName")String serverName, @DefValue("zh_CN")Locale locale){
         BeaconLocale.setLocale(locale);
@@ -136,6 +169,7 @@ public class WlsController {
     public Reply chartFree(@Param("type")String type, @Param("serverName")String serverName, @Param("operation")String operation) {
         WlsHisData hisData = monitorManage.getMonitorInf(serverName);
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
+        Iterator<WlsInTimeData> iterator = hisData.getIntimeDatasQue(serverName);
         Object retVal = null; //返回char数据对象，用于转化为JSON
         if(type.equals("cpu")||type.equals("memory")){
             List<Object> list = new ArrayList<Object>(); //cpu和memory时，返回对象为数组形式
@@ -149,22 +183,26 @@ public class WlsController {
                     list.add(inTimeData.getResource().getMemFree());
                 }
             }else{
-                Map<String, Object> point = new HashMap<String, Object>();
-                point.put("x", inTimeData.getResource().getRecTime().getTime());
-                //TODO 非latest
-                if("cpu".equals(type)) {
-                    //cpu使用率=100-cpu空闲率
-                    point.put("y", 100 - inTimeData.getResource().getCpuIdle());
-                } else {
-                    //TODO 内存使用率取值 此时获取的是内存空闲
-                    point.put("y", inTimeData.getResource().getMemFree());
+                while(iterator.hasNext()) {
+                    inTimeData = iterator.next();
+                    Map<String, Object> point = new HashMap<String, Object>();
+                    point.put("x", inTimeData.getResource().getRecTime().getTime());
+                    //TODO 非latest
+                    if("cpu".equals(type)) {
+                        //cpu使用率=100-cpu空闲率
+                        point.put("y", 100 - inTimeData.getResource().getCpuIdle());
+                    } else {
+                        //TODO 内存使用率取值 此时获取的是内存空闲
+                        point.put("y", inTimeData.getResource().getMemFree());
+                    }
+                    list.add(point);
+
                 }
-                list.add(point);
             }
             retVal = list;
         } else if("server_ram".equals(type)){
-            List<Object> list = new ArrayList<Object>();
             if(operation.equals("latest")){
+                List<Object> list = new ArrayList<Object>();
                 for(WlsJvm jvm : inTimeData.getJvmRuntimes()) {
                     List<Object> point = new ArrayList<Object>();
                     //lineSerie.addData(jvm.getRecTime().getTime());
@@ -173,46 +211,63 @@ public class WlsController {
                     point.add(100-freePercent);
                     list.add(point);
                 }
+                retVal = list;
             } else {
-                for(WlsJvm jvm : inTimeData.getJvmRuntimes()) {
-                    Map<String, Object> serie = new HashMap<String, Object>();
-                    serie.put("name", jvm.getServerName());
-                    List<Object> data = new ArrayList<Object>();
-                    Map<String, Object> point = new HashMap<String, Object>();
-                    data.add(point);
-                    int freePercent = Integer.parseInt(jvm.getFreePercent());
-                    point.put("x", jvm.getRecTime().getTime());
-                    point.put("y", 100 - freePercent);
-                    serie.put("data", data);
-                    list.add(serie);
+                Map<String, Map<String, Object>> series = new LinkedHashMap<String, Map<String, Object>>();
+                while (iterator.hasNext()) {
+                    inTimeData = iterator.next();
+                    for(WlsJvm jvm : inTimeData.getJvmRuntimes()) {
+                        Map<String, Object> serie = series.get(jvm.getServerName());
+                        if(serie == null) {
+                            serie = new HashMap<String, Object>();
+                            series.put(jvm.getServerName(), serie);
+                            serie.put("name", jvm.getServerName());
+                            List<Object> data = new ArrayList<Object>();
+                            serie.put("data", data);
+                        }
+                        List<Object> data = (List<Object>) serie.get("data");
+                        Map<String, Object> point = new HashMap<String, Object>();
+                        int freePercent = Integer.parseInt(jvm.getFreePercent());
+                        point.put("x", jvm.getRecTime().getTime());
+                        point.put("y", 100 - freePercent);
+                        data.add(point);
+                    }
                 }
+                retVal = series.values();
             }
-            retVal = list;
         } else if("server_throughput".equals(type)) {
-            List<Object> list = new ArrayList<Object>();
             if(operation.equals("latest")){
+                List<Object> list = new ArrayList<Object>();
                 for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
                     List<Object> point = new ArrayList<Object>();
                     point.add(thread.getRecTime().getTime());
                     point.add(thread.getThoughput());
                     list.add(point);
                 }
+                retVal = list;
             } else {
-                for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
-                    Map<String, Object> serie = new HashMap<String, Object>();
-                    serie.put("name", thread.getServerName());
-                    List<Object> data = new ArrayList<Object>();
-                    Map<String, Object> point = new HashMap<String, Object>();
-                    data.add(point);
-                    point.put("x", thread.getRecTime().getTime());
-                    point.put("y", thread.getThoughput());
-                    serie.put("data", data);
-                    list.add(serie);
+                Map<String, Map<String, Object>> series = new LinkedHashMap<String, Map<String, Object>>();
+                while (iterator.hasNext()) {
+                    inTimeData = iterator.next();
+                    for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
+                        Map<String, Object> serie = series.get(thread.getServerName());
+                        if(serie == null) {
+                            serie = new HashMap<String, Object>();
+                            series.put(thread.getServerName(), serie);
+                            serie.put("name", thread.getServerName());
+                            List<Object> data = new ArrayList<Object>();
+                            serie.put("data", data);
+                        }
+                        List<Object> data = (List<Object>) serie.get("data");
+                        Map<String, Object> point = new HashMap<String, Object>();
+                        point.put("x", thread.getRecTime().getTime());
+                        point.put("y", thread.getThoughput());
+                        data.add(point);
+                    }
                 }
+                retVal = series.values();
             }
-            retVal = list;
         }
-        Stack stack;
         return Replys.with(retVal).as(Json.class);
     }
 
