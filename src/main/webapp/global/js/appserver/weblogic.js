@@ -297,13 +297,13 @@ function chart_init(){
         },
         yAxis: {
             title: {
-                text: '值%'
+                text: '值'
             }
         },
         tooltip: {
             formatter: function() {
                 return '<b>'+ this.series.name +'</b><br/>'+
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'%';
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'';
             }
         },
         plotOptions: {
@@ -326,6 +326,172 @@ function chart_init(){
             var data = [];
             $.ajax({
                 url: rootPath + "/appServer/weblogic/chart/server_throughput/"+serverName+"/123",
+                cache:false,
+                async:false,
+                success:function(back){
+                    data = back;
+                }
+            })
+            return data;
+        })(),
+        colors: ['#87bdc9']
+    });
+
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'thdusage_line',
+            type: 'line',
+            height:230,
+            events: {
+                load: function() {
+
+                    // set up the updating of the chart each second
+                    var series = this.series[0];
+                    //update chart data
+                    setInterval(function() {
+                        $.ajax({
+                            url:rootPath + "/appServer/weblogic/chart/thdusage/"+serverName+"/latest",
+                            cache:false,
+                            async:false,
+                            success:function(back){
+                                $(back).each(function(i,d) {
+                                    $(back).each(function(i,d) {
+                                        if(series[i].data.length < 20){
+                                            series[i].addPoint(d, true, false);
+                                        }
+                                        else{
+                                            series[i].addPoint(d, true, true);
+                                        }
+                                    });
+                                });
+                            }
+                        })
+                    }, 30000);
+                }
+            }
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: '值'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'_THREAD</b><br/>'+(this.y*100).toFixed(2)+'%';
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                marker:{
+                    enabled:false
+                }
+            }
+        },
+        credits: {
+            text: '',
+            href: ''
+        },
+        series: (function() {
+            // generate an array of random data
+            var data = [];
+            $.ajax({
+                url: rootPath + "/appServer/weblogic/chart/thdusage/"+serverName+"/123",
+                cache:false,
+                async:false,
+                success:function(back){
+                    data = back;
+                }
+            })
+            return data;
+        })(),
+        colors: ['#769f5d']
+    });
+
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'server_session_line',
+            type: 'line',
+            height:230,
+            events: {
+                load: function() {
+
+                    var series = this.series;
+                    //update chart data
+                    setInterval(function() {
+                        $.ajax({
+                            url:rootPath + "/appServer/weblogic/chart/server_session/"+serverName+"/latest",
+                            cache:false,
+                            async:false,
+                            success:function(back){
+                                $(back).each(function(i,d) {
+                                    $(back).each(function(i,d) {
+                                        if(series[i].data.length < 20){
+                                            series[i].addPoint(d, true, false);
+                                        }
+                                        else{
+                                            series[i].addPoint(d, true, true);
+                                        }
+                                    });
+                                });
+                            }})
+                    }, 30000);
+                }
+            }
+        },
+
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: '值'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'';
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                marker:{
+                    enabled:false
+                }
+            }
+        },
+        credits: {
+            text: '',
+            href: ''
+        },
+        series: (function() {
+            // generate an array of random data
+            var data = [];
+            $.ajax({
+                url: rootPath + "/appServer/weblogic/chart/server_session/"+serverName+"/123",
                 cache:false,
                 async:false,
                 success:function(back){
@@ -360,14 +526,14 @@ DataState.prototype.start = function(){
     var dynamic_ = {state:[],data:[]}
     dynamic_.state.push(new ServerInfo());
 
-    dynamic_.state.push(new WlsServer());
-    dynamic_.state.push(new JVM());
-    dynamic_.state.push(new ThreadPool());
-    dynamic_.state.push(new JDBC());
-    dynamic_.state.push(new Component());
-    dynamic_.state.push(new JMS());
-    dynamic_.state.push(new EjbPool());
-    dynamic_.state.push(new EjbCache());
+    dynamic_.data.push(new WlsServer());
+    dynamic_.data.push(new JVM());
+    dynamic_.data.push(new ThreadPool());
+    dynamic_.data.push(new JDBC());
+    dynamic_.data.push(new Component());
+    dynamic_.data.push(new JMS());
+    dynamic_.data.push(new EjbPool());
+    dynamic_.data.push(new EjbCache());
     $(dynamic_.state).each(function(){
         //  this.init();
         this.run();

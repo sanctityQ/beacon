@@ -2,15 +2,13 @@ package com.fusionspy.beacon.site.wls.entity;
 // Generated 2013-9-20 23:23:18 by One Data Tools 1.0.0
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -143,6 +141,12 @@ public class WlsThread  implements java.io.Serializable {
 
     public void setQueueLength(Integer queueLength) {
     this.queueLength = queueLength;
+    }
+
+    @Transient
+    public BigDecimal getThdusage() {
+        BigDecimal thdusage = new BigDecimal((totalCount-idleCount-standbyCount)+"").divide(new BigDecimal(totalCount+""), 2, RoundingMode.HALF_UP);
+        return thdusage;
     }
 
 

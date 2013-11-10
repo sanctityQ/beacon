@@ -70,6 +70,8 @@ public class WlsDataSimulationRepository implements MonitorDataRepository {
             for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
                 int thoughput = thread.getThoughput() + new Random().nextInt(5);
                 thread.setThoughput(thoughput);
+                thread.setIdleCount(new Random().nextInt(8));
+                thread.setStandbyCount(new Random().nextInt(8));
             }
             return inTimeData;
         } catch (Exception e) {

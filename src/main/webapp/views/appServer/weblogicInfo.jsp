@@ -18,8 +18,8 @@ $(function() {
 
     var toggle = new DataState().start();
     $("#tabs").tabs({closeTab:false});
-    //$("#state_tab").click(function(){setTimeout(toggle.stateShow,50)});
-    $("#data_tab").click(function(){setTimeout(toggle.dataShow,50)});
+    $("#state_tab").click(function(){setTimeout(toggle.stateShow, 50)});
+    $("#data_tab").click(function(){setTimeout(toggle.dataShow, 50)});
 
     if($.browser.msie && ($.browser.version == "7.0")){
         var center = $("#layout_center")
@@ -179,7 +179,7 @@ $(function() {
                             <div class="hr_box h_b">
                                 <div class="head-cpu">
                                     <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>
-                                    Server吞吐量使用率-最近6小时
+                                    Server吞吐量-最近6小时
                                 </div>
                                 <div id="server_throughput_line" style="height:230px;padding-top:15px"></div>
                             </div>
@@ -190,12 +190,12 @@ $(function() {
                     <tr>
                         <td width="49%"><div class="hr_box h_b">
                             <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> server线程信息</div>
-                            <div id="client_line" style="height:230px;padding-top:15px"></div>
+                            <div id="thdusage_line" style="height:230px;padding-top:15px"></div>
                         </div></td>
                         <td width="2%">&nbsp;</td>
                         <td width="49%"><div class="hr_box h_b">
                             <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> server session信息 </div>
-                            <div id="throughput_line" style="height:230px;padding-top:15px"></div>
+                            <div id="server_session_line" style="height:230px;padding-top:15px"></div>
                         </div></td>
                     </tr>
                 </table>

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -262,6 +263,70 @@ public class WlsController {
                         Map<String, Object> point = new HashMap<String, Object>();
                         point.put("x", thread.getRecTime().getTime());
                         point.put("y", thread.getThoughput());
+                        data.add(point);
+                    }
+                }
+                retVal = series.values();
+            }
+        }  else if("thdusage".equals(type)) {
+            if(operation.equals("latest")){
+                List<Object> list = new ArrayList<Object>();
+                for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
+                    List<Object> point = new ArrayList<Object>();
+                    point.add(thread.getRecTime().getTime());
+                    point.add(thread.getThdusage());
+                    list.add(point);
+                }
+                retVal = list;
+            } else {
+                Map<String, Map<String, Object>> series = new LinkedHashMap<String, Map<String, Object>>();
+                while (iterator.hasNext()) {
+                    inTimeData = iterator.next();
+                    for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
+                        Map<String, Object> serie = series.get(thread.getServerName());
+                        if(serie == null) {
+                            serie = new HashMap<String, Object>();
+                            series.put(thread.getServerName(), serie);
+                            serie.put("name", thread.getServerName());
+                            List<Object> data = new ArrayList<Object>();
+                            serie.put("data", data);
+                        }
+                        List<Object> data = (List<Object>) serie.get("data");
+                        Map<String, Object> point = new HashMap<String, Object>();
+                        point.put("x", thread.getRecTime().getTime());
+                        point.put("y", thread.getThdusage());
+                        data.add(point);
+                    }
+                }
+                retVal = series.values();
+            }
+        }  else if("server_session".equals(type)) {
+            if(operation.equals("latest")){
+                List<Object> list = new ArrayList<Object>();
+                for(WlsWebapp webapp : inTimeData.getComponentRuntimes()) {
+                    List<Object> point = new ArrayList<Object>();
+                    point.add(webapp.getRecTime().getTime());
+                    point.add(webapp.getOpenSessionsCurrentCount());
+                    list.add(point);
+                }
+                retVal = list;
+            } else {
+                Map<String, Map<String, Object>> series = new LinkedHashMap<String, Map<String, Object>>();
+                while (iterator.hasNext()) {
+                    inTimeData = iterator.next();
+                    for(WlsWebapp webapp : inTimeData.getComponentRuntimes()) {
+                        Map<String, Object> serie = series.get(webapp.getServerName());
+                        if(serie == null) {
+                            serie = new HashMap<String, Object>();
+                            series.put(webapp.getServerName(), serie);
+                            serie.put("name", webapp.getServerName());
+                            List<Object> data = new ArrayList<Object>();
+                            serie.put("data", data);
+                        }
+                        List<Object> data = (List<Object>) serie.get("data");
+                        Map<String, Object> point = new HashMap<String, Object>();
+                        point.put("x", webapp.getRecTime().getTime());
+                        point.put("y", webapp.getOpenSessionsCurrentCount());
                         data.add(point);
                     }
                 }

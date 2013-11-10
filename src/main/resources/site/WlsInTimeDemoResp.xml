@@ -7,8 +7,8 @@
     <JVMRuntime HeapFreeCurrent="17181728" HeapSizeCurrent="32347824" HeapFreePercent="50" serverName="examplesServer1"/>
     <JVMRuntime HeapFreeCurrent="17181728" HeapSizeCurrent="32347824" HeapFreePercent="50" serverName="examplesServer2"/>
 
-    <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="2" ExecuteThreadIdleCount="2" StandbyThreadCount="0" serverName="examplesServer1" QueueLength="0" />
-    <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="2" ExecuteThreadIdleCount="2" StandbyThreadCount="0" serverName="examplesServer2" QueueLength="0" />
+    <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="20" ExecuteThreadIdleCount="7" StandbyThreadCount="6" serverName="examplesServer1" QueueLength="0" />
+    <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="20" ExecuteThreadIdleCount="5" StandbyThreadCount="4" serverName="examplesServer2" QueueLength="0" />
 
     <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="demoPool1" State="Running" ConnectionsTotalCount="2" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="2" ActiveConnectionsHighCount="2" ActiveConnectionsCurrentCount="2" serverName="examplesServer1" />
     <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="demoPool2" State="Running" ConnectionsTotalCount="2" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="2" ActiveConnectionsHighCount="2" ActiveConnectionsCurrentCount="2" serverName="examplesServer1" />
