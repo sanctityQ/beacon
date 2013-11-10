@@ -130,6 +130,11 @@ public class WlsService {
 
     }
 
+    @Transactional
+    public void delete(String serverName) {
+        wlsServerDao.delete(serverName);
+    }
+
     @Transactional(readOnly = true)
     public WlsServer getSite(String serverName) {
         return wlsServerDao.findOne(serverName);

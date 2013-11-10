@@ -74,10 +74,10 @@ public class WlsController {
      */
     @Get("delete/{serverNames}")
     public Reply delete(@Param("serverNames")List<String> serverNames) {
-        //TODO 确认都要做哪些操作
         message.put("result", true);
         for(String serverName : serverNames) {
             monitorManage.cancel(serverName);
+            //wlsService
         }
         return Replys.with(message).as(Json.class);
     }

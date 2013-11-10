@@ -11,8 +11,12 @@
     <script type="text/javascript" src="${ctx}/global/js/validate.js"></script>
     <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
-        var weblogicValidator; //生命校验器
+        var weblogicValidator; //生成校验器
         $(function() {
+            var editFlag = '${empty server}' == 'false';
+            if(editFlag) {
+                $("#serverName").attr({"readonly":true});
+            }
             weblogicValidator = buildValidator("weblogic_fm"); //构建校验器
             weblogicValidator.form(); clearError(); //先from可以实现实时校验
             $("input[name='isSsl']").click(function(){ //实现单选功能
