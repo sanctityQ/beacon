@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -97,7 +98,7 @@ public class Connect{
         private String iniXml;
 
         public SiteThread(String iniXmlNameP, String siteIDP, String agentIPP,
-				int sitePortP, int sampleIntervalP) throws IOException {
+				int sitePortP, int sampleIntervalP) {
             iniXml = loadXML(iniXmlNameP);
 			siteID = siteIDP;
 			agentIP = agentIPP;
@@ -107,6 +108,12 @@ public class Connect{
 			signal = true;
 			errXml = "<Err/>";
 		}
+
+        public String getMonitorDataByResetConnect(){
+            stop();
+            init();
+            return getMonitorData();
+        }
 
 		public void stop() {
 			try {
@@ -122,7 +129,7 @@ public class Connect{
 				}
 				this.signal = false;
 			} catch (IOException ioe) {
-				ioe.printStackTrace();
+                throw  new RuntimeException(ioe);
 			}
 
 		}
@@ -145,7 +152,7 @@ public class Connect{
 					switch (actionInt) {
 
 					case 91:
-						System.out.println("HANDINIT");
+                        logger.debug("HANDINIT");
 						siteSocket = new Socket(agentIP, agentPort);
 						out = new PrintWriter(siteSocket.getOutputStream(),true);
 						in = new BufferedReader(new InputStreamReader(siteSocket.getInputStream()));
@@ -169,7 +176,7 @@ public class Connect{
 						}
 						break;
 					case 93:
-						System.out.println("GETSVRDATA");
+                        logger.debug("GETSVRDATA");
 						out.write((char) Integer.parseInt((String) coreMap
 								.get("GETSVRDATA")));
 						out.flush();
@@ -179,6 +186,9 @@ public class Connect{
                         respLenStr = new String(buffer).trim();
 						// get response-xml
                         logger.debug("respLenStr  = {}",respLenStr);
+                        if(StringUtils.isEmpty(respLenStr)){
+                            return getMonitorDataByResetConnect();
+                        }
 						int respLenInt = Integer.parseInt(respLenStr.trim());
                         int count = 0;
                         StringBuilder bufferWriter = new  StringBuilder(respLenInt);
@@ -190,7 +200,7 @@ public class Connect{
 						break;
 
 					case 94:
-						System.out.println("GETINITDATA");
+                        logger.debug("GETINITDATA");
 						// write 94 into stream to indicate this is to ask for
 						// site's initial information
 						out.write((char) 94);
@@ -238,7 +248,7 @@ public class Connect{
 						break;
 
 					case 95:
-						System.out.println("CLOSECONNECT");
+                        logger.debug("CLOSECONNECT");
 						out.write((char) Integer.parseInt((String) coreMap
 								.get("CLOSECONNECT")));
 						out.flush();
@@ -246,27 +256,31 @@ public class Connect{
 						// len = in.read(buffer, 0, 8);
 						break;
 					default:
-						System.out.println("NO PROPER CODE");
+                        logger.debug("NO PROPER CODE");
 						in.close();
 						out.close();
 						break;
 					}
 
 				} else {
-					System.out
-							.println("getData: no action specified, need to point out which action to do...");
+                    logger.error("getData: no action specified, need to point out which action to do...");
 				}
 				return respXmlStr;
-			} catch (UnknownHostException uhe) {
-				uhe.printStackTrace();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			} catch (Throwable e) {
-				System.out
-						.println("getData: got RuntimeException while getting data from agent...");
-				e.printStackTrace();
 			}
-            return  StringUtils.EMPTY;
+//            catch (UnknownHostException uhe) {
+//				uhe.printStackTrace();
+//			} catch (ConnectException connectException){
+//                throw new RuntimeException(connectException);
+//            }
+//            catch (IOException ioe) {
+//				ioe.printStackTrace();
+//			}
+            catch (Throwable e) {
+				System.out.println("getData: got RuntimeException while getting data from agent...");
+				e.printStackTrace();
+                throw new ConnectAgentException(e);
+			}
+//            return  StringUtils.EMPTY;
 		}
 
         public String init(){
@@ -305,7 +319,7 @@ public class Connect{
 
 	public  String startSiteThread(String iniXmlNameP, String siteName,
 			String agentIPP, int sitePortP, int sampleIntervalP){
-		try {
+//		try {
             SiteThread task = siteThreadMap.get(siteName);
             if(task==null){
                task = new SiteThread(iniXmlNameP, siteName, agentIPP,
@@ -314,11 +328,11 @@ public class Connect{
             }
             return task.init();
 
-		} catch (Exception ioe) {
-			System.out.println("Got IOException while creating site thread");
-			ioe.printStackTrace();
-		}
-        return null;
+//		} catch (Exception ioe) {
+//			System.out.println("Got IOException while creating site thread");
+//			ioe.printStackTrace();
+//		}
+        //return null;
 	}
 
     public String getInTimeData(String siteName){

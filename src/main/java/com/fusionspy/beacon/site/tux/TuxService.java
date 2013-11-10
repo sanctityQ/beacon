@@ -168,9 +168,10 @@ public class TuxService {
                Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
                //停机发告警
                alarmMessage(attribute,SeverityLevel.CRITICAL,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_STOP));
-               TuxresourceEntity resource =  ProcessInTimeResult.EMPTY.getTuxRes();
-               resource.setSitename(siteName);
-               processResult.recordTuxRes(resource);
+//               TuxresourceEntity resource =  ProcessInTimeResult.EMPTY.getTuxRes();
+//               resource.setSitename(siteName);
+//               resource.setCpuidle(100);
+//               processResult.recordTuxRes(resource);
                return processResult;
            }
            this.processClt();
@@ -502,7 +503,9 @@ public class TuxService {
             resource.setTuxrunqueue(this.queSize);
             resource.setTuxrunsvr(this.svrSize);
             processResult.recordTuxRes(resource);
-             if(recordDB)tuxResourceDao.save(resource);
+            if(recordDB){
+                tuxResourceDao.save(resource);
+            }
         }
 
         private DataSave.Server getServerType() {
@@ -534,6 +537,7 @@ public class TuxService {
 
             //发送邮件
             List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(this.resource.getResourceId(), attribute.getId(), severityLevel);
+
             //处理动作
             if(thresholdAttributeActions != null && thresholdAttributeActions.size() > 0) {
                 actionService.doActions(thresholdAttributeActions, this.resource, attribute, severityLevel, message);
@@ -551,6 +555,10 @@ public class TuxService {
            return back;
         }
 
+    }
+
+    public static void main(String[] args){
+        System.out.println(new Date(1383989138321l));
     }
 
 }

@@ -10,7 +10,7 @@ drop table if exists ge_monitor_attribute_threshold;
 
 drop table if exists ge_monitor_biz_scenario;
 
-drop table if exists GE_MONITOR_BIZ_SCENARIO_URL;
+drop table if exists ge_monitor_biz_scenario_url;
 
 drop table if exists GE_MONITOR_EMAIL_ACTION;
 
@@ -231,9 +231,7 @@ create table GE_MONITOR_EUM_URL_AVA
 (
    ID                   varchar(32) not null comment '主键ID',
    EUM_URL_ID           varchar(32) comment '业务仿真ID',
-   STATE                varchar(1) comment '状态
-            1---可用
-            0---不可用',
+   STATE                varchar(1) comment '状态1可用0不可用',
    RECORD_TIME          datetime comment '记录时间',
    `INTERVAL`           numeric(8,0) not null comment '轮询间隔',
    primary key (ID)

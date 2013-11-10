@@ -1,5 +1,5 @@
 <%@ page import="org.apache.shiro.web.filter.authc.FormAuthenticationFilter" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="msg" uri="http://mvc.one.sinosoft.com/validation/msg" %>
 <%@ include file="/WEB-INF/layouts/base.jsp" %>

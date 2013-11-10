@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.net.ConnectException;
 import java.util.concurrent.ScheduledFuture;
 
 /**
@@ -105,6 +107,8 @@ public abstract class MonitorSite<E> {
     private ScheduledFuture scheduledFuture;
 
 
+
+
     /**
      * record init data
      * @param initData
@@ -120,6 +124,8 @@ public abstract class MonitorSite<E> {
 
     public Runnable start() {
         return new Runnable() {
+
+
             @Override
             public void run() {
 
@@ -132,10 +138,19 @@ public abstract class MonitorSite<E> {
                         recordInitData(repository.getInitData(siteName, siteIp, sitePort));
                         isRunning = true;
                     }
+                    //如果监控次数超过1000重置连接
+                    if(monitorCount%1000==0){
+                        reset();
+                    }
                     //in time data
                     recordInTimeData(repository.getInTimeData(siteName));
 
                 } catch (Throwable t) {
+
+                    if(t instanceof ConnectAgentException){
+                        reset();
+                    }
+
                     t.printStackTrace();
                 }
 
@@ -143,6 +158,15 @@ public abstract class MonitorSite<E> {
         };
     }
 
+    private void reset(){
+        repository.stopSite(siteName);
+        this.isRunning = false;
+       // repository.getInitData(siteName, siteIp, sitePort);
+    }
+
+
+
+    @PreDestroy
     public void stop(){
         Assert.notNull(this.scheduledFuture);
         this.isRunning = false;
@@ -152,4 +176,8 @@ public abstract class MonitorSite<E> {
     }
 
     public abstract <T extends HisData> T getMonitorData();
+
+//    public static void main(String[] args){
+//        System.out.print(2000%1000);
+//    }
 }

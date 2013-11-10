@@ -88,7 +88,7 @@ public class ReportResult {
             if(avg ==null)
                 continue;
             temp+=avg;
-        };
+        }
         avg = BigDecimal.valueOf(temp/avgs.size()).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 

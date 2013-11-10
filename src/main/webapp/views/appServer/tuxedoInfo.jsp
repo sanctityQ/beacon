@@ -7,9 +7,10 @@
 <title>Tuxedo站点</title>
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
-$(function(){
-    //todo 需要将当前页面的刷新间隔时间调整为从站点对象中动态获取
 
+//需要将当前页面的刷新间隔时间调整为从站点对象中动态获取
+var interval = ${interval};
+$(function(){
     var autoWidth = $("#layout_center").width() - 100;
     $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth)
     $("#cipan_space_detail").width(autoWidth + 65)
@@ -51,7 +52,7 @@ $(function(){
                                 }
                             }
                         })
-                    }, 30000);
+                    }, interval*1000);
                 }
             }
         },
@@ -137,7 +138,7 @@ $(function(){
                                 }
                             }
                         })
-                    }, 30000);
+                    }, interval*1000);
                 }
             }
         },
@@ -221,7 +222,7 @@ $(function(){
                                 }
                             }
                         })
-                    }, 30000);
+                    }, interval*1000);
                     setInterval(function() {
                         $.ajax({
                             url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/latest/busy",
@@ -236,7 +237,7 @@ $(function(){
                                 }
                             }
                         })
-                    }, 30000);
+                    }, interval*1000);
                 }
             }
         },
@@ -330,7 +331,7 @@ $(function(){
         });
     }
 
-    setInterval(getServerLatestData, 1000 * 30);
+    setInterval(getServerLatestData, 1000 * interval);
 
     //吞吐量
     new Highcharts.Chart({
@@ -509,7 +510,7 @@ DataState.prototype.toggle = function(obj){
 }
 DataState.prototype.run = function(){
     this.switch.removeClass('refresh').addClass('refresh_dynamic')
-    this.intervalId = setInterval(this.start,1000 * 30);
+    this.intervalId = setInterval(this.start,1000 * interval);
 }
 DataState.prototype.cancel = function(){
     this.switch.removeClass('refresh_dynamic').addClass('refresh')
@@ -798,7 +799,7 @@ System.prototype.start = function(){
                                     <td class="monitorinfoeven">${tuxRunSvr}</td>
                                 </tr>
                                 <tr>
-                                    <td align="right" class="monitorinfoodd">排队消息：</td>
+                                    <td align="right" class="monitorinfoodd">队列个数：</td>
                                     <td class="monitorinfoeven"><span id='tuxRunQueue'>${tuxRunQueue}</span></td>
                                     <td align="right" class="monitorinfoodd">客户端个数： </td>
                                     <td class="monitorinfoeven"><span id='tuxRunClt'>${tuxRunClt}</span></td>

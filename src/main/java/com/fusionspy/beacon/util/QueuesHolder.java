@@ -58,19 +58,23 @@ public class QueuesHolder {
 
     static class FixArrayBlockQueue<E> extends ArrayBlockingQueue<E> {
 
-        private int oldCapcity;
 
         public FixArrayBlockQueue(int capacity) {
             super(capacity, true);
-            this.oldCapcity = capacity;
         }
 
         @Override
         public void put(E e) throws InterruptedException {
-            for (int i = 0, n = this.size() - oldCapcity; i <= n; i++) {
-                super.remove();
+
+            boolean flag = super.offer(e);
+            if(!flag){
+              super.remove();
+              super.put(e);
             }
-            super.put(e);
+//            for (int i = 0, n = this.size() - oldCapcity; i <= n; i++) {
+//                super.remove();
+//            }
+
         }
     }
 }

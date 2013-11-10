@@ -18,6 +18,7 @@ class ClientBusyCountReport implements TuxReport{
     @Autowired
     private TuxcltsStatsDao cltsStatsDao;
 
+
     @Override
     public ReportResult getStatistic(String resourceId, DateSeries dateSeries) {
         ReportQuery query = dateSeries.getQuery();
