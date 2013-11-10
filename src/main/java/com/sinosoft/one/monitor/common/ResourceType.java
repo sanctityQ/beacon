@@ -15,6 +15,7 @@ public enum ResourceType {
 	DB("数据库"),
     APP_SERVER("应用服务器"),
     Tuxedo("Tuxedo"),
+    Weblogic("Weblogic"),
 	NONE("");
 
 	private String _cnName;

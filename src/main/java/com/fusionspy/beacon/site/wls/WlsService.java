@@ -2,14 +2,16 @@ package com.fusionspy.beacon.site.wls;
 
 import com.fusionspy.beacon.site.wls.dao.*;
 import com.fusionspy.beacon.site.wls.entity.*;
+import com.sinosoft.one.monitor.common.ResourceType;
+import com.sinosoft.one.monitor.resources.domain.ResourcesService;
+import com.sinosoft.one.monitor.resources.model.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,27 +27,29 @@ public class WlsService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Resource
+    @Autowired
+    private ResourcesService resourcesService;
+    @Autowired
     private WlsSysrecDao wlsSysrecDao;
-    @Resource
+    @Autowired
     private WlsEjbCacheDao wlsEjbCacheDao;
-    @Resource
+    @Autowired
     private WlsEjbPoolDao wlsEjbPoolDao;
-    @Resource
+    @Autowired
     private WlsJdbcDao wlsJdbcDao;
-    @Resource
+    @Autowired
     private WlsJmsDao wlsJmsDao;
-    @Resource
+    @Autowired
     private WlsJvmDao wlsJvmDao;
-    @Resource
+    @Autowired
     private WlsResourceDao wlsResourceDao;
-    @Resource
+    @Autowired
     private WlsSvrDao wlsSvrDao;
-    @Resource
+    @Autowired
     private WlsThreadDao wlsThreadDao;
-    @Resource
+    @Autowired
     private WlsWebappDao wlsWebappDao;
-    @Resource
+    @Autowired
     private WlsServerDao wlsServerDao;
 
     /**
@@ -118,7 +122,12 @@ public class WlsService {
     public void save(WlsServer wlsServer) {
         wlsServer.setRecTime(new Date());
         wlsServerDao.save(wlsServer);
-        //TODO 确认是否要保存 WlsResources
+        Resource resource = new Resource();
+        resource.setResourceId(wlsServer.getServerName());
+        resource.setResourceName(wlsServer.getServerName());
+        resource.setResourceType(ResourceType.APP_SERVER.toString());
+        resourcesService.saveResource(resource);
+
     }
 
     @Transactional(readOnly = true)

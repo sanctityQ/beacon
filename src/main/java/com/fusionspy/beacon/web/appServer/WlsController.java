@@ -52,7 +52,8 @@ public class WlsController {
 
     @Get("editUI/{serverName}")
     public String editUI(@Param("serverName")String serverName,Invocation invocation) {
-        //TODO 修改为从MonitorManage获取
+        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+        hisData.getWlsIniData().getWlsSysrec();
         WlsServer wlsServer = wlsService.getSite(serverName);
         invocation.addModel("server", wlsServer);
         return "weblogicSaveUI";
@@ -62,6 +63,7 @@ public class WlsController {
     public String save(WlsServer wlsServer) {
         wlsServer.setStatus(1);
         wlsService.save(wlsServer);
+        monitorManage.cancel(wlsServer.getServerName());
         return "/appServer/weblogic/start/"+wlsServer.getServerName();
     }
 
@@ -74,6 +76,9 @@ public class WlsController {
     public Reply delete(@Param("serverNames")List<String> serverNames) {
         //TODO 确认都要做哪些操作
         message.put("result", true);
+        for(String serverName : serverNames) {
+            monitorManage.cancel(serverName);
+        }
         return Replys.with(message).as(Json.class);
     }
 

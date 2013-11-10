@@ -10,6 +10,7 @@ import com.fusionspy.beacon.system.service.SystemService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.Assert;
 
@@ -63,7 +64,11 @@ public class SitesHolder {
 
     public void removeMonitorSite(String siteName) {
         Assert.hasText(siteName);
-        tuxSiteMap.remove(siteName);
+        Object site = null;
+        site = tuxSiteMap.remove(siteName);
+        if(site == null) {
+            wlsSiteMap.remove(siteName);
+        }
     }
 
 
