@@ -199,7 +199,7 @@ public class TuxController {
         invocation.addModel("systemboot",hisData.getTuxIniData().getSysrecsEntity().getSystemboot());
         invocation.addModel("rectime", DateTimeFormat.forPattern(DATE_FORMAT).print(new DateTime(hisData.getTuxIniData().getSysrecsEntity().getRectime())) );
         invocation.addModel("tuxRunSvr", hisData.getProcessResult().getTuxRes()==null?"-":hisData.getProcessResult().getTuxRes().getTuxrunsvr());
-        invocation.addModel("tuxRunQueue", hisData.getProcessResult().getTuxRes().getTuxrunqueue());
+        invocation.addModel("tuxRunQueue", hisData.getProcessResult().getTuxRes()==null?"-":hisData.getProcessResult().getTuxRes().getTuxrunqueue());
         invocation.addModel("tuxRunClt", hisData.getProcessResult().getTuxRes().getTuxrunclt());
         invocation.addModel("osVersion", hisData.getTuxIniData().getSysrecsEntity().getOstype());
         invocation.addModel("cpuIdle", hisData.getProcessResult().getTuxRes().getCpuidle());
