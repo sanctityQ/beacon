@@ -130,12 +130,14 @@ class TuxAlertMessage extends AlertMessage {
             case TUX_CPU:
                 return appendServerName(alarmMessageFormat, this.cpuAlarmServerName);
             case TUX_STOP:
-                break;
+                return this.getMessage(alarmMessageFormat,this.stopServerName);
         }
         return null;
     }
 
     String appendServerName(AlarmMessageFormat format,Collection<String> serverNames){
+       if(serverNames.isEmpty())
+           return StringUtils.EMPTY;
        //no current env data
        StringBuffer str = new StringBuffer(100);
        for(String serverName:serverNames){

@@ -104,7 +104,9 @@ public class SitesHolder {
                     newMonitorSite.setSitePort(wlsServer.getListenPort());
                     monitorSite = wlsSiteMap.putIfAbsent(siteName, newMonitorSite);
                 }
+               
             }
+            newMonitorSite.setPeriod(siteListEntity.getInterval());
             if(monitorSite == null)
                 monitorSite = newMonitorSite;
         }

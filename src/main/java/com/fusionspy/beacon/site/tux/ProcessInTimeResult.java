@@ -31,6 +31,7 @@ public class ProcessInTimeResult {
 
     private DataTrace dataTrace = DataTrace.getInstance();
 
+
     static {
         EMPTY = new ProcessInTimeResult(StringUtils.EMPTY);
         ArrayList arrayList = new ArrayList();

@@ -170,19 +170,19 @@ public class ConfigEmergencyController {
             if(dbAttributes!=null&&dbAttributes.size()>0){
                 String thresholdOfAttributeStart="<a href='javascript:void(0)' onclick='setAttributeEmergency(this)'>";
                 String thresholdOfAttributeEnd="</a>";
-                AttributeThreshold dbAttributeThreshold=new AttributeThreshold();
-                List<AttributeAction> dbAttributeAction=new ArrayList<AttributeAction>();
                 for(Attribute attribute:dbAttributes){
+                    if(attribute.getAttribute().equals("SystemStop"))
+                        continue;
                     List<String> actionNames=new ArrayList<String>();
                     String thresholdOfAttributeMiddle="关联";
                     String actionsOfAttribute="-";
                     //得到属性关联的阈值
-                    dbAttributeThreshold=attributeThresholdRepository.findByResourceIdAndAttributeId(monitorId,attribute.getId());
+                    AttributeThreshold dbAttributeThreshold=attributeThresholdRepository.findByResourceIdAndAttributeId(monitorId,attribute.getId());
                     if(dbAttributeThreshold!=null){
                         thresholdOfAttributeMiddle=thresholdRepository.findOne(dbAttributeThreshold.getThresholdId()).getName();
                     }
                     //得到属性关联的所有动作(需要去重)
-                    dbAttributeAction=attributeActionRepository.findByResourceIdAndAttributeId(monitorId,attribute.getId());
+                    List<AttributeAction> dbAttributeAction =attributeActionRepository.findByResourceIdAndAttributeId(monitorId,attribute.getId());
                     if(dbAttributeAction!=null&&dbAttributeAction.size()>0){
                         for(AttributeAction attributeAction:dbAttributeAction){
                             String newActonName=mailActionRepository.findOne(attributeAction.getActionId()).getName();
@@ -209,11 +209,7 @@ public class ConfigEmergencyController {
             Gridable<Attribute> gridable=new Gridable<Attribute>(page);
             gridable.setIdField("id");
             gridable.setCellStringField("attributeCn,threshold,action");
-            try {
-                UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-            } catch (Exception e) {
-                throw new Exception("Json数据转换出错!",e);
-            }
+            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
         }
     }
 

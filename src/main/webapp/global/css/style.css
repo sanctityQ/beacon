@@ -219,3 +219,15 @@ padding-left:25px}
 .repor_view .hint{margin:20px;}
 .reporCont{display:none}
 .error_validate {color: red;}
+.alert-danger {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.alert {
+    padding: 30px;
+    margin: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+

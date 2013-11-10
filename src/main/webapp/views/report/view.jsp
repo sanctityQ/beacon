@@ -49,7 +49,7 @@
             var temWin = $("body").window({
                 "id":"window_"+attribute,
                 "title":attribute_name,
-                "url":url,
+                "url":encodeURI(url),
                 "hasIFrame":true,
                 "width": 840,
                 "height":540,

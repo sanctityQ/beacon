@@ -147,9 +147,12 @@ public class TuxService {
 
         private ProcessInTimeResult processResult;
 
+        private String siteName;
+
         private boolean recordDB;
 
         ProcessData(String siteName,int period,TuxInTimeData tuxInTimeData,TuxHisData prvHisData,SiteSettings siteSettings) {
+            this.siteName = siteName;
             this.siteSettings = siteSettings;
             this.tuxInTimeData = tuxInTimeData;
             this.period = period;
@@ -162,7 +165,14 @@ public class TuxService {
         ProcessInTimeResult process(){
            processResult.setReceiveDate(now);
            if(alarmStopRunning()){
-              return processResult;
+               Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
+               //停机发告警
+               alarmMessage(attribute,SeverityLevel.CRITICAL,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_STOP));
+//               TuxresourceEntity resource =  ProcessInTimeResult.EMPTY.getTuxRes();
+//               resource.setSitename(siteName);
+//               resource.setCpuidle(100);
+//               processResult.recordTuxRes(resource);
+               return processResult;
            }
            this.processClt();
            this.processQueue();
@@ -416,13 +426,16 @@ public class TuxService {
                     if(diedServerThreshold==null)
                         continue;
                     SeverityLevel severityLevel = diedServerThreshold.match(old.getProgname());
-                    //config server data contains serverName
-                    if (severityLevel!=SeverityLevel.UNKNOWN) {
-                        processResult.addDiedServerName(old.getProgname());
-                    }
+
                     if(diedServerSeverityLevel.ordinal()>severityLevel.ordinal()){
                         diedServerSeverityLevel = severityLevel;
                     }
+
+                    //config server data contains serverName
+                    if (severityLevel!=SeverityLevel.UNKNOWN) {
+                        processResult.addDiedServerName(old.getProgname()+"["+old.getProcessid()+"]");
+                    }
+
                 }
                 //contains data
                 else {
@@ -436,17 +449,19 @@ public class TuxService {
                             if(noTransSeverityLevel.ordinal()>severityLevel.ordinal()){
                                 noTransSeverityLevel = severityLevel;
                             }
-                            if(now.getCurrenctsvc().equals("IDLE")&&severityLevel!=SeverityLevel.UNKNOWN)
-                                processResult.addNoTrans(now.getProgname());
+                            if(now.getCurrenctsvc().equals("IDLE")&&severityLevel!=SeverityLevel.UNKNOWN){
+                                processResult.addNoTrans(now.getProgname()+"["+now.getProcessid()+"]");
+                            }
                         }
                         //long busy
-                        else if(busyServerThreshold!=null){
+                        if(busyServerThreshold!=null){
                             SeverityLevel severityLevel = busyServerThreshold.match(now.getProgname());
-                            if(busyServerSeverityLevel.ordinal()>severityLevel.ordinal()){
+                             if(busyServerSeverityLevel.ordinal()>severityLevel.ordinal()){
                                 busyServerSeverityLevel = severityLevel;
                             }
-                            if(now.getCurrenctsvc().equals("BUSY")&&old.getCurrenctsvc().equals("BUSY")&&severityLevel!=SeverityLevel.UNKNOWN)
-                             processResult.addLongBusy(now.getProgname());
+                            if(!now.getCurrenctsvc().equals("IDLE")&&!old.getCurrenctsvc().equals("IDLE")&&severityLevel!=SeverityLevel.UNKNOWN){
+                                processResult.addLongBusy(now.getProgname()+"["+now.getProcessid()+"]");
+                            }
                         }
                     }
                 }
@@ -488,7 +503,9 @@ public class TuxService {
             resource.setTuxrunqueue(this.queSize);
             resource.setTuxrunsvr(this.svrSize);
             processResult.recordTuxRes(resource);
-             if(recordDB)tuxResourceDao.save(resource);
+            if(recordDB){
+                tuxResourceDao.save(resource);
+            }
         }
 
         private DataSave.Server getServerType() {
@@ -512,7 +529,7 @@ public class TuxService {
             alarm.setAlarmSource(AlarmSource.APP_SERVER);
             alarm.setMonitorType(ResourceType.APP_SERVER.name());
             alarm.setSeverity(severityLevel);
-            alarm.setMessage(message+severityLevel.cnName());
+            alarm.setMessage(controlFixedLength(message));
             alarm.setCreateTime(now);
             alarm.setSubResourceId(this.siteSettings.getSiteName());
             alarm.setSubResourceType(ResourceType.APP_SERVER);
@@ -520,12 +537,28 @@ public class TuxService {
 
             //发送邮件
             List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(this.resource.getResourceId(), attribute.getId(), severityLevel);
+
             //处理动作
             if(thresholdAttributeActions != null && thresholdAttributeActions.size() > 0) {
                 actionService.doActions(thresholdAttributeActions, this.resource, attribute, severityLevel, message);
             }
         }
 
+        private String controlFixedLength(String message){
+           String back=null;
+           if(message.length()>500){
+              back =  StringUtils.substring(message,0,500);
+              back =back + "...";
+           }else {
+               back = message;
+           }
+           return back;
+        }
+
+    }
+
+    public static void main(String[] args){
+        System.out.println(new Date(1383989138321l));
     }
 
 }

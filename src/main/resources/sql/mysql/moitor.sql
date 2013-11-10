@@ -1018,7 +1018,8 @@ COMMIT;
 --  `GE_MONITOR_ATTRIBUTE` 监控属性
 -- ----------------------------
 BEGIN;
-INSERT INTO GE_MONITOR_ATTRIBUTE VALUES ('1', 'APPLICATION', 'ResponseTime', 'ms', '响应时间'),
+INSERT INTO GE_MONITOR_ATTRIBUTE VALUES
+('1', 'APPLICATION', 'ResponseTime', 'ms', '响应时间'),
 ('10', 'DB', 'Availability', null, '可用性'),
 ('11', 'DB', 'ResponseTime', 'ms', '响应时间'),
 ('12', 'DB', 'Health', null, '健康度'),

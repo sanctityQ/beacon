@@ -39,20 +39,21 @@ $(function(){
 	//gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList?time=" + new Date().getTime(), "columStyle":columStyle1});
 	gridList.push({"renderId":"tuxedoList","url":rootPath+"/appServer/tuxedo/list?time=" + new Date().getTime(), "columStyle":columnStyle3});
 
+
 	$(gridList).each(function(i, d){
-		$("#"+d.renderId).Grid({
-			url : d.url,  
-			dataType: "json",
-			colDisplay: false,  
-			clickSelect: true,
+		var grid=  $("#"+d.renderId).Grid({
+			url:d.url,
+			dataType:"json",
+			colDisplay:false,
+			clickSelect:true,
 			draggable:false,
-			height: "auto",  
-			colums: d.columStyle,  
-			rowNum:9999,
-			pager : false,
+			height:"auto",
+			colums:d.columStyle,
+			pager:false,
 			number:false,  
-			multiselect: false  
-		});
+			multiselect:false
+        }).grid;
+        setInterval(grid.reload,1000*30);
 	});
 });
 

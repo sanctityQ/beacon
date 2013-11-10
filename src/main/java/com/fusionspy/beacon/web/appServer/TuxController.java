@@ -8,7 +8,6 @@ import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.fusionspy.beacon.site.tux.entity.SiteSettings;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.fusionspy.beacon.web.BeaconLocale;
-import com.fusionspy.beacon.web.Chart;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sinosoft.one.monitor.utils.MessageUtils;
@@ -27,6 +26,7 @@ import com.sinosoft.one.mvc.web.instruction.reply.transport.Text;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
+import com.sinosoft.one.util.encode.EncodeUtils;
 import com.sinosoft.one.util.encode.JsonBinder;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -71,7 +71,7 @@ public class TuxController {
     private SystemService systemService;
 
     @Put("/save")
-    public Reply update(SiteListEntity appServer,Invocation invocation){
+    public Reply update(SiteListEntity appServer){
         systemService.addSite(appServer);
         monitorManage.cancel(appServer.getSiteName());
         monitorManage.monitor(appServer.getSiteName());
@@ -82,7 +82,6 @@ public class TuxController {
     public Reply delete(@Param("serverName")String serverName) {
         monitorManage.cancel(serverName);
         systemService.delSite(serverName);
-
         return Replys.with("success").as(Text.class);
     }
 
@@ -166,7 +165,7 @@ public class TuxController {
 
             TuxHisData monitorInf = monitorManage.getMonitorInf(siteListEntity.getSiteName());
             Map<String,String> map = Maps.newHashMap();
-            String url = inv.getServletContext().getContextPath()+"/appServer/tuxedo/view/"+siteListEntity.getSiteName();
+            String url = inv.getServletContext().getContextPath()+"/appServer/tuxedo/view/"+EncodeUtils.urlEncode(siteListEntity.getSiteName());
             map.put("siteName", MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, url, siteListEntity.getSiteName()));
             map.put("availability",MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV,
                     MessageUtils.available2CssClass(!monitorInf.getProcessResult().isStopAlarmSignal())));
@@ -199,8 +198,8 @@ public class TuxController {
         invocation.addModel("tuxVersion",hisData.getTuxIniData().getSysrecsEntity().getProductver());
         invocation.addModel("systemboot",hisData.getTuxIniData().getSysrecsEntity().getSystemboot());
         invocation.addModel("rectime", DateTimeFormat.forPattern(DATE_FORMAT).print(new DateTime(hisData.getTuxIniData().getSysrecsEntity().getRectime())) );
-        invocation.addModel("tuxRunSvr", hisData.getProcessResult().getTuxRes().getTuxrunsvr());
-        invocation.addModel("tuxRunQueue", hisData.getProcessResult().getTuxRes().getTuxrunqueue());
+        invocation.addModel("tuxRunSvr", hisData.getProcessResult().getTuxRes()==null?"-":hisData.getProcessResult().getTuxRes().getTuxrunsvr());
+        invocation.addModel("tuxRunQueue", hisData.getProcessResult().getTuxRes()==null?"-":hisData.getProcessResult().getTuxRes().getTuxrunqueue());
         invocation.addModel("tuxRunClt", hisData.getProcessResult().getTuxRes().getTuxrunclt());
         invocation.addModel("osVersion", hisData.getTuxIniData().getSysrecsEntity().getOstype());
         invocation.addModel("cpuIdle", hisData.getProcessResult().getTuxRes().getCpuidle());
@@ -209,6 +208,8 @@ public class TuxController {
         invocation.addModel("count", hisData.getMonitorCount());
         invocation.addModel("ip", siteListEntity.getSiteIp());
         invocation.addModel("port", siteListEntity.getSitePort());
+        invocation.addModel("interval", siteListEntity.getInterval());
+        invocation.addModel("stop",hisData.getProcessResult().isStopAlarmSignal());
         return "tuxedoInfo";
     }
 
@@ -365,11 +366,7 @@ public class TuxController {
         String cellString = new String("sort,name,queued");
         gridable.setIdField("name");
         gridable.setCellStringField(cellString);
-        try {
-            UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
-        } catch (Exception e) {
-            throw new RuntimeException("json数据转换出错!", e);
-        }
+        UIUtil.with(gridable).as(UIType.Json).render(inv.getResponse());
     }
 
     private Map<String, String> convertQueueGrid(TuxquesEntity que, int index) {
