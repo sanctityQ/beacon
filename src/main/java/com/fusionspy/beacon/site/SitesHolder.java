@@ -90,23 +90,25 @@ public class SitesHolder {
                 newMonitorSite.setSiteName(siteName);
                 newMonitorSite.setSiteIp(siteListEntity.getSiteIp());
                 newMonitorSite.setSitePort(siteListEntity.getSitePort());
+                newMonitorSite.setPeriod(siteListEntity.getInterval());
                 monitorSite = tuxSiteMap.putIfAbsent(siteName, newMonitorSite);
-            } else {
-            }
 
-            monitorSite = wlsSiteMap.get(siteName);
-            if(monitorSite == null) {
-                WlsServer wlsServer = wlsService.getSite(siteName);
-                if(wlsServer != null) {
-                    newMonitorSite = getWlsSite();
-                    newMonitorSite.setSiteName(siteName);
-                    newMonitorSite.setSiteIp(wlsServer.getListenAddress());
-                    newMonitorSite.setSitePort(wlsServer.getListenPort());
-                    monitorSite = wlsSiteMap.putIfAbsent(siteName, newMonitorSite);
+            } else {
+                monitorSite = wlsSiteMap.get(siteName);
+                if(monitorSite == null) {
+                    WlsServer wlsServer = wlsService.getSite(siteName);
+                    if(wlsServer != null) {
+                        newMonitorSite = getWlsSite();
+                        newMonitorSite.setSiteName(siteName);
+                        newMonitorSite.setSiteIp(wlsServer.getListenAddress());
+                        newMonitorSite.setSitePort(wlsServer.getListenPort());
+                        newMonitorSite.setPeriod(wlsServer.getInterval());
+                        monitorSite = wlsSiteMap.putIfAbsent(siteName, newMonitorSite);
+                    }
+
                 }
-               
+
             }
-            newMonitorSite.setPeriod(siteListEntity.getInterval());
             if(monitorSite == null)
                 monitorSite = newMonitorSite;
         }
