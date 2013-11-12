@@ -123,14 +123,14 @@ public class MonitorManage {
      * get monitor data
      *
      * @param siteName
-     * @param <T>
-     * @return HisData
+     * @return MonitorSite
      */
-    public <T extends HisData> T getMonitorInf(String siteName) {
+    public MonitorSite getMonitorInf(String siteName) {
         Assert.hasText(siteName);
         MonitorSite monitorSite = sitesHolder.getMonitorSite(siteName);
         //      logger.debug(" getMonitorInf monitorSite =  {}",monitorSite.getSiteName() );
-        return (T) monitorSite.getMonitorData();
+
+        return  monitorSite;
     }
 
 

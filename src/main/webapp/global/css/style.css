@@ -141,10 +141,11 @@ display:block;height:22px;float:left}
 .explain li span{display:block;width:10px;height:10px;background:#f00;border:#333 1px solid;margin:10px 3px 0 12px}
 .explain li .ex_is{background:#84c65a}
 .explain li .ex_xp{background:#FF0}
-.grid_view .sys_up,.grid_view .fine,.grid_view .sys_down,.grid_view .poor,.grid_view .y_poor{background:url(../images/icon_availability_up.gif) no-repeat;width:13px;height:13px;}
+.grid_view .sys_up,.grid_view .fine,.grid_view .unknown,.grid_view .sys_down,.grid_view .poor,.grid_view .y_poor{background:url(../images/icon_availability_up.gif) no-repeat;width:13px;height:13px;}
 .grid_view .sys_down{background-image:url(../images/icon_availability_down.gif)}
 .grid_view .fine{background-image:url(../images/bussinessY.gif)}
 .grid_view .poor{background-image:url(../images/icon_health_critical.gif)}
+.grid_view .unknown{background-image:url(../images/icon_health_unknown.gif)}
 .grid_view .y_poor{background-image:url(../images/bussinessY3.gif)}
 .tree_box{width:90%;margin:0 auto;border:#ccc 1px solid;margin-top:20px}
 .tree_box .tree_cont{width:100%;height:150px;overflow:hidden;overflow-y:auto;}
@@ -225,6 +226,7 @@ padding-left:25px}
     background-color: #f2dede;
     border-color: #ebccd1;
 }
+
 .alert {
     padding: 30px;
     margin: 20px;

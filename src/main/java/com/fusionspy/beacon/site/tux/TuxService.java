@@ -88,9 +88,9 @@ public class TuxService {
      */
     @Transactional
     public int processInitData(TuxIniData tuxIniData) {
-        logger.debug("tuxIniData: {}",tuxIniData);
         SysrecsEntity sysrecsEntity = tuxIniData.getSysrecsEntity();
         sysrecsEntity.setRectime(new Date());
+        sysrecsEntity.setSiteName(tuxIniData.getSiteName());
         return systemService.saveSysRec(sysrecsEntity);
     }
 
@@ -99,24 +99,23 @@ public class TuxService {
      * process intime data
      * @param siteName
      * @param period
-     * @param tuxInTimeData
      * @param prvData
      */
     @Transactional
-    public void processInTimeData(String siteName,int period,TuxInTimeData tuxInTimeData,TuxHisData prvData) {
+    public void processInTimeData(String siteName,int period,TuxHisData prvData) {
         logger.debug("start process data");
         SiteSettings siteSettings =  systemService.getSiteSetting(siteName);
-        processData(siteName, period, tuxInTimeData, prvData,siteSettings);
+        processData(siteName, period,  prvData,siteSettings);
     }
 
-    ProcessInTimeResult processData(String siteName,int period, TuxInTimeData tuxInTimeData,TuxHisData prvData,SiteSettings siteSettings){
+    ProcessInTimeResult processData(String siteName,int period, TuxHisData prvData,SiteSettings siteSettings){
 
       //  ProcessInTimeResult processInTimeResult = new ProcessData(siteName,period,tuxInTimeData,prvData,siteSettings,recordDB).process().log(siteName);
       //  TuxAlertMessage message =processInTimeResult.getTuxAlertMessage();
         //alarm采用每个属性都是一个独立的alarm方式
 
 
-        return new ProcessData(siteName,period,tuxInTimeData,prvData,siteSettings).process().log(siteName);//.alarm(siteSettings.getAlertType());
+        return new ProcessData(siteName,period,prvData,siteSettings).process().log(siteName);//.alarm(siteSettings.getAlertType());
     }
 
     private class ProcessData {
@@ -151,10 +150,10 @@ public class TuxService {
 
         private boolean recordDB;
 
-        ProcessData(String siteName,int period,TuxInTimeData tuxInTimeData,TuxHisData prvHisData,SiteSettings siteSettings) {
+        ProcessData(String siteName,int period,TuxHisData prvHisData,SiteSettings siteSettings) {
             this.siteName = siteName;
             this.siteSettings = siteSettings;
-            this.tuxInTimeData = tuxInTimeData;
+            this.tuxInTimeData = prvHisData.getTuxInTimeData();
             this.period = period;
             this.tuxHisData =  prvHisData;
             this.recordDB = siteSettings.getDataSave().getSaveAll().equals(DataSave.SaveFlag.ENABLE);
@@ -167,7 +166,8 @@ public class TuxService {
            if(alarmStopRunning()){
                Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
                //停机发告警
-               alarmMessage(attribute,SeverityLevel.CRITICAL,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_STOP));
+               alarmMessage(this.resource,attribute,this.siteName,SeverityLevel.CRITICAL,
+                       processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_STOP));
 //               TuxresourceEntity resource =  ProcessInTimeResult.EMPTY.getTuxRes();
 //               resource.setSitename(siteName);
 //               resource.setCpuidle(100);
@@ -184,7 +184,6 @@ public class TuxService {
 
         private void recordHisData(){
              this.tuxHisData.setRqDoneCount(rqdone);
-             this.tuxHisData.setTuxInTimeData(this.tuxInTimeData);
              this.tuxHisData.setProcessResult(processResult);
         }
 
@@ -249,7 +248,7 @@ public class TuxService {
                     severityLevel =  temp;
                 }
             }
-            alarmMessage(attribute,severityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_QUE));
+            alarmMessage(this.resource,attribute,this.siteName,severityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_QUE));
 
             TuxqueStatsEntity stats = new TuxqueStatsEntity();
             stats.setSitename(siteSettings.getSiteName());
@@ -311,8 +310,8 @@ public class TuxService {
                processResult.recordTuxSvrs(svr);
             }
 
-            alarmMessage(cpuAttribute,cpuSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_CPU));
-            alarmMessage(memAttribute,memSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_MEM));
+            alarmMessage(this.resource,cpuAttribute,this.siteName,cpuSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_CPU));
+            alarmMessage(this.resource,memAttribute,this.siteName,memSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_MEM));
 
             serverDiedAlarmAndNoTransAndLongBusy(processMap);
             TuxsvrStatsEntity stats = new TuxsvrStatsEntity();
@@ -333,9 +332,7 @@ public class TuxService {
         }
 
         private SeverityLevel queueAlarm(TuxquesEntity que, Threshold threshold) {
-            //int queLimit = this.siteSettings.getConditions().getQueued().getQueueNumber();
 
-            //if(this.alartEnable(this.siteSettings.getConditions().getQueued().getAlert())&&queLimit<que.getQueued()){
             if(threshold==null)
                 return SeverityLevel.UNKNOWN;
             SeverityLevel severityLevel = threshold.match(String.valueOf(que.getQueued()));
@@ -466,9 +463,9 @@ public class TuxService {
                     }
                 }
             }
-            alarmMessage(serverDiedAttribute,diedServerSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_DIED));
-            alarmMessage(noTransAttribute,noTransSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_NOTRAN));
-            alarmMessage(busyServerAttribute,busyServerSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_BUSY));
+            alarmMessage(this.resource,serverDiedAttribute,this.siteName,diedServerSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_DIED));
+            alarmMessage(this.resource,noTransAttribute,this.siteName,noTransSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_NOTRAN));
+            alarmMessage(this.resource,busyServerAttribute,this.siteName,busyServerSeverityLevel,processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_BUSY));
         }
 
         //return tux stop signal
@@ -520,41 +517,45 @@ public class TuxService {
             return recordDB&&siteSettings.getDataSave().getSaveAllClient().equals(DataSave.SaveFlag.ENABLE);
         }
 
-        private void alarmMessage(Attribute attribute, SeverityLevel severityLevel,String message){
-            if(attribute==null||severityLevel == SeverityLevel.UNKNOWN ||StringUtils.isBlank(message))
-                return;
-            Alarm alarm = new Alarm(UUID.randomUUID().toString().replaceAll("-", ""));
-            alarm.setAttributeId(attribute.getId());
-            alarm.setMonitorId(this.siteSettings.getSiteName());
-            alarm.setAlarmSource(AlarmSource.APP_SERVER);
-            alarm.setMonitorType(ResourceType.APP_SERVER.name());
-            alarm.setSeverity(severityLevel);
-            alarm.setMessage(controlFixedLength(message));
-            alarm.setCreateTime(now);
-            alarm.setSubResourceId(this.siteSettings.getSiteName());
-            alarm.setSubResourceType(ResourceType.APP_SERVER);
-            alarmService.saveAlarm(alarm);
 
-            //发送邮件
-            List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(this.resource.getResourceId(), attribute.getId(), severityLevel);
 
-            //处理动作
-            if(thresholdAttributeActions != null && thresholdAttributeActions.size() > 0) {
-                actionService.doActions(thresholdAttributeActions, this.resource, attribute, severityLevel, message);
-            }
+
+
+    }
+
+    private String controlFixedLength(String message){
+        String back=null;
+        if(message.length()>500){
+            back =  StringUtils.substring(message,0,500);
+            back =back + "...";
+        }else {
+            back = message;
         }
+        return back;
+    }
 
-        private String controlFixedLength(String message){
-           String back=null;
-           if(message.length()>500){
-              back =  StringUtils.substring(message,0,500);
-              back =back + "...";
-           }else {
-               back = message;
-           }
-           return back;
+    private void alarmMessage(Resource resource,Attribute attribute,String siteName, SeverityLevel severityLevel,String message){
+        if(attribute==null||severityLevel == SeverityLevel.UNKNOWN ||StringUtils.isBlank(message))
+            return;
+        Alarm alarm = new Alarm(UUID.randomUUID().toString().replaceAll("-", ""));
+        alarm.setAttributeId(attribute.getId());
+        alarm.setMonitorId(siteName);
+        alarm.setAlarmSource(AlarmSource.APP_SERVER);
+        alarm.setMonitorType(ResourceType.APP_SERVER.name());
+        alarm.setSeverity(severityLevel);
+        alarm.setMessage(controlFixedLength(message));
+        alarm.setCreateTime(new Date());
+        alarm.setSubResourceId(siteName);
+        alarm.setSubResourceType(ResourceType.APP_SERVER);
+        alarmService.saveAlarm(alarm);
+
+        //发送邮件
+        List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(resource.getResourceId(), attribute.getId(), severityLevel);
+
+        //处理动作
+        if(thresholdAttributeActions != null && thresholdAttributeActions.size() > 0) {
+            actionService.doActions(thresholdAttributeActions, resource, attribute, severityLevel, message);
         }
-
     }
 
     public static void main(String[] args){

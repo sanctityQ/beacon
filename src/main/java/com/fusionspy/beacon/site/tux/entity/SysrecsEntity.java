@@ -17,6 +17,8 @@ import java.util.Date;
 @Entity
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class SysrecsEntity {
+
+
     private Integer id;
 
     @Column(name = "id")

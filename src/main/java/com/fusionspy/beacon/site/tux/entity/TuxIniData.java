@@ -2,6 +2,7 @@ package com.fusionspy.beacon.site.tux.entity;
 
 import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorData;
+import com.fusionspy.beacon.site.tux.dao.SysrecsDao;
 import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -26,13 +27,15 @@ public class TuxIniData extends MonitorData implements InitData {
       EMPTY  = new TuxIniData();
       SysrecsEntity sysrecsEntity = new SysrecsEntity();
       sysrecsEntity.setRectime(null);
-      sysrecsEntity.setAgentver(StringUtils.EMPTY);
-      sysrecsEntity.setSiteName(StringUtils.EMPTY);
-      sysrecsEntity.setOstype(StringUtils.EMPTY);
-      sysrecsEntity.setSystemboot(StringUtils.EMPTY);
-      sysrecsEntity.setProductver(StringUtils.EMPTY);
+      sysrecsEntity.setAgentver(InitData.EMPTY);
+      sysrecsEntity.setSiteName(InitData.EMPTY);
+      sysrecsEntity.setOstype(InitData.EMPTY);
+      sysrecsEntity.setSystemboot(InitData.EMPTY);
+      sysrecsEntity.setProductver(InitData.EMPTY);
       EMPTY.setSysrecsEntity(sysrecsEntity);
     }
+
+    private SysrecsDao sysrecsDao;
 
     @XmlElement(name = "INITBUF")
     public SysrecsEntity getSysrecsEntity() {
@@ -43,7 +46,12 @@ public class TuxIniData extends MonitorData implements InitData {
         this.sysrecsEntity = sysrecsEntity;
     }
 
-    public void setSiteName(String siteName) {
-        this.sysrecsEntity.setSiteName(siteName);
+    @Override
+    public void process() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void setSysrecsDao(SysrecsDao sysrecsDao) {
+        this.sysrecsDao = sysrecsDao;
     }
 }

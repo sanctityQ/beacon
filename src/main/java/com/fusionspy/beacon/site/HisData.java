@@ -7,4 +7,5 @@ package com.fusionspy.beacon.site;
  * Time: 下午2:13
  */
 public interface HisData<E> {
+
 }

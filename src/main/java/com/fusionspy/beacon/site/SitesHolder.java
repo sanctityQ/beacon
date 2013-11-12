@@ -6,8 +6,11 @@ import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.fusionspy.beacon.system.service.SystemService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
+import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
+import com.sinosoft.one.monitor.resources.domain.ResourcesCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
@@ -27,19 +30,25 @@ public class SitesHolder {
     @Autowired
     private SystemService systemService;
 
-    @Resource(name="tuxDataConnectRepo")
+    @Resource(name = "tuxDataConnectRepo")
     private MonitorDataRepository conRep;
 
-    @Resource(name="tuxDataSimulationRep")
-    private MonitorDataRepository  demoRep;
+    @Resource(name = "tuxDataSimulationRep")
+    private MonitorDataRepository demoRep;
 
     @Autowired
     private TuxService tuxService;
 
-    private boolean demo=false;
+    @Autowired
+    private AttributeCache attributeCache;
+    @Autowired
+    private ResourcesCache resourcesCache;
+
+    private boolean demo = false;
 
     /**
      * is demo
+     *
      * @param demo
      */
     public void setDemo(boolean demo) {
@@ -52,10 +61,8 @@ public class SitesHolder {
     }
 
 
-
-
-    public List<MonitorSite> getMonitorSites(){
-       return Lists.newArrayList(tuxSiteMap.values()) ;
+    public List<MonitorSite> getMonitorSites() {
+        return Lists.newArrayList(tuxSiteMap.values());
     }
 
     public MonitorSite getMonitorSite(String siteName) {
@@ -64,7 +71,7 @@ public class SitesHolder {
         if (monitorSite == null) {
             SiteListEntity siteListEntity = systemService.getSite(siteName);
             MonitorSite newMonitorSite = null;
-            if (siteListEntity instanceof  SiteListEntity) {
+            if (siteListEntity instanceof SiteListEntity) {
                 newMonitorSite = getTuxSite();
                 newMonitorSite.setSiteName(siteName);
                 newMonitorSite.setSiteIp(siteListEntity.getSiteIp());
@@ -72,16 +79,18 @@ public class SitesHolder {
                 newMonitorSite.setPeriod(siteListEntity.getInterval());
             }
             monitorSite = tuxSiteMap.putIfAbsent(siteName, newMonitorSite);
-            if(monitorSite == null)
-               monitorSite = newMonitorSite;
+            if (monitorSite == null)
+                monitorSite = newMonitorSite;
         }
         return monitorSite;
     }
 
-    @Bean
+   // @Bean
     public MonitorSite getTuxSite() {
         TuxSite tuxSite = new TuxSite();
         tuxSite.setTuxService(tuxService);
+        tuxSite.setAttributeCache(this.attributeCache);
+        tuxSite.setResourcesCache(this.resourcesCache);
         if (demo) {
             tuxSite.setMonitorDataRepository(demoRep);
         } else {
@@ -90,8 +99,6 @@ public class SitesHolder {
 
         return tuxSite;
     }
-
-
 
 
 }

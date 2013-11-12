@@ -5,6 +5,8 @@ import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
 import com.fusionspy.beacon.site.tux.entity.TuxIniData;
+import com.sinosoft.one.monitor.resources.model.Resource;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * tuxSite
@@ -25,42 +27,60 @@ public class TuxSite extends MonitorSite{
 
     private volatile TuxHisData tuxHisData;
 
+    public TuxSite() {
+        super();
+        hisData = new TuxHisData(this.getSiteName());
+        tuxHisData = (TuxHisData)hisData;
+    }
+
+
     @Override
     protected void recordInitData(InitData initData) {
 
-//       String initXml = connect.startSiteThread(iniXml,this.getSiteName(),siteIp,sitePort,0);
-//       logger.debug("get initXml Xml: {}",initXml);
-//       TuxIniData tuxIniData = iniBinder.fromXml(initXml);
-        //  logger.debug("----tuxIniData------:{} service : {}",tuxIniData,tuxService);
         TuxIniData tuxIniData = (TuxIniData) initData;
         tuxIniData.setSiteName(getSiteName());
-        tuxService.processInitData(tuxIniData);
-        iniHisData();
-        tuxHisData.setMonitorCount(++monitorCount);
         tuxHisData.setTuxIniData(tuxIniData);
+
+        //初始化数据返回有tuxedo失败信息
+        if(tuxHisData.isTuxedoStop()){
+            tuxHisData.setTuxIniData(TuxIniData.EMPTY);
+            tuxHisData.setTuxInTimeData(TuxInTimeData.EMPTY);
+            throw new IllegalStateException("被监控Tuxedo系统并无运行，请检查");
+        }
+
+        initData.process();
+        tuxService.processInitData(tuxIniData);
+//       tuxHisData.setMonitorCount(++monitorCount);
+
     }
 
-    private void iniHisData(){
-         if(tuxHisData == null){
-           tuxHisData = new TuxHisData();
-            tuxHisData.setTuxInTimeData(new TuxInTimeData());
-         }
-    }
+//    private void iniHisData(){
+//         if(tuxHisData == null) {
+//             tuxHisData = new TuxHisData(this.getSiteName());
+//             tuxHisData.setTuxInTimeData(new TuxInTimeData());
+//         }
+//    }
+
 
     @Override
     protected void recordInTimeData(InTimeData inTimeData) {
-    //    logger.debug("get inTime Xml: {}",inTimeXml);
+
+
         TuxInTimeData thisData = (TuxInTimeData)inTimeData;
+        this.tuxHisData.setTuxInTimeData(thisData);
+        if(tuxHisData.isTuxedoStop()){
+            return;
+        }
         //first load
-        iniHisData();
-        tuxService.processInTimeData(this.getSiteName(),this.getPeriod(),thisData,tuxHisData);
+        // iniHisData();
+        tuxService.processInTimeData(this.getSiteName(),this.getPeriod(),tuxHisData);
         //record monitorData
-        tuxHisData.setMonitorCount(++monitorCount);
+//        tuxHisData.setMonitorCount(++monitorCount);
     }
 
     @Override
     public TuxHisData getMonitorData() {
-        return tuxHisData!=null?tuxHisData:TuxHisData.EMPTY;
+        return (TuxHisData)hisData;
     }
 
 }

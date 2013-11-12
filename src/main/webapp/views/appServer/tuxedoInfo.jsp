@@ -25,7 +25,6 @@ $(function(){
     };
 
 
-
     //cpu chart
     new Highcharts.Chart({
         chart: {
@@ -44,6 +43,8 @@ $(function(){
                             cache:false,
                             async:false,
                             success:function(back){
+                                if(back.length ==0)
+                                    return;
                                 if(series.data.length < 20){
                                     series.addPoint(back, true, false);
                                 }
@@ -130,6 +131,8 @@ $(function(){
                             cache:false,
                             async:false,
                             success:function(back){
+                                if(back.length ==0)
+                                    return;
                                 if(series.data.length < 20){
                                     series.addPoint(back, true, false);
                                 }
@@ -214,6 +217,8 @@ $(function(){
                             cache:false,
                             async:false,
                             success:function(back){
+                                if(back.length ==0)
+                                    return;
                                 if(series0.data.length < 20){
                                     series0.addPoint(back, true, false);
                                 }
@@ -229,6 +234,8 @@ $(function(){
                             cache:false,
                             async:false,
                             success:function(back){
+                                if(back.length ==0)
+                                    return;
                                 if(series1.data.length < 20){
                                     series1.addPoint(back, true, false);
                                 }
@@ -312,26 +319,7 @@ $(function(){
         colors: ['#e77c52']
     });
 
-    function getServerLatestData(){
-        $.ajax({
-            url: '${ctx}/appServer/tuxedo/view/${serverName}/latest',
-            dataType : 'json',
-            type : 'get',
-            async : false,
-            error : function (XMLHttpRequest,errorThrown) {
-                alert("数据加载出错！" + errorThrown);
-            },
-            success: function(data){
-               $('#count').html(data.count);
-               $('#cpuIdle').html(data.cpuIdle);
-               $('#memFree').html(data.memFree);
-               $('#tuxRunQueue').html(data.tuxRunQueue);
-               $('#tuxRunClt').html(data.tuxRunClt);
-            }
-        });
-    }
 
-    setInterval(getServerLatestData, 1000 * interval);
 
     //吞吐量
     new Highcharts.Chart({
@@ -350,6 +338,8 @@ $(function(){
                             cache:false,
                             async:false,
                             success:function(back){
+                                if(back.length ==0)
+                                    return;
                                 if(series.data.length < 20){
                                     series.addPoint(back, true, false);
                                 }
@@ -358,7 +348,7 @@ $(function(){
                                 }
                             }
                         })
-                    }, 30000);
+                    }, interval*1000);
                 }
             }
         },
@@ -749,15 +739,15 @@ System.prototype.start = function(){
 <body>
 
 <%@include file="/WEB-INF/layouts/menu.jsp"%>
-<c:if test="${stop}" >
-<div id="errorMsg" class="alert alert-danger"><strong>错误：</strong>Tuxedo系统监控已经停止，请检查agent端/Tuxedo是否正常运行!</div>
-</c:if>
+
 <div id="layout_center">
     <div class="main-linux" id="main">
         <ul class="crumbs">
             <li><a href="${ctx}/appServer/tuxedo/manager" target="_blank">Tuxedo监视器</a> ></li>
             <li><b>${serverName}</b></li>
         </ul>
+
+        <div id="errorMsg" class="alert alert-danger" style="display: none;"></div>
         <hr class="top_border" />
         <div id="tabs">
             <ul>
@@ -788,15 +778,15 @@ System.prototype.start = function(){
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd" >产品版本： </td>
-                                    <td class="monitorinfoeven">${tuxVersion}</td>
+                                    <td class="monitorinfoeven"><span id="tuxVersion">${tuxVersion}</span></td>
                                     <td align="right" class="monitorinfoodd" >启动时间： </td>
-                                    <td class="monitorinfoeven">${systemboot}</td>
+                                    <td class="monitorinfoeven"><span id="systemboot">${systemboot}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd" >监控时间：</td>
                                     <td class="monitorinfoeven">${rectime}</td>
                                     <td align="right" class="monitorinfoodd" >服务个数：</td>
-                                    <td class="monitorinfoeven">${tuxRunSvr}</td>
+                                    <td class="monitorinfoeven"><span id="tuxRunSvr">${tuxRunSvr}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">队列个数：</td>
@@ -806,7 +796,7 @@ System.prototype.start = function(){
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd"> 操作系统：</td>
-                                    <td class="monitorinfoeven">${osVersion}</td>
+                                    <td class="monitorinfoeven"><span id='osVersion'>${osVersion}</span></td>
                                     <td align="right" class="monitorinfoodd">CPU空余：</td>
                                     <td class="monitorinfoeven"><span id='cpuIdle'>${cpuIdle}</span></td>
                                 </tr>
@@ -814,7 +804,7 @@ System.prototype.start = function(){
                                     <td align="right" class="monitorinfoodd"> 内存空余：</td>
                                     <td class="monitorinfoeven"><span id='memFree'>${memFree}</span>M</td>
                                     <td align="right" class="monitorinfoodd">Agent版本：</td>
-                                    <td class="monitorinfoeven">${agentVer}</td>
+                                    <td class="monitorinfoeven"><span id='agentVer'>${agentVer}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">监控次数：</td>
@@ -959,3 +949,53 @@ System.prototype.start = function(){
 <%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>
+<script>
+
+    function getServerLatestData(){
+        $.ajax({
+            url: '${ctx}/appServer/tuxedo/view/${serverName}/latest',
+            dataType : 'json',
+            type : 'get',
+            async : false,
+            error : function (XMLHttpRequest,errorThrown) {
+                console.error("数据加载出错！" + errorThrown);
+            },
+            success: function(data){
+                $('#count').html(data.count);
+                $('#cpuIdle').html(data.cpuIdle);
+                $('#memFree').html(data.memFree);
+                $('#tuxRunQueue').html(data.tuxRunQueue);
+                $('#tuxRunClt').html(data.tuxRunClt);
+                $('#systemboot').html(data.systemboot);
+                $('#tuxVersion').html(data.tuxVersion);
+                $('#osVersion').html(data.osVersion);
+                $('#agentVer').html(data.agentVer);
+                $('#tuxRunSvr').html(data.tuxRunSvr);
+                if(data.stop=='true'){
+                    $('#errorMsg').html(tuxedoStopMessage);
+                    $('#errorMsg').fadeIn();
+                }
+                else if(data.agentStop == 'true'){
+                    $('#errorMsg').html(agentStopMessage)
+                    $('#errorMsg').fadeIn();
+                }
+                else{
+                    $('#errorMsg').fadeOut();
+                }
+            }
+        });
+    }
+
+    setInterval(getServerLatestData, 1000 * interval);
+
+    var tuxedoStopMessage = '<strong>错误：</strong>Tuxedo系统监控已经停止，请检查Tuxedo是否正常运行!';
+    var agentStopMessage = '<strong>错误：</strong>Tuxedo系统监控无法连接到agent端，请检查agent端是否正常运行!';
+    <c:if test="${stop}">
+        $('#errorMsg').html(tuxedoStopMessage);
+        $('#errorMsg').fadeIn();
+    </c:if>
+    <c:if test="${agentStop}">
+        $('#errorMsg').html(agentStopMessage)
+        $('#errorMsg').fadeIn();
+    </c:if>
+</script>

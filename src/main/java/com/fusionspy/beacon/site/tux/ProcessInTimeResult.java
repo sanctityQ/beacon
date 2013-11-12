@@ -22,7 +22,6 @@ public class ProcessInTimeResult {
 
     public static final ProcessInTimeResult EMPTY;
 
-
     private SiteInfoLogger siteInfoLogger = SiteInfoLogger.getInstance();
 
     private AlarmObserver alarmObserver = AlarmObserver.getInstance();
@@ -31,23 +30,22 @@ public class ProcessInTimeResult {
 
     private DataTrace dataTrace = DataTrace.getInstance();
 
-
     static {
         EMPTY = new ProcessInTimeResult(StringUtils.EMPTY);
-        ArrayList arrayList = new ArrayList();
-        //tux resource empty
-        TuxresourceEntity tuxresourceEntity = new TuxresourceEntity();
-        tuxresourceEntity.setAllsvrcpuuse(0);
-        tuxresourceEntity.setAllsvrmemused(0);
-        tuxresourceEntity.setCpuidle(0);
-        tuxresourceEntity.setMemfree(0);
-        tuxresourceEntity.setRectime(new Date());
-        tuxresourceEntity.setSitename(StringUtils.EMPTY);
-        tuxresourceEntity.setTuxrunclt(0);
-        tuxresourceEntity.setTuxrunqueue(0);
-        tuxresourceEntity.setTuxrunsvr(0);
-        EMPTY.recordTuxRes(tuxresourceEntity);
-        EMPTY.setStopServer(true,StringUtils.EMPTY);
+//        ArrayList arrayList = new ArrayList();
+//        //tux resource empty
+//        TuxresourceEntity tuxresourceEntity = new TuxresourceEntity();
+//        tuxresourceEntity.setAllsvrcpuuse(0);
+//        tuxresourceEntity.setAllsvrmemused(0);
+//        tuxresourceEntity.setCpuidle(0);
+//        tuxresourceEntity.setMemfree(0);
+//        tuxresourceEntity.setRectime(new Date());
+//        tuxresourceEntity.setSitename(StringUtils.EMPTY);
+//        tuxresourceEntity.setTuxrunclt(0);
+//        tuxresourceEntity.setTuxrunqueue(0);
+//        tuxresourceEntity.setTuxrunsvr(0);
+//        EMPTY.recordTuxRes(tuxresourceEntity);
+//        EMPTY.setStopServer(true,StringUtils.EMPTY);
     }
 
 
