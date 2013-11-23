@@ -51,7 +51,7 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
         WlsHisData hisData = new WlsHisData();
         hisData.setWlsIniData(initData.defaultData());
 
-        InputStream in = Test.class.getClassLoader().getResourceAsStream("site/WlsInTimeDemoResp.xml");
+        InputStream in = Test.class.getClassLoader().getResourceAsStream("a.xml");
         SAXReader xmlReader = new SAXReader();
         Document xmlDocument = (Document) xmlReader.read(in);
         String resp = xmlDocument.asXML();
@@ -73,5 +73,9 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
         wlsServer.setVersion("aaa");
         wlsServer.setStatus(0);
         wlsServerDao.save(wlsServer);
+    }
+
+    public static void main(String[] args) {
+
     }
 }

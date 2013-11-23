@@ -145,6 +145,12 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
                                         subField.set(obj, "N/A");
                                     }
                                 }
+                                if(subField.isAnnotationPresent(XmlAttribute.class) && subField.getType()==Integer.class) {
+                                    Object subFieldVal =subField.get(obj);
+                                    if(subFieldVal == null) {
+                                        subField.set(obj, 0);
+                                    }
+                                }
                                 if("recTime".equals(subField.getName()) && subField.getType()==Date.class) {
                                     subField.set(obj, new Date());
                                 }
@@ -157,6 +163,12 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
                                 Object subFieldVal = subField.get(fieldVal);
                                 if(subFieldVal ==null || StringUtils.isBlank(subFieldVal.toString())) {
                                     subField.set(fieldVal, "N/A");
+                                }
+                            }
+                            if(subField.isAnnotationPresent(XmlAttribute.class) && subField.getType()==Integer.class) {
+                                Object subFieldVal =subField.get(fieldVal);
+                                if(subFieldVal == null) {
+                                    subField.set(fieldVal, 0);
                                 }
                             }
                             if("recTime".equals(subField.getName()) && subField.getType()==Date.class) {

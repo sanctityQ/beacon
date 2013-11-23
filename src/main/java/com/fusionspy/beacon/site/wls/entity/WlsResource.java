@@ -48,7 +48,7 @@ public class WlsResource  implements java.io.Serializable {
     private Integer cpuIdle;
 
     @XmlTransient
-    private Integer memFree;
+    private String memFree;
 
     /**
     * os类型.
@@ -141,11 +141,11 @@ public class WlsResource  implements java.io.Serializable {
         this.mem = mem;
     }
     @Column(name="mem_free")
-    public Integer getMemFree() {
+    public String getMemFree() {
         return memFree;
     }
 
-    public void setMemFree(Integer memFree) {
+    public void setMemFree(String memFree) {
         this.memFree = memFree;
     }
 

@@ -77,7 +77,7 @@ public class WlsController {
         message.put("result", true);
         for(String serverName : serverNames) {
             monitorManage.cancel(serverName);
-            //wlsService
+            wlsService.delete(serverName);
         }
         return Replys.with(message).as(Json.class);
     }
@@ -186,7 +186,7 @@ public class WlsController {
                     list.add(100 - inTimeData.getResource().getCpuIdle());
                 } else {
                     //TODO 内存使用率取值 此时获取的是内存空闲
-                    list.add(inTimeData.getResource().getMemFree());
+                    list.add(Double.parseDouble(inTimeData.getResource().getMemFree()));
                 }
             }else{
                 while(iterator.hasNext()) {
@@ -199,7 +199,7 @@ public class WlsController {
                         point.put("y", 100 - inTimeData.getResource().getCpuIdle());
                     } else {
                         //TODO 内存使用率取值 此时获取的是内存空闲
-                        point.put("y", inTimeData.getResource().getMemFree());
+                        point.put("y", Double.parseDouble(inTimeData.getResource().getMemFree()));
                     }
                     list.add(point);
 
@@ -311,7 +311,7 @@ public class WlsController {
                 for(WlsWebapp webapp : inTimeData.getComponentRuntimes()) {
                     List<Object> point = new ArrayList<Object>();
                     point.add(webapp.getRecTime().getTime());
-                    point.add(webapp.getOpenSessionsCurrentCount());
+                    point.add(webapp.getOpenSessionsCurrent());
                     list.add(point);
                 }
                 retVal = list;
@@ -331,7 +331,7 @@ public class WlsController {
                         List<Object> data = (List<Object>) serie.get("data");
                         Map<String, Object> point = new HashMap<String, Object>();
                         point.put("x", webapp.getRecTime().getTime());
-                        point.put("y", webapp.getOpenSessionsCurrentCount());
+                        point.put("y", webapp.getOpenSessionsCurrent());
                         data.add(point);
                     }
                 }

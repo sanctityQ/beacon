@@ -88,6 +88,11 @@ public class WlsService {
         List<WlsJdbc> jdbcDataSourceRuntimes = inTimeData.getJdbcDataSourceRuntimes();
         wlsJdbcDao.save(jdbcDataSourceRuntimes);
         List<WlsWebapp> componentRuntimes = inTimeData.getComponentRuntimes();
+        for(WlsWebapp webapp : componentRuntimes) {
+            webapp.setOpenSessionsHigh(parsetInt(webapp.getOpenSessionsHighCount()));
+            webapp.setOpenSessionsCurrent(parsetInt(webapp.getOpenSessionsCurrentCount()));
+            webapp.setSessionsOpenedTotal(parsetInt(webapp.getSessionsOpenedTotalCount()));
+        }
         wlsWebappDao.save(componentRuntimes);
         List<WlsJms> jmsServers = inTimeData.getJmsServers();
         wlsJmsDao.save(jmsServers);
@@ -102,20 +107,28 @@ public class WlsService {
         resource.setRunServerNumber(jvmRuntimes.size()); //服务器数量
         resource.setServerNumber(sysrec.getServerNum()); //运行服务器数量
         if(StringUtils.isNotBlank(resource.getCpu())) { //CPU空闲
-            resource.setCpuIdle(Integer.parseInt(resource.getCpu()));
+            resource.setCpuIdle(Integer.parseInt(resource.getCpu().trim()));
         } else {
             resource.setCpuIdle(0);
         }
         resource.setOsType(sysrec.getOsType());
         if(StringUtils.isNotBlank(mem)) { //获取当前'M'之前的数值
-            resource.setMemFree(Integer.parseInt(mem.substring(0, mem.indexOf('M'))));
+            resource.setMemFree(mem.substring(0, mem.indexOf('M')));
         } else {
-            resource.setMemFree(0);
+            resource.setMemFree("0");
         }
         hisData.setWlsInTimeData(inTimeData);
         hisData.addWlsIntimeData(siteName, inTimeData);
         wlsResourceDao.save(resource);
 
+    }
+
+    private Integer parsetInt(String str) {
+        try{
+           return Integer.parseInt(str);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Transactional
@@ -125,7 +138,7 @@ public class WlsService {
         Resource resource = new Resource();
         resource.setResourceId(wlsServer.getServerName());
         resource.setResourceName(wlsServer.getServerName());
-        resource.setResourceType(ResourceType.APP_SERVER.toString());
+        resource.setResourceType(ResourceType.Weblogic.toString());
         resourcesService.saveResource(resource);
 
     }

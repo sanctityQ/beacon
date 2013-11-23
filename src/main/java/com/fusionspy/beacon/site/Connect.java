@@ -230,7 +230,7 @@ public class Connect{
 						out.write(buffer);
 						out.flush();
 
-                        if(buffer.length == 0)
+                        //if(buffer.length == 0)
                             buffer = new char[9];
 						// get length of response-xml
 						respLenCharCount = in.read(buffer, 0, 9);
