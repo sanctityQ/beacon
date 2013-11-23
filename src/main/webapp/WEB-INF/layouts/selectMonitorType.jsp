@@ -20,9 +20,7 @@
 <script type="text/javascript">
     var _val =   location.href.substring( location.href.lastIndexOf("/")+1);
     if(_val =="tuxedo")  {
-        $("#monitorType").find("optgroup:eq(0)").find("option:eq(0)").attr("selected","selected")
-    }else if(_val=="weblogic")  {
-        $("#monitorType").find("optgroup:eq(0)").find("option:eq(1)").attr("selected","selected")
+        $("#monitorType").find("optgroup:eq(0)").find("option:eq(0)").attr("selected","selected");
     }
     /*else if(_val=="addapp")  {
         $("#monitorType").find("optgroup:eq(1)").find("option").attr("selected","selected")

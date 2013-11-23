@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Tuxedo - 批量配置视图</title>
+    <title>Weblogic - 批量配置视图</title>
 
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
@@ -35,113 +35,49 @@
         });
         function delRow(e){
             var row = $(e).parent().parent();
-            var id = row.attr('id');
+            var rowId = row.attr('id');
+            var serverName = rowId.split('_')[1]
             msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-                delServer(id.substring(4),row);
+                delServer(serverName, row);
             });
         }
-        function updRow(e){
-            var rows = $(e).parent().parent();
-            var id = rows.attr('id');
-            location.href="${ctx}/appServer/view/tuxedo/"+id.substring(4);
-        }
+
         function batchDel(){
             var $g = $("#thresholdList div.grid_view > table");
             var selecteds = $("td.multiple :checked",$g);
             if(selecteds.length > 0){
                 msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
                     var checks = [];
+                    var serverNames = [];
                     selecteds.each(function(){
                         var rows = $(this).parent().parent();
-                        checks.push(rows.attr('id'));
-                        rows.remove();
+                        var rowId = rows.attr('id');
+                        serverNames.push(rowId.split('_')[1]);
+                        checks.push(rows);
                     });
-                    alert(checks);
-                    msgSuccess("系统消息", "操作成功，配置已删除！");
+                    delServer(serverNames, checks);
                 });
             }else{
                 msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
             }
         }
-        function viewRelevance(e){
-            var rows = $(e).parent().parent();
-            var id = rows.attr('id');
-            var name = rows.children("td").eq(1).text();
-            var title = "监视器使用阈值: " + name;
-            var temWin = $("body").window({
-                "id":"window",
-                "title":title,
-                "url":"thresholdEdit.html",
-                "hasIFrame":true,
-                "width": 740,
-                "height":440,
-                "diyButton":[{
-                    "id": "btOne",
-                    "btClass": "buttons",
-                    "value": "关闭",
-                    "onclickEvent" : "selectLear",
-                    "btFun": function() {
-                        temWin.closeWin();
-                    }
-                }
-                ]
-            });
-        }
 
-        function delServer(serverName,row){
+        function delServer(serverNames, rows){
             $.ajax({
                 type : "delete",
-                url : "${ctx}/appServer/delete/tuxedo/"+serverName,
+                url : "${ctx}/appServer/weblogic/delete/"+serverNames,
                 dataType : "text",
                 success : function(data) {
                     msgSuccess("系统消息", "操作成功，已删除！");
-                    row.remove();
+                    $(rows).each(function(i, row) {
+                        row.remove();
+                    });
                 },
                 error:function(){
                     msgFailed("系统消息", "操作失败，未被删除！");
                 }
             });
         }
-
-        function setTuxMergency(e){
-            var rows = $(e).parent().parent();
-            var id = rows.attr('id');
-            var temWin = $("body").window({
-                "id":"window",
-                "title":'数据保存设置',
-                "url":"${ctx}/appServer/tuxedo/setting/"+id.substring(4),
-                "hasIFrame":true,
-                "width": 740,
-                "height":240,
-                "diyButton":[{
-                    "id": "btOne",
-                    "btClass": "buttons",
-                    "value": "保存",
-                    "onclickEvent" : "selectLear",
-                    "btFun": function() {
-                        var form = $("#window_iframe").contents().find("#settingForm");
-                        form.ajaxForm(function(data) {
-                            if(data=='success'){
-                                msgSuccess("系统消息", "操作成功，配置已保存");
-                            }else{
-                                msgFailed("系统消息","操作失败");
-                            }
-                        }).submit();
-                        temWin.closeWin();
-                    }
-                },
-                    {
-                        "id": "btOne",
-                        "btClass": "buttons",
-                        "value": "关闭",
-                        "onclickEvent" : "selectLear",
-                        "btFun": function() {
-                            temWin.closeWin();
-                        }
-                    }
-                ]
-            });
-        };
     </script>
 </head>
 
@@ -151,14 +87,14 @@
     <div class="main">
         <ul class="crumbs">
             <li><a href="#">监视器</a> &gt;</li>
-            <li><b> Tuxedo - 批量配置视图 (总计<span id='g_count'></span>监视器)</b></li>
+            <li><b> Weblogic - 批量配置视图 (总计<span id='g_count'></span>监视器)</b></li>
         </ul>
         <div class="threshold_file">
             <h2 class="title2"><b>Weblogic列表视图</b></h2>
             <div class="tool_bar_top">
                <shiro:hasPermission name="admin">
                 <a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a>
-                <a href="${ctx}/addmonitor/server/tuxedo" class="add">新建Weblogic</a>
+                <a href="${ctx}/appServer/weblogic/addUI" class="add">新建Weblogic</a>
                </shiro:hasPermission>
             </div>
             <div id="thresholdList"></div>

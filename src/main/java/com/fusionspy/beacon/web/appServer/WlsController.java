@@ -12,6 +12,7 @@ import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.DefValue;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
+import com.sinosoft.one.mvc.web.annotation.rest.Delete;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
 import com.sinosoft.one.mvc.web.instruction.reply.Reply;
@@ -72,7 +73,7 @@ public class WlsController {
      * @param serverNames
      * @return
      */
-    @Get("delete/{serverNames}")
+    @Delete("delete/{serverNames}")
     public Reply delete(@Param("serverNames")List<String> serverNames) {
         message.put("result", true);
         for(String serverName : serverNames) {
@@ -96,6 +97,7 @@ public class WlsController {
             @Override
             public JsonGrid.JsonRow buildRow(WlsServer wlsServer) {
                 JsonGrid.JsonRow row = new JsonGrid.JsonRow();
+                row.setId(wlsServer.getServerName());
                 row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, viewUrl + wlsServer.getServerName(), wlsServer.getServerName()));
                 row.addCell(wlsServer.getListenAddress());
                 row.addCell(wlsServer.getListenPort()+"");
@@ -177,9 +179,9 @@ public class WlsController {
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         Iterator<WlsInTimeData> iterator = hisData.getIntimeDatasQue(serverName);
         Object retVal = null; //返回char数据对象，用于转化为JSON
-        if(type.equals("cpu")||type.equals("memory")){
+        if(type.equals("cpu")||type.equals("memory")){ //cpu使用率和内存使用率
             List<Object> list = new ArrayList<Object>(); //cpu和memory时，返回对象为数组形式
-            if(operation.equals("latest")){
+            if(operation.equals("latest")){ //最近一次
                 list.add(inTimeData.getResource().getRecTime().getTime());
                 if("cpu".equals(type)) {
                     //cpu使用率=100-cpu空闲率
@@ -188,7 +190,7 @@ public class WlsController {
                     //TODO 内存使用率取值 此时获取的是内存空闲
                     list.add(Double.parseDouble(inTimeData.getResource().getMemFree()));
                 }
-            }else{
+            }else{ //最近20次的记录
                 while(iterator.hasNext()) {
                     inTimeData = iterator.next();
                     Map<String, Object> point = new HashMap<String, Object>();
@@ -206,7 +208,7 @@ public class WlsController {
                 }
             }
             retVal = list;
-        } else if("server_ram".equals(type)){
+        } else if("server_ram".equals(type)){ //server内存使用率
             if(operation.equals("latest")){
                 List<Object> list = new ArrayList<Object>();
                 for(WlsJvm jvm : inTimeData.getJvmRuntimes()) {
@@ -241,7 +243,7 @@ public class WlsController {
                 }
                 retVal = series.values();
             }
-        } else if("server_throughput".equals(type)) {
+        } else if("server_throughput".equals(type)) { //server吞吐量
             if(operation.equals("latest")){
                 List<Object> list = new ArrayList<Object>();
                 for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
@@ -273,7 +275,7 @@ public class WlsController {
                 }
                 retVal = series.values();
             }
-        }  else if("thdusage".equals(type)) {
+        }  else if("thdusage".equals(type)) { //server线程信心
             if(operation.equals("latest")){
                 List<Object> list = new ArrayList<Object>();
                 for(WlsThread thread : inTimeData.getThreadPoolRuntimes()) {
@@ -305,7 +307,7 @@ public class WlsController {
                 }
                 retVal = series.values();
             }
-        }  else if("server_session".equals(type)) {
+        }  else if("server_session".equals(type)) {//session信息
             if(operation.equals("latest")){
                 List<Object> list = new ArrayList<Object>();
                 for(WlsWebapp webapp : inTimeData.getComponentRuntimes()) {
@@ -341,6 +343,12 @@ public class WlsController {
         return Replys.with(retVal).as(Json.class);
     }
 
+    /**
+     * 数据监控列表信息
+     * @param type
+     * @param serverName
+     * @return
+     */
     @Get("data/{type}/{serverName}")
     public Reply getInTimeData(@Param("type")String type,@Param("serverName")String serverName){
         WlsHisData hisData = monitorManage.getMonitorInf(serverName);

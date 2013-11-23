@@ -13,6 +13,7 @@
     <script type="text/javascript">
         var weblogicValidator; //生成校验器
         $(function() {
+            $("#monitorType").find("optgroup:eq(0)").find("option:eq(1)").attr("selected","selected");
             var editFlag = '${empty server}' == 'false';
             if(editFlag) {
                 $("#serverName").attr({"readonly":true});
@@ -35,7 +36,7 @@
                 data: data_,
                 success: function(data){
                     if(data.type == 'success') {
-                        window.location.href="${ctx}/appServer/weblogic/manage";
+                        window.location.href="${ctx}/appServer/weblogic/manager";
                     }
                 }
             });

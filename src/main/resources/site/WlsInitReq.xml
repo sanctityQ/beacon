@@ -1,1 +1,83 @@
-<?xml version="1.0" encoding="UTF-8"?><wlsagent><Domain name="baseDomain" adminAddress="115.28.16.154" adminPort="7001" principal="weblogic" password="weblogic10"/><MBean mBeanType="runtime" name="JVMRuntime"><attribute>HeapFreeCurrent</attribute><attribute>HeapSizeCurrent</attribute><attribute>HeapFreePercent</attribute></MBean><MBean mBeanType="runtime" name="ServerRuntime"><attribute>ActivationTime</attribute><attribute>HealthState</attribute><attribute>State</attribute><attribute>Name</attribute><attribute>OpenSocketsCurrentCount</attribute><attribute>WeblogicVersion</attribute><attribute>ListenAddress</attribute><attribute>ListenPort</attribute><attribute>RestartsTotalCount</attribute><attribute>State</attribute></MBean><MBean mBeanType="runtime" name="ExecuteQueueRuntime"><attribute>ExecuteThreadIdleCount</attribute><attribute>CompletedRequestCount</attribute><attribute>ExecuteThreadTotalCount</attribute><attribute>PendingUserRequestCount</attribute><attribute>QueueLength</attribute><attribute>StandbyThreadCount</attribute><attribute>Throughput</attribute></MBean><MBean mBeanType="runtime" name="JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans"><attribute>Name</attribute><attribute>ConnectionDelayTime</attribute><attribute>State</attribute><attribute>ActiveConnectionsCurrentCount</attribute><attribute>LeakedConnectionCount</attribute><attribute>FailuresToReconnectCount</attribute><attribute>ConnectionsTotalCount</attribute><attribute>CurrCapacity</attribute><attribute>PrepStmtCacheAccessCount</attribute><attribute>PrepStmtCacheHitCount</attribute></MBean><MBean mBeanType="runtime" name="ApplicationRuntimes.ComponentRuntimes"><attribute>Name</attribute><attribute>DeploymentState</attribute><attribute>ComponentName</attribute><attribute>Status</attribute><attribute>OpenSessionsHighCount</attribute><attribute>OpenSessionsCurrentCount</attribute><attribute>SessionsOpenedTotalCount</attribute></MBean><MBean mBeanType="runtime" name="ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.PoolRuntime"><attribute>Name</attribute><attribute>BeansInUseCount</attribute><attribute>BeansInUseCurrentCount</attribute><attribute>AccessTotalCount</attribute><attribute>DestroyedTotalCount</attribute><attribute>IdleBeansCount</attribute><attribute>MissTotalCount</attribute><attribute>PooledBeansCurrentCount</attribute><attribute>TimeoutTotalCount</attribute><attribute>WaiterCurrentCount</attribute></MBean><MBean mBeanType="runtime" name="ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime"><attribute>Name</attribute><attribute>CacheAccessCount</attribute><attribute>ActivationCount</attribute><attribute>CachedBeansCurrentCount</attribute><attribute>CacheHitCount</attribute><attribute>CacheMissCount</attribute><attribute>PassivationCount</attribute></MBean><MBean mBeanType="runtime" name="JMSRuntime.JMSServers"><attribute>Name</attribute><attribute>BytesCurrentCount</attribute><attribute>BytesHighCount</attribute><attribute>BytesPendingCount</attribute><attribute>BytesReceivedCount</attribute><attribute>MessagesCurrentCount</attribute><attribute>MessagesHighCount</attribute><attribute>MessagesPendingCount</attribute><attribute>MessagesReceivedCount</attribute></MBean></wlsagent>
+<?xml version="1.0" encoding="UTF-8"?>
+<wlsagent>
+    <Domain name="baseDomain" adminAddress="115.28.16.154" adminPort="7001" principal="weblogic" password="weblogic10"/>
+    <MBean mBeanType="runtime" name="JVMRuntime">
+        <attribute>HeapFreeCurrent</attribute>
+        <attribute>HeapSizeCurrent</attribute>
+        <attribute>HeapFreePercent</attribute>
+    </MBean>
+    <MBean mBeanType="runtime" name="ServerRuntime">
+        <attribute>ActivationTime</attribute>
+        <attribute>HealthState</attribute>
+        <attribute>State</attribute>
+        <attribute>Name</attribute>
+        <attribute>OpenSocketsCurrentCount</attribute>
+        <attribute>WeblogicVersion</attribute>
+        <attribute>ListenAddress</attribute>
+        <attribute>ListenPort</attribute>
+        <attribute>RestartsTotalCount</attribute>
+        <attribute>State</attribute>
+    </MBean>
+    <MBean mBeanType="runtime" name="ExecuteQueueRuntime">
+        <attribute>ExecuteThreadIdleCount</attribute>
+        <attribute>CompletedRequestCount</attribute>
+        <attribute>ExecuteThreadTotalCount</attribute>
+        <attribute>PendingUserRequestCount</attribute>
+        <attribute>QueueLength</attribute>
+        <attribute>StandbyThreadCount</attribute>
+        <attribute>Throughput</attribute>
+    </MBean>
+    <MBean mBeanType="runtime" name="JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans">
+        <attribute>Name</attribute>
+        <attribute>ConnectionDelayTime</attribute>
+        <attribute>State</attribute>
+        <attribute>ActiveConnectionsCurrentCount</attribute>
+        <attribute>LeakedConnectionCount</attribute>
+        <attribute>FailuresToReconnectCount</attribute>
+        <attribute>ConnectionsTotalCount</attribute>
+        <attribute>CurrCapacity</attribute>
+        <attribute>PrepStmtCacheAccessCount</attribute>
+        <attribute>PrepStmtCacheHitCount</attribute>
+    </MBean>
+    <MBean mBeanType="runtime" name="ApplicationRuntimes.ComponentRuntimes">
+        <attribute>Name</attribute>
+        <attribute>DeploymentState</attribute>
+        <attribute>ComponentName</attribute>
+        <attribute>Status</attribute>
+        <attribute>OpenSessionsHighCount</attribute>
+        <attribute>OpenSessionsCurrentCount</attribute>
+        <attribute>SessionsOpenedTotalCount</attribute>
+    </MBean>
+    <MBean mBeanType="runtime" name="ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.PoolRuntime">
+        <attribute>Name</attribute>
+        <attribute>BeansInUseCount</attribute>
+        <attribute>BeansInUseCurrentCount</attribute>
+        <attribute>AccessTotalCount</attribute>
+        <attribute>DestroyedTotalCount</attribute>
+        <attribute>IdleBeansCount</attribute>
+        <attribute>MissTotalCount</attribute>
+        <attribute>PooledBeansCurrentCount</attribute>
+        <attribute>TimeoutTotalCount</attribute>
+        <attribute>WaiterCurrentCount</attribute>
+    </MBean>
+    <MBean mBeanType="runtime" name="ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime">
+        <attribute>Name</attribute>
+        <attribute>CacheAccessCount</attribute>
+        <attribute>ActivationCount</attribute>
+        <attribute>CachedBeansCurrentCount</attribute>
+        <attribute>CacheHitCount</attribute>
+        <attribute>CacheMissCount</attribute>
+        <attribute>PassivationCount</attribute>
+    </MBean>
+    <MBean mBeanType="runtime" name="JMSRuntime.JMSServers">
+        <attribute>Name</attribute>
+        <attribute>BytesCurrentCount</attribute>
+        <attribute>BytesHighCount</attribute>
+        <attribute>BytesPendingCount</attribute>
+        <attribute>BytesReceivedCount</attribute>
+        <attribute>MessagesCurrentCount</attribute>
+        <attribute>MessagesHighCount</attribute>
+        <attribute>MessagesPendingCount</attribute>
+        <attribute>MessagesReceivedCount</attribute>
+    </MBean>
+</wlsagent>
