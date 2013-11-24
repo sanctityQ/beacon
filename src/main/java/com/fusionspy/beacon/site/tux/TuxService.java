@@ -81,20 +81,6 @@ public class TuxService {
     private ActionService actionService;
 
 
-
-    /**
-     * process init data
-     * @param tuxIniData
-     */
-    @Transactional
-    public int processInitData(TuxIniData tuxIniData) {
-        SysrecsEntity sysrecsEntity = tuxIniData.getSysrecsEntity();
-        sysrecsEntity.setRectime(new Date());
-        sysrecsEntity.setSiteName(tuxIniData.getSiteName());
-        return systemService.saveSysRec(sysrecsEntity);
-    }
-
-
     /**
      * process intime data
      * @param siteName
@@ -117,6 +103,12 @@ public class TuxService {
 
         return new ProcessData(siteName,period,prvData,siteSettings).process().log(siteName);//.alarm(siteSettings.getAlertType());
     }
+
+    Attribute getAttribute(String siteName,AttributeName attributeName){
+        Resource resource = resourcesCache.getResource(siteName);
+        return attributeCache.getAttribute(resource.getResourceType(), attributeName.name());
+    }
+
 
     private class ProcessData {
 
@@ -534,7 +526,7 @@ public class TuxService {
         return back;
     }
 
-    private void alarmMessage(Resource resource,Attribute attribute,String siteName, SeverityLevel severityLevel,String message){
+     void alarmMessage(Resource resource,Attribute attribute,String siteName, SeverityLevel severityLevel,String message){
         if(attribute==null||severityLevel == SeverityLevel.UNKNOWN ||StringUtils.isBlank(message))
             return;
         Alarm alarm = new Alarm(UUID.randomUUID().toString().replaceAll("-", ""));

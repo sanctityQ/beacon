@@ -39,10 +39,11 @@ public class TuxDataRepository implements MonitorDataRepository {
     @Override
     public TuxIniData getInitData(String siteName, String ip, int port) {
         String initXml = connect.startSiteThread("", siteName, ip, port, 0);
-        logger.debug("get initXml Xml: {}", initXml);
+        logger.debug("siteName is {}, ip is {}, get initXml Xml: {}",new Object[]{ siteName,ip,initXml});
         TuxIniData tuxIniData =  iniBinder.fromXml(initXml);
+        tuxIniData.setSiteName(siteName);
         tuxIniData.setSysrecsDao(sysrecsDao);
-        return  tuxIniData;
+        return tuxIniData;
     }
 
     @Override

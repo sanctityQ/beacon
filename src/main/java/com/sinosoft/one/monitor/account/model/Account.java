@@ -144,7 +144,8 @@ public class Account  implements java.io.Serializable {
     public void setName(String name) {
     this.name = Strings.nullToEmpty(name);
     }
-    @Temporal(TemporalType.DATE)
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="CREATE_TIME", length=7)
     public Date getCreateTime() {
     return this.createTime;

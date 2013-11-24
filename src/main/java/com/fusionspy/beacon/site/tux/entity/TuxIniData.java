@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.Date;
 
 /**
  * tux ini data
@@ -46,9 +47,20 @@ public class TuxIniData extends MonitorData implements InitData {
         this.sysrecsEntity = sysrecsEntity;
     }
 
+    public boolean isStop(){
+        if(this.getTuxError()!=null&& StringUtils.isNotBlank(this.getTuxError().getError())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     @Override
     public void process() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        isStop();
+        sysrecsEntity.setSiteName(this.getSiteName());
+        sysrecsEntity.setRectime(new java.util.Date());
+        sysrecsDao.save(sysrecsEntity);
     }
 
     public void setSysrecsDao(SysrecsDao sysrecsDao) {

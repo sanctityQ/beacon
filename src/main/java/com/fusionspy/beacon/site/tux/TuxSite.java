@@ -1,11 +1,14 @@
 package com.fusionspy.beacon.site.tux;
 
+import com.fusionspy.beacon.site.AlarmMessageFormat;
 import com.fusionspy.beacon.site.InTimeData;
 import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
 import com.fusionspy.beacon.site.tux.entity.TuxIniData;
+import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -38,28 +41,20 @@ public class TuxSite extends MonitorSite{
     protected void recordInitData(InitData initData) {
 
         TuxIniData tuxIniData = (TuxIniData) initData;
-        tuxIniData.setSiteName(getSiteName());
         tuxHisData.setTuxIniData(tuxIniData);
 
-        //初始化数据返回有tuxedo失败信息
-        if(tuxHisData.isTuxedoStop()){
-            tuxHisData.setTuxIniData(TuxIniData.EMPTY);
-            tuxHisData.setTuxInTimeData(TuxInTimeData.EMPTY);
+        //初始化数据返回有Tuxedo无正常启动的信息
+        if(tuxIniData.isStop()){
+            this.resource = this.resourcesCache.getResource(this.getSiteName());
+            this.alarmAttribute = this.attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
+            tuxHisData.getProcessResult().setStopServer(true,this.getSiteName());
+            this.tuxService.alarmMessage(resource,alarmAttribute,this.getSiteName(), SeverityLevel.CRITICAL,
+                    tuxHisData.getProcessResult().getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_STOP));
+            //tuxHisData.setTuxIniData(TuxIniData.EMPTY);
             throw new IllegalStateException("被监控Tuxedo系统并无运行，请检查");
         }
 
-        initData.process();
-        tuxService.processInitData(tuxIniData);
-//       tuxHisData.setMonitorCount(++monitorCount);
-
     }
-
-//    private void iniHisData(){
-//         if(tuxHisData == null) {
-//             tuxHisData = new TuxHisData(this.getSiteName());
-//             tuxHisData.setTuxInTimeData(new TuxInTimeData());
-//         }
-//    }
 
 
     @Override
@@ -68,14 +63,11 @@ public class TuxSite extends MonitorSite{
 
         TuxInTimeData thisData = (TuxInTimeData)inTimeData;
         this.tuxHisData.setTuxInTimeData(thisData);
-        if(tuxHisData.isTuxedoStop()){
-            return;
-        }
+//        if(tuxHisData.isTuxedoStop()){
+//            return;
+//        }
         //first load
-        // iniHisData();
         tuxService.processInTimeData(this.getSiteName(),this.getPeriod(),tuxHisData);
-        //record monitorData
-//        tuxHisData.setMonitorCount(++monitorCount);
     }
 
     @Override

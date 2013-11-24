@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class ProcessInTimeResult {
 
-    private static Logger logger = LoggerFactory.getLogger(ProcessInTimeResult.class);
+  //  private static Logger logger = LoggerFactory.getLogger(ProcessInTimeResult.class);
 
     public static final ProcessInTimeResult EMPTY;
 
@@ -270,7 +270,7 @@ public class ProcessInTimeResult {
     private void logMessage(String siteName, String message) {
 
         //log
-        logger.info(message);
+        //logger.info(message);
         //message add queue
         siteInfoLogger.logInf(siteName, message);
     }

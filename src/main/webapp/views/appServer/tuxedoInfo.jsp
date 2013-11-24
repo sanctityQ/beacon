@@ -6,734 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Tuxedo站点</title>
 <%@include file="/WEB-INF/layouts/base.jsp" %>
-<script type="text/javascript">
-
-//需要将当前页面的刷新间隔时间调整为从站点对象中动态获取
-var interval = ${interval};
-$(function(){
-    var autoWidth = $("#layout_center").width() - 100;
-    $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth)
-    $("#cipan_space_detail").width(autoWidth + 65)
-
-    $("#tabs").tabs({closeTab:false});
-    var toggle = new DataState().start();
-    $("#state_tab").click(function(){setTimeout(toggle.stateShow,50)});
-    $("#data_tab").click(function(){setTimeout(toggle.dataShow,50)});
-    if($.browser.msie && ($.browser.version == "7.0")){
-        var center = $("#layout_center")
-        $("#main").width(center.width() - 31).height(center.height() - 30)
-    };
-
-
-    //cpu chart
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'CPU_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/cpu/${serverName}/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(back.length ==0)
-                                    return;
-                                if(series.data.length < 20){
-                                    series.addPoint(back, true, false);
-                                }
-                                else{
-                                    series.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, interval*1000);
-                }
-            }
-        },
-
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值%'
-            }
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'%';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: 'CPU使用率',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/cpu/${serverName}/123",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#87bdc9']
-    });
-
-
-
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'RAM_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/memory/${serverName}/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(back.length ==0)
-                                    return;
-                                if(series.data.length < 20){
-                                    series.addPoint(back, true, false);
-                                }
-                                else{
-                                    series.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, interval*1000);
-                }
-            }
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值M'
-            }
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'M';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: '物理内存剩余',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/memory/${serverName}/all",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#769f5d']
-    });
-
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'client_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-
-                    // set up the updating of the chart each second
-                    var series0 = this.series[0];
-                    var series1 = this.series[1];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/latest/total",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(back.length ==0)
-                                    return;
-                                if(series0.data.length < 20){
-                                    series0.addPoint(back, true, false);
-                                }
-                                else{
-                                    series0.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, interval*1000);
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/latest/busy",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(back.length ==0)
-                                    return;
-                                if(series1.data.length < 20){
-                                    series1.addPoint(back, true, false);
-                                }
-                                else{
-                                    series1.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, interval*1000);
-                }
-            }
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值'
-            },
-            min:0,
-            tickInterval: 1
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'M';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: '全部客户端',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/all/total",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        },{
-            name: '繁忙客户端',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/all/busy",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#e77c52']
-    });
-
-
-
-    //吞吐量
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'throughput_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:"${ctx}/appServer/tuxedo/chart/thoughtPut/${serverName}/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(back.length ==0)
-                                    return;
-                                if(series.data.length < 20){
-                                    series.addPoint(back, true, false);
-                                }
-                                else{
-                                    series.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, interval*1000);
-                }
-            }
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值'
-            },
-            min:0,
-            tickInterval: 0.5
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y;
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: '吞吐量',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:"${ctx}/appServer/tuxedo/chart/thoughtPut/${serverName}/all",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#ffa200']
-    });
-
-});
-
-
-var TAB_STATE = {data:0,state:1};
-/**
-* DataState 数据状态对象
-* @constructor
- */
-var DataState = function(){}
-DataState.prototype.init = function(refreshId){
-    var _target = this;
-    this.switch = $(refreshId);
-    this.switch.click(
-            function () {
-                _target.toggle(_target);
-            });
-   // $(refreshId).trigger('click');
-}
-
-DataState.prototype.start = function(){
-    //--状态监控---
-
-    var dynamic_ = {state:[],data:[]}
-    dynamic_.state.push(new TransTop());
-    dynamic_.state.push(new EmergencyMsg());
-    dynamic_.state.push(new QueueTop());
-    dynamic_.state.push(new RamTop());
-
-    dynamic_.data.push(new Server());
-    dynamic_.data.push(new Queue());
-    dynamic_.data.push(new Client());
-    dynamic_.data.push(new System());
-    $(dynamic_.state).each(function(){
-      //  this.init();
-        this.run();
-        this.start();
-    })
-    return {
-        stateShow: function () {
-            $(dynamic_.state).each(function () {
-                this.run();
-                this.start();
-            });
-            $(dynamic_.data).each(function () {
-                this.cancel();
-            })
-        },
-        dataShow: function () {
-            $(dynamic_.state).each(function () {
-                this.cancel();
-            });
-            $(dynamic_.data).each(function () {
-                this.run();
-                this.start();
-            })
-        }
-    }
-//    return function(){
-//        $(dynamic_.state).each(function(){
-//            this.toggle();
-//        })
-//        $(dynamic_.data).each(function(){
-//            this.toggle();
-//        })
-//    }
-
-//    return dynamic_;
-//    $(this.state).each(function(){
-//        this.start();
-//    })
-
-//    (new TransTop()).start();
-//    (new EmergencyMsg()).start();
-//    (new QueueTop()).start();
-//    (new RamTop()).start();
-
-    //---数据监控---
-//    (new Server()).start();
-//    (new Queue()).start();
-//    (new Client()).start();
-//    (new System()).start();
-}
-
-DataState.prototype.toggle = function(obj){
-    if(obj.intervalId){
-        obj.cancel();
-    }else{
-        obj.run();
-    }
-}
-DataState.prototype.run = function(){
-    this.switch.removeClass('refresh').addClass('refresh_dynamic')
-    this.intervalId = setInterval(this.start,1000 * interval);
-}
-DataState.prototype.cancel = function(){
-    this.switch.removeClass('refresh_dynamic').addClass('refresh')
-    clearInterval(this.intervalId);
-    this.intervalId = null;
-}
-var TransTop = function(){
-    this.init('#transTopRefresh');
-};
-TransTop.prototype = new DataState();
-TransTop.prototype.start = function () {
-    $("#trade_top5").empty();
-    $("#trade_top5").Grid({
-        url: "${ctx}/appServer/tuxedo/transcation/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable: false,
-        height: "auto",
-        colums: [
-            {id: '1', text: '排名', name: "sort", index: '1', align: ''},
-            {id: '2', text: 'rqdone', name: "rqdone", index: '1', align: ''},
-            {id: '3', text: 'progname', name: "progname", index: '1', align: ''},
-            {id: '4', text: 'pid', name: "pid", index: '1', align: ''}
-        ],
-        rowNum: 10,
-        pager: false,
-        number: false,
-        multiselect: false
-    });
-}
-var RamTop = function(){
-    this.init('#memTopRefresh');
-};
-RamTop.prototype = new DataState();
-RamTop.prototype.start = function(){
-    $("#RAM_top5").empty();
-    $("#RAM_top5").Grid({
-        url : "${ctx}/appServer/tuxedo/memory/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'排名',name:"sort",index:'1',align:''},
-            {id:'2',text:'PID',name:"pid",index:'1',align:''},
-            {id:'3',text:'使用内存',name:"used",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-}
-
-var QueueTop = function(){
-    this.init('#queTopRefresh');
-};
-QueueTop.prototype = new DataState();
-QueueTop.prototype.start = function(){
-    $("#rank_top").empty();
-    $("#rank_top").Grid({
-        url : "${ctx}/appServer/tuxedo/queue/top/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'排名',name:"sort",index:'1',align:''},
-            {id:'2',text:'名称',name:"name",index:'1',align:''},
-            {id:'3',text:'队列消息数',name:"queued",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-}
-
-var EmergencyMsg = function(){
-    this.init('#emergencyRefresh');
-};
-EmergencyMsg.prototype = new DataState();
-EmergencyMsg.prototype.start = function(){
-    $("#emergencyList").empty();
-    $("#emergencyList").Grid({
-        url : "${ctx}/alarm/manager/resource/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        colums:[
-            {id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
-            {id:'2',text:'消息',name:"appellation",index:'1',align:'',width:'420'},
-            {id:'5',text:'时间',name:"appellation",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : false,
-        number:false,
-        multiselect: false
-    });
-}
-
-/**
-* Server对象
-* @constructor
-*/
-var Server = function(){
-    this.init('#serverRefresh');
-};
-Server.prototype = new DataState();
-Server.prototype.start = function(){
-    $("#tuxSERVER").empty();
-    $("#tuxSERVER").Grid({
-        url : "${ctx}/appServer/tuxedo/data/server/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        searchClass:"serverRefreshInput",
-        searchBtn:"serverRefreshButton",
-        colums:[
-            {id:'1',text:'Server',name:"server",index:'1',align:''},
-            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
-            {id:'3',text:'ProcessID',name:"processId",index:'1',align:''},
-            {id:'4',text:'Rpdone',name:"rqDone",index:'1',align:''},
-            {id:'5',text:'CurrSvc',name:"currentSvc",index:'1',align:''},
-            {id:'6',text:'SvrMin',name:"svrMin",index:'1',align:''},
-            {id:'7',text:'SvrMax',name:"svrMax",index:'1',align:''},
-            {id:'8',text:'UseMem',name:"memUsed",index:'1',align:''},
-            {id:'9',text:'UseCPU',name:"cpuUsed",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-}
-var Queue = function(){
-    this.init('#queRefresh');
-}
-Queue.prototype = new DataState();
-Queue.prototype.constructor =  Queue;
-Queue.prototype.start = function(){
-    $("#tuxQUEUE").empty();
-    $("#tuxQUEUE").Grid({
-        url : "${ctx}/appServer/tuxedo/data/queue/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        searchClass:"queRefreshInput",
-        searchBtn:"queRefreshButton",
-        colums:[
-            {id:'1',text:'Server',name:"server",index:'1',align:''},
-            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
-            {id:'3',text:'SrvCnt',name:"srvCnt",index:'1',align:''},
-            {id:'4',text:'Queued',name:"queued",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-}
-
-var Client = function(){
-    this.init('#cltRefresh');
-}
-Client.prototype = new DataState();
-Client.prototype.start = function(){
-    $("#tuxCLIENT").empty();
-    $("#tuxCLIENT").Grid({
-        url : "${ctx}/appServer/tuxedo/data/client/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        searchClass:"cltRefreshInput",
-        searchBtn:"cltRefreshButton",
-        colums:[
-            {id:'1',text:'Name',name:"name",index:'1',align:''},
-            {id:'2',text:'ClentPID',name:"pid",index:'1',align:''},
-            {id:'3',text:'ClentAddr',name:"addr",index:'1',align:''},
-            {id:'4',text:'Status',name:"status",index:'1',align:''},
-            {id:'5',text:'Contime',name:"conTime",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-}
-
-var System = function(){
-    this.init('#sysRefresh');
-};
-System.prototype = new DataState();
-System.prototype.start = function(){
-    $("#tuxSYSTEM").empty();
-    $("#tuxSYSTEM").Grid({
-        url : "${ctx}/appServer/tuxedo/data/system/${serverName}",
-        dataType: "json",
-        colDisplay: false,
-        clickSelect: true,
-        draggable:false,
-        height: "auto",
-        searchClass:"sysRefreshInput",
-        searchBtn:"sysRefreshButton",
-        colums:[
-            {id:'1',text:'CoreFind',name:"coreFind",index:'1',align:''},
-            {id:'2',text:'ErrorFind',name:"errorFind",index:'1',align:''},
-            {id:'3',text:'WarnFind',name:"warnFind",index:'1',align:''},
-            {id:'4',text:'LargueFind',name:"largueFile",index:'1',align:''},
-            {id:'5',text:'FreeMem',name:"freeMem",index:'1',align:''},
-            {id:'6',text:'IdleCPU',name:"idleCPU",index:'1',align:''},
-            {id:'7',text:'SvrCnt',name:"svrCnt",index:'1',align:''},
-            {id:'8',text:'QueCnt',name:"queCnt",index:'1',align:''},
-            {id:'9',text:'CltCnt',name:"cltCnt",index:'1',align:''}
-        ],
-        rowNum:10,
-        pager : true,
-        number:false,
-        multiselect: false
-    });
-}
-</script>
 </head>
 
 <body>
@@ -949,7 +221,9 @@ System.prototype.start = function(){
 <%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>
-<script>
+<script type="text/javascript">
+//需要将当前页面的刷新间隔时间调整为从站点对象中动态获取
+var interval = ${interval};
 
     function getServerLatestData(){
         $.ajax({
@@ -998,4 +272,731 @@ System.prototype.start = function(){
         $('#errorMsg').html(agentStopMessage)
         $('#errorMsg').fadeIn();
     </c:if>
+
+
+$(function(){
+    var autoWidth = $("#layout_center").width() - 100;
+    $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth)
+    $("#cipan_space_detail").width(autoWidth + 65)
+
+    $("#tabs").tabs({closeTab:false});
+    var toggle = new DataState().start();
+    $("#state_tab").click(function(){setTimeout(toggle.stateShow,50)});
+    $("#data_tab").click(function(){setTimeout(toggle.dataShow,50)});
+    if($.browser.msie && ($.browser.version == "7.0")){
+        var center = $("#layout_center")
+        $("#main").width(center.width() - 31).height(center.height() - 30)
+    };
+
+
+    //cpu chart
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'CPU_line',
+            type: 'line',
+            height:230,
+            events: {
+                load: function() {
+
+                    // set up the updating of the chart each second
+                    var series = this.series[0];
+                    //update chart data
+                    setInterval(function() {
+                        $.ajax({
+                            url:"${ctx}/appServer/tuxedo/chart/cpu/${serverName}/latest",
+                            cache:false,
+                            async:false,
+                            success:function(back){
+                                if(back.length ==0)
+                                    return;
+                                if(series.data.length < 20){
+                                    series.addPoint(back, true, false);
+                                }
+                                else{
+                                    series.addPoint(back, true, true);
+                                }
+                            }
+                        })
+                    }, interval*1000);
+                }
+            }
+        },
+
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: '值%'
+            },min:0
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'%';
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                marker:{
+                    enabled:false
+                }
+            }
+        },
+        credits: {
+            text: '',
+            href: ''
+        },
+        series: [{
+            name: 'CPU使用率',
+            data: (function() {
+                // generate an array of random data
+                var data = [];
+                $.ajax({
+                    url:"${ctx}/appServer/tuxedo/chart/cpu/${serverName}/123",
+                    cache:false,
+                    async:false,
+                    success:function(back){
+                        data = back;
+                    }
+                })
+                return data;
+            })()
+        }],
+        colors: ['#87bdc9']
+    });
+
+
+
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'RAM_line',
+            type: 'line',
+            height:230,
+            events: {
+                load: function() {
+
+                    // set up the updating of the chart each second
+                    var series = this.series[0];
+                    //update chart data
+                    setInterval(function() {
+                        $.ajax({
+                            url:"${ctx}/appServer/tuxedo/chart/memory/${serverName}/latest",
+                            cache:false,
+                            async:false,
+                            success:function(back){
+                                if(back.length ==0)
+                                    return;
+                                if(series.data.length < 20){
+                                    series.addPoint(back, true, false);
+                                }
+                                else{
+                                    series.addPoint(back, true, true);
+                                }
+                            }
+                        })
+                    }, interval*1000);
+                }
+            }
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: '值M'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'M';
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                marker:{
+                    enabled:false
+                }
+            }
+        },
+        credits: {
+            text: '',
+            href: ''
+        },
+        series: [{
+            name: '物理内存剩余',
+            data: (function() {
+                // generate an array of random data
+                var data = [];
+                $.ajax({
+                    url:"${ctx}/appServer/tuxedo/chart/memory/${serverName}/all",
+                    cache:false,
+                    async:false,
+                    success:function(back){
+                        data = back;
+                    }
+                })
+                return data;
+            })()
+        }],
+        colors: ['#769f5d']
+    });
+
+
+    //吞吐量
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'throughput_line',
+            type: 'line',
+            height:230,
+            events: {
+                load: function() {
+                    // set up the updating of the chart each second
+                    var series = this.series[0];
+                    //update chart data
+                    setInterval(function() {
+                        $.ajax({
+                            url:"${ctx}/appServer/tuxedo/chart/thoughtPut/${serverName}/latest",
+                            cache:false,
+                            async:false,
+                            success:function(back){
+                                if(back.length ==0)
+                                    return;
+                                if(series.data.length < 20){
+                                    series.addPoint(back, true, false);
+                                }
+                                else{
+                                    series.addPoint(back, true, true);
+                                }
+                            }
+                        })
+                    }, interval*1000);
+                }
+            }
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: '值'
+            },
+            min:0,
+            allowDecimals:false
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y;
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                marker:{
+                    enabled:false
+                }
+            }
+        },
+        credits: {
+            text: '',
+            href: ''
+        },
+        series: [{
+            name: '吞吐量',
+            data: (function() {
+                // generate an array of random data
+                var data = [];
+                $.ajax({
+                    url:"${ctx}/appServer/tuxedo/chart/thoughtPut/${serverName}/all",
+                    cache:false,
+                    async:false,
+                    success:function(back){
+                        data = back;
+                    }
+                })
+                return data;
+            })()
+        }],
+        colors: ['#ffa200']
+    });
+
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'client_line',
+            type: 'line',
+            height:230,
+            events: {
+                load: function() {
+
+                    // set up the updating of the chart each second
+                    var series0 = this.series[0];
+                    var series1 = this.series[1];
+                    //update chart data
+                    setInterval(function() {
+                        $.ajax({
+                            url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/latest/total",
+                            cache:false,
+                            async:false,
+                            success:function(back){
+                                if(back.length ==0)
+                                    return;
+                                if(series0.data.length < 20){
+                                    series0.addPoint(back, true, false);
+                                }
+                                else{
+                                    series0.addPoint(back, true, true);
+                                }
+                            }
+                        })
+                    }, interval*1000);
+                    setInterval(function() {
+                        $.ajax({
+                            url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/latest/busy",
+                            cache:false,
+                            async:false,
+                            success:function(back){
+                                if(back.length ==0)
+                                    return;
+                                if(series1.data.length < 20){
+                                    series1.addPoint(back, true, false);
+                                }
+                                else{
+                                    series1.addPoint(back, true, true);
+                                }
+                            }
+                        })
+                    }, interval*1000);
+                }
+            }
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: '值'
+            },
+            min:0,
+            allowDecimals:false
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y;
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true,
+                marker:{
+                    enabled:false
+                }
+            }
+        },
+        credits: {
+            text: '',
+            href: ''
+        },
+        series: [{
+            name: '全部客户端',
+            data: (function() {
+                // generate an array of random data
+                var data = [];
+                $.ajax({
+                    url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/all/total",
+                    cache:false,
+                    async:false,
+                    success:function(back){
+                        data = back;
+                    }
+                })
+                return data;
+            })()
+        },{
+            name: '繁忙客户端',
+            data: (function() {
+                // generate an array of random data
+                var data = [];
+                $.ajax({
+                    url:"${ctx}/appServer/tuxedo/chart/client/${serverName}/all/busy",
+                    cache:false,
+                    async:false,
+                    success:function(back){
+                        data = back;
+                    }
+                })
+                return data;
+            })()
+        }],
+        colors: ['#00B58A','#F80B28']
+    });
+
+
+
+
+
+});
+
+
+var TAB_STATE = {data:0,state:1};
+/**
+ * DataState 数据状态对象
+ * @constructor
+ */
+var DataState = function(){}
+DataState.prototype.init = function(refreshId){
+    var _target = this;
+    this.switch = $(refreshId);
+    this.switch.click(
+            function () {
+                _target.toggle(_target);
+            });
+    // $(refreshId).trigger('click');
+}
+
+DataState.prototype.start = function(){
+    //--状态监控---
+
+    var dynamic_ = {state:[],data:[]}
+    dynamic_.state.push(new TransTop());
+    dynamic_.state.push(new EmergencyMsg());
+    dynamic_.state.push(new QueueTop());
+    dynamic_.state.push(new RamTop());
+
+    dynamic_.data.push(new Server());
+    dynamic_.data.push(new Queue());
+    dynamic_.data.push(new Client());
+    dynamic_.data.push(new System());
+    $(dynamic_.state).each(function(){
+        //  this.init();
+        this.run();
+        this.start();
+    })
+    return {
+        stateShow: function () {
+            $(dynamic_.state).each(function () {
+                this.run();
+                this.start();
+            });
+            $(dynamic_.data).each(function () {
+                this.cancel();
+            })
+        },
+        dataShow: function () {
+            $(dynamic_.state).each(function () {
+                this.cancel();
+            });
+            $(dynamic_.data).each(function () {
+                this.run();
+                this.start();
+            })
+        }
+    }
+//    return function(){
+//        $(dynamic_.state).each(function(){
+//            this.toggle();
+//        })
+//        $(dynamic_.data).each(function(){
+//            this.toggle();
+//        })
+//    }
+
+//    return dynamic_;
+//    $(this.state).each(function(){
+//        this.start();
+//    })
+
+//    (new TransTop()).start();
+//    (new EmergencyMsg()).start();
+//    (new QueueTop()).start();
+//    (new RamTop()).start();
+
+    //---数据监控---
+//    (new Server()).start();
+//    (new Queue()).start();
+//    (new Client()).start();
+//    (new System()).start();
+}
+
+DataState.prototype.toggle = function(obj){
+    if(obj.intervalId){
+        obj.cancel();
+    }else{
+        obj.run();
+    }
+}
+DataState.prototype.run = function(){
+    this.switch.removeClass('refresh').addClass('refresh_dynamic')
+    this.intervalId = setInterval(this.start,1000 * interval);
+}
+DataState.prototype.cancel = function(){
+    this.switch.removeClass('refresh_dynamic').addClass('refresh')
+    clearInterval(this.intervalId);
+    this.intervalId = null;
+}
+var TransTop = function(){
+    this.init('#transTopRefresh');
+};
+TransTop.prototype = new DataState();
+TransTop.prototype.start = function () {
+    $("#trade_top5").empty();
+    $("#trade_top5").Grid({
+        url: "${ctx}/appServer/tuxedo/transcation/top/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable: false,
+        height: "auto",
+        colums: [
+            {id: '1', text: '排名', name: "sort", index: '1', align: ''},
+            {id: '2', text: '交易执行次数', name: "rqdone", index: '1', align: ''},
+            {id: '3', text: '进程名称', name: "progname", index: '1', align: ''},
+            {id: '4', text: '进程号', name: "pid", index: '1', align: ''}
+        ],
+        pager: false,
+        number: false,
+        multiselect: false
+    });
+}
+var RamTop = function(){
+    this.init('#memTopRefresh');
+};
+RamTop.prototype = new DataState();
+RamTop.prototype.start = function(){
+    $("#RAM_top5").empty();
+    $("#RAM_top5").Grid({
+        url : "${ctx}/appServer/tuxedo/memory/top/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'排名',name:"sort",index:'1',align:''},
+            {id:'2',text:'进程号',name:"pid",index:'1',align:''},
+            {id:'3',text:'使用内存（页）',name:"used",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : false,
+        number:false,
+        multiselect: false
+    });
+}
+
+var QueueTop = function(){
+    this.init('#queTopRefresh');
+};
+QueueTop.prototype = new DataState();
+QueueTop.prototype.start = function(){
+    $("#rank_top").empty();
+    $("#rank_top").Grid({
+        url : "${ctx}/appServer/tuxedo/queue/top/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'排名',name:"sort",index:'1',align:''},
+            {id:'2',text:'名称',name:"name",index:'1',align:''},
+            {id:'3',text:'队列消息数',name:"queued",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : false,
+        number:false,
+        multiselect: false
+    });
+}
+
+var EmergencyMsg = function(){
+    this.init('#emergencyRefresh');
+};
+EmergencyMsg.prototype = new DataState();
+EmergencyMsg.prototype.start = function(){
+    $("#emergencyList").empty();
+    $("#emergencyList").Grid({
+        url : "${ctx}/alarm/manager/resource/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
+            {id:'2',text:'消息',name:"appellation",index:'1',align:'',width:'420'},
+            {id:'5',text:'时间',name:"appellation",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : false,
+        number:false,
+        multiselect: false
+    });
+}
+
+/**
+ * Server对象
+ * @constructor
+ */
+var Server = function(){
+    this.init('#serverRefresh');
+};
+Server.prototype = new DataState();
+Server.prototype.start = function(){
+    $("#tuxSERVER").empty();
+    $("#tuxSERVER").Grid({
+        url : "${ctx}/appServer/tuxedo/data/server/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        searchClass:"serverRefreshInput",
+        searchBtn:"serverRefreshButton",
+        colums:[
+            {id:'1',text:'Server',name:"server",index:'1',align:''},
+            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
+            {id:'3',text:'ProcessID',name:"processId",index:'1',align:''},
+            {id:'4',text:'Rpdone',name:"rqDone",index:'1',align:''},
+            {id:'5',text:'CurrSvc',name:"currentSvc",index:'1',align:''},
+            {id:'6',text:'SvrMin',name:"svrMin",index:'1',align:''},
+            {id:'7',text:'SvrMax',name:"svrMax",index:'1',align:''},
+            {id:'8',text:'UseMem',name:"memUsed",index:'1',align:''},
+            {id:'9',text:'UseCPU',name:"cpuUsed",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: false
+    });
+}
+var Queue = function(){
+    this.init('#queRefresh');
+}
+Queue.prototype = new DataState();
+Queue.prototype.constructor =  Queue;
+Queue.prototype.start = function(){
+    $("#tuxQUEUE").empty();
+    $("#tuxQUEUE").Grid({
+        url : "${ctx}/appServer/tuxedo/data/queue/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        searchClass:"queRefreshInput",
+        searchBtn:"queRefreshButton",
+        colums:[
+            {id:'1',text:'Server',name:"server",index:'1',align:''},
+            {id:'2',text:'Queueid',name:"queueId",index:'1',align:''},
+            {id:'3',text:'SrvCnt',name:"srvCnt",index:'1',align:''},
+            {id:'4',text:'Queued',name:"queued",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: false
+    });
+}
+
+var Client = function(){
+    this.init('#cltRefresh');
+}
+Client.prototype = new DataState();
+Client.prototype.start = function(){
+    $("#tuxCLIENT").empty();
+    $("#tuxCLIENT").Grid({
+        url : "${ctx}/appServer/tuxedo/data/client/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        searchClass:"cltRefreshInput",
+        searchBtn:"cltRefreshButton",
+        colums:[
+            {id:'1',text:'Name',name:"name",index:'1',align:''},
+            {id:'2',text:'ClentPID',name:"pid",index:'1',align:''},
+            {id:'3',text:'ClentAddr',name:"addr",index:'1',align:''},
+            {id:'4',text:'Status',name:"status",index:'1',align:''},
+            {id:'5',text:'Contime',name:"conTime",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: false
+    });
+}
+
+var System = function(){
+    this.init('#sysRefresh');
+};
+System.prototype = new DataState();
+System.prototype.start = function(){
+    $("#tuxSYSTEM").empty();
+    $("#tuxSYSTEM").Grid({
+        url : "${ctx}/appServer/tuxedo/data/system/${serverName}",
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        searchClass:"sysRefreshInput",
+        searchBtn:"sysRefreshButton",
+        colums:[
+            {id:'1',text:'CoreFind',name:"coreFind",index:'1',align:''},
+            {id:'2',text:'ErrorFind',name:"errorFind",index:'1',align:''},
+            {id:'3',text:'WarnFind',name:"warnFind",index:'1',align:''},
+            {id:'4',text:'LargueFind',name:"largueFile",index:'1',align:''},
+            {id:'5',text:'FreeMem',name:"freeMem",index:'1',align:''},
+            {id:'6',text:'IdleCPU',name:"idleCPU",index:'1',align:''},
+            {id:'7',text:'SvrCnt',name:"svrCnt",index:'1',align:''},
+            {id:'8',text:'QueCnt',name:"queCnt",index:'1',align:''},
+            {id:'9',text:'CltCnt',name:"cltCnt",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : true,
+        number:false,
+        multiselect: false
+    });
+}
 </script>

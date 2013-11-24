@@ -32,15 +32,17 @@ public abstract class MonitorSite {
 
     private MonitorDataRepository repository;
 
-
     protected volatile HisData hisData;
 
+    protected InitData initData;
 
-    private ResourcesCache resourcesCache;
+    protected ResourcesCache resourcesCache;
 
-    private AttributeCache attributeCache;
+    protected AttributeCache attributeCache;
 
-    private Attribute alarmAttribute;
+    protected Attribute alarmAttribute;
+
+    protected Resource resource;
 
     protected void setMonitorDataRepository(MonitorDataRepository repository) {
         this.repository = repository;
@@ -58,6 +60,13 @@ public abstract class MonitorSite {
     protected int monitorCount = 0;
 
     protected String siteIp;
+
+    //default value set 100
+    protected int resetMonitorCount = 100;
+
+    void setResetMonitorCount(int resetMonitorCount) {
+        this.resetMonitorCount = resetMonitorCount;
+    }
 
 
     public String getSiteName() {
@@ -86,7 +95,6 @@ public abstract class MonitorSite {
 
     //启动标识
     private volatile boolean isRunning  = false;
-
 
     //agent端是否运行标识
     private volatile boolean agentRunning = false;
@@ -120,9 +128,6 @@ public abstract class MonitorSite {
     @PostConstruct
 	void checkSetting() {
         Assert.isTrue(period >= 30);
-        Resource resource = resourcesCache.getResource(this.getSiteName());
-        this.alarmAttribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
-
 	}
 
     void setScheduledFuture(ScheduledFuture scheduledFuture) {
@@ -149,51 +154,66 @@ public abstract class MonitorSite {
         return new Runnable() {
 
 
+
             @Override
             public void run() {
 
                 try {
-
-
-                    //TODO check this site is exists，can do right
-                    //start
-                    if (!isRunning) {
-                        logger.debug("siteName:{} started", siteName);
-                        //    String initXml = connect.startSiteThread(iniXml,siteName,siteIp,sitePort,0);
-                        recordInitData(repository.getInitData(siteName, siteIp, sitePort));
-
-                        isRunning = true;
-                        agentRunning = true;
-                    }
-                    //如果监控次数超过1000重置连接
-                    if(monitorCount > 0&&monitorCount%1000==0){
-                        reset();
-                    }
+                    before();
+                    init();
                     //in time data
                     recordInTimeData(repository.getInTimeData(siteName));
+                    //监控计数
                     monitorCount++;
                 } catch (Throwable t) {
 
-                    //连接失败重试一次连接
                     if(t instanceof ConnectAgentException){
+                        //连接失败重试一次连接
                         reset();
+                        //agent运行不正常，设置agent状态
                         agentRunning = false;
+                        t = t.getCause();
                     }
-
-                    t.printStackTrace();
+                    logger.error("siteName:{} has  ConnectAgentException , detail is:", getSiteName(), t);
                 }
 
             }
+
+
+
+
+
         };
+    }
+
+    private void init(){
+        //start
+        if (!isRunning) {
+            logger.debug("siteName:{} started", siteName);
+            initData = repository.getInitData(siteName, siteIp, sitePort);
+            agentRunning = true;
+
+            recordInitData(initData);
+            initData.process();
+            isRunning = true;
+        }
+    }
+
+    private void before(){
+        //如果监控次数超过1000重置连接
+        if(monitorCount > 0 && monitorCount%resetMonitorCount==0){
+            reset();
+        }
     }
 
     private void reset() {
         try {
-            repository.stopSite(siteName);
-            this.isRunning = false;
-
+          repository.stopSite(siteName);
+          logger.debug("site name is: {},reset successful",siteName);
         } catch (Throwable t) {
-            logger.warn("重置连接异常：",t);
+            logger.error("site name is: {}, reset failed：{}", siteName, t);
+        } finally {
+            this.isRunning = false;
         }
         // repository.getInitData(siteName, siteIp, sitePort);
     }

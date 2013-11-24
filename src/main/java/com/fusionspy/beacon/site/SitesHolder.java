@@ -46,6 +46,7 @@ public class SitesHolder {
 
     private boolean demo = false;
 
+
     /**
      * is demo
      *
@@ -85,7 +86,7 @@ public class SitesHolder {
         return monitorSite;
     }
 
-   // @Bean
+    @Bean
     public MonitorSite getTuxSite() {
         TuxSite tuxSite = new TuxSite();
         tuxSite.setTuxService(tuxService);

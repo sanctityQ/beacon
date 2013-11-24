@@ -10,8 +10,5 @@ public interface InitData {
 
     final String EMPTY="-";
 
-    /**
-     * 记录初始化信息
-     */
     void process();
 }

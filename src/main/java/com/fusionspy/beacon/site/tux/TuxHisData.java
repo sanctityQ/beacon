@@ -57,7 +57,7 @@ public class  TuxHisData implements HisData {
     }
 
     public TuxIniData getTuxIniData() {
-        return tuxIniData;
+        return tuxIniData.isStop()?TuxIniData.EMPTY:tuxIniData;
     }
 
     void setTuxIniData(TuxIniData tuxIniData) {

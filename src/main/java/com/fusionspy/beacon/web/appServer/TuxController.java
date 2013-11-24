@@ -236,7 +236,7 @@ public class TuxController {
         reply.put("memFree",hisData.getProcessResult().getTuxRes()==null?"-":String.valueOf(hisData.getProcessResult().getTuxRes().getMemfree()));
         reply.put("tuxRunSvr",hisData.getProcessResult().getTuxRes()==null?"-":String.valueOf(hisData.getProcessResult().getTuxRes().getTuxrunsvr()));
         reply.put("count", String.valueOf(monitorSite.getMonitorCount()));
-        reply.put("stop",String.valueOf(hisData.getProcessResult().isStopAlarmSignal()));
+        reply.put("stop",String.valueOf(hisData.isTuxedoStop()));
         reply.put("agentStop",String.valueOf(!monitorSite.isAgentRunning()));
         reply.put("tuxVersion",hisData.getTuxIniData().getSysrecsEntity().getProductver());
         reply.put("systemboot",hisData.getTuxIniData().getSysrecsEntity().getSystemboot());
@@ -247,24 +247,6 @@ public class TuxController {
     }
 
 
-//    public Reply getMonitorInf(String siteName){
-//      TuxHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
-//      jsonBinder.setDateFormat(DATE_FORMAT);
-//      HashMap<String,Object> map = new HashMap<String,Object>();
-//      map.put("tuxVersion",hisData.getTuxIniData().getSysrecsEntity().getProductver());
-//      map.put("systemboot",hisData.getTuxIniData().getSysrecsEntity().getSystemboot());
-//      map.put("rectime",hisData.getTuxIniData().getSysrecsEntity().getRectime());
-//      map.put("tuxRunSvr",hisData.getProcessResult().getTuxRes().getTuxrunsvr());
-//      map.put("tuxRunQueue",hisData.getProcessResult().getTuxRes().getTuxrunqueue());
-//      map.put("tuxRunClt",hisData.getProcessResult().getTuxRes().getTuxrunclt());
-//      map.put("osVersion",hisData.getTuxIniData().getSysrecsEntity().getOstype());
-//      map.put("cpuIdle",hisData.getProcessResult().getTuxRes().getCpuidle());
-//      map.put("memFree",hisData.getProcessResult().getTuxRes().getMemfree());
-//      map.put("agentVer",hisData.getTuxIniData().getSysrecsEntity().getAgentver());
-//      map.put("count",hisData.getMonitorCount());
-//      String data = jsonBinder.toJson(map);
-//      return Replys.with(data).as(Json.class);
-//    }
 
     @Get("data/{type}/{serverName}")
     public void getInTimeData(@Param("type")String type,@Param("serverName")String serverName,Invocation invocation){
@@ -287,19 +269,21 @@ public class TuxController {
 
     private void getServerDate(List<TuxsvrsEntity> servers, Invocation invocation) {
         List<Map<String, String>> l = new ArrayList<Map<String, String>>();
-        for (Iterator<TuxsvrsEntity> iterator = servers.iterator(); iterator.hasNext(); ) {
-            TuxsvrsEntity svr = iterator.next();
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("server", svr.getProgname());
-            map.put("queueId", svr.getQueuename());
-            map.put("processId", svr.getProcessid());
-            map.put("rqDone", String.valueOf(svr.getRqdone()));
-            map.put("currentSvc", svr.getCurrenctsvc());
-            map.put("svrMin", String.valueOf(svr.getSvrmin()));
-            map.put("svrMax", String.valueOf(svr.getSvrmax()));
-            map.put("memUsed", String.valueOf(svr.getMemoryuse()));
-            map.put("cpuUsed", String.valueOf(svr.getCpuuse()));
-            l.add(map);
+        if(servers!=null) {
+            for (Iterator<TuxsvrsEntity> iterator = servers.iterator(); iterator.hasNext(); ) {
+                TuxsvrsEntity svr = iterator.next();
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("server", svr.getProgname());
+                map.put("queueId", svr.getQueuename());
+                map.put("processId", svr.getProcessid());
+                map.put("rqDone", String.valueOf(svr.getRqdone()));
+                map.put("currentSvc", svr.getCurrenctsvc());
+                map.put("svrMin", String.valueOf(svr.getSvrmin()));
+                map.put("svrMax", String.valueOf(svr.getSvrmax()));
+                map.put("memUsed", String.valueOf(svr.getMemoryuse()));
+                map.put("cpuUsed", String.valueOf(svr.getCpuuse()));
+                l.add(map);
+            }
         }
         Page<Map<String, String>> page = new PageImpl<Map<String, String>>(l);
         Gridable<Map<String, String>> gridable = new Gridable<Map<String, String>>(page);
@@ -313,15 +297,16 @@ public class TuxController {
 
     private void getQueDate(List<TuxquesEntity> servers, Invocation invocation){
         List<Map<String,String>> l = new ArrayList<Map<String, String>>();
-
-        for(Iterator<TuxquesEntity> iterator = servers.iterator();iterator.hasNext();){
-            TuxquesEntity que = iterator.next();
-            Map<String,String> map = new HashMap<String, String>();
-            map.put("server",que.getProgname());
-            map.put("queueId",que.getIpcsid());
-            map.put("srvCnt",String.valueOf(que.getSvrcnt()));
-            map.put("queued",String.valueOf(que.getQueued()));
-            l.add(map);
+        if(servers!=null) {
+            for (Iterator<TuxquesEntity> iterator = servers.iterator(); iterator.hasNext(); ) {
+                TuxquesEntity que = iterator.next();
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("server", que.getProgname());
+                map.put("queueId", que.getIpcsid());
+                map.put("srvCnt", String.valueOf(que.getSvrcnt()));
+                map.put("queued", String.valueOf(que.getQueued()));
+                l.add(map);
+            }
         }
         Page<Map<String,String>> page = new PageImpl<Map<String,String>>(l);
         Gridable<Map<String,String>> gridable = new Gridable<Map<String,String>> (page);
