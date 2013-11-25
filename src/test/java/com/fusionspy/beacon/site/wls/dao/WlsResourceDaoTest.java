@@ -1,5 +1,6 @@
 package com.fusionspy.beacon.site.wls.dao;
 
+import com.fusionspy.beacon.site.Connect;
 import com.fusionspy.beacon.site.wls.WlsHisData;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
@@ -7,7 +8,10 @@ import com.fusionspy.beacon.site.wls.entity.WlsIniData;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
 import com.sinosoft.one.util.encode.JaxbBinder;
 import com.sinosoft.one.util.test.SpringTxTestCase;
+import org.dom4j.Attribute;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
+import java.net.URL;
 
 @DirtiesContext
 @ContextConfiguration(locations = {"/spring/applicationContext-test.xml"})
@@ -75,7 +80,5 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
         wlsServerDao.save(wlsServer);
     }
 
-    public static void main(String[] args) {
 
-    }
 }

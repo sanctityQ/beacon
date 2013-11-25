@@ -47,6 +47,15 @@ public class WlsServer  implements java.io.Serializable {
      */
     private Integer interval;
     /**
+     * weblogic监听地址
+     */
+    private String weblogicIp;
+    /**
+     * weblogic监听端口
+     */
+    private Integer weblogicPort;
+
+    /**
      * 用户名
      */
     private String userName;
@@ -152,6 +161,24 @@ public class WlsServer  implements java.io.Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Column(name="weblogic_ip")
+    public String getWeblogicIp() {
+        return weblogicIp;
+    }
+
+    public void setWeblogicIp(String weblogicIp) {
+        this.weblogicIp = weblogicIp;
+    }
+
+    @Column(name="weblogic_port")
+    public Integer getWeblogicPort() {
+        return weblogicPort;
+    }
+
+    public void setWeblogicPort(Integer weblogicPort) {
+        this.weblogicPort = weblogicPort;
     }
 
     @Override

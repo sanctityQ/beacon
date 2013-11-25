@@ -17,6 +17,8 @@
             var editFlag = '${empty server}' == 'false';
             if(editFlag) {
                 $("#serverName").attr({"readonly":true});
+                var isSsl = '${server.isSsl}';
+                $(".server_isSsl[value="+isSsl+"]").attr("checked", true);
             }
             weblogicValidator = buildValidator("weblogic_fm"); //构建校验器
             weblogicValidator.form(); clearError(); //先from可以实现实时校验
@@ -24,6 +26,18 @@
                 var flag = $(this).attr("checked");
                 $("input[name='isSsl']").removeAttr("checked");
                 if(flag) $(this).attr({"checked":"checked"});
+            });
+
+            $(".number_validate").keyup(function() {
+                this.value=this.value.replace(/\D/g,'');
+            }).blur(function() {
+                this.value=this.value.replace(/\D/g,'');
+            });
+
+            $(".number2_validate").keyup(function() {
+                this.value=this.value.replace(/[^\d.]/g,'');
+            }).blur(function() {
+                this.value=this.value.replace(/[^\d.]/g,'');
             });
         });
         function save(){
@@ -78,22 +92,37 @@
                                 <tr>
                                     <td>IP地址<span class="mandatory">*</span></td>
                                     <td id="v_listenAddress">
-                                        <input id="listenAddress" name="listenAddress" type="text" class="validate {required:true,IP_v:true} formtext" size="30" value="${server.listenAddress}" />
+                                        <input id="listenAddress" name="listenAddress" type="text" class="validate {required:true,IP_v:true} number2_validate formtext" maxlength="15" size="30" value="${server.listenAddress}" />
                                         <span id="v_listenAddress_validate"></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>轮询间隔(s)<span class="mandatory">*</span></td>
                                     <td id="v_interval">
-                                        <input id="interval" name="interval" type="text" class="validate {required:true,digits:true,min:30} formtext" size="8" value="${server.interval}"/> <span class="mandatory">最小间隔30秒</span>
+                                        <input id="interval" name="interval" type="text" class="validate {required:true,digits:true,min:30} number_validate formtext" maxlength="8" size="8" value="${server.interval}"/> <span class="mandatory">最小间隔30秒</span>
                                         <span id="v_interval_validate"></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>端口<span class="mandatory">*</span></td>
                                     <td id="v_listenPort">
-                                        <input id="listenPort" name="listenPort" type="text" class="validate {required:true,port_v:true} formtext" maxlength="5" size="5" value="${server.listenPort}"/>
+                                        <input id="listenPort" name="listenPort" type="text" class="validate {required:true,port_v:true} number_validate formtext" maxlength="5" size="5" value="${server.listenPort}"/>
                                         <span id="v_listenPort_validate"></span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>weblogic监听地址<span class="mandatory">*</span></td>
+                                    <td id="v_weblogicIp">
+                                        <input id="weblogicIp" name="weblogicIp" type="text" class="validate {required:true,IP_v:true} number2_validate formtext" maxlength="15" size="30" value="${server.weblogicIp}"/>
+                                        <span id="v_weblogicIp_validate"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>weblogic监听端口<span class="mandatory">*</span></td>
+                                    <td id="v_weblogicPort">
+                                        <input id="weblogicPort" name="weblogicPort" type="text" class="validate {required:true,port_v:true} number_validate formtext" maxlength="5" size="5" value="${server.weblogicPort}"/>
+                                        <span id="v_weblogicPort_validate"></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -116,8 +145,8 @@
                                 <tr>
                                     <td>使用SSL<span class="mandatory">*</span></td>
                                     <td id="v_isSsl">
-                                        <input type="checkbox" class="validate {required:true}" name="isSsl" value="0"/>未使用
-                                        <input type="checkbox" class="validate {required:true}" name="isSsl" value="1"/>使用
+                                        <input type="checkbox" class="validate {required:true} server_isSsl" name="isSsl" value="0"/>未使用
+                                        <input type="checkbox" class="validate {required:true} server_isSsl" name="isSsl" value="1"/>使用
                                         <span id="v_isSsl_validate"></span>
                                     </td>
                                 </tr>

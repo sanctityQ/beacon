@@ -4,16 +4,21 @@ import com.fusionspy.beacon.site.Connect;
 import com.fusionspy.beacon.site.InTimeData;
 import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorDataRepository;
-import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
-import com.fusionspy.beacon.site.tux.entity.TuxIniData;
-import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
+import com.fusionspy.beacon.site.wls.entity.WlsServer;
 import com.sinosoft.one.util.encode.JaxbBinder;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.net.URL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,6 +36,8 @@ public class WlsDataRepository implements MonitorDataRepository {
     /** 处理实时报文数据binder*/
     private JaxbBinder inTimeBinder = new JaxbBinder(WlsInTimeData.class);
     @Autowired
+    private WlsService wlsService;
+    @Autowired
     private Connect connect;
 
     /**
@@ -43,7 +50,23 @@ public class WlsDataRepository implements MonitorDataRepository {
     @Override
     public InitData getInitData(String siteName, String ip, int port) {
         //TODO 修改第一个参数：初始化数据请求报文资源文件路径
-        String initXml = connect.startSiteThread("site/WlsInitReq.xml", siteName, ip, port, 0);
+        URL initXmlReq =Connect.class.getClassLoader().getResource("site/WlsInitReq.xml");
+        SAXReader xmlReader = new SAXReader();
+        Document xmlDocument = null;
+        try {
+            xmlDocument = (Document) xmlReader.read(initXmlReq);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        Element node = (Element) xmlDocument.selectSingleNode("/wlsagent/Domain");
+        WlsServer wlsServer = wlsService.getSite(siteName);
+        //TODO domain名称是否需要配置，待确认？  用户名和密码是否使用站点的？
+        node.attribute("adminAddress").setData(wlsServer.getWeblogicIp());  //Weblogic监听地址
+        node.attribute("adminPort").setData(wlsServer.getWeblogicPort()); //Weblogic监听端口
+        node.attribute("principal").setData(wlsServer.getUserName()); //Weblogic用户名
+        node.attribute("password").setData(wlsServer.getPassword()); //密码
+        System.out.println(xmlDocument.asXML());
+        String initXml = connect.startSiteThread(xmlDocument, siteName, ip, port, 0);
         logger.debug("get initXml Xml: {}", initXml);
         WlsIniData initData = iniBinder.fromXml(initXml);
         return initData.defaultData();
