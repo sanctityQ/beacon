@@ -110,6 +110,9 @@
                                         <span id="v_listenPort_validate"></span>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td colspan="2" class="group_name">Weblogic监听信息</td>
+                                </tr>
 
                                 <tr>
                                     <td>weblogic监听地址<span class="mandatory">*</span></td>
@@ -126,7 +129,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="group_name">用户信息</td>
+                                    <td>domain名称<span class="mandatory">*</span></td>
+                                    <td id="v_domainName">
+                                        <input id="domainName" name="domainName" type="text" class="validate {required:true} number_validate formtext" maxlength="20" value="${server.domainName}"/>
+                                        <span id="v_domainName_validate"></span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>用户名<span class="mandatory">*</span></td>

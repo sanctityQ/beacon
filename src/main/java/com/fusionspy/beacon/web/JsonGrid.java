@@ -12,15 +12,15 @@ import java.util.List;
  */
 public class JsonGrid {
 
-    private String total;
+    private int total;
 
     private List<JsonRow> rows = new ArrayList<JsonRow>();
 
-    public String getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 
@@ -62,7 +62,7 @@ public class JsonGrid {
     public static JsonGrid buildGrid(List recordList, JsonRowHandler handler) {
         if(recordList!=null) {
             JsonGrid grid = new JsonGrid();
-            grid.setTotal(recordList.size()+"");
+            grid.setTotal(recordList.size());
             for(Object o : recordList) {
                 grid.addRow(handler.buildRow(o));
             }

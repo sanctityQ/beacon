@@ -18,5 +18,7 @@ public enum AttributeName {
 	ActiveConnection,
 	BufferHitRatio,
     //tux
-    ServerDied,ServerNoTrans,ServerBusy,UsedMemory,QueuedNumber,SystemStop
+    ServerDied,ServerNoTrans,ServerBusy,UsedMemory,QueuedNumber,SystemStop,
+    //Weblogic
+    FreeHeap,ThreadUtilization,JdbcUtilization
 }

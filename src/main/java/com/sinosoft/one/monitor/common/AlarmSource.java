@@ -12,5 +12,5 @@ public enum AlarmSource {
 	EUM,
 	URL_RESPONSE_TIME,
 	OS,
-	DB,APP_SERVER
+	DB,APP_SERVER,WEBLOGIC
 }

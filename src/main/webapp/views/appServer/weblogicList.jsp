@@ -9,8 +9,9 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
+        var gird;
         $(function(){
-            var grid = $("#thresholdList").Grid({
+            grid = $("#thresholdList").Grid({
                 url : "${ctx}/appServer/weblogic/list",
                 type:"POST",
                 dataType: "json",

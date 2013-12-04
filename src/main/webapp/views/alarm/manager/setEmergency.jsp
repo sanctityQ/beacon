@@ -58,7 +58,9 @@
                     $(".conf_box").each(function(){
                          if($("#monitorType").val()=='APP_SERVER'){
                              $(this).slideUp('fast');
-                         }else{
+                         }
+                         //TODO 增加weblogic
+                         else{
                              $(this).slideDown('fast');
                          }
 
@@ -253,6 +255,7 @@
                         <option value="">--选择一个监视器类型--</option>
                         <%--<option value="APPLICATION">应用系统</option>--%>
                         <option value="APP_SERVER">TUXEDO</option>
+                        <option value="WEBLOGIC">WEBLOGIC</option>
                         <%--<option value="DB">数据库</option>--%>
                         <%--<option value="OS">操作系统</option>--%>
                     </select></td>

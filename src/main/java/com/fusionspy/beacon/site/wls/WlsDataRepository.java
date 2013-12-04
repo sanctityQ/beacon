@@ -49,7 +49,6 @@ public class WlsDataRepository implements MonitorDataRepository {
      */
     @Override
     public InitData getInitData(String siteName, String ip, int port) {
-        //TODO 修改第一个参数：初始化数据请求报文资源文件路径
         URL initXmlReq =Connect.class.getClassLoader().getResource("site/WlsInitReq.xml");
         SAXReader xmlReader = new SAXReader();
         Document xmlDocument = null;
@@ -60,9 +59,9 @@ public class WlsDataRepository implements MonitorDataRepository {
         }
         Element node = (Element) xmlDocument.selectSingleNode("/wlsagent/Domain");
         WlsServer wlsServer = wlsService.getSite(siteName);
-        //TODO domain名称是否需要配置，待确认？  用户名和密码是否使用站点的？
         node.attribute("adminAddress").setData(wlsServer.getWeblogicIp());  //Weblogic监听地址
         node.attribute("adminPort").setData(wlsServer.getWeblogicPort()); //Weblogic监听端口
+        node.attribute("name").setData(wlsServer.getDomainName());
         node.attribute("principal").setData(wlsServer.getUserName()); //Weblogic用户名
         node.attribute("password").setData(wlsServer.getPassword()); //密码
         System.out.println(xmlDocument.asXML());

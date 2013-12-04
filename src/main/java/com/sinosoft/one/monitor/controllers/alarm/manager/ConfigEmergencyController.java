@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fusionspy.beacon.site.tux.dao.SiteListDao;
 import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
+import com.fusionspy.beacon.site.wls.dao.WlsServerDao;
+import com.fusionspy.beacon.site.wls.entity.WlsServer;
 import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.action.model.MailAction;
 import com.sinosoft.one.monitor.action.repository.MailActionRepository;
@@ -80,6 +82,9 @@ public class ConfigEmergencyController {
     @Autowired
     private SiteListDao siteListDao;
 
+    @Autowired
+    private WlsServerDao wlsServerDao;
+
     @Get("config")
     public String configEmergencyForm(Invocation inv){
         return "setEmergency";
@@ -152,7 +157,18 @@ public class ConfigEmergencyController {
             };
             jsonMonitorNames = jsonArray.toJSONString();
             return Replys.with(jsonMonitorNames).as(Json.class);
+        } else if (ResourceType.WEBLOGIC.name().equals(resourceType)) {
+            for(WlsServer wlsServer : wlsServerDao.findAll()) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("monitorId",wlsServer.getServerName());
+                //获取GE_MONITOR_OS表的NAME字段值
+                jsonObject.put("monitorName", wlsServer.getServerName());
+                jsonArray.add(jsonObject);
+            }
+            jsonMonitorNames = jsonArray.toJSONString();
+            return Replys.with(jsonMonitorNames).as(Json.class);
         }
+        //
         else {
             return null;
         }

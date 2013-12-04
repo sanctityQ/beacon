@@ -524,6 +524,7 @@ DataState.prototype.start = function(){
     //--状态监控---
 
     var dynamic_ = {state:[],data:[]}
+    dynamic_.state.push(new EmergencyMsg());
     dynamic_.state.push(new ServerInfo());
 
     dynamic_.data.push(new WlsServer());
@@ -742,3 +743,28 @@ var EjbCache = buildDataList("EjbCache", [
     {id: '8', text: '缓存错失数量', name: "CacheMissCount", index: '1', align: ''},
     {id: '9', text: '钝化数量', name: "PassivationCount", index: '1', align: ''}
 ]);
+
+var EmergencyMsg = function(){
+    this.init('#emergencyRefresh');
+};
+EmergencyMsg.prototype = new DataState();
+EmergencyMsg.prototype.start = function(){
+    $("#emergencyList").empty();
+    $("#emergencyList").Grid({
+        url : rootPath + "/alarm/manager/resource/"+serverName,
+        dataType: "json",
+        colDisplay: false,
+        clickSelect: true,
+        draggable:false,
+        height: "auto",
+        colums:[
+            {id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
+            {id:'2',text:'消息',name:"appellation",index:'1',align:'',width:'420'},
+            {id:'5',text:'时间',name:"appellation",index:'1',align:''}
+        ],
+        rowNum:10,
+        pager : false,
+        number:false,
+        multiselect: false
+    });
+}

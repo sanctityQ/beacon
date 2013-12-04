@@ -21,6 +21,12 @@ public enum AlarmMessageFormat {
     TUX_QUE,
     TUX_MEM,
     TUX_CPU,
-    TUX_STOP;
+    TUX_STOP,
+    WLS_DIED,
+    WLS_JDBC,
+    WLS_HEAP,
+    WLS_THREAD,
+    WLS_CPU,
+    WLS_STOP;
 }
 

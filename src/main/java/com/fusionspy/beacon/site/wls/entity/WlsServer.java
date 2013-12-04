@@ -55,6 +55,8 @@ public class WlsServer  implements java.io.Serializable {
      */
     private Integer weblogicPort;
 
+    private String domainName;
+
     /**
      * 用户名
      */
@@ -179,6 +181,15 @@ public class WlsServer  implements java.io.Serializable {
 
     public void setWeblogicPort(Integer weblogicPort) {
         this.weblogicPort = weblogicPort;
+    }
+
+    @Column(name="domain_name")
+    public String getDomainName() {
+        return domainName;
+    }
+
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
     }
 
     @Override

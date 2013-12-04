@@ -130,6 +130,7 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
         try {
             Field[] fields = this.getClass().getDeclaredFields();
             for(Field field : fields) {
+                if("error".equals(field.getName())) continue;
                 if(field.isAnnotationPresent(XmlElement.class)) {
                     field.setAccessible(true);
                     Object fieldVal = field.get(this);

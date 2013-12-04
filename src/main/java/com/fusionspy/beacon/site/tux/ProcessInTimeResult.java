@@ -51,7 +51,7 @@ public class ProcessInTimeResult {
     }
 
 
-    ProcessInTimeResult(String siteName) {
+    public ProcessInTimeResult(String siteName) {
         this.siteName = siteName;
     }
 
