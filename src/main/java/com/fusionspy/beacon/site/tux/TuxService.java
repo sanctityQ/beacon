@@ -160,10 +160,6 @@ public class TuxService {
                //停机发告警
                alarmMessage(this.resource,attribute,this.siteName,SeverityLevel.CRITICAL,
                        processResult.getTuxAlertMessage().getMessageByAlarmMessageFormat(AlarmMessageFormat.TUX_STOP));
-//               TuxresourceEntity resource =  ProcessInTimeResult.EMPTY.getTuxRes();
-//               resource.setSitename(siteName);
-//               resource.setCpuidle(100);
-//               processResult.recordTuxRes(resource);
                return processResult;
            }
            this.processClt();
@@ -236,6 +232,7 @@ public class TuxService {
                 }
                 // 取alarm级别最高的作为报警级别
                 SeverityLevel temp =  queueAlarm(t, threshold);
+                /*TODO 警告级别正常来说是需要分类的，这块有bug，如，a是严重、b是正常，c是警告由于按照最高级别走，所以变成 abc均是严重 */
                 if(severityLevel.ordinal()>temp.ordinal()){
                     severityLevel =  temp;
                 }
@@ -339,7 +336,6 @@ public class TuxService {
             if(threshold == null)
                 return SeverityLevel.UNKNOWN;
             SeverityLevel severityLevel = threshold.match(String.valueOf(svr.getMemoryuse()));
-            //if(alartEnable(this.siteSettings.getConditions().getProcessMemory().getAlert())&&memLimit<svr.getMemoryuse()){
             if(severityLevel!=SeverityLevel.UNKNOWN){
                 processResult.addMemAlarm(svr.getProgname());
             }
@@ -387,6 +383,7 @@ public class TuxService {
 //            String diedServerNames = this.siteSettings.getConditions().getServerDied().getName();
 //            String noTransServerNames =  this.siteSettings.getConditions().getServerNoTrans().getName();
 //            String busyServerNames =  this.siteSettings.getConditions().getServerBusy().getName();
+
             //获取serverDied属性
             Attribute serverDiedAttribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.ServerDied.name());
             if(serverDiedAttribute == Attribute.EMPTY){

@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fusionspy.beacon.report.*;
-import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -24,9 +23,6 @@ import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
-import com.sinosoft.one.mvc.web.instruction.reply.Reply;
-import com.sinosoft.one.mvc.web.instruction.reply.Replys;
-import com.sinosoft.one.mvc.web.instruction.reply.transport.Raw;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
@@ -37,6 +33,7 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -55,8 +52,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -175,16 +170,16 @@ public class ReportController {
             @Override
             public Map<String,String> apply(@Nullable Statistics input) {
                 Map<String,String> m = Maps.newHashMap();
-                m.put("date", input.getTimePeriod().getStartDateTime().toLocalDate().toString("yyyy-MM-dd"));
+                m.put("date", new DateTime(input.getStartTime()).toLocalDate().toString("yyyy-MM-dd"));
                 if(series.equals(DateSeries.today)||series.equals(DateSeries.yesterday))
-                    m.put("time",input.getTimePeriod().getStartDateTime().toLocalTime().toString("HH:mm:ss"));
+                    m.put("time",new DateTime(input.getStartTime()).toLocalTime().toString("HH:mm:ss"));
                 m.put("max",input.getMax()==null?"-": toBigDemical(input.getMax()).toString());
                 m.put("min",input.getMin()==null?"-":toBigDemical(input.getMin()).toString());
                 m.put("avg", input.getAvg() == null ? "-" : toBigDemical(input.getAvg()).toString());
                 if(series.equals(DateSeries.lastWeek)||series.equals(DateSeries.lastMonth))
-                    xAxis.add(input.getTimePeriod().getStartDateTime().toLocalDate().toString("yyyy-MM-dd"));
+                    xAxis.add(new DateTime(input.getStartTime()).toLocalDate().toString("yyyy-MM-dd"));
                 else
-                    xAxis.add(input.getTimePeriod().getStartDateTime().toLocalTime().toString("HH:mm:ss"));
+                    xAxis.add(new DateTime(input.getStartTime()).toLocalTime().toString("HH:mm:ss"));
                 chartData.add(input.getAvg() == null? 0d:input.getAvg());
                 return m;
             }

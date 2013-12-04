@@ -1,13 +1,34 @@
 package com.fusionspy.beacon.report;
 
+import com.sinosoft.one.monitor.common.AttributeName;
+import com.sinosoft.one.monitor.common.ResourceType;
 
-import org.joda.time.DateTime;
+import javax.annotation.Generated;
+import javax.persistence.*;
+import java.util.Date;
 
-/**
- * 统计信息
- *
- */
-public class Statistics {
+@Entity
+@Table(name = "ge_monitor_report_statistics")
+public class Statistics implements java.io.Serializable{
+
+    private static final long serialVersionUID = Statistics.class.hashCode();
+
+
+    //enum Unit{day,hour}
+
+    private Long id;
+
+    private String resourceId;
+
+    private ResourceType resourceType;
+
+    private String attribute;
+
+    private Date startTime;
+
+    private Date endTime;
+
+    //private Unit unit;
 
     private Double max;
 
@@ -15,9 +36,80 @@ public class Statistics {
 
     private Double avg;
 
-    private TimePeriod timePeriod;
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 
+    @Column(name = "resource_id")
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+
+    @Column(name="resource_type")
+    @Enumerated(value = EnumType.STRING)
+    public ResourceType getResourceType() {
+        return resourceType;
+    }
+
+    public void setResourceType(ResourceType resourceType) {
+        this.resourceType = resourceType;
+    }
+
+
+    @Column(name = "attribute_name")
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
+
+    @Column(name="start_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    @Column(name="end_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+
+//    @Column(name="unit")
+//    @Enumerated(value = EnumType.STRING)
+//    public Unit getUnit() {
+//        return unit;
+//    }
+//
+//    public void setUnit(Unit unit) {
+//        this.unit = unit;
+//    }
+
+    @Column(name = "max")
     public Double getMax() {
         return max;
     }
@@ -26,6 +118,7 @@ public class Statistics {
         this.max = max;
     }
 
+    @Column(name = "min")
     public Double getMin() {
         return min;
     }
@@ -34,19 +127,12 @@ public class Statistics {
         this.min = min;
     }
 
+    @Column(name = "avg")
     public Double getAvg() {
         return avg;
     }
 
     public void setAvg(Double avg) {
         this.avg = avg;
-    }
-
-    public void setTimePeriod(TimePeriod timePeriod) {
-        this.timePeriod = timePeriod;
-    }
-
-    public TimePeriod getTimePeriod() {
-        return timePeriod;
     }
 }

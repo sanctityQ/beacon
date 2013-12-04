@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import static com.google.common.collect.Maps.newHashMap;
+
 
 @Component
 class TuxReportFactory extends StatisticReportFactory {
@@ -29,8 +31,8 @@ class TuxReportFactory extends StatisticReportFactory {
     private Ordering<Attribute> naturalOrdering =  Ordering.natural();
 
 
-    private Map<Attribute,StatisticReport> reportMap = Maps.newHashMap();
-    private Map<String,Attribute> attributeMapMap = Maps.newHashMap();
+    private Map<Attribute,StatisticReport> reportMap = newHashMap();
+    private Map<String,Attribute> attributeMapMap = newHashMap();
 
     @Override
     protected ResourceType getResourceType() {
@@ -39,7 +41,7 @@ class TuxReportFactory extends StatisticReportFactory {
 
     @Override
     protected void initChild() {
-        for(Iterator<TuxReport> iterator =tuxReports.iterator();iterator.hasNext();){
+        for (Iterator<TuxReport> iterator = tuxReports.iterator(); iterator.hasNext(); ) {
             addStatisticReport(iterator.next());
         }
     }

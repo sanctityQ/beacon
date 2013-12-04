@@ -32,7 +32,8 @@ public class StatisticFactory {
     }
 
     public StatisticReport getInstance(ResourceType resourceType,String attributeId){
-        return  map.get(resourceType).create(attributeId);
+        StatisticReport statisticReport = map.get(resourceType).create(attributeId);
+        return new StatisticCacheReport(statisticReport);
     }
 
 

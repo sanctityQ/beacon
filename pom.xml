@@ -172,10 +172,12 @@
             <version>15.0</version>
 		</dependency>
         <dependency>
-            <groupId>com.googlecode.disruptor</groupId>
+            <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
+            <version>3.2.0</version>
         </dependency>
-		<!-- GENERAL UTILS end -->
+
+        <!-- GENERAL UTILS end -->
 
 		<dependency>
 			<groupId>junit</groupId>
