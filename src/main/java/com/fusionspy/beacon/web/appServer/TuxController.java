@@ -61,7 +61,6 @@ public class TuxController {
 
     private static final String DATE_FORMAT =  "yyyy-MM-dd HH:mm:ss";
 
-    private DateFormat df = new SimpleDateFormat(TIME_FORMAT);
 
     private static String[] SORT_CSS_CLASS ={"one","two","three","four","five"};
 

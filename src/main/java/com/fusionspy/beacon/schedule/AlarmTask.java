@@ -1,4 +1,4 @@
-package com.fusionspy.beacon.task;
+package com.fusionspy.beacon.schedule;
 
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
 import org.joda.time.DateTime;

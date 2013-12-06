@@ -42,8 +42,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
@@ -63,7 +61,7 @@ public class ReportController {
     private DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
-    private StatisticFactory factory;
+    private StatisticFacade factory;
 
 
     @Autowired

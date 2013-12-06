@@ -12,8 +12,7 @@ import javax.persistence.*;
 * 资源表
  */
 @Entity
-@Table(name="GE_MONITOR_RESOURCES"
-)
+@Table(name="GE_MONITOR_RESOURCES")
 public class Resource implements java.io.Serializable {
 
     /**
@@ -29,15 +28,7 @@ public class Resource implements java.io.Serializable {
     */
     private String resourceType = "";
 
-    public Resource() {
-    }
 
-	
-    public Resource(String resourceId, String resourceType) {
-        this.resourceId = resourceId;
-        this.resourceType = resourceType;
-    }
-   
     @Id 
     @Column(name="resource_id", unique=true, length=32)
     public String getResourceId() {
