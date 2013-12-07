@@ -102,7 +102,7 @@
                                     预警消息最近10条
                                 </div>
                                 <div id="emergencyList"></div>
-                                <div class="cpu-text"><b><a class="bodytext-img" href="${ctx}/alarm/manager/configemergency/config/APP_SERVER/${serverName}">警告配置</a></b></div>
+                                <div class="cpu-text"><b><a class="bodytext-img" href="${ctx}/alarm/manager/configemergency/config/Tuxedo/${serverName}">警告配置</a></b></div>
                             </div>
                         </td>
                     </tr>

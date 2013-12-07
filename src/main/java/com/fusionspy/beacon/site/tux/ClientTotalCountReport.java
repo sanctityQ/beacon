@@ -20,21 +20,6 @@ public class ClientTotalCountReport extends StatisticForwardReport implements Tu
     @Autowired
     private TuxcltsStatsDao cltsStatsDao;
 
-//    @Override
-//    public ReportResult getStatistic(String resourceId, DateSeries dateSeries) {
-//        ReportQuery query = dateSeries.getQuery();
-//        ReportResult reportResult = new ReportResult();
-//        for(TimePeriod period:query.getPeriods()){
-//            Statistics statistics =  cltsStatsDao.statisticTotalCountByRectimeBetween(resourceId,
-//                    new Timestamp(period.getStartDateTime().getMillis()),
-//                    new Timestamp(period.getEndDateTime().getMillis()));
-//          //  statistics.setTimePeriod(period);
-//            reportResult.addStatistics(statistics);
-//        }
-//        reportResult.setStartTime(query.getStartDateTime());
-//        reportResult.setEndTime(query.getEndDateTime());
-//        return reportResult;
-//    }
 
     @Override
     public Statistics getStatistic(String resourceId, DateTime startDate, DateTime endDate) {

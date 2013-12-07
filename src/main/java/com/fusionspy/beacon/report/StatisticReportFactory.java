@@ -13,13 +13,13 @@ import java.util.Map;
 import static com.google.common.collect.Maps.newHashMap;
 
 @Component
-public abstract class StatisticReportFactory {
+public abstract class StatisticReportFactory implements StatisticClean{
 
 
     @Autowired
     List<StatisticReport> statisticReports;
 
-    private static Map<String,StatisticReport> attributeReportMap = newHashMap();
+    private static Map<String,StatisticCacheReport> attributeReportMap = newHashMap();
 
 
 
@@ -27,7 +27,8 @@ public abstract class StatisticReportFactory {
     public void init(){
         initChild();
         for(StatisticReport statisticReport : statisticReports){
-            attributeReportMap.put(statisticReport.getAttribute().getAttribute(),statisticReport);
+            attributeReportMap.put(statisticReport.getAttribute().getAttribute(),
+                    new StatisticCacheReport(statisticReport));
         }
 
     }
@@ -44,6 +45,13 @@ public abstract class StatisticReportFactory {
 
     public StatisticReport getStatisticReport(String attribute){
         return this.attributeReportMap.get(attribute);
+    }
+
+    @Override
+    public void clean(){
+        for(StatisticCacheReport statisticCacheReport : attributeReportMap.values()){
+            statisticCacheReport.clean();
+        }
     }
 
 

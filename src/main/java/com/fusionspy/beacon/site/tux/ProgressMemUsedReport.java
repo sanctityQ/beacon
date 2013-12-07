@@ -5,6 +5,7 @@ import com.fusionspy.beacon.site.tux.dao.TuxSvrsDao;
 import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import com.google.common.collect.Lists;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.sinosoft.one.monitor.common.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,6 +47,7 @@ class ProgressMemUsedReport<TuxsvrsEntity> implements TuxReport, StatisticTopRep
             attribute = new Attribute();
             attribute.setAttribute("PROGRESS_MEM_USED");
             attribute.setAttributeCn("进程MEM占用大小");
+            attribute.setResourceType(ResourceType.Tuxedo);
             attribute.setUnits("K");
         }
         return attribute;

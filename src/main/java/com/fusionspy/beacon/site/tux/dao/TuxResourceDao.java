@@ -6,6 +6,7 @@ import com.sinosoft.one.data.jade.annotation.SQL;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Tux Resource Dao
@@ -26,5 +27,8 @@ public interface TuxResourceDao extends PagingAndSortingRepository<TuxresourceEn
 
     @SQL("select MAX(u.allSvrMemUsed) max,MIN(u.allSvrMemUsed) min,AVG(u.allSvrMemUsed) avg from GE_MONITOR_TUX_RESOURCE u where u.sitename = ?1 and u.rectime >= ?2 and  u.rectime < ?3")
     public Statistics statisticServiceMemUsedByRectimeBetween(String siteName,Timestamp startTime,Timestamp endTime);
+
+    @SQL("delete u from GE_MONITOR_TUX_RESOURCE u where u.rectime < ?1 ")
+    public void deleteByRectimeBefore(Timestamp date);
 
 }

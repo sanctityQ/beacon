@@ -37,4 +37,5 @@ class CpuIDLEReport extends StatisticForwardReport implements TuxReport {
         }
         return attribute;
     }
+
 }

@@ -4,6 +4,7 @@ import com.fusionspy.beacon.report.*;
 import com.fusionspy.beacon.site.tux.dao.TuxSvrsDao;
 import com.google.common.collect.Lists;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.sinosoft.one.monitor.common.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +46,7 @@ class ProgressCpuUsedReport<TuxsvrsEntity> implements TuxReport, StatisticTopRep
             attribute = new Attribute();
             attribute.setAttribute("PROGRESS_CPU_USED");
             attribute.setAttributeCn("进程CPU使用率");
+            attribute.setResourceType(ResourceType.Tuxedo);
             attribute.setUnits("%");
         }
         return attribute;

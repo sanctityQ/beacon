@@ -11,7 +11,7 @@
 
             $.ajax({
                 type:"post",
-                url:"${ctx}/alarm/manager/configemergency/monitornames/APP_SERVER",
+                url:"${ctx}/alarm/manager/configemergency/monitornames/Tuxedo",
                 dataType:"json",
                 async:false,
                 success:function(data){

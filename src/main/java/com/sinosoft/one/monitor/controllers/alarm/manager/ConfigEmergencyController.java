@@ -7,8 +7,6 @@ import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.sinosoft.one.monitor.action.model.ActionType;
 import com.sinosoft.one.monitor.action.model.MailAction;
 import com.sinosoft.one.monitor.action.repository.MailActionRepository;
-import com.sinosoft.one.monitor.application.domain.ApplicationService;
-import com.sinosoft.one.monitor.application.model.Application;
 import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
 import com.sinosoft.one.monitor.attribute.domain.AttributeService;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
@@ -18,10 +16,6 @@ import com.sinosoft.one.monitor.attribute.repository.AttributeActionRepository;
 import com.sinosoft.one.monitor.attribute.repository.AttributeRepository;
 import com.sinosoft.one.monitor.attribute.repository.AttributeThresholdRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.monitor.db.oracle.model.Info;
-import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
-import com.sinosoft.one.monitor.os.linux.model.Os;
-import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
 import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.threshold.model.Threshold;
@@ -56,13 +50,6 @@ public class ConfigEmergencyController {
     @Autowired
     AttributeService attributeService;
     @Autowired
-    ApplicationService applicationService;
-
-    @Autowired
-    InfoRepository infoRepository;
-    @Autowired
-    OsRepository osRepository;
-    @Autowired
     AttributeCache attributeCache;
     @Autowired
     AttributeRepository attributeRepository;
@@ -87,6 +74,7 @@ public class ConfigEmergencyController {
 
     @Get("config/${resourceType}/${serverName}")
     public String configEmergencyByTypeAndServerName(@Param("serverName")String serverName,@Param("resourceType")String resourceType,Invocation inv){
+        inv.addModel("resourceTypes",ResourceType.values());
         inv.addModel("resourceType",resourceType);
         inv.addModel("serverName",serverName);
         return "setEmergency";
@@ -94,55 +82,10 @@ public class ConfigEmergencyController {
 
     //配置告警页面，选择监视器类型时，得到相应类型下的所有可用的监视器
     @Post("monitornames/{resourceType}")
-    public Reply getMonitorNames(@Param("resourceType") String resourceType, Invocation inv) throws Exception {
+    public Reply getMonitorNames(@Param("resourceType") ResourceType type, Invocation inv) throws Exception {
         JSONArray jsonArray = new JSONArray();
         String jsonMonitorNames;
-        if (ResourceType.APPLICATION.name().equals(resourceType)) {
-            List<Application> applications = applicationService.findAllApplicationNames();
-            if (applications != null) {
-                for (Application application : applications) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("monitorId",application.getId());
-                    //获取应用中文名
-                    jsonObject.put("monitorName", application.getCnName());
-                    jsonArray.add(jsonObject);
-                }
-                jsonMonitorNames = jsonArray.toJSONString();
-                return Replys.with(jsonMonitorNames).as(Json.class);
-            }
-            return null;
-        }else if(ResourceType.DB.name().equals(resourceType)){
-            List<Info> dbInfos= (List<Info>) infoRepository.findAll();
-            if (dbInfos!=null){
-                for (Info dbInfo : dbInfos) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("monitorId",dbInfo.getId());
-                    //获取GE_MONITOR_ORACLE_INFO表的NAME字段值
-                    jsonObject.put("monitorName", dbInfo.getName());
-                    jsonArray.add(jsonObject);
-                }
-                jsonMonitorNames = jsonArray.toJSONString();
-                return Replys.with(jsonMonitorNames).as(Json.class);
-            }
-            return null;
-        }
-        else if(ResourceType.OS.name().equals(resourceType)){
-            List<Os> oses= (List<Os>) osRepository.findAll();
-            if (oses!=null){
-                for (Os os : oses) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("monitorId",os.getOsInfoId());
-                    //获取GE_MONITOR_OS表的NAME字段值
-                    jsonObject.put("monitorName", os.getName());
-                    jsonArray.add(jsonObject);
-                }
-                jsonMonitorNames = jsonArray.toJSONString();
-                return Replys.with(jsonMonitorNames).as(Json.class);
-            }
-            return null;
-        }
-        //应用服务器
-        else if(ResourceType.APP_SERVER.name().equals(resourceType)){
+        if(ResourceType.Tuxedo.equals(type)){
             for(SiteListEntity site : siteListDao.findAll()){
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("monitorId",site.getSiteName());
@@ -215,16 +158,10 @@ public class ConfigEmergencyController {
 
     //获得监视器名称，属性名称
     @Get("sub/{resourceType}/{monitorId}/{attribute}")
-    public String setHealthOrAvailableForm(@Param("resourceType") String resourceType,@Param("monitorId") String monitorId,
+    public String setHealthOrAvailableForm(@Param("resourceType") ResourceType resourceType,@Param("monitorId") String monitorId,
                                            @Param("attribute") String attribute,Invocation inv){
-        //获得监视器名称（也就是应用中文名）
-        if(ResourceType.APPLICATION.name().equals(resourceType)){
-            inv.addModel("monitorName",applicationService.findApplication(monitorId).getCnName());
-        }else if(ResourceType.OS.name().equals(resourceType)){
-            inv.addModel("monitorName",osRepository.findOne(monitorId).getName());
-        }else if(ResourceType.DB.name().equals(resourceType)){
-            inv.addModel("monitorName",infoRepository.findOne(monitorId).getName());
-        }else if(ResourceType.APP_SERVER.name().equals(resourceType)){
+
+        if(ResourceType.Tuxedo.equals(resourceType)){
             inv.addModel("monitorName",siteListDao.findOne(monitorId).getSiteName());
         }
 
@@ -235,7 +172,7 @@ public class ConfigEmergencyController {
 
         //健康与可用性配置
         if("Health".equals(attribute)||"Availability".equals(attribute)){
-            attributeId= attributeCache.getAttributeId(ResourceType.valueOf(resourceType).name(),attribute);
+            attributeId= attributeCache.getAttributeId(resourceType,attribute);
             inv.getRequest().setAttribute("attributeId",attributeId);
             inv.addModel("attributeName",attributeRepository.findOne(attributeId).getAttributeCn());
         }else {
@@ -347,7 +284,7 @@ public class ConfigEmergencyController {
     public String getJsonStringOfMonitorTypeAndId(String monitorId){
         JSONArray jsonArray=new JSONArray();
         JSONObject jsonObject=new JSONObject();
-        String resourceType=resourcesRepository.findOne(monitorId).getResourceType();
+        ResourceType resourceType=resourcesRepository.findOne(monitorId).getResourceType();
         jsonObject.put("resourceTypeAfterUpdate",resourceType);
         jsonObject.put("monitorIdAfterUpdate",monitorId);
         jsonArray.add(jsonObject);

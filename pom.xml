@@ -108,6 +108,8 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
+
+
 		<!-- WEB begin -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -182,13 +184,13 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>import</scope>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<scope>import</scope>
+			<scope>test</scope>
 		</dependency>
         <!--ShiroDbRealm begin-->
 

@@ -59,7 +59,7 @@ public enum DateSeries {
                 start = stepTime;
                 stepTime = step(start);
             }
-            reportQuery.setEndDateTime(stepTime.minusSeconds(1));
+            reportQuery.setEndDateTime(end.minusSeconds(1));
             return reportQuery;
         }
 
@@ -86,7 +86,7 @@ public enum DateSeries {
                 start = stepTime;
                 stepTime = step(start);
             }
-            reportQuery.setEndDateTime(stepTime);
+            reportQuery.setEndDateTime(end.minusSeconds(1));
             return reportQuery;
         }
 
@@ -114,7 +114,7 @@ public enum DateSeries {
                 start = stepTime;
                 stepTime = step(start);
             }
-            reportQuery.setEndDateTime(stepTime);
+            reportQuery.setEndDateTime(end.minusSeconds(1));
             return reportQuery;
         }
 

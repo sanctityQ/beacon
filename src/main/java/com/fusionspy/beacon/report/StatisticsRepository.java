@@ -8,5 +8,5 @@ import java.sql.Timestamp;
 
 public interface StatisticsRepository extends PagingAndSortingRepository<Statistics,Long> {
 
-    Statistics findByResourceIdAndStartTimeAndEndTime(String resourceId, Timestamp startTime, Timestamp endTime);
+    Statistics findByResourceIdAndAttributeAndStartTimeAndEndTime(String resourceId,String attribute,Timestamp startTime, Timestamp endTime);
 }

@@ -49,7 +49,7 @@ public class TuxDataRepository implements MonitorDataRepository {
     @Override
     public InTimeData getInTimeData(String siteName) {
         String inTimeXml = connect.getInTimeData(siteName);
-        logger.debug("get inTime Xml: {}", inTimeXml);
+       // logger.debug("get inTime Xml: {}", inTimeXml);
         return inTimeBinder.fromXml(inTimeXml);
     }
 

@@ -186,6 +186,8 @@ public class TuxService {
                     busycount++;
                 }
                 if (isSave) {
+                    tuxcltsEntity.setRectime(now);
+                    tuxcltsEntity.setSitename(this.siteName);
                     tuxcltsDao.save(tuxcltsEntity);
                 }
                 //record saved data
@@ -530,12 +532,12 @@ public class TuxService {
         alarm.setAttributeId(attribute.getId());
         alarm.setMonitorId(siteName);
         alarm.setAlarmSource(AlarmSource.APP_SERVER);
-        alarm.setMonitorType(ResourceType.APP_SERVER.name());
+        alarm.setMonitorType(ResourceType.Tuxedo.name());
         alarm.setSeverity(severityLevel);
         alarm.setMessage(controlFixedLength(message));
         alarm.setCreateTime(new Date());
-        alarm.setSubResourceId(siteName);
-        alarm.setSubResourceType(ResourceType.APP_SERVER);
+//        alarm.setSubResourceId(siteName);
+//        alarm.setSubResourceType(ResourceType.APP_SERVER);
         alarmService.saveAlarm(alarm);
 
         //发送邮件

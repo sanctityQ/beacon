@@ -35,7 +35,7 @@ public class AttributeCache {
 				}
 			});
 
-	public Attribute getAttribute(String resourceType, String attributeName) {
+	public Attribute getAttribute(ResourceType resourceType, String attributeName) {
 		try {
 			return attributeCache.get(resourceType + "#" + attributeName);
 		} catch (ExecutionException e) {
@@ -44,7 +44,7 @@ public class AttributeCache {
 		}
 	}
 
-	public String getAttributeId(String resourceType, String attributeName) {
+	public String getAttributeId(ResourceType resourceType, String attributeName) {
 		Attribute attribute = getAttribute(resourceType, attributeName);
 		return attribute.getId();
 	}

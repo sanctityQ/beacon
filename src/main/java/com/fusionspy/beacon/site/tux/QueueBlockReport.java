@@ -4,6 +4,7 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.report.*;
 import com.fusionspy.beacon.site.tux.dao.TuxQueueStatsDao;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.sinosoft.one.monitor.common.ResourceType;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class QueueBlockReport extends StatisticForwardReport implements TuxRepor
             attribute = new Attribute();
             attribute.setAttribute("QUE_BLOCK_COUNT");
             attribute.setAttributeCn("队列阻塞消息数量");
+            attribute.setResourceType(ResourceType.Tuxedo);
             attribute.setUnits("");
         }
         return attribute;

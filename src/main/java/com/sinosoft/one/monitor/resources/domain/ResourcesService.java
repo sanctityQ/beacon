@@ -1,5 +1,6 @@
 package com.sinosoft.one.monitor.resources.domain;
 
+import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class ResourcesService {
 	 * @param resourceId 资源ID
 	 * @return 资源类型
 	 */
-	public String getResourceType(String resourceId) {
+	public ResourceType getResourceType(String resourceId) {
 		return resourcesRepository.findOne(resourceId).getResourceType();
 	}
 

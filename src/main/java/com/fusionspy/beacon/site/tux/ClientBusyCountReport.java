@@ -43,5 +43,4 @@ class ClientBusyCountReport extends StatisticForwardReport implements TuxReport{
         return attribute;
     }
 
-
 }

@@ -2,6 +2,7 @@ package com.sinosoft.one.monitor.resources.model;
 // Generated 2013-3-1 10:54:16 by One Data Tools 1.0.0
 
 
+import com.sinosoft.one.monitor.common.ResourceType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -26,7 +27,7 @@ public class Resource implements java.io.Serializable {
     /**
     * 资源类型.
     */
-    private String resourceType = "";
+    private ResourceType resourceType;
 
 
     @Id 
@@ -49,11 +50,11 @@ public class Resource implements java.io.Serializable {
     }
     
     @Column(name="resource_type", length=100)
-    public String getResourceType() {
+    public ResourceType getResourceType() {
     return this.resourceType;
     }
 
-    public void setResourceType(String resourceType) {
+    public void setResourceType(ResourceType resourceType) {
     this.resourceType = resourceType;
     }
 

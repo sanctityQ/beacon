@@ -11,10 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Alarm.
-* 应用系统预警信息表
- */
+
 @Entity
 @Table(name="GE_MONITOR_ALARM")
 //todo 需要将monitorId调整为resourceId

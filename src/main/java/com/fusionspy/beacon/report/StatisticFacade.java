@@ -17,8 +17,6 @@ public class StatisticFacade {
 
     private  Map<ResourceType,StatisticReportFactory> map = Maps.newHashMap();
 
-
-
     @Inject
     private Set<StatisticReportFactory> statisticReportFactorySet;
 
@@ -34,18 +32,13 @@ public class StatisticFacade {
         map.put(resourceType,statisticReportFactory);
     }
 
-    public final Set<StatisticReportFactory> getStatisticReportFactorySet(){
-        return this.statisticReportFactorySet;
-    }
-
 
     public List<Attribute> getAttributes(ResourceType resourceType){
         return map.get(resourceType).getAttributes();
     }
 
     public StatisticReport getInstance(ResourceType resourceType,String attributeId){
-        StatisticReport statisticReport = map.get(resourceType).getStatisticReport(attributeId);
-        return new StatisticCacheReport(statisticReport);
+        return map.get(resourceType).getStatisticReport(attributeId);
     }
 
 

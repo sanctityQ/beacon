@@ -34,7 +34,7 @@ class TuxReportFactory extends StatisticReportFactory {
     @Override
     protected void initChild() {
         for (Iterator<TuxReport> iterator = tuxReports.iterator(); iterator.hasNext(); ) {
-            attributes.add(iterator.next().getAttribute());
+            attributes.add(((StatisticReport)iterator.next()).getAttribute());
         }
     }
 

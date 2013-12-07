@@ -113,7 +113,6 @@ public class ReportController {
 
         //view data
         inv.addModel("dateSeries",series);
-        //TODO resourceType应该细化到tuxedo，现在仍然为APP_SERVER级别,当调整后可直接通过resource来获取到type
         inv.addModel("resourceType",type);
         inv.addModel("resource", StringUtils.isBlank(resourceId)?resourceId:resourcesCache.getResource(resourceId));
         inv.addModel("attribute",statisticReport.getAttribute());
