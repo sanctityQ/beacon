@@ -34,6 +34,7 @@ function clearError() {
 }
 
 jQuery.validator.addMethod("IP_v",function(value, element, params) {
+    if(value=='localhost' || value=='127.0.0.1') return true;
     return /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/.test(value);
 },"IP地址不合法");
 

@@ -76,7 +76,6 @@
                                     <td width="25%">版本<span class="mandatory">*</span></td>
                                     <td>
                                         <select id="version" name="version" type="text" class="formtext" value="${server.version}">
-                                            <option value="weblogic 8.x">weblogic 8.x</option>
                                             <option value="weblogic 9.x">weblogic 9.x</option>
                                             <option value="weblogic 10.x">weblogic 10.x</option>
                                         </select>
@@ -92,7 +91,7 @@
                                 <tr>
                                     <td>IP地址<span class="mandatory">*</span></td>
                                     <td id="v_listenAddress">
-                                        <input id="listenAddress" name="listenAddress" type="text" class="validate {required:true,IP_v:true} number2_validate formtext" maxlength="15" size="30" value="${server.listenAddress}" />
+                                        <input id="listenAddress" name="listenAddress" type="text" class="validate {required:true,IP_v:true} formtext" maxlength="15" size="30" value="${server.listenAddress}" />
                                         <span id="v_listenAddress_validate"></span>
                                     </td>
                                 </tr>
@@ -131,7 +130,7 @@
                                 <tr>
                                     <td>domain名称<span class="mandatory">*</span></td>
                                     <td id="v_domainName">
-                                        <input id="domainName" name="domainName" type="text" class="validate {required:true} number_validate formtext" maxlength="20" value="${server.domainName}"/>
+                                        <input id="domainName" name="domainName" type="text" class="validate {required:true} formtext" maxlength="20" value="${server.domainName}"/>
                                         <span id="v_domainName_validate"></span>
                                     </td>
                                 </tr>

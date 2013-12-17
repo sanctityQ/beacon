@@ -159,7 +159,8 @@ public class WlsJdbc  implements java.io.Serializable {
 
     @Transient
     public BigDecimal getJdbcusage() {
-        return new BigDecimal(activeCount+leakCount+"").divide(new BigDecimal(currCapacity+""), 2, RoundingMode.HALF_UP);
+        BigDecimal jdbcUsage = new BigDecimal(activeCount+leakCount+"").divide(new BigDecimal(currCapacity+""), 2, RoundingMode.HALF_UP);
+        return jdbcUsage.multiply(new BigDecimal("100"));
     }
 
 

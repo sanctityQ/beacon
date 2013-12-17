@@ -1,5 +1,5 @@
 var serverName;
-
+var interval;
 function chart_init(){
     //cpu chart
     new Highcharts.Chart({
@@ -27,7 +27,7 @@ function chart_init(){
                                 }
                             }
                         })
-                    }, 30000);
+                    }, 1000 * interval);
                 }
             }
         },
@@ -113,7 +113,7 @@ function chart_init(){
                                 }
                             }
                         })
-                    }, 30000);
+                    }, 1000 * interval);
                 }
             }
         },
@@ -197,7 +197,7 @@ function chart_init(){
                                 });
                             }
                         })
-                    }, 30000);
+                    }, 1000 * interval);
                 }
             }
         },
@@ -271,17 +271,15 @@ function chart_init(){
                          async:false,
                          success:function(back){
                              $(back).each(function(i,d) {
-                                 $(back).each(function(i,d) {
-                                     if(series[i].data.length < 20){
-                                         series[i].addPoint(d, true, false);
-                                     }
-                                     else{
-                                         series[i].addPoint(d, true, true);
-                                     }
-                                 });
+                                 if(series[i].data.length < 20){
+                                     series[i].addPoint(d, true, false);
+                                 }
+                                 else{
+                                     series[i].addPoint(d, true, true);
+                                 }
                              });
                          }})
-                     }, 30000);
+                     }, 1000 * interval);
                 }
             }
         },
@@ -344,10 +342,7 @@ function chart_init(){
             height:230,
             events: {
                 load: function() {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
+                    var series = this.series;
                     setInterval(function() {
                         $.ajax({
                             url:rootPath + "/appServer/weblogic/chart/thdusage/"+serverName+"/latest",
@@ -355,18 +350,16 @@ function chart_init(){
                             async:false,
                             success:function(back){
                                 $(back).each(function(i,d) {
-                                    $(back).each(function(i,d) {
-                                        if(series[i].data.length < 20){
-                                            series[i].addPoint(d, true, false);
-                                        }
-                                        else{
-                                            series[i].addPoint(d, true, true);
-                                        }
-                                    });
+                                    if(series[i].data.length < 20){
+                                        series[i].addPoint(d, true, false);
+                                    }
+                                    else{
+                                        series[i].addPoint(d, true, true);
+                                    }
                                 });
                             }
                         })
-                    }, 30000);
+                    }, 1000 * interval);
                 }
             }
         },
@@ -381,12 +374,13 @@ function chart_init(){
         },
         yAxis: {
             title: {
-                text: '值'
+                text: '值%'
             }
         },
         tooltip: {
             formatter: function() {
-                return '<b>'+ this.series.name +'_THREAD</b><br/>'+(this.y*100).toFixed(2)+'%';
+                return '<b>'+ this.series.name +'_THREAD</b><br/>'+
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y.toFixed(2)+'%';
             }
         },
         plotOptions: {
@@ -429,7 +423,6 @@ function chart_init(){
                 load: function() {
 
                     var series = this.series;
-                    //update chart data
                     setInterval(function() {
                         $.ajax({
                             url:rootPath + "/appServer/weblogic/chart/server_session/"+serverName+"/latest",
@@ -437,17 +430,15 @@ function chart_init(){
                             async:false,
                             success:function(back){
                                 $(back).each(function(i,d) {
-                                    $(back).each(function(i,d) {
-                                        if(series[i].data.length < 20){
-                                            series[i].addPoint(d, true, false);
-                                        }
-                                        else{
-                                            series[i].addPoint(d, true, true);
-                                        }
-                                    });
+                                    if(series[i].data.length < 20){
+                                        series[i].addPoint(d, true, false);
+                                    }
+                                    else{
+                                        series[i].addPoint(d, true, true);
+                                    }
                                 });
                             }})
-                    }, 30000);
+                    }, 1000 * interval);
                 }
             }
         },
@@ -658,7 +649,6 @@ ServerInfo.prototype.start = function () {
 }
 
 var WlsServer = buildDataList("WlsServer", [
-    {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'ServerName', name: "ServerName", index: '1', align: ''},
     {id: '3', text: 'ListenAddress', name: "ListenAddress", index: '1', align: ''},
     {id: '4', text: 'ListenPort', name: "ListenPort", index: '1', align: ''},
@@ -669,14 +659,12 @@ var WlsServer = buildDataList("WlsServer", [
 
 
 var JVM = buildDataList("JVM", [
-    {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'server名称', name: "ServerName", index: '1', align: ''},
     {id: '3', text: '空闲heap', name: "FreeHeap", index: '1', align: ''},
     {id: '4', text: '当前heap使用数', name: "CurrentHeap", index: '1', align: ''},
     {id: '5', text: '空闲heap百分比', name: "FreePercent", index: '1', align: ''}
 ]);
 var ThreadPool = buildDataList("ThreadPool", [
-    {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'Server名称', name: "ServerName", index: '1', align: ''},
     {id: '3', text: '空闲数量', name: "IdleCount", index: '1', align: ''},
     {id: '4', text: '备用数量', name: "StandbyCount", index: '1', align: ''},
@@ -685,7 +673,6 @@ var ThreadPool = buildDataList("ThreadPool", [
     {id: '7', text: '队列大小', name: "QueueLength", index: '1', align: ''}
 ]);
 var JDBC = buildDataList("JDBC", [
-    {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'Server名称', name: "ServerName", index: '1', align: ''},
     {id: '3', text: '连接池名称', name: "JDBCName", index: '1', align: ''},
     {id: '4', text: '活动连接数', name: "ActiveCount", index: '1', align: ''},
@@ -695,7 +682,6 @@ var JDBC = buildDataList("JDBC", [
     {id: '8', text: '状态', name: "State", index: '1', align: ''}
 ]);
 var Component = buildDataList("Component", [
-    {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'Server名称', name: "ServerName", index: '1', align: ''},
     {id: '3', text: '应用名称', name: "WebAppName", index: '1', align: ''},
     {id: '4', text: '部署状态', name: "DeploymentState", index: '1', align: ''},
@@ -706,7 +692,6 @@ var Component = buildDataList("Component", [
     {id: '9', text: '累计打开会话数', name: "SessionsOpenedTotalCount", index: '1', align: ''}
 ]);
 var JMS = buildDataList("JMS", [
-    {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'Server名称', name: "ServerName", index: '1', align: ''},
     {id: '3', text: '名称', name: "name", index: '1', align: ''},
     {id: '4', text: '当前字节数', name: "BytesCurrentCount", index: '1', align: ''},
@@ -719,7 +704,6 @@ var JMS = buildDataList("JMS", [
     {id: '11', text: '接受消息数', name: "MessagesReceivedCount", index: '1', align: ''}
 ]);
 var EjbPool = buildDataList("EjbPool", [
-    {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'Server名称', name: "ServerName", index: '1', align: ''},
     {id: '3', text: '名称', name: "EJBPoolName", index: '1', align: ''},
     {id: '4', text: '使用中bean数量', name: "BeansInUseCount", index: '1', align: ''},
@@ -733,7 +717,6 @@ var EjbPool = buildDataList("EjbPool", [
     {id: '12', text: '当前等待数量', name: "WaiterCurrentCount", index: '1', align: ''}
 ]);
 var EjbCache = buildDataList("EjbCache", [
-    {id: '1', text: '排名', name: "sort", index: '1', align: ''},
     {id: '2', text: 'Server名称', name: "ServerName", index: '1', align: ''},
     {id: '3', text: '名称', name: "EJBCacheName", index: '1', align: ''},
     {id: '4', text: '缓存访问数量', name: "CacheAccessCount", index: '1', align: ''},

@@ -8,9 +8,9 @@
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript" src="${ctx}/global/js/appserver/weblogic.js"></script>
 <script type="text/javascript">
-$(function() {
+    interval = '${interval}';
     serverName = '${serverName}';
-    //todo 需要将当前页面的刷新间隔时间调整为从站点对象中动态获取
+$(function() {
 
     var autoWidth = $("#layout_center").width() - 100;
     $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth);
@@ -25,6 +25,27 @@ $(function() {
         var center = $("#layout_center")
         $("#main").width(center.width() - 31).height(center.height() - 30)
     };
+
+    function getServerLatestData(){
+        $.ajax({
+            url: '${ctx}/appServer/weblogic/view/${serverName}/latest',
+            dataType : 'json',
+            type : 'get',
+            async : false,
+            error : function (XMLHttpRequest,errorThrown) {
+                alert("数据加载出错！" + errorThrown);
+            },
+            success: function(data){
+                $('#count').html(data.count);
+                $('#cpuIdle').html(data.cpuIdle);
+                $('#memFree').html(data.memFree);
+                $('#tuxRunQueue').html(data.tuxRunQueue);
+                $('#tuxRunClt').html(data.tuxRunClt);
+            }
+        });
+    }
+
+    setInterval(getServerLatestData, 1000 * interval);
 
     chart_init();
 });

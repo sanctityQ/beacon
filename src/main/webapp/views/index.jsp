@@ -37,7 +37,8 @@ $(function(){
 	gridList.push({"renderId":"emergencyList","url":rootPath+"/alarmList?time=" + new Date().getTime(), "columStyle":columStyle2});
 	//gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList?time=" + new Date().getTime(), "columStyle":columStyle1});
 	//gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList?time=" + new Date().getTime(), "columStyle":columStyle1});
-	gridList.push({"renderId":"tuxedoList","url":rootPath+"/appServer/tuxedo/list?time=" + new Date().getTime(), "columStyle":columnStyle3});
+    gridList.push({"renderId":"weblogicList","url":rootPath+"/appServer/weblogic/indexList?time=" + new Date().getTime(), "columStyle":columnStyle3});
+	//gridList.push({"renderId":"tuxedoList","url":rootPath+"/appServer/tuxedo/list?time=" + new Date().getTime(), "columStyle":columnStyle3});
 
 
 	$(gridList).each(function(i, d){
@@ -80,8 +81,8 @@ $(function(){
 	        <td width="4%">&nbsp;</td>
 	        <td rowspan="3" style="vertical-align:top">
                 <div class="threshold_file">
-                    <h3 class="title3">tuxedo服务器：</h3>
-                    <div id="tuxedoList"></div>
+                    <h3 class="title3">weblogic服务器：</h3>
+                    <div id="weblogicList"></div>
                 </div>
                 <br />
 	        	<%--<div class="threshold_file">--%>

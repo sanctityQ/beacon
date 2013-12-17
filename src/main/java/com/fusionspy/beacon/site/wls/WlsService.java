@@ -182,7 +182,7 @@ public class WlsService {
             this.processWebapp();
             this.processWlsResource();
             WlsError error = inTimeData.getError();
-            if(StringUtils.isNotBlank(error.getErrMsg().trim())) {
+            if(error != null && StringUtils.isNotBlank(error.getErrMsg().trim())) {
                 Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
                 //停机发告警
                 alarmMessage(resource, attribute, siteName, SeverityLevel.CRITICAL, wlsAlertMessage.getMessageByAlarmMessageFormat(AlarmMessageFormat.WLS_STOP));
@@ -345,7 +345,7 @@ public class WlsService {
         private SeverityLevel threadAlarm(WlsThread thread, Threshold threshold){
             if(threshold==null)
                 return SeverityLevel.UNKNOWN;
-            SeverityLevel severityLevel = threshold.match(thread.getThdusage().multiply(new BigDecimal("100")).toString());
+            SeverityLevel severityLevel = threshold.match(thread.getThdusage().toString());
             if(severityLevel != SeverityLevel.UNKNOWN) {
                 wlsAlertMessage.addThreadAlarm(thread.getServerName());
             }

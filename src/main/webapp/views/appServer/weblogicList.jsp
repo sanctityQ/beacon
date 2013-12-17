@@ -13,7 +13,7 @@
         $(function(){
             grid = $("#thresholdList").Grid({
                 url : "${ctx}/appServer/weblogic/list",
-                type:"POST",
+                type:"get",
                 dataType: "json",
                 colDisplay: false,
                 clickSelect: true,
