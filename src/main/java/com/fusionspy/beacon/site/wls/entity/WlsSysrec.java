@@ -45,7 +45,7 @@ public class WlsSysrec  implements java.io.Serializable {
     /**
     * 系统启动时间.
     */
-    @XmlAttribute(name = "Activationtime")
+    @XmlAttribute(name = "ActivationTime")
     private String systemBoot;
     /**
     * os类型.(OS版本)

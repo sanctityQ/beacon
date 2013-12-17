@@ -81,7 +81,7 @@
             <ul class="nav" id="nav">
                 <li><a href="${ctx }/index">首页</a></li>
                 <li class="has_sub">
-                    <a href="javascript:viod(0)">监视器</a><span class="show_sub_anv"></span>
+                    <a href="javascript:void(0)">监视器</a><span class="show_sub_anv"></span>
                     <ul class="add_sub_menu" id="subNav">
                         <li class="action" style="border:none"><span class="middleware">应用服务器</span>
                             <ul class="list">
@@ -128,7 +128,7 @@
                 </ul>
             </li>
             <li class="has_sub">
-                <a href="javascript:viod(0)"><span>动作</span></a>
+                <a href="javascript:void(0)"><span>动作</span></a>
                 <ul class="add_sub_menu">
                     <li class="title"><a href="${ctx}/action/email/list">显示动作</a></li>
                     <shiro:hasPermission name="admin">

@@ -28,7 +28,7 @@ $(function() {
 
     function getServerLatestData(){
         $.ajax({
-            url: '${ctx}/appServer/weblogic/view/${serverName}/latest',
+            url: '${ctx}/appServer/weblogic/viewLast/${serverName}',
             dataType : 'json',
             type : 'get',
             async : false,
@@ -39,8 +39,7 @@ $(function() {
                 $('#count').html(data.count);
                 $('#cpuIdle').html(data.cpuIdle);
                 $('#memFree').html(data.memFree);
-                $('#tuxRunQueue').html(data.tuxRunQueue);
-                $('#tuxRunClt').html(data.tuxRunClt);
+                $('#rectime').html(data.rectime);;
             }
         });
     }
@@ -97,7 +96,7 @@ $(function() {
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd" >监控时间：</td>
-                                    <td class="monitorinfoeven">${rectime}</td>
+                                    <td class="monitorinfoeven"><span id="rectime">${rectime}</span></td>
                                     <td align="right" class="monitorinfoodd" >服务器数量：</td>
                                     <td class="monitorinfoeven">${serverNum}</td>
                                 </tr>

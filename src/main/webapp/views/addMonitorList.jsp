@@ -19,7 +19,7 @@
                       <h3 class="title3">应用服务器</h3>
                       <ul>
                           <li><a href="${ctx}/addmonitor/server/tuxedo">Tuxedo</a></li>
-                          <li><a href="${ctx}/addmonitor/server/weblogic">Weblogic</a></li>
+                          <li><a href="${ctx}/appServer/weblogic/addUI">Weblogic</a></li>
                       </ul>
                   </td>
                 <td width="25%" class="center">

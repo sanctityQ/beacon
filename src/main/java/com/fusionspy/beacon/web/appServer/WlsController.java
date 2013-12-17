@@ -154,13 +154,14 @@ public class WlsController {
      */
     @Get("view/{serverName}")
     public String view(@Param("serverName") String serverName, Invocation invocation) {
+        WlsServer wlsServer = wlsService.getSite(serverName);
         WlsHisData hisData = monitorManage.getMonitorInf(serverName);
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         invocation.addModel("serverName", serverName);
         invocation.addModel("serverType", "weblogic");
         invocation.addModel("wlsVersion", iniData.getWlsSysrec().getDomainVersion());
-        invocation.addModel("rectime", DateTimeFormat.forPattern("yyyy-MM-dd").print(new DateTime(iniData.getWlsSysrec().getRecTime())));
+        invocation.addModel("rectime", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").print(new DateTime(iniData.getWlsSysrec().getRecTime())));
         invocation.addModel("osVersion", iniData.getWlsSysrec().getOsVersion());
         invocation.addModel("serverNum", iniData.getWlsSysrec().getServerNum());
         invocation.addModel("domainName", iniData.getWlsSysrec().getName());
@@ -172,6 +173,7 @@ public class WlsController {
         invocation.addModel("count", hisData.getMonitorCount());
         invocation.addModel("ip", inTimeData.getServerRuntimes().get(0).getListenAddress());
         invocation.addModel("port", inTimeData.getServerRuntimes().get(0).getListenPort());
+        invocation.addModel("interval", wlsServer.getInterval());
         return "weblogicInfo";
     }
 
@@ -180,14 +182,17 @@ public class WlsController {
      * @param serverName
      * @return
      */
+    @Get("/viewLast/${serverName}")
     public Reply viewLast(@Param("serverName") String serverName) {
         WlsHisData hisData = monitorManage.getMonitorInf(serverName);
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         Map<String, Object> lastInfo = new HashMap<String, Object>();
-        lastInfo.put("", "");
-        lastInfo.put("", "");
-        return null;
+        lastInfo.put("count", hisData.getMonitorCount());
+        lastInfo.put("rectime", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").print(new DateTime(iniData.getWlsSysrec().getRecTime())));
+        lastInfo.put("cpuIdle", inTimeData.getResource().getCpuIdle());
+        lastInfo.put("memFree", inTimeData.getResource().getMemFree());
+        return Replys.with(lastInfo).as(Json.class);
     }
 
     /**
