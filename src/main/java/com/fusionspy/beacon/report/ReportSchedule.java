@@ -27,6 +27,9 @@ class ReportSchedule {
     @Autowired
     private List<StatisticReport> statisticReports;
 
+    @Autowired
+    private List<StatisticTopReport> statisticTopReports;
+
 
     @Autowired
     private List<StatisticClean> cleans;
@@ -35,6 +38,8 @@ class ReportSchedule {
 
         //统计
         statistic();
+
+        statisticTop();
         //统计后清除处理
         clear();
 
@@ -60,6 +65,23 @@ class ReportSchedule {
             }
         }
         logger.debug("report Schedule task statistic end,consumeTime is:{}",System.currentTimeMillis()-now.getMillis());
+
+    }
+
+    void statisticTop(){
+        DateTime now =  DateTime.now();
+        logger.debug("report Schedule task statisticTop start,time is:{}",now);
+        for (StatisticTopReport report : statisticTopReports) {
+            for (Resource resource : resourcesRepository.findByResourceType(report.getAttribute().getResourceType())) {
+                for (DateSeries dateSeries : DateSeries.values()) {
+                    if (dateSeries.equals(DateSeries.today))
+                        continue;
+                    report.statisticByTop(resource.getResourceId(), dateSeries,TopFilter.ten);
+                }
+            }
+        }
+        logger.debug("report Schedule task statisticTop end,consumeTime is:{}",System.currentTimeMillis()-now.getMillis());
+
     }
 
 

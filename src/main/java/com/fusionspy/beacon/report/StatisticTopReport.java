@@ -1,11 +1,14 @@
 package com.fusionspy.beacon.report;
 
 
+import com.sinosoft.one.monitor.attribute.model.Attribute;
+
 import java.util.List;
+import java.util.Map;
 
-public interface StatisticTopReport<T> extends StatisticReport{
+public interface StatisticTopReport extends Report{
 
-    List<T> statisticByTop(String resourceId,DateSeries dateSeries,TopFilter top);
+    List<Map<String,String>> statisticByTop(String resourceId,DateSeries dateSeries,TopFilter top);
 
     ReportAttribute reportAttribute();
 }

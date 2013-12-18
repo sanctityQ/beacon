@@ -37,8 +37,12 @@ public class StatisticFacade {
         return map.get(resourceType).getAttributes();
     }
 
-    public StatisticReport getInstance(ResourceType resourceType,String attributeId){
+    public StatisticReport getStatisticReport(ResourceType resourceType, String attributeId){
         return map.get(resourceType).getStatisticReport(attributeId);
+    }
+
+    public StatisticTopReport getTopReport(ResourceType resourceType,String attributeId){
+        return map.get(resourceType).getTopReport(attributeId);
     }
 
 

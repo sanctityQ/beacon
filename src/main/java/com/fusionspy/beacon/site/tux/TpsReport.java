@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-class TpsReport extends StatisticForwardReport implements TuxReport{
+class TpsReport extends TuxStatisticReport implements TuxReport{
 
     private Attribute attribute;
 
@@ -21,7 +21,7 @@ class TpsReport extends StatisticForwardReport implements TuxReport{
     private TuxSvrsStatsDao svrsStatsDao;
 
     @Override
-    public Statistics getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
+    public Statistics statistic(String resourceId, DateTime startDate, DateTime endDate) {
         return svrsStatsDao.statisticTpsByRectimeBetween(resourceId,
                 new Timestamp(startDate.getMillis()),
                 new Timestamp(endDate.getMillis()));

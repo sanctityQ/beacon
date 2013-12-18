@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class ClientTotalCountReport extends StatisticForwardReport implements TuxReport
+public class ClientTotalCountReport extends TuxStatisticReport implements TuxReport
 {
     private Attribute attribute;
 
@@ -22,7 +22,7 @@ public class ClientTotalCountReport extends StatisticForwardReport implements Tu
 
 
     @Override
-    public Statistics getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
+    public Statistics statistic(String resourceId, DateTime startDate, DateTime endDate) {
         return cltsStatsDao.statisticTotalCountByRectimeBetween(resourceId,
                 new Timestamp(startDate.getMillis()),
                 new Timestamp(endDate.getMillis()));

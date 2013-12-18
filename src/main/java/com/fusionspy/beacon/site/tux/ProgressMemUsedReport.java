@@ -3,43 +3,61 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.report.*;
 import com.fusionspy.beacon.site.tux.dao.TuxSvrsDao;
 import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
+import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Lists;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 @Service
-class ProgressMemUsedReport<TuxsvrsEntity> implements TuxReport, StatisticTopReport{
+class ProgressMemUsedReport extends StaticTopForwardReport implements TuxReport{
 
     private Attribute attribute;
 
     @Autowired
     private TuxSvrsDao svrsDao;
 
+    private ReportAttribute reportAttribute =   new ReportAttribute(newArrayList("progname", "memoryuse", "processid"),"progname","memoryuse");
+
+    private final Comparator<Map<String, String>> comparator = new ProgressMemUsedComparator();
+
     @Override
-    public List<TuxsvrsEntity> statisticByTop(String resourceId, DateSeries dateSeries, TopFilter top) {
-        PageRequest pageRequest = new PageRequest(0,top.getTopNum(), Sort.Direction.DESC,"memoryuse");
-        ReportQuery query = dateSeries.getQuery();
-        Page page = svrsDao.findByRectimeBetweenAndSitename(query.getStartDateTime().toDate(),
-                query.getEndDateTime().toDate(),resourceId,pageRequest);
-        return page.getContent();
+    protected List<Map<String, String>> statisticByTop(String resourceId, DateTime startTime, DateTime endTime, int top) {
+        PageRequest pageRequest = new PageRequest(0,top, Sort.Direction.DESC,"memoryuse");
+        Page page = svrsDao.findByRectimeBetweenAndSitename(startTime.toDate(),
+                endTime.toDate(),resourceId,pageRequest);
+        return super.convert(page.getContent());
+    }
+
+    @Override
+    protected Comparator<Map<String, String>> getComparable() {
+        return comparator;
+    }
+
+    static class  ProgressMemUsedComparator implements Comparator<Map<String, String>>{
+        @Override
+        public int compare(Map<String, String> o1, Map<String, String> o2) {
+            return ComparisonChain.start().compare(Float.valueOf(o1.get("memoryuse")),Float.valueOf(o2.get("memoryuse")))
+                    .result();
+        }
     }
 
     @Override
     public ReportAttribute reportAttribute() {
-        return new ReportAttribute(Lists.newArrayList("progname","memoryuse","processid"),"progname","memoryuse");
+        return reportAttribute;
     }
 
-    @Override
-    public ReportResult getStatistic(String resourceId, DateSeries dateSeries) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     @Override
     public Attribute getAttribute() {

@@ -3,6 +3,7 @@ package com.fusionspy.beacon.report;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.AttributeName;
 import org.joda.time.DateTime;
@@ -10,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -25,21 +29,23 @@ public abstract class StatisticForwardReport implements StatisticReport{
         ReportQuery query = dateSeries.getQuery();
         ReportResult reportResult = new ReportResult();
         for(TimePeriod timePeriod:query.getPeriods()){
-            reportResult.addStatistics(statistic(resourceId,timePeriod));
+            for(Statistics statistics:statistic(resourceId,timePeriod)){
+                reportResult.addStatistics(statistics);
+            }
         }
         reportResult.setStartTime(query.getStartDateTime());
         reportResult.setEndTime(query.getEndDateTime());
         return reportResult;
     }
 
-    Statistics statistic(String resourceId,TimePeriod timePeriod){
+    List<Statistics> statistic(String resourceId,TimePeriod timePeriod){
 
-        Statistics statistics =  statisticsRepository.findByResourceIdAndAttributeAndStartTimeAndEndTime
+        List<Statistics> statistics =  statisticsRepository.findByResourceIdAndAttributeAndStartTimeAndEndTime
                 (resourceId, getAttribute().getAttribute(),
                         new Timestamp(timePeriod.getStartDateTime().getMillis()),
                         new Timestamp(timePeriod.getEndDateTime().getMillis()));
 
-        if(statistics == null){
+        if(statistics.isEmpty()){
             statistics = createAndSaveStatistics(resourceId,timePeriod);
         }
 
@@ -55,27 +61,24 @@ public abstract class StatisticForwardReport implements StatisticReport{
         return true;
     }
 
-    Statistics createAndSaveStatistics(String resourceId,TimePeriod timePeriod){
-        Statistics statistics =  getStatistic(resourceId, timePeriod.getStartDateTime(), timePeriod.getEndDateTime());
-        statistics.setResourceId(resourceId);
-        statistics.setResourceType(getAttribute().getResourceType());
-        statistics.setAttribute(getAttribute().getAttribute());
-        statistics.setStartTime(timePeriod.getStartDateTime().toDate());
-        statistics.setEndTime(timePeriod.getEndDateTime().toDate());
-        if(canSave(timePeriod))
-            statisticsRepository.save(statistics);
-        return statistics;
+    List<Statistics> createAndSaveStatistics(String resourceId,TimePeriod timePeriod){
+        Map<String,Statistics>  map =  getStatistic(resourceId, timePeriod.getStartDateTime(), timePeriod.getEndDateTime());
+
+        for(String name:map.keySet()) {
+            Statistics statistics = map.get(name);
+            statistics.setName(name);
+            statistics.setResourceId(resourceId);
+            statistics.setResourceType(getAttribute().getResourceType());
+            statistics.setAttribute(getAttribute().getAttribute());
+            statistics.setStartTime(timePeriod.getStartDateTime().toDate());
+            statistics.setEndTime(timePeriod.getEndDateTime().toDate());
+            if (canSave(timePeriod))
+                statisticsRepository.save(statistics);
+        }
+        return Lists.newArrayList(map.values());
     }
 
 
-    public abstract Statistics getStatistic(String resourceId,DateTime startDate, DateTime endDate);
+    public abstract Map<String,Statistics> getStatistic(String resourceId,DateTime startDate, DateTime endDate);
 
-    @Override
-    public abstract Attribute getAttribute();
-
-
-    public static void main(String[] args){
-        DateTime now = DateTime.now();
-        System.out.println(now.withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0));
-    }
 }

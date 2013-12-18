@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-class ServiceCpuUsedReport extends StatisticForwardReport implements TuxReport{
+class ServiceCpuUsedReport extends TuxStatisticReport implements TuxReport{
 
     private Attribute attribute;
 
@@ -21,7 +21,7 @@ class ServiceCpuUsedReport extends StatisticForwardReport implements TuxReport{
     private TuxResourceDao resourceDao;
 
     @Override
-    public Statistics getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
+    public Statistics statistic(String resourceId, DateTime startDate, DateTime endDate) {
         return resourceDao.statisticServiceCpuUsedByRectimeBetween(resourceId,
                 new Timestamp(startDate.getMillis()),
                 new Timestamp(endDate.getMillis()));

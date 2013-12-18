@@ -16,11 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-/**
- * 统计报表缓存
- * @param <T>
- */
-class StatisticCacheReport<T> implements StatisticTopReport<T>{
+
+class StatisticCacheReport implements StatisticReport{
 
     private static final Logger logger  = LoggerFactory.getLogger(StatisticCacheReport.class);
 
@@ -36,9 +33,7 @@ class StatisticCacheReport<T> implements StatisticTopReport<T>{
     }
 
      void clean(){
-
         resourceReportCache.cleanUp();
-        topCache.cleanUp();
         logger.debug("statistics cache clean up successful");
     }
 
@@ -78,62 +73,12 @@ class StatisticCacheReport<T> implements StatisticTopReport<T>{
     }
 
 
-
     @Override
     public Attribute getAttribute() {
         return statisticReport.getAttribute();
     }
 
-    Cache<String,Cache<DateSeries,Map<TopFilter,List>>> topCache =CacheBuilder.newBuilder().maximumSize(1024)
-    .expireAfterWrite(1, TimeUnit.DAYS).build();
-
-    @Override
-    public List statisticByTop(final String resourceId, final DateSeries dateSeries, final TopFilter top) {
-
-        Cache<DateSeries,Map<TopFilter,List>>  cache = topCache.getIfPresent(resourceId);
-
-        if(cache == null){
-            cache =  CacheBuilder.newBuilder().maximumSize(1024).expireAfterWrite(1,TimeUnit.DAYS).build();
-            topCache.put(resourceId,cache);
-        }
-
-        final StatisticTopReport statisticTopReport = toStatisticTopReport();
-
-        if(dateSeries!=DateSeries.today){
-            try {
-                Map<TopFilter, List> map = cache.get(dateSeries,new Callable<Map<TopFilter, List>>() {
-                    @Override
-                    public Map<TopFilter, List> call() throws Exception {
-                        Map<TopFilter, List> map = newHashMap();
-                        for(TopFilter t:TopFilter.values()){
-                            map.put(t,statisticTopReport.statisticByTop(resourceId,dateSeries,t));
-                        }
-                        return map;
-                    }
-                });
-                return map.get(top);
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        //today data is dynamic,so don't do cache
-        else {
-            return statisticTopReport.statisticByTop(resourceId,dateSeries,top);
-        }
-
-    }
-
-    @Override
-    public ReportAttribute reportAttribute() {
-        return toStatisticTopReport().reportAttribute();
-    }
 
 
-    StatisticTopReport toStatisticTopReport(){
-        if(statisticReport instanceof StatisticTopReport){
-            return  (StatisticTopReport)statisticReport;
-        }else {
-            throw new RuntimeException("can't access this method,it not a StatisticTopReport");
-        }
-    }
+
 }

@@ -1,14 +1,9 @@
 package com.fusionspy.beacon.report;
 
-import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 
-import java.util.List;
 
-/**
- * 统计日期类型
- *
- */
+
 public enum DateSeries {
 
     today {
@@ -36,6 +31,11 @@ public enum DateSeries {
         @Override
         public String getDescription() {
             return "今天";
+        }
+
+        @Override
+        public String getDateTimeFormatter() {
+            return "HH:mm:ss";
         }
 
 
@@ -72,7 +72,13 @@ public enum DateSeries {
             return "昨天";
         }
 
+        @Override
+        public String getDateTimeFormatter() {
+            return "HH:mm:ss";
+        }
+
     },
+
     lastWeek {
         @Override
         public ReportQuery getQuery() {
@@ -82,7 +88,7 @@ public enum DateSeries {
             reportQuery.setStartDateTime(new DateTime(start));
             DateTime stepTime = step(start);
             while(start.isBefore(end)){
-                reportQuery.addTimePeriod(new TimePeriod(start,stepTime));
+                reportQuery.addTimePeriod(new TimePeriod(start,stepTime.minusSeconds(1)));
                 start = stepTime;
                 stepTime = step(start);
             }
@@ -98,6 +104,11 @@ public enum DateSeries {
         public String getDescription() {
             return "最近一周";
         }
+
+        @Override
+        public String getDateTimeFormatter() {
+            return "yyyy-MM-dd";
+        }
     },
 
     lastMonth {
@@ -110,7 +121,7 @@ public enum DateSeries {
             reportQuery.setStartDateTime(new DateTime(start));
             DateTime stepTime = step(start);
             while(start.isBefore(end)){
-                reportQuery.addTimePeriod(new TimePeriod(start,stepTime));
+                reportQuery.addTimePeriod(new TimePeriod(start,stepTime.minusSeconds(1)));
                 start = stepTime;
                 stepTime = step(start);
             }
@@ -126,14 +137,25 @@ public enum DateSeries {
         public String getDescription() {
             return "最近一月";
         }
+
+        @Override
+        public String getDateTimeFormatter() {
+            return "yyyy-MM-dd";
+        }
     };
 
     public abstract ReportQuery getQuery();
 
     public abstract String getDescription();
 
+    public abstract String getDateTimeFormatter();
+
 
     public static void main(String[] args){
-        DateSeries today1 = DateSeries.today;
+        DateSeries today1 = DateSeries.lastMonth;
+        for(TimePeriod timePeriod:today1.getQuery().getPeriods()){
+            System.out.println(timePeriod.getStartDateTime()+"||"+timePeriod.getEndDateTime());
+
+        }
     }
 }

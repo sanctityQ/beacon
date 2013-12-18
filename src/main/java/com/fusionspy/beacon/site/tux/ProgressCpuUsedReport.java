@@ -2,42 +2,50 @@ package com.fusionspy.beacon.site.tux;
 
 import com.fusionspy.beacon.report.*;
 import com.fusionspy.beacon.site.tux.dao.TuxSvrsDao;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ComparisonChain;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 @Service
-class ProgressCpuUsedReport<TuxsvrsEntity> implements TuxReport, StatisticTopReport{
+class ProgressCpuUsedReport extends StaticTopForwardReport implements TuxReport{
 
     private Attribute attribute;
 
     @Autowired
     private TuxSvrsDao svrsDao;
 
+    private final Comparator<Map<String, String>> comparator = new ProgressCpuUsedComparator();
+
+    private ReportAttribute reportAttribute = new ReportAttribute(newArrayList("progname", "cpuuse", "processid"),"progname","cpuuse");
+
+
     @Override
-    public List<TuxsvrsEntity> statisticByTop(String resourceId, DateSeries dateSeries, TopFilter top) {
-        PageRequest pageRequest = new PageRequest(0,top.getTopNum(), Sort.Direction.DESC,"cpuuse");
-        ReportQuery query = dateSeries.getQuery();
-        Page page =svrsDao.findByRectimeBetweenAndSitename(query.getStartDateTime().toDate(),
-                query.getEndDateTime().toDate(),resourceId,pageRequest);
-        return page.getContent();
+    protected List<Map<String,String>>  statisticByTop(String resourceId, DateTime startTime, DateTime endTime, int top) {
+        PageRequest pageRequest = new PageRequest(0,top, Sort.Direction.DESC,"cpuuse");
+        Page page =svrsDao.findByRectimeBetweenAndSitename(startTime.toDate(),endTime.toDate(),resourceId,pageRequest);
+        return super.convert(page.getContent()) ;
+    }
+
+    @Override
+    protected Comparator<Map<String, String>> getComparable() {
+        return comparator;
     }
 
     @Override
     public ReportAttribute reportAttribute() {
-        return new ReportAttribute(Lists.newArrayList("progname", "cpuuse", "processid"),"progname","cpuuse");
-    }
-
-    @Override
-    public ReportResult getStatistic(String resourceId, DateSeries dateSeries) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return reportAttribute;
     }
 
     @Override
@@ -50,5 +58,15 @@ class ProgressCpuUsedReport<TuxsvrsEntity> implements TuxReport, StatisticTopRep
             attribute.setUnits("%");
         }
         return attribute;
+    }
+
+    static class  ProgressCpuUsedComparator implements Comparator<Map<String, String>>{
+
+        @Override
+        public int compare(Map<String, String> o1, Map<String, String> o2) {
+            return ComparisonChain.start().compare(Float.valueOf(o1.get("cpuuse")),Float.valueOf(o2.get("cpuuse")))
+                    .result();
+
+        }
     }
 }

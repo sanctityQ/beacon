@@ -90,7 +90,7 @@
 
                             <div class="reporCont" style="display:block">
                                 <div class="selec_list">
-                                    选择中间件
+                                    选择服务器
                                     <select id="monitorName" class="diySelect" style="width:150px">
                                     </select>
                                 </div>

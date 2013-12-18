@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 
 @Service
-class ServiceMemUsedReport extends StatisticForwardReport implements TuxReport{
+class ServiceMemUsedReport extends TuxStatisticReport implements TuxReport{
 
     private Attribute attribute;
 
@@ -20,7 +20,7 @@ class ServiceMemUsedReport extends StatisticForwardReport implements TuxReport{
     private TuxResourceDao resourceDao;
 
     @Override
-    public Statistics getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
+    public Statistics statistic(String resourceId, DateTime startDate, DateTime endDate) {
         return resourceDao.statisticServiceMemUsedByRectimeBetween(resourceId,
                 new Timestamp(startDate.getMillis()),
                 new Timestamp(endDate.getMillis()));

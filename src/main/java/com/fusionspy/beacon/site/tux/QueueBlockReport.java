@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class QueueBlockReport extends StatisticForwardReport implements TuxReport{
+public class QueueBlockReport extends TuxStatisticReport implements TuxReport {
 
     private Attribute attribute;
 
@@ -21,7 +21,7 @@ public class QueueBlockReport extends StatisticForwardReport implements TuxRepor
     private TuxQueueStatsDao queueStatsDao;
 
     @Override
-    public Statistics getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
+    public Statistics statistic(String resourceId, DateTime startDate, DateTime endDate) {
         return queueStatsDao.statisticQueueBlockCountByRectimeBetween(resourceId,
                 new Timestamp(startDate.getMillis()),
                 new Timestamp(endDate.getMillis()));

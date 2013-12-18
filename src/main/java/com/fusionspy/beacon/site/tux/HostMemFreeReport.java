@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class HostMemFreeReport extends StatisticForwardReport implements TuxReport{
+public class HostMemFreeReport extends TuxStatisticReport implements TuxReport {
 
     private Attribute attribute;
 
@@ -21,7 +21,7 @@ public class HostMemFreeReport extends StatisticForwardReport implements TuxRepo
     private TuxResourceDao resourceDao;
 
     @Override
-    public Statistics getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
+    public Statistics statistic(String resourceId, DateTime startDate, DateTime endDate) {
         return resourceDao.statisticHostMemFreeByRectimeBetween(resourceId,
                 new Timestamp(startDate.getMillis()),
                 new Timestamp(endDate.getMillis()));
