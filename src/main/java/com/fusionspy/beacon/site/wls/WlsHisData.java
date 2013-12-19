@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.util.Assert;
 
 import java.util.Iterator;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -23,18 +24,25 @@ public class WlsHisData implements HisData {
 
     public final static WlsHisData EMPTY;
 
-    static{
+    static {
         EMPTY = new WlsHisData();
         EMPTY.setWlsIniData(WlsIniData.EMPTY);
         EMPTY.setWlsInTimeData(WlsInTimeData.EMPTY);
     }
-    /** 记录初始化数据*/
+
+    /**
+     * 记录初始化数据
+     */
     private WlsInTimeData wlsInTimeData;
-    /** 记录最后一次实时数据*/
+    /**
+     * 记录最后一次实时数据
+     */
     private WlsIniData wlsIniData;
 
     private int rqDoneCount = -1;
-    /** 监控次数*/
+    /**
+     * 监控次数
+     */
     private int monitorCount;
 
     public int getRqDoneCount() {
@@ -54,6 +62,8 @@ public class WlsHisData implements HisData {
     }
 
     public WlsInTimeData getWlsInTimeData() {
+        if (wlsInTimeData == null)
+            return WlsInTimeData.EMPTY;
         return wlsInTimeData;
     }
 
@@ -62,7 +72,7 @@ public class WlsHisData implements HisData {
     }
 
     public WlsIniData getWlsIniData() {
-        return wlsIniData;
+        return wlsIniData.isStop() ? WlsIniData.EMPTY : wlsIniData;
     }
 
     public void setWlsIniData(WlsIniData wlsIniData) {
@@ -78,7 +88,21 @@ public class WlsHisData implements HisData {
     }
 
     public Iterator<WlsInTimeData> getIntimeDatasQue(String siteName) {
-        BlockingQueue<WlsInTimeData> wlsInTimeDataQueue =  QueuesHolder.getQueue(siteName + INTIMEDATA, point);
+        BlockingQueue<WlsInTimeData> wlsInTimeDataQueue = QueuesHolder.getQueue(siteName + INTIMEDATA, point);
+        if (wlsInTimeDataQueue.size() == 0) {
+            wlsInTimeDataQueue = new ArrayBlockingQueue<WlsInTimeData>(1);
+            wlsInTimeDataQueue.add(WlsInTimeData.EMPTY);
+        }
         return wlsInTimeDataQueue.iterator();
+    }
+
+    public boolean isWlsStop() {
+        if (wlsIniData.getTuxError() != null && StringUtils.isNotBlank(wlsIniData.getWlsError().getErrMsg())) {
+            return true;
+        }
+        if (wlsInTimeData.getTuxError() != null && StringUtils.isNotBlank(wlsInTimeData.getWlsError().getErrMsg())) {
+            return true;
+        }
+        return false;
     }
 }

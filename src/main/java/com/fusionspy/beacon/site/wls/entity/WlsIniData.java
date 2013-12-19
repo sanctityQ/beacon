@@ -28,6 +28,7 @@ public class WlsIniData extends MonitorData implements InitData {
     static {
         EMPTY = new WlsIniData();
         EMPTY.setWlsSysrec(new WlsSysrec());
+        EMPTY.defaultData();
     }
 
     @XmlElement(name = "INITBUF")

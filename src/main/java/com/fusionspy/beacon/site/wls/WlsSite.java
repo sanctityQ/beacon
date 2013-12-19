@@ -45,6 +45,8 @@ public class WlsSite extends MonitorSite {
 
     @Override
     public HisData getMonitorData() {
+        if(wlsHisData == null)
+            return WlsHisData.EMPTY;
         return wlsHisData;
     }
 

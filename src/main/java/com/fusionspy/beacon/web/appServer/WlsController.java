@@ -579,7 +579,6 @@ public class WlsController {
                 index = index + 1;
                 row.addCell(webapp.getServerName());
                 row.addCell(webapp.getName() + "");
-                row.addCell(webapp.getName() + "");
                 row.addCell(webapp.getDeploymentState() + "");
                 row.addCell(webapp.getStatus() + "");
                 row.addCell(webapp.getComponentName() + "");
@@ -601,7 +600,6 @@ public class WlsController {
                 row.setId(jms.getId() + "");
                 index = index + 1;
                 row.addCell(jms.getServerName());
-                row.addCell(jms.getName() + "");
                 row.addCell(jms.getName() + "");
                 row.addCell(jms.getBytesCurrentCount() + "");
                 row.addCell(jms.getBytesHighCount() + "");
@@ -627,7 +625,6 @@ public class WlsController {
                 index = index + 1;
                 row.addCell(ejbPool.getServerName());
                 row.addCell(ejbPool.getName() + "");
-                row.addCell(ejbPool.getName() + "");
                 row.addCell(ejbPool.getBeansInUseCount() + "");
                 row.addCell(ejbPool.getBeansInUserCurrentCount() + "");
                 row.addCell(ejbPool.getAccessTotalCount() + "");
@@ -652,7 +649,6 @@ public class WlsController {
                 row.setId(ejbCache.getId() + "");
                 index = index + 1;
                 row.addCell(ejbCache.getServerName());
-                row.addCell(ejbCache.getName() + "");
                 row.addCell(ejbCache.getName() + "");
                 row.addCell(ejbCache.getCacheAccessCount() + "");
                 row.addCell(ejbCache.getActivationCount() + "");

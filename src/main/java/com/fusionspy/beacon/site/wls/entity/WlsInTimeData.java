@@ -2,11 +2,16 @@ package com.fusionspy.beacon.site.wls.entity;
 
 import com.fusionspy.beacon.site.InTimeData;
 import com.fusionspy.beacon.site.MonitorData;
+import com.sinosoft.one.util.encode.JaxbBinder;
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.annotation.*;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +29,22 @@ import java.util.List;
 public class WlsInTimeData extends MonitorData implements InTimeData {
 
     public static WlsInTimeData EMPTY = new WlsInTimeData();
+
+    static {
+        try {
+            InputStream in = WlsInTimeData.class.getClassLoader().getResourceAsStream("site/WlsInTimeEmpty.xml");
+            SAXReader xmlReader = new SAXReader();
+            Document xmlDocument = xmlReader.read(in);
+            String resp = xmlDocument.asXML();
+            JaxbBinder jaxbBinder2 = new JaxbBinder(WlsInTimeData.class);
+            EMPTY = jaxbBinder2.fromXml(resp);
+            EMPTY.getResource().setCpuIdle(100);
+            EMPTY.getResource().setMemFree("0");
+            EMPTY.defaultData();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+    }
 
     @XmlElement(name = "ServerRuntime")
     private List<WlsSvr> serverRuntimes = new ArrayList<WlsSvr>();

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MONITOR Date="2009-10-19 16:10:42">
+    <ServerRuntime ActivationTime="" HealthState="State:HEALTH_FAILED,ReasonCode:[,]" State="" Name="" OpenSocketsCurrentCount="0" WeblogicVersion="" ListenAddress="" ListenPort="" RestartsTotalCount="" serverName=""/>
+    <!--wxT("HEALTH_OK"),wxT("HEALTH_WARN"),wxT("HEALTH_CRITICAL"),wxT("HEALTH_FAILED"),-->`
+
+    <JVMRuntime HeapFreeCurrent="0" HeapSizeCurrent="0" HeapFreePercent="0" serverName=""/>
+
+    <ThreadPoolRuntime Name="" CompletedRequestCount="0" ExecuteThreadTotalCount="0" ExecuteThreadIdleCount="0" StandbyThreadCount="0" serverName="" QueueLength="0" />
+
+    <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="" State="" ConnectionsTotalCount="0" LeakedConnectionCount="0" FailedReserveRequestCount="0" DeploymentState="" CurrCapacity="0" ActiveConnectionsHighCount="0" ActiveConnectionsCurrentCount="0" serverName="" />
+
+    <ApplicationRuntimes.ComponentRuntimes  Name="" DeploymentState="0" ComponentName="" Status="0" OpenSessionsHighCount="0" OpenSessionsCurrentCount="0" SessionsOpenedTotalCount="0" serverName=""/>
+
+    <JMSRuntime.JMSServers  Name="" BytesCurrentCount="0" BytesHighCount="0" BytesPendingCount="0" BytesReceivedCount="0" MessagesCurrentCount="0" MessagesHighCount="0" MessagesPendingCount="0" MessagesReceivedCount="0" serverName=""/>
+
+    <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.PoolRuntime  Name="" BeansInUseCount="0" BeansInUseCurrentCount="0" AccessTotalCount="0" DestroyedTotalCount="0" IdleBeansCount="0" MissTotalCount="0" PooledBeansCurrentCount="0" TimeoutTotalCount="0" WaiterCurrentCount="0" serverName=""/>
+
+    <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime  Name="" CacheAccessCount="0" ActivationCount="0" CachedBeansCurrentCount="0" CacheHitCount="0" CacheMissCount="0" PassivationCount="0" serverName=""/>
+
+    <OSResource CPU="0" MEM="0M0"/>
+</MONITOR>

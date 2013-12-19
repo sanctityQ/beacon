@@ -159,8 +159,12 @@ public class WlsThread implements java.io.Serializable {
 
     @Transient
     public BigDecimal getThdusage() {
-        BigDecimal thdusage = new BigDecimal((totalCount - idleCount - standbyCount) + "").divide(new BigDecimal(totalCount + ""), 2, RoundingMode.HALF_UP);
-        return thdusage.multiply(new BigDecimal("100"));
+        try {
+            BigDecimal thdusage = new BigDecimal((totalCount - idleCount - standbyCount) + "").divide(new BigDecimal(totalCount + ""), 2, RoundingMode.HALF_UP);
+            return thdusage.multiply(new BigDecimal("100"));
+        } catch (Exception e) {
+            return BigDecimal.ZERO;
+        }
     }
 
 
