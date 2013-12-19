@@ -8,4 +8,7 @@ package com.fusionspy.beacon.site;
  */
 public interface InitData {
 
+    final String EMPTY="-";
+
+    void process();
 }

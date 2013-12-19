@@ -39,8 +39,8 @@ public class SystemServiceImpl implements SystemService{
 
     private static final String CACHE = "systemInfoCache";
 
-    @Autowired
-	private CacheManager ehcacheManager;
+//    @Autowired
+//	private CacheManager ehcacheManager;
 
     @Autowired
     private SiteListDao siteListDao;
@@ -54,13 +54,6 @@ public class SystemServiceImpl implements SystemService{
     @Autowired
     private ResourcesRepository resourcesRepository;
 
-    @Autowired
-    private AttributeCache attributeCache;
-    @Autowired
-    private ResourcesCache resourcesCache;
-    @Autowired
-    private ThresholdService thresholdService;
-
 
     @Override
     public void addSite(SiteListEntity siteListEntity) {
@@ -72,7 +65,7 @@ public class SystemServiceImpl implements SystemService{
             resource = new Resource();
             resource.setResourceId(siteListEntity.getSiteName());
             resource.setResourceName(siteListEntity.getSiteName());
-            resource.setResourceType(ResourceType.APP_SERVER.name());
+            resource.setResourceType(ResourceType.Tuxedo);
             resourcesRepository.save(resource);
         }
 
@@ -113,9 +106,9 @@ public class SystemServiceImpl implements SystemService{
     }
 
 
-    private void cacheSiteSetting(){
-        Cache cache = ehcacheManager.getCache(CACHE);
-    }
+//    private void cacheSiteSetting(){
+//        Cache cache = ehcacheManager.getCache(CACHE);
+//    }
 
     @Override
     public SiteSettings getSiteSetting(String siteName) {

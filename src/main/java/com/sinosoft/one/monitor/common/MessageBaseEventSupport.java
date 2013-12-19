@@ -31,9 +31,8 @@ public class MessageBaseEventSupport {
 	public void init() {
 		MessageBaseEventHandler messageBaseEventHandler = new MessageBaseEventHandler();
 		messageBaseEventHandler.setAlarmMessageHandler(alarmMessageHandler);
-		Disruptor<MessageBaseEvent> disruptor = new Disruptor<MessageBaseEvent>(MessageBaseEvent.EVENT_FACTORY, Executors.newSingleThreadExecutor(),
-						new SingleThreadedClaimStrategy(ringSize),
-						new BlockingWaitStrategy());
+		Disruptor<MessageBaseEvent> disruptor = new Disruptor<MessageBaseEvent>(MessageBaseEvent.EVENT_FACTORY,ringSize,
+                Executors.newSingleThreadExecutor());
 		disruptor.handleEventsWith(messageBaseEventHandler);
 		ringBuffer = disruptor.start();
 	}

@@ -5,10 +5,8 @@ import com.sinosoft.one.monitor.attribute.model.Attribute;
 
 import java.util.List;
 
-public interface StatisticReport{
+public interface StatisticReport extends Report{
 
-    public ReportResult getStatistic(String resourceId,DateSeries dateSeries);
-
-    public Attribute getAttribute();
+    ReportResult getStatistic(String resourceId,DateSeries dateSeries);
 
 }

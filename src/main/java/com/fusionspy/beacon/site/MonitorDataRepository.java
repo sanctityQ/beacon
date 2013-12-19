@@ -12,7 +12,7 @@ public interface MonitorDataRepository {
      * when monitor start get init data
      * @return
      */
-    <T> InitData getInitData(String siteName, String ip, int port);
+    <T  extends InitData> T getInitData(String siteName, String ip, int port);
 
     /**
      * every interval get server side in-time data

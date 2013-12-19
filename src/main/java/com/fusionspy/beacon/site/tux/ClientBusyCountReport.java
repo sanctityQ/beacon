@@ -3,38 +3,35 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.report.*;
 import com.fusionspy.beacon.site.tux.dao.TuxResourceDao;
 import com.fusionspy.beacon.site.tux.dao.TuxcltsStatsDao;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.sinosoft.one.monitor.common.ResourceType;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 @Service
-class ClientBusyCountReport implements TuxReport{
+class ClientBusyCountReport extends TuxStatisticReport implements TuxReport {
 
     private Attribute attribute;
 
     @Autowired
     private TuxcltsStatsDao cltsStatsDao;
 
-
     @Override
-    public ReportResult getStatistic(String resourceId, DateSeries dateSeries) {
-        ReportQuery query = dateSeries.getQuery();
-        List<TimePeriod> timePeriods = query.getPeriods();
-        ReportResult reportResult = new ReportResult();
-
-        for(TimePeriod timePeriod:timePeriods){
-            Statistics statistics =  cltsStatsDao.statisticBusyCountByRectimeBetween(resourceId,
-                    new Timestamp(timePeriod.getStartDateTime().getMillis()),
-                    new Timestamp(timePeriod.getEndDateTime().getMillis()));
-            statistics.setTimePeriod(timePeriod);
-            reportResult.addStatistics(statistics);
-        }
-        reportResult.setStartTime(query.getStartDateTime());
-        reportResult.setEndTime(query.getEndDateTime());
-        return reportResult;
+    public Statistics statistic(String resourceId, DateTime startDate, DateTime endDate) {
+       return cltsStatsDao.statisticBusyCountByRectimeBetween(resourceId,
+                new Timestamp(startDate.getMillis()),
+                new Timestamp(endDate.getMillis()));
     }
 
     @Override
@@ -43,10 +40,10 @@ class ClientBusyCountReport implements TuxReport{
             attribute = new Attribute();
             attribute.setAttribute("CLT_BUSY_COUNT");
             attribute.setAttributeCn("繁忙客户端数量");
+            attribute.setResourceType(ResourceType.Tuxedo);
             attribute.setUnits("");
         }
         return attribute;
     }
-
 
 }

@@ -90,8 +90,13 @@ public class MessageUtils {
 		return healthClass;
 	}
 
-    public static String available2CssClass(boolean isAvailable){
-        return isAvailable?"fine":"poor";
+    public static String available2CssClass(int isAvailable){
+        if(isAvailable == 1)
+            return "fine";
+        else if(isAvailable == -1)
+            return "poor";
+        else
+            return "unknown";
     }
 	
 	public static String trend2CssClass(String strTrend) {

@@ -18,10 +18,9 @@ import java.util.*;
  */
 public class ProcessInTimeResult {
 
-    private static Logger logger = LoggerFactory.getLogger(ProcessInTimeResult.class);
+  //  private static Logger logger = LoggerFactory.getLogger(ProcessInTimeResult.class);
 
     public static final ProcessInTimeResult EMPTY;
-
 
     private SiteInfoLogger siteInfoLogger = SiteInfoLogger.getInstance();
 
@@ -31,23 +30,22 @@ public class ProcessInTimeResult {
 
     private DataTrace dataTrace = DataTrace.getInstance();
 
-
     static {
         EMPTY = new ProcessInTimeResult(StringUtils.EMPTY);
-        ArrayList arrayList = new ArrayList();
-        //tux resource empty
-        TuxresourceEntity tuxresourceEntity = new TuxresourceEntity();
-        tuxresourceEntity.setAllsvrcpuuse(0);
-        tuxresourceEntity.setAllsvrmemused(0);
-        tuxresourceEntity.setCpuidle(0);
-        tuxresourceEntity.setMemfree(0);
-        tuxresourceEntity.setRectime(new Date());
-        tuxresourceEntity.setSitename(StringUtils.EMPTY);
-        tuxresourceEntity.setTuxrunclt(0);
-        tuxresourceEntity.setTuxrunqueue(0);
-        tuxresourceEntity.setTuxrunsvr(0);
-        EMPTY.recordTuxRes(tuxresourceEntity);
-        EMPTY.setStopServer(true,StringUtils.EMPTY);
+//        ArrayList arrayList = new ArrayList();
+//        //tux resource empty
+//        TuxresourceEntity tuxresourceEntity = new TuxresourceEntity();
+//        tuxresourceEntity.setAllsvrcpuuse(0);
+//        tuxresourceEntity.setAllsvrmemused(0);
+//        tuxresourceEntity.setCpuidle(0);
+//        tuxresourceEntity.setMemfree(0);
+//        tuxresourceEntity.setRectime(new Date());
+//        tuxresourceEntity.setSitename(StringUtils.EMPTY);
+//        tuxresourceEntity.setTuxrunclt(0);
+//        tuxresourceEntity.setTuxrunqueue(0);
+//        tuxresourceEntity.setTuxrunsvr(0);
+//        EMPTY.recordTuxRes(tuxresourceEntity);
+//        EMPTY.setStopServer(true,StringUtils.EMPTY);
     }
 
 
@@ -272,7 +270,7 @@ public class ProcessInTimeResult {
     private void logMessage(String siteName, String message) {
 
         //log
-        logger.info(message);
+        //logger.info(message);
         //message add queue
         siteInfoLogger.logInf(siteName, message);
     }

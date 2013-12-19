@@ -110,6 +110,8 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
+
+
 		<!-- WEB begin -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -174,21 +176,23 @@
             <version>15.0</version>
 		</dependency>
         <dependency>
-            <groupId>com.googlecode.disruptor</groupId>
+            <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
+            <version>3.2.0</version>
         </dependency>
-		<!-- GENERAL UTILS end -->
+
+        <!-- GENERAL UTILS end -->
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>import</scope>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<scope>import</scope>
+			<scope>test</scope>
 		</dependency>
         <!--ShiroDbRealm begin-->
 

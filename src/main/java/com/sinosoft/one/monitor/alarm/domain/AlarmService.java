@@ -2,18 +2,11 @@ package com.sinosoft.one.monitor.alarm.domain;
 
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
-import com.sinosoft.one.monitor.common.AlarmSource;
-import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.monitor.resources.domain.ResourcesService;
-import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
-import com.sinosoft.one.monitor.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -31,8 +24,6 @@ public class AlarmService {
     @Autowired
 	private AlarmRepository alarmRepository;
 
-    @Autowired
-    private ResourcesService resourcesService;
 
 
 	public void saveAlarm(Alarm alarm) {

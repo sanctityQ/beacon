@@ -10,7 +10,8 @@
 		<!-- Triggers集成 -->
 		<property name="triggers">
 			<list>
-				<ref bean="cronTrigger" />
+				<ref bean="cronTrigger_1" />
+				<ref bean="cronTrigger_2" />
 			</list>
 		</property>
 		<!-- Quartz配置, 本地运行无需单独的quartz.properties文件，在此简单配置即可 -->
@@ -24,18 +25,33 @@
 	</bean>
 
 	<!-- Cron式Trigger定义 -->
-	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="cronJobDetail" />
-		<!-- 周一至五,朝九晚五工作时间内每半小时执行一次 -->
+	<bean id="cronTrigger_1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="cronJobDetail_1" />
+		<!-- 每天23:59:59 开始执行 -->
 		<property name="cronExpression" value="59 59 23 ? * *" />
 	</bean>
 
 	<!-- JobDetajil, 基于MethodInvokingJobDetailFactoryBean调用普通Spring Bean -->
-	<bean id="cronJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<bean id="cronJobDetail_1" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="alarmTask" />
 		<property name="targetMethod" value="execute" />
 		<!-- 同一任务在前一次执行未完成而Trigger时间又到时是否并发开始新的执行, 默认为true. -->
 		<property name="concurrent" value="true" />
 	</bean>
+
+    <!-- Cron式Trigger定义 -->
+    <bean id="cronTrigger_2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cronJobDetail_2" />
+        <!-- 每天23:59:59 开始执行 -->
+        <property name="cronExpression" value="59 39 23 ? * *" />
+    </bean>
+
+    <!-- JobDetajil, 基于MethodInvokingJobDetailFactoryBean调用普通Spring Bean -->
+    <bean id="cronJobDetail_2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="reportSchedule" />
+        <property name="targetMethod" value="execute" />
+        <!-- 同一任务在前一次执行未完成而Trigger时间又到时是否并发开始新的执行, 默认为true. -->
+        <property name="concurrent" value="true" />
+    </bean>
 
 </beans>

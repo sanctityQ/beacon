@@ -33,18 +33,12 @@
             dataType: "json",
             height: 'auto',
             colums:[
-                {id:'1',text:'日期',name:"date",width:'',index:'1',align:'',color:''},
-                <c:if test="${dateSeries eq 'today'}">
-                {id:'2',text:'时间',name:"time",width:'',index:'1',align:'',color:''},
-                </c:if>
-                <c:if test="${dateSeries eq 'yesterday'}">
-                {id:'2',text:'时间',name:"time",width:'',index:'1',align:'',color:''},
-                </c:if>
+                {id:'1',text:'日期/时间',name:"datetime",width:'',index:'1',align:'',color:''},
+                {id:'2',text:'名称',name:"name",width:'',index:'1',align:'',color:''},
                 {id:'3',text:'最大值',name:"max",width:'',index:'1',align:'',color:''},
                 {id:'4',text:'最小值',name:"min",width:'',index:'1',align:'',color:''},
                 {id:'5',text:'平均值',name:"avg",width:'',index:'1',align:'',color:''}
             ],
-            rowNum:100000,
             //rowList:[10,20,30],
             pager : false,
             number:false,
@@ -55,21 +49,13 @@
             chart: {
                 renderTo: 'container',
                 type: 'column',
-                margin: [ 50, 50, 100, 80]
+                margin: [ 50, 50, 50, 50]
             },
             title: {
                 text: ''
             },
             xAxis: {
-                categories: ${chartCategories},
-                labels: {
-                    rotation: -45,
-                    align: 'right',
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
+                categories: ${xAxisCategories}
             },
             yAxis: {
                 min: 0,
@@ -78,38 +64,29 @@
                 }
             },
             legend: {
-                enabled: false
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 50,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: '#FFFFFF',
+                shadow: true
             },
             credits: {
                 text: '',
                 href: ''
             },
             tooltip: {
+                valueSuffix: '${attribute.units}',
                 formatter: function() {
                     return '<b>${attribute.attributeCn}('+ this.x +
                             '):</b>'+ Highcharts.numberFormat(this.y, 1) +
                             ' ${attribute.units}';
                 }
             },
-            series: [{
-                name: 'Population',
-                data: ${chartData},
-                dataLabels: {
-                    enabled: false,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    x: -3,
-                    y: 10,
-                    formatter: function() {
-                        return this.y;
-                    },
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-            }]
+            series: ${chartSeries}
         });
 
         $('#expPdf').click(function(e){
@@ -119,7 +96,7 @@
                         'title':'${dateSeries.description}-${type.description}的${attribute.attributeCn}(${attribute.units})',
                         'attribute':'${attribute.attribute}',
                         'gridData':'${gridData}',
-                        'gridTitle':"['日期'," +
+                        'gridTitle':"['日期/时间'," +
                             <c:if test="${(dateSeries eq 'today') or (dateSeries eq 'yesterday')}">
                                 "'时间'," +
                             </c:if>

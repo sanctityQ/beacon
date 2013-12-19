@@ -3,6 +3,7 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.site.HisData;
 import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
 import com.fusionspy.beacon.site.tux.entity.TuxIniData;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * tux history data (only last data)
@@ -13,10 +14,17 @@ public class  TuxHisData implements HisData {
     public final static TuxHisData EMPTY;
 
     static{
-        EMPTY = new TuxHisData();
+        EMPTY = new TuxHisData(StringUtils.EMPTY);
         EMPTY.setTuxIniData(TuxIniData.EMPTY);
         EMPTY.setTuxInTimeData(TuxInTimeData.EMPTY);
         EMPTY.setProcessResult(ProcessInTimeResult.EMPTY);
+    }
+
+
+    TuxHisData(String siteName){
+        this.setProcessResult(new ProcessInTimeResult(siteName));
+        this.setTuxInTimeData(TuxInTimeData.EMPTY);
+        this.setTuxIniData(TuxIniData.EMPTY);
     }
 
     private TuxInTimeData tuxInTimeData;
@@ -28,6 +36,9 @@ public class  TuxHisData implements HisData {
     private ProcessInTimeResult processResult;
 
     private int monitorCount;
+
+
+  //  private boolean tuxedoStop = false;
 
     public TuxInTimeData getTuxInTimeData() {
         return tuxInTimeData;
@@ -46,7 +57,7 @@ public class  TuxHisData implements HisData {
     }
 
     public TuxIniData getTuxIniData() {
-        return tuxIniData;
+        return tuxIniData.isStop()?TuxIniData.EMPTY:tuxIniData;
     }
 
     void setTuxIniData(TuxIniData tuxIniData) {
@@ -79,4 +90,16 @@ public class  TuxHisData implements HisData {
     public int getMonitorCount() {
         return monitorCount;
     }
+
+    public boolean isTuxedoStop() {
+
+        if(tuxIniData.getTuxError()!=null&& StringUtils.isNotBlank(tuxIniData.getTuxError().getError())){
+            return true;
+        }
+        if(tuxInTimeData.getTuxError()!=null&&StringUtils.isNotBlank(tuxInTimeData.getTuxError().getError())){
+            return true;
+        }
+        return false;
+    }
+
 }

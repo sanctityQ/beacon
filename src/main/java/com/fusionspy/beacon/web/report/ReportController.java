@@ -5,11 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fusionspy.beacon.report.*;
-import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -24,9 +22,6 @@ import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Get;
 import com.sinosoft.one.mvc.web.annotation.rest.Post;
-import com.sinosoft.one.mvc.web.instruction.reply.Reply;
-import com.sinosoft.one.mvc.web.instruction.reply.Replys;
-import com.sinosoft.one.mvc.web.instruction.reply.transport.Raw;
 import com.sinosoft.one.uiutil.Gridable;
 import com.sinosoft.one.uiutil.UIType;
 import com.sinosoft.one.uiutil.UIUtil;
@@ -37,6 +32,7 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -45,8 +41,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
@@ -55,8 +49,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.Date;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -68,16 +61,19 @@ public class ReportController {
     private DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
-    private StatisticFactory factory;
+    private StatisticFacade factory;
 
 
     @Autowired
     private ResourcesCache resourcesCache;
 
     @Get
-    public String view(Invocation inv){
-        //TODO 先写死，后期需要调整为ajax动态加载属性值
-        List<Attribute> attributes = factory.getAttributes(ResourceType.Tuxedo);
+    public String view(@Param("resourceType")ResourceType resourceType,Invocation inv){
+        if(resourceType == null){
+            resourceType =  ResourceType.Tuxedo;
+        }
+
+        List<Attribute> attributes = factory.getAttributes(resourceType);
         inv.addModel("attributes",attributes);
         return "view";
     }
@@ -88,17 +84,16 @@ public class ReportController {
                                  @Param("resourceId")String resourceId,@Param("dateSeries")DateSeries series,
                                  Invocation inv){
 
-        StatisticReport statisticReport = factory.getInstance(type, attribute);
+        StatisticReport statisticReport = factory.getStatisticReport(type, attribute);
 
 
 
         ReportResult reportResult = statisticReport.getStatistic(resourceId,series);
+        chartData(reportResult,series,inv);
         toGridJsonData(reportResult,series,inv);
-
 
         //view data
         inv.addModel("dateSeries",series);
-        //TODO resourceType应该细化到tuxedo，现在仍然为APP_SERVER级别,当调整后可直接通过resource来获取到type
         inv.addModel("resourceType",type);
         inv.addModel("resource", StringUtils.isBlank(resourceId)?resourceId:resourcesCache.getResource(resourceId));
         inv.addModel("attribute",statisticReport.getAttribute());
@@ -110,7 +105,7 @@ public class ReportController {
     public String top(@Param("type")ResourceType type,@Param("attribute")String attribute,
                       @Param("resourceId")String resourceId,@Param("dateSeries")DateSeries series,
                       @Param("top")TopFilter top,Invocation inv){
-        StatisticTopReport statisticReport = (StatisticTopReport)factory.getInstance(type, attribute);
+        StatisticTopReport statisticReport = factory.getTopReport(type, attribute);
         //set top default value
         if(top ==null)top=TopFilter.five;
         logger.debug("/resourceType/{type}/attribute/{attribute}/top resourceId:{}",resourceId);
@@ -120,7 +115,6 @@ public class ReportController {
 
         //view data
         inv.addModel("dateSeries",series);
-        //TODO resourceType应该细化到tuxedo，现在仍然为APP_SERVER级别,当调整后可直接通过resource来获取到type
         inv.addModel("resourceType",type);
         inv.addModel("resource", StringUtils.isBlank(resourceId)?resourceId:resourcesCache.getResource(resourceId));
         inv.addModel("attribute",statisticReport.getAttribute());
@@ -129,28 +123,20 @@ public class ReportController {
         return "topInfo";
     }
 
-    void topDeal(List rows, final ReportAttribute reportAttribute, Invocation inv){
+    void topDeal(List<Map<String,String>> rows, final ReportAttribute reportAttribute, Invocation inv){
 
         //chart data
         final List<String> xAxis = Lists.newArrayList();
         final List<Double> chartData = Lists.newArrayList();
-        List<Map<String,String>> grid = Lists.transform(rows,new Function<Object, Map<String,String>>() {
-            @Nullable
-            @Override
-            public Map<String,String> apply(@Nullable Object input) {
-                Map<String,String> m = Maps.newHashMap();
-                for(String attribute:reportAttribute.getAttributes()){
-                    m.put(attribute,String.valueOf(Reflections.invokeGetter(input, attribute)));
-                };
 
-                xAxis.add(m.get(reportAttribute.getCategories()));
-                chartData.add(Double.parseDouble(m.get(reportAttribute.getChartData())));
-                return m;
-            }
-        });
+        for(Map<String,String> map:rows){
+            xAxis.add(map.get(reportAttribute.getCategories()));
+            chartData.add(Double.parseDouble(map.get(reportAttribute.getOrderAttributeName())));
+
+        }
 
         String cellString = Joiner.on(",").join(reportAttribute.getAttributes());
-        Page page = new PageImpl(grid);
+        Page page = new PageImpl(rows);
         Gridable gridable = new Gridable(page);
         gridable.setIdField(reportAttribute.getCategories());
         gridable.setCellStringField(cellString);
@@ -159,15 +145,47 @@ public class ReportController {
         inv.addModel("chartData", JSON.toJSONString(chartData) );
     }
 
+   void chartData(ReportResult reportResult, final DateSeries series,Invocation inv){
 
+       final List<String> xAxis = Lists.newArrayList();
+       final List<Map> chartSeries = Lists.newArrayList();
+
+
+       Map<String,Collection<Double>> map =  Multimaps.transformValues(reportResult.getStatisticsMap(), new Function<Statistics, Double>() {
+           @Nullable
+           @Override
+           public Double apply(@Nullable Statistics input) {
+               return input.getAvg() == null ? 0d : input.getAvg();
+           }
+       }).asMap();
+
+
+       for(String key:map.keySet()){
+           Map<String,Object> m = Maps.newHashMap();
+           m.put("name",key);
+           m.put("data", map.get(key));
+           chartSeries.add(m);
+
+           if(xAxis.isEmpty()){
+               //创建xAxis
+               xAxis.addAll(Collections2.transform(reportResult.getStatisticsMap().get(key),new Function<Statistics, String>() {
+                   @Nullable
+                   @Override
+                   public String apply(@Nullable Statistics input) {
+                       return new DateTime(input.getStartTime()).toLocalDateTime().toString(series.getDateTimeFormatter());
+                   }
+               }));
+           }
+
+       }
+
+       inv.addModel("xAxisCategories", JSON.toJSONString(xAxis));
+       inv.addModel("chartSeries", JSON.toJSONString(chartSeries) );
+   }
 
     private void toGridJsonData(ReportResult reportResult,final DateSeries series, Invocation inv){
         if(reportResult.getStatistics().isEmpty())
             return;
-        //chart data
-        final List<String> xAxis = Lists.newArrayList();
-        final List<Double> chartData = Lists.newArrayList();
-
 
 
         List<Map<String,String>> rows = Lists.transform(reportResult.getStatistics(),new Function<Statistics, Map<String,String>>() {
@@ -175,33 +193,25 @@ public class ReportController {
             @Override
             public Map<String,String> apply(@Nullable Statistics input) {
                 Map<String,String> m = Maps.newHashMap();
-                m.put("date", input.getTimePeriod().getStartDateTime().toLocalDate().toString("yyyy-MM-dd"));
-                if(series.equals(DateSeries.today)||series.equals(DateSeries.yesterday))
-                    m.put("time",input.getTimePeriod().getStartDateTime().toLocalTime().toString("HH:mm:ss"));
+                m.put("dateTime", new DateTime(input.getStartTime()).toLocalDateTime().toString(series.getDateTimeFormatter()));
+                m.put("name", StringUtils.isBlank(input.getName())?input.getResourceId():input.getName());
                 m.put("max",input.getMax()==null?"-": toBigDemical(input.getMax()).toString());
                 m.put("min",input.getMin()==null?"-":toBigDemical(input.getMin()).toString());
                 m.put("avg", input.getAvg() == null ? "-" : toBigDemical(input.getAvg()).toString());
-                if(series.equals(DateSeries.lastWeek)||series.equals(DateSeries.lastMonth))
-                    xAxis.add(input.getTimePeriod().getStartDateTime().toLocalDate().toString("yyyy-MM-dd"));
-                else
-                    xAxis.add(input.getTimePeriod().getStartDateTime().toLocalTime().toString("HH:mm:ss"));
-                chartData.add(input.getAvg() == null? 0d:input.getAvg());
                 return m;
             }
         });
+
+
         Page<Map<String,String>> page = new PageImpl<Map<String,String>>(rows);
         Gridable<Map<String,String>> gridable = new Gridable<Map<String,String>> (page);
 
-        String cellString = new String("date,time,max,min,avg");
-        if(series.equals(DateSeries.lastWeek)||series.equals(DateSeries.lastMonth))
-            cellString = new String("date,max,min,avg");
+        String cellString = new String("dateTime,name,max,min,avg");
 
-        gridable.setIdField("date");
+        gridable.setIdField("dateTime");
         gridable.setCellStringField(cellString);
 
         inv.addModel("gridData", UIUtil.with(gridable).as(UIType.Json).getConvertResult());
-        inv.addModel("chartCategories", JSON.toJSONString(xAxis));
-        inv.addModel("chartData", JSON.toJSONString(chartData) );
         inv.addModel("startTime",dateTimeFormatter.print(reportResult.getStartTime()));
         inv.addModel("endTime",dateTimeFormatter.print(reportResult.getEndTime()));
         inv.addModel("maxAvg",reportResult.getMaxAvg() == null?"-":toBigDemical(reportResult.getMaxAvg()).toString());

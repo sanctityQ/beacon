@@ -7,6 +7,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "GE_MONITOR_GROUP")
 //@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Group{
+public class Group implements Serializable{
 
     protected Long id;
 
