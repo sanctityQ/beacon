@@ -7,6 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * TuxcltsStats dao
@@ -22,4 +23,7 @@ public interface TuxcltsStatsDao extends PagingAndSortingRepository<TuxcltsStats
 
     @SQL("select MAX(u.busyCount) max,MIN(u.busyCount) min,AVG(u.busyCount) avg from GE_MONITOR_TUX_CLT_STATS u where u.sitename = ?1 and u.rectime >= ?2 and  u.rectime < ?3")
     public Statistics statisticBusyCountByRectimeBetween(String siteName, Timestamp startTime, Timestamp endTime);
+
+    @SQL("delete u from GE_MONITOR_TUX_CLT_STATS u where u.rectime < ?1 ")
+    public void deleteByRectimeBefore(Timestamp date);
 }

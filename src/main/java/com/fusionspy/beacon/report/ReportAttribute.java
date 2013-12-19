@@ -9,12 +9,13 @@ public class ReportAttribute {
 
     private String categories;
 
-    private String chartData;
+    private String orderAttribute;
 
-    public ReportAttribute(List<String> attributes, String categories, String chartData) {
+
+    public ReportAttribute(List<String> attributes, String categories, String orderAttribute) {
         this.attributes = attributes;
         this.categories = categories;
-        this.chartData = chartData;
+        this.orderAttribute = orderAttribute;
     }
 
     public List<String> getAttributes() {
@@ -22,9 +23,10 @@ public class ReportAttribute {
     }
 
 
-    public String getChartData() {
-        return chartData;
+    public String getOrderAttributeName() {
+        return orderAttribute;
     }
+
 
     public String getCategories() {
         return categories;

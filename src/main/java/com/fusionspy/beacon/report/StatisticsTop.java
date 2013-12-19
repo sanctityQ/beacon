@@ -1,20 +1,14 @@
 package com.fusionspy.beacon.report;
 
-import com.sinosoft.one.monitor.common.AttributeName;
+
 import com.sinosoft.one.monitor.common.ResourceType;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "ge_monitor_report_statistics")
-public class Statistics implements java.io.Serializable{
-
-    private static final long serialVersionUID = Statistics.class.hashCode();
-
-
-    //enum Unit{day,hour}
+@Table(name = "ge_monitor_report_statistics_top")
+public class StatisticsTop implements java.io.Serializable{
 
     private Long id;
 
@@ -22,23 +16,16 @@ public class Statistics implements java.io.Serializable{
 
     private ResourceType resourceType;
 
-    private String name;
-
     private String attribute;
 
     private Date startTime;
 
     private Date endTime;
 
-    private Double max;
-
-    private Double min;
-
-    private Double avg;
-
+    private String topValue;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     public Long getId() {
         return id;
     }
@@ -46,7 +33,6 @@ public class Statistics implements java.io.Serializable{
     public void setId(Long id) {
         this.id = id;
     }
-
 
     @Column(name = "resource_id")
     public String getResourceId() {
@@ -68,14 +54,6 @@ public class Statistics implements java.io.Serializable{
         this.resourceType = resourceType;
     }
 
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Column(name = "attribute_name")
     public String getAttribute() {
@@ -106,44 +84,12 @@ public class Statistics implements java.io.Serializable{
         this.endTime = endTime;
     }
 
-
-//    @Column(name="unit")
-//    @Enumerated(value = EnumType.STRING)
-//    public Unit getUnit() {
-//        return unit;
-//    }
-//
-//    public void setUnit(Unit unit) {
-//        this.unit = unit;
-//    }
-
-    @Column(name = "max")
-    public Double getMax() {
-        return max;
+    @Column(name="top_value")
+    public String getTopValue() {
+        return topValue;
     }
 
-    public void setMax(Double max) {
-        this.max = max;
+    public void setTopValue(String topValue) {
+        this.topValue = topValue;
     }
-
-    @Column(name = "min")
-    public Double getMin() {
-        return min;
-    }
-
-    public void setMin(Double min) {
-        this.min = min;
-    }
-
-    @Column(name = "avg")
-    public Double getAvg() {
-        return avg;
-    }
-
-    public void setAvg(Double avg) {
-        this.avg = avg;
-    }
-
-
-
 }

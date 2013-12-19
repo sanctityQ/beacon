@@ -11,7 +11,7 @@
 
             $.ajax({
                 type:"post",
-                url:"${ctx}/alarm/manager/configemergency/monitornames/APP_SERVER",
+                url:"${ctx}/alarm/manager/configemergency/monitornames/Tuxedo",
                 dataType:"json",
                 async:false,
                 success:function(data){
@@ -90,7 +90,7 @@
 
                             <div class="reporCont" style="display:block">
                                 <div class="selec_list">
-                                    选择中间件
+                                    选择服务器
                                     <select id="monitorName" class="diySelect" style="width:150px">
                                     </select>
                                 </div>

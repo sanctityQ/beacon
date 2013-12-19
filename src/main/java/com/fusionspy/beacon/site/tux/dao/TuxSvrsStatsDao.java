@@ -7,6 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * TuxSvrsStats Dao
@@ -19,4 +20,7 @@ public interface TuxSvrsStatsDao extends PagingAndSortingRepository<TuxsvrStatsE
 
     @SQL("select MAX(u.tpsDone) max,MIN(u.tpsDone) min,AVG(u.tpsDone) avg from GE_MONITOR_TUX_SVR_STATS u where u.sitename = ?1 and u.rectime >= ?2 and  u.rectime < ?3")
     public Statistics statisticTpsByRectimeBetween(String siteName, Timestamp startTime, Timestamp endTime);
+
+    @SQL("delete u from GE_MONITOR_TUX_SVR_STATS u where u.rectime < ?1 ")
+    void deleteByRecTimeBefore(Timestamp date);
 }

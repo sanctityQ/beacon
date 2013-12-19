@@ -199,7 +199,7 @@ public class AlarmMessageHandler {
 		alarm.setAttributeId(attribute.getId());
 		alarm.setMonitorId(thresholdAlarmParams.resource.getResourceId());
 		alarm.setAlarmSource(thresholdAlarmParams.alarmSource);
-		alarm.setMonitorType(thresholdAlarmParams.resource.getResourceType());
+		alarm.setMonitorType(thresholdAlarmParams.resource.getResourceType().name());
 		alarm.setSeverity(thresholdAlarmParams.severityLevel);
 		alarm.setMessage(alarmMessageBuilder.toString());
 		alarm.setCreateTime(new Date());
@@ -218,9 +218,10 @@ public class AlarmMessageHandler {
 		
 		// 保存告警信息
 		alarmService.saveAlarm(alarm);
-		if(thresholdAlarmParams.subResourceType != ResourceType.NONE && StringUtils.isNotBlank(thresholdAlarmParams.subResourceId)) {
-			healthStaCache.increase(thresholdAlarmParams.resource.getResourceId(), thresholdAlarmParams.subResourceId, thresholdAlarmParams.severityLevel);
-		}
+
+//        if(thresholdAlarmParams.subResourceType != ResourceType.NONE && StringUtils.isNotBlank(thresholdAlarmParams.subResourceId)) {
+//			healthStaCache.increase(thresholdAlarmParams.resource.getResourceId(), thresholdAlarmParams.subResourceId, thresholdAlarmParams.severityLevel);
+//		}
 
 		// 处理动作
 		if(allAttributeActions != null && allAttributeActions.size() > 0) {

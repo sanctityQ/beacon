@@ -1,5 +1,6 @@
 package com.fusionspy.beacon.site.tux;
 
+import com.fusionspy.beacon.report.Report;
 import com.fusionspy.beacon.report.StatisticReport;
 import com.fusionspy.beacon.report.StatisticReportFactory;
 import com.google.common.collect.Ordering;
@@ -34,7 +35,7 @@ class TuxReportFactory extends StatisticReportFactory {
     @Override
     protected void initChild() {
         for (Iterator<TuxReport> iterator = tuxReports.iterator(); iterator.hasNext(); ) {
-            attributes.add(iterator.next().getAttribute());
+            attributes.add(((Report)iterator.next()).getAttribute());
         }
     }
 

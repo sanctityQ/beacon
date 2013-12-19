@@ -3,12 +3,7 @@ package com.sinosoft.one.monitor.controllers.alarm.manager;
 import com.sinosoft.one.monitor.alarm.domain.AlarmService;
 import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
-import com.sinosoft.one.monitor.application.model.UrlTraceLog;
-import com.sinosoft.one.monitor.application.repository.ApplicationRepository;
-import com.sinosoft.one.monitor.application.repository.UrlTraceLogRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.monitor.db.oracle.repository.InfoRepository;
-import com.sinosoft.one.monitor.os.linux.repository.OsRepository;
 import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
@@ -49,16 +44,9 @@ public class AlarmManagerController {
 
     @Autowired
     AlarmRepository alarmRepository;
-    @Autowired
-    ApplicationRepository applicationRepository;
+
     @Autowired
     AlarmService alarmService;
-    @Autowired
-    OsRepository osRepository;
-    @Autowired
-    InfoRepository infoRepository;
-    @Autowired
-    UrlTraceLogRepository urlTraceLogRepository;
     @Autowired
     ResourcesRepository resourcesRepository;
 
@@ -185,16 +173,8 @@ public class AlarmManagerController {
                 }else {
                     tempAlarm.setMessage(messageNameStart+messageNameEnd);
                 }
-                //拼接应用中文名
-                if(ResourceType.APPLICATION.name().equals(tempAlarm.getMonitorType())){
-                    tempAlarm.setAppName(applicationRepository.findOne(tempAlarm.getMonitorId()).getCnName());
-                }else if(ResourceType.OS.name().equals(tempAlarm.getMonitorType())){
-                    tempAlarm.setAppName(osRepository.findOne(tempAlarm.getMonitorId()).getName());
-                }else if(ResourceType.DB.name().equals(tempAlarm.getMonitorType())){
-                    tempAlarm.setAppName(infoRepository.findOne(tempAlarm.getMonitorId()).getName());
-                }else {
-                    tempAlarm.setAppName(tempAlarm.getMonitorId());
-                }
+
+                tempAlarm.setAppName(tempAlarm.getMonitorId());
                 //获得类型对应的中文名
                 tempAlarm.setMonitorType(ResourceType.valueOf(tempAlarm.getMonitorType()).getDescription());
                 //格式化时间，供页面显示
@@ -239,24 +219,8 @@ public class AlarmManagerController {
     @Get("detail/{alarmId}")
     public String getAlarmDetail(@Param("alarmId") String alarmId,Invocation inv){
         Alarm dbAlarm=alarmRepository.findOne(alarmId);
-        if(ResourceType.APPLICATION.name().equals(dbAlarm.getMonitorType())){
-            inv.addModel("monitorName",applicationRepository.findOne(dbAlarm.getMonitorId()).getCnName());
-            inv.addModel("monitorType",ResourceType.APPLICATION.name());
-            UrlTraceLog urlTraceLog=urlTraceLogRepository.findByAlarmId(dbAlarm.getId());
-            if(null==urlTraceLog){
-                inv.addModel("urlTraceLogUrlId","-1");
-                inv.addModel("urlTraceLogId","notExist");
-            }else{
-                inv.addModel("urlTraceLogUrlId",urlTraceLog.getUrlId());
-                inv.addModel("urlTraceLogId",urlTraceLog.getId());
-            }
-        }else if(ResourceType.OS.name().equals(dbAlarm.getMonitorType())){
-            inv.addModel("monitorName",osRepository.findOne(dbAlarm.getMonitorId()).getName());
-        }else if(ResourceType.DB.name().equals(dbAlarm.getMonitorType())){
-            inv.addModel("monitorName",infoRepository.findOne(dbAlarm.getMonitorId()).getName());
-        }else{
-            inv.addModel("monitorName",dbAlarm.getMonitorId());
-        }
+
+        inv.addModel("monitorName",dbAlarm.getMonitorId());
         inv.addModel("alarm",dbAlarm);
         inv.addModel("_cnName",dbAlarm.getSeverity().cnName());
         inv.addModel("alarmImage",getImageOfAlarm(dbAlarm.getSeverity()));
