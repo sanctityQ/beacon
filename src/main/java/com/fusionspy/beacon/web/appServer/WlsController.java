@@ -64,13 +64,14 @@ public class WlsController {
         JsonGrid grid = JsonGrid.buildGrid(wlsService.list(), new JsonGrid.JsonRowHandler<WlsServer>() {
             @Override
             public JsonGrid.JsonRow buildRow(WlsServer t) {
-                WlsHisData hisData = monitorManage.getMonitorInf(t.getServerName());
+                WlsHisData hisData = monitorManage.getMonitorInf(t.getSiteName()).getMonitorData();
                 WlsInTimeData inTimeData = hisData.getWlsInTimeData();
+                //TODO
                 List<WlsSvr> serverRuntimes = inTimeData.getServerRuntimes();
-                String availability = (inTimeData.getError() == null || StringUtils.isBlank(inTimeData.getError().getErrMsg())) ? "fine" : "poor";
+                //String availability = (inTimeData.getError() == null || StringUtils.isBlank(inTimeData.getError().getErrMsg())) ? "fine" : "poor";
                 JsonGrid.JsonRow row = new JsonGrid.JsonRow();
-                row.setId(t.getServerName());
-                row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, preUrl + t.getServerName(), t.getServerName()));
+                row.setId(t.getSiteName());
+                row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, preUrl + t.getSiteName(), t.getSiteName()));
                 StringBuilder serverList = new StringBuilder();
                 StringBuilder healthList = new StringBuilder();
                 for(WlsSvr serverRuntime : serverRuntimes) {
@@ -103,11 +104,11 @@ public class WlsController {
         return "weblogicSaveUI";
     }
 
-    @Get("editUI/{serverName}")
-    public String editUI(@Param("serverName") String serverName, Invocation invocation) {
-        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+    @Get("editUI/{siteName}")
+    public String editUI(@Param("siteName") String siteName, Invocation invocation) {
+        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
         hisData.getWlsIniData().getWlsSysrec();
-        WlsServer wlsServer = wlsService.getSite(serverName);
+        WlsServer wlsServer = wlsService.getSite(siteName);
         invocation.addModel("server", wlsServer);
         return "weblogicSaveUI";
     }
@@ -116,22 +117,22 @@ public class WlsController {
     public String save(WlsServer wlsServer) {
         wlsServer.setStatus(1);
         wlsService.save(wlsServer);
-        monitorManage.cancel(wlsServer.getServerName());
-        return "/appServer/weblogic/start/" + wlsServer.getServerName();
+        monitorManage.cancel(wlsServer.getSiteName());
+        return "/appServer/weblogic/start/" + wlsServer.getSiteName();
     }
 
     /**
      * 删除操作(包含删除一个和批量删除操作)
      *
-     * @param serverNames
+     * @param siteNames
      * @return
      */
-    @Delete("delete/{serverNames}")
-    public Reply delete(@Param("serverNames") List<String> serverNames) {
+    @Delete("delete/{siteNames}")
+    public Reply delete(@Param("siteNames") List<String> siteNames) {
         message.put("result", true);
-        for (String serverName : serverNames) {
-            monitorManage.cancel(serverName);
-            wlsService.delete(serverName);
+        for (String siteName : siteNames) {
+            monitorManage.cancel(siteName);
+            wlsService.delete(siteName);
         }
         return Replys.with(message).as(Json.class);
     }
@@ -150,12 +151,12 @@ public class WlsController {
             @Override
             public JsonGrid.JsonRow buildRow(WlsServer wlsServer) {
                 JsonGrid.JsonRow row = new JsonGrid.JsonRow();
-                row.setId(wlsServer.getServerName());
-                row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, viewUrl + wlsServer.getServerName(), wlsServer.getServerName()));
+                row.setId(wlsServer.getSiteName());
+                row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, viewUrl + wlsServer.getSiteName(), wlsServer.getSiteName()));
                 row.addCell(wlsServer.getListenAddress());
                 row.addCell(wlsServer.getListenPort() + "");
                 row.addCell(wlsServer.getInterval() + "");
-                row.addCell(MessageUtils.formateMessage(MessageUtils.HANDLER_FORMAT, eidUrl + wlsServer.getServerName()));
+                row.addCell(MessageUtils.formateMessage(MessageUtils.HANDLER_FORMAT, eidUrl + wlsServer.getSiteName()));
                 return row;
             }
         });
@@ -164,17 +165,17 @@ public class WlsController {
 
     /**
      * 查看监控Weblogic服务详细信息
-     * @param serverName
+     * @param siteName
      * @param invocation
      * @return
      */
-    @Get("view/{serverName}")
-    public String view(@Param("serverName") String serverName, Invocation invocation) {
-        WlsServer wlsServer = wlsService.getSite(serverName);
-        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+    @Get("view/{siteName}")
+    public String view(@Param("siteName") String siteName, Invocation invocation) {
+        WlsServer wlsServer = wlsService.getSite(siteName);
+        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
-        invocation.addModel("serverName", serverName);
+        invocation.addModel("serverName", siteName);
         invocation.addModel("serverType", "weblogic");
         invocation.addModel("wlsVersion", iniData.getWlsSysrec().getDomainVersion());
         invocation.addModel("rectime", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").print(new DateTime(iniData.getWlsSysrec().getRecTime())));
@@ -195,12 +196,12 @@ public class WlsController {
 
     /**
      * 更新监视汇总信息
-     * @param serverName
+     * @param siteName
      * @return
      */
-    @Get("/viewLast/${serverName}")
-    public Reply viewLast(@Param("serverName") String serverName) {
-        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+    @Get("/viewLast/${siteName}")
+    public Reply viewLast(@Param("siteName") String siteName) {
+        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         Map<String, Object> lastInfo = new HashMap<String, Object>();
@@ -219,7 +220,7 @@ public class WlsController {
      */
     @Get("serverInfo/{serverName}")
     public Reply serverInfo(@Param("serverName") String serverName) {
-        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+        WlsHisData hisData = monitorManage.getMonitorInf(serverName).getMonitorData();
         List<WlsSvr> serverRuntimes = hisData.getWlsInTimeData().getServerRuntimes();
         JsonGrid grid = JsonGrid.buildGrid(serverRuntimes, new JsonGrid.JsonRowHandler<WlsSvr>() {
             @Override
@@ -249,20 +250,20 @@ public class WlsController {
         return Replys.with(grid).as(Json.class);
     }
 
-    @Post("start/{serverName}")
-    public Reply startMonitor(@Param("serverName") String serverName, @DefValue("zh_CN") Locale locale) {
+    @Post("start/{siteName}")
+    public Reply startMonitor(@Param("siteName") String siteName, @DefValue("zh_CN") Locale locale) {
         BeaconLocale.setLocale(locale);
-        monitorManage.monitor(serverName);
-        logger.debug("start server name is {} ", serverName);
+        monitorManage.monitor(siteName);
+        logger.debug("start server name is {} ", siteName);
         message.put("type", "success");
         return Replys.with(message).as(Json.class);
     }
 
-    @Get("/chart/{type}/{serverName}/{operation}")
-    public Reply chartFree(@Param("type") String type, @Param("serverName") String serverName, @Param("operation") String operation) {
-        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+    @Get("/chart/{type}/{siteName}/{operation}")
+    public Reply chartFree(@Param("type") String type, @Param("siteName") String siteName, @Param("operation") String operation) {
+        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
-        Iterator<WlsInTimeData> iterator = hisData.getIntimeDatasQue(serverName);
+        Iterator<WlsInTimeData> iterator = hisData.getIntimeDatasQue(siteName);
         Object retVal = null; //返回char数据对象，用于转化为JSON
         if (type.equals("cpu") || type.equals("memory")) { //cpu使用率和内存使用率
             List<Object> list = new ArrayList<Object>(); //cpu和memory时，返回对象为数组形式
@@ -343,11 +344,11 @@ public class WlsController {
                 while (iterator.hasNext()) {
                     inTimeData = iterator.next();
                     if (inTimeData.getThreadPoolRuntimes().isEmpty()) {
-                        Map<String, Object> serie = series.get(serverName);
+                        Map<String, Object> serie = series.get(siteName);
                         if (serie == null) {
                             serie = new HashMap<String, Object>();
-                            series.put(serverName, serie);
-                            serie.put("name", serverName);
+                            series.put(siteName, serie);
+                            serie.put("name", siteName);
                             List<Object> data = new ArrayList<Object>();
                             serie.put("data", data);
                         }
@@ -390,11 +391,11 @@ public class WlsController {
                 while (iterator.hasNext()) {
                     inTimeData = iterator.next();
                     if (inTimeData.getThreadPoolRuntimes().isEmpty()) {
-                        Map<String, Object> serie = series.get(serverName);
+                        Map<String, Object> serie = series.get(siteName);
                         if (serie == null) {
                             serie = new HashMap<String, Object>();
-                            series.put(serverName, serie);
-                            serie.put("name", serverName);
+                            series.put(siteName, serie);
+                            serie.put("name", siteName);
                             List<Object> data = new ArrayList<Object>();
                             serie.put("data", data);
                         }
@@ -462,12 +463,12 @@ public class WlsController {
      * 数据监控列表信息
      *
      * @param type
-     * @param serverName
+     * @param siteName
      * @return
      */
-    @Get("data/{type}/{serverName}")
-    public Reply getInTimeData(@Param("type") String type, @Param("serverName") String serverName) {
-        WlsHisData hisData = monitorManage.getMonitorInf(serverName);
+    @Get("data/{type}/{siteName}")
+    public Reply getInTimeData(@Param("type") String type, @Param("siteName") String siteName) {
+        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
         WlsInTimeData wlsInTimeData = hisData.getWlsInTimeData();
         if (type.equals("WlsServer")) {
             return getServerDate(wlsInTimeData.getServerRuntimes());

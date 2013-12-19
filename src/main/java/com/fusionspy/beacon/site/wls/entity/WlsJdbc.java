@@ -18,156 +18,171 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * WlsJdbc.
-* 
  */
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(name="ge_monitor_wls_jdbc")
-public class WlsJdbc  implements java.io.Serializable {
+@Table(name = "ge_monitor_wls_jdbc")
+public class WlsJdbc implements java.io.Serializable {
 
     /**
-        */
+     */
     @XmlTransient
     private Integer id;
     /**
-    * 记录时间.
-    */
+     * 站点名称
+     */
+    @XmlTransient
+    private String siteName;
+    /**
+     * 记录时间.
+     */
     @XmlTransient
     private Date recTime;
     /**
-    * Server名称.
-    */
+     * Server名称.
+     */
     @XmlAttribute(name = "serverName")
     private String serverName;
     /**
-    * 连接池名称.
-    */
+     * 连接池名称.
+     */
     @XmlAttribute(name = "Name")
     private String name;
     /**
-    * 活动链接数.
-    */
+     * 活动链接数.
+     */
     @XmlAttribute(name = "ActiveConnectionsCurrentCount")
     private Integer activeCount;
     /**
-    * 连接最高值.
-    */
+     * 连接最高值.
+     */
     @XmlAttribute(name = "ActiveConnectionsHighCount")
     private Integer activeHigh;
     /**
-    * 连接池大小.
-    */
+     * 连接池大小.
+     */
     @XmlAttribute(name = "CurrCapacity")
     private Integer currCapacity;
     /**
-    * 连接泄露数.
-    */
+     * 连接泄露数.
+     */
     @XmlAttribute(name = "LeakedConnectionCount")
     private Integer leakCount;
     /**
-    * 状态.
-    */
+     * 状态.
+     */
     @XmlAttribute(name = "State")
     private String state;
 
     public WlsJdbc() {
     }
 
-   
-    @Id @GeneratedValue(strategy=IDENTITY)
-    
-    @Column(name="id", unique=true)
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+
+    @Column(name = "id", unique = true)
     public Integer getId() {
-    return this.id;
+        return this.id;
     }
 
     public void setId(Integer id) {
-    this.id = id;
+        this.id = id;
     }
+
+    @Column(name = "site_name")
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="rec_time", length=19)
+    @Column(name = "rec_time", length = 19)
     public Date getRecTime() {
-    return this.recTime;
+        return this.recTime;
     }
 
     public void setRecTime(Date recTime) {
-    this.recTime = recTime;
+        this.recTime = recTime;
     }
-    
-    @Column(name="server_name")
+
+    @Column(name = "server_name")
     public String getServerName() {
-    return this.serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
-    this.serverName = serverName;
+        this.serverName = serverName;
     }
-    
-    @Column(name="name")
+
+    @Column(name = "name")
     public String getName() {
-    return this.name;
+        return this.name;
     }
 
     public void setName(String name) {
-    this.name = name;
+        this.name = name;
     }
-    
-    @Column(name="active_count")
+
+    @Column(name = "active_count")
     public Integer getActiveCount() {
-    return this.activeCount;
+        return this.activeCount;
     }
 
     public void setActiveCount(Integer activeCount) {
-    this.activeCount = activeCount;
+        this.activeCount = activeCount;
     }
-    
-    @Column(name="active_high")
+
+    @Column(name = "active_high")
     public Integer getActiveHigh() {
-    return this.activeHigh;
+        return this.activeHigh;
     }
 
     public void setActiveHigh(Integer activeHigh) {
-    this.activeHigh = activeHigh;
+        this.activeHigh = activeHigh;
     }
-    
-    @Column(name="curr_capacity")
+
+    @Column(name = "curr_capacity")
     public Integer getCurrCapacity() {
-    return this.currCapacity;
+        return this.currCapacity;
     }
 
     public void setCurrCapacity(Integer currCapacity) {
-    this.currCapacity = currCapacity;
+        this.currCapacity = currCapacity;
     }
-    
-    @Column(name="leak_count")
+
+    @Column(name = "leak_count")
     public Integer getLeakCount() {
-    return this.leakCount;
+        return this.leakCount;
     }
 
     public void setLeakCount(Integer leakCount) {
-    this.leakCount = leakCount;
+        this.leakCount = leakCount;
     }
-    
-    @Column(name="state")
+
+    @Column(name = "state")
     public String getState() {
-    return this.state;
+        return this.state;
     }
 
     public void setState(String state) {
-    this.state = state;
+        this.state = state;
     }
 
     @Transient
     public BigDecimal getJdbcusage() {
-        BigDecimal jdbcUsage = new BigDecimal(activeCount+leakCount+"").divide(new BigDecimal(currCapacity+""), 2, RoundingMode.HALF_UP);
+        BigDecimal jdbcUsage = new BigDecimal(activeCount + leakCount + "").divide(new BigDecimal(currCapacity + ""), 2, RoundingMode.HALF_UP);
         return jdbcUsage.multiply(new BigDecimal("100"));
     }
 
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
 }
 

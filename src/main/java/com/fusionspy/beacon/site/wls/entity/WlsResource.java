@@ -15,35 +15,39 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * WlsResource.
-* 
  */
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(name="ge_monitor_wls_resource")
-public class WlsResource  implements java.io.Serializable {
+@Table(name = "ge_monitor_wls_resource")
+public class WlsResource implements java.io.Serializable {
 
     /**
-        */
+     */
     @XmlTransient
     private Integer id;
     /**
-    * 记录时间.
-    */
+     * 站点名称
+     */
+    @XmlTransient
+    private String siteName;
+    /**
+     * 记录时间.
+     */
     @XmlTransient
     private Date recTime;
     /**
-    * 服务器数量.
-    */
+     * 服务器数量.
+     */
     @XmlTransient
     private Integer serverNumber;
     /**
-    * 运行服务器数量.
-    */
+     * 运行服务器数量.
+     */
     @XmlTransient
     private Integer runServerNumber;
     /**
-    * cpu空闲.
-    */
+     * cpu空闲.
+     */
     @XmlTransient
     private Integer cpuIdle;
 
@@ -51,8 +55,8 @@ public class WlsResource  implements java.io.Serializable {
     private String memFree;
 
     /**
-    * os类型.
-    */
+     * os类型.
+     */
     @XmlTransient
     private String osType;
 
@@ -67,60 +71,71 @@ public class WlsResource  implements java.io.Serializable {
     public WlsResource() {
     }
 
-   
-    @Id @GeneratedValue(strategy=IDENTITY)
-    @Column(name="id", unique=true)
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true)
     public Integer getId() {
-    return this.id;
+        return this.id;
     }
 
     public void setId(Integer id) {
-    this.id = id;
+        this.id = id;
     }
+
+    @Column(name = "site_name")
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="rec_time", length=19)
+    @Column(name = "rec_time", length = 19)
     public Date getRecTime() {
-    return this.recTime;
+        return this.recTime;
     }
 
     public void setRecTime(Date recTime) {
-    this.recTime = recTime;
+        this.recTime = recTime;
     }
-    
-    @Column(name="server_number")
+
+    @Column(name = "server_number")
     public Integer getServerNumber() {
-    return this.serverNumber;
+        return this.serverNumber;
     }
 
     public void setServerNumber(Integer serverNumber) {
-    this.serverNumber = serverNumber;
+        this.serverNumber = serverNumber;
     }
-    
-    @Column(name="run_server_number")
+
+    @Column(name = "run_server_number")
     public Integer getRunServerNumber() {
-    return this.runServerNumber;
+        return this.runServerNumber;
     }
 
     public void setRunServerNumber(Integer runServerNumber) {
-    this.runServerNumber = runServerNumber;
+        this.runServerNumber = runServerNumber;
     }
-    
-    @Column(name="cpu_idle")
+
+    @Column(name = "cpu_idle")
     public Integer getCpuIdle() {
-    return this.cpuIdle;
+        return this.cpuIdle;
     }
 
     public void setCpuIdle(Integer cpuIdle) {
-    this.cpuIdle = cpuIdle;
+        this.cpuIdle = cpuIdle;
     }
-    
-    @Column(name="os_type")
+
+    @Column(name = "os_type")
     public String getOsType() {
-    return this.osType;
+        return this.osType;
     }
 
     public void setOsType(String osType) {
-    this.osType = osType;
+        this.osType = osType;
     }
 
     @Transient
@@ -140,7 +155,8 @@ public class WlsResource  implements java.io.Serializable {
     public void setMem(String mem) {
         this.mem = mem;
     }
-    @Column(name="mem_free")
+
+    @Column(name = "mem_free")
     public String getMemFree() {
         return memFree;
     }
@@ -150,9 +166,9 @@ public class WlsResource  implements java.io.Serializable {
     }
 
     @Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
 }
 

@@ -31,9 +31,8 @@ public class WlsSite extends MonitorSite {
     @Override
     protected void recordInitData(InitData initData) {
         WlsIniData wlsIniData = (WlsIniData) initData;
-        wlsService.processInitData(wlsIniData);
-        iniHisData(); //构建HisData,并记录初始化数据
-        wlsHisData.setMonitorCount(++monitorCount);
+        wlsService.processInitData(wlsIniData); //记录初始化数据
+        iniHisData(); //构建HisData,关联初始化数据
         wlsHisData.setWlsIniData(wlsIniData);
     }
 

@@ -38,9 +38,9 @@
         function delRow(e){
             var row = $(e).parent().parent();
             var rowId = row.attr('id');
-            var serverName = rowId.split('_')[1]
+            var siteName = rowId.split('_')[1]
             msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
-                delServer(serverName, row);
+                delServer(siteName, row);
             });
         }
 
@@ -50,24 +50,24 @@
             if(selecteds.length > 0){
                 msgConfirm('系统消息','确定要删除该条配置文件吗？',function(){
                     var checks = [];
-                    var serverNames = [];
+                    var siteNames = [];
                     selecteds.each(function(){
                         var rows = $(this).parent().parent();
                         var rowId = rows.attr('id');
-                        serverNames.push(rowId.split('_')[1]);
+                        siteNames.push(rowId.split('_')[1]);
                         checks.push(rows);
                     });
-                    delServer(serverNames, checks);
+                    delServer(siteNames, checks);
                 });
             }else{
                 msgAlert('系统消息','没有选中的文件！<br />请选择要删除的文件后，继续操作。')
             }
         }
 
-        function delServer(serverNames, rows){
+        function delServer(siteNames, rows){
             $.ajax({
                 type : "delete",
-                url : "${ctx}/appServer/weblogic/delete/"+serverNames,
+                url : "${ctx}/appServer/weblogic/delete/"+siteNames,
                 dataType : "text",
                 success : function(data) {
                     msgSuccess("系统消息", "操作成功，已删除！");

@@ -16,45 +16,49 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * WlsWebapp.
-* 
  */
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(name="ge_monitor_wls_webapp")
-public class WlsWebapp  implements java.io.Serializable {
+@Table(name = "ge_monitor_wls_webapp")
+public class WlsWebapp implements java.io.Serializable {
 
     /**
-        */
+     */
     @XmlTransient
     private Integer id;
     /**
-    * 记录时间.
-    */
+     * 站点名称
+     */
+    @XmlTransient
+    private String siteName;
+    /**
+     * 记录时间.
+     */
     @XmlTransient
     private Date recTime;
     /**
-    * Server名称.
-    */
+     * Server名称.
+     */
     @XmlAttribute(name = "serverName")
     private String serverName;
     /**
-    * 应用名称.
-    */
+     * 应用名称.
+     */
     @XmlAttribute(name = "Name")
     private String name;
     /**
-    * 部署状态.
-    */
+     * 部署状态.
+     */
     @XmlAttribute(name = "DeploymentState")
     private String deploymentState;
     /**
-    * 状态.
-    */
+     * 状态.
+     */
     @XmlAttribute(name = "Status")
     private String status;
     /**
-    * 组件名称.
-    */
+     * 组件名称.
+     */
     @XmlAttribute(name = "ComponentName")
     private String componentName;
 
@@ -65,117 +69,128 @@ public class WlsWebapp  implements java.io.Serializable {
     private Integer sessionsOpenedTotal;
 
     /**
-    * 最高会话数.
-    */
+     * 最高会话数.
+     */
     @XmlAttribute(name = "OpenSessionsHighCount")
     private String openSessionsHighCount;
     /**
-    * 当前会话数.
-    */
+     * 当前会话数.
+     */
     @XmlAttribute(name = "OpenSessionsCurrentCount")
     private String openSessionsCurrentCount;
     /**
-    * 累计打开会话数.
-    */
+     * 累计打开会话数.
+     */
     @XmlAttribute(name = "SessionsOpenedTotalCount")
     private String sessionsOpenedTotalCount;
 
     public WlsWebapp() {
     }
 
-   
-    @Id @GeneratedValue(strategy=IDENTITY)
-    @Column(name="id", unique=true)
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true)
     public Integer getId() {
-    return this.id;
+        return this.id;
     }
 
     public void setId(Integer id) {
-    this.id = id;
+        this.id = id;
     }
+
+    @Column(name = "site_name")
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="rec_time", length=19)
+    @Column(name = "rec_time", length = 19)
     public Date getRecTime() {
-    return this.recTime;
+        return this.recTime;
     }
 
     public void setRecTime(Date recTime) {
-    this.recTime = recTime;
+        this.recTime = recTime;
     }
-    
-    @Column(name="server_name")
+
+    @Column(name = "server_name")
     public String getServerName() {
-    return this.serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
-    this.serverName = serverName;
+        this.serverName = serverName;
     }
-    
-    @Column(name="name")
+
+    @Column(name = "name")
     public String getName() {
-    return this.name;
+        return this.name;
     }
 
     public void setName(String name) {
-    this.name = name;
+        this.name = name;
     }
-    
-    @Column(name="deployment_state")
+
+    @Column(name = "deployment_state")
     public String getDeploymentState() {
-    return this.deploymentState;
+        return this.deploymentState;
     }
 
     public void setDeploymentState(String deploymentState) {
-    this.deploymentState = deploymentState;
+        this.deploymentState = deploymentState;
     }
-    
-    @Column(name="status")
+
+    @Column(name = "status")
     public String getStatus() {
-    return this.status;
+        return this.status;
     }
 
     public void setStatus(String status) {
-    this.status = status;
+        this.status = status;
     }
-    
-    @Column(name="component_name")
+
+    @Column(name = "component_name")
     public String getComponentName() {
-    return this.componentName;
+        return this.componentName;
     }
 
     public void setComponentName(String componentName) {
-    this.componentName = componentName;
+        this.componentName = componentName;
     }
 
     @Transient
     public String getOpenSessionsHighCount() {
-    return this.openSessionsHighCount;
+        return this.openSessionsHighCount;
     }
 
     public void setOpenSessionsHighCount(String openSessionsHighCount) {
-    this.openSessionsHighCount = openSessionsHighCount;
+        this.openSessionsHighCount = openSessionsHighCount;
     }
 
     @Transient
     public String getOpenSessionsCurrentCount() {
-    return this.openSessionsCurrentCount;
+        return this.openSessionsCurrentCount;
     }
 
     public void setOpenSessionsCurrentCount(String openSessionsCurrentCount) {
-    this.openSessionsCurrentCount = openSessionsCurrentCount;
+        this.openSessionsCurrentCount = openSessionsCurrentCount;
     }
 
     @Transient
     public String getSessionsOpenedTotalCount() {
-    return this.sessionsOpenedTotalCount;
+        return this.sessionsOpenedTotalCount;
     }
 
     public void setSessionsOpenedTotalCount(String sessionsOpenedTotalCount) {
-    this.sessionsOpenedTotalCount = sessionsOpenedTotalCount;
+        this.sessionsOpenedTotalCount = sessionsOpenedTotalCount;
     }
 
-    @Column(name="open_sessions_high_count")
+    @Column(name = "open_sessions_high_count")
     public Integer getOpenSessionsHigh() {
         return openSessionsHigh;
     }
@@ -184,7 +199,7 @@ public class WlsWebapp  implements java.io.Serializable {
         this.openSessionsHigh = openSessionsHigh;
     }
 
-    @Column(name="open_sessions_current_count")
+    @Column(name = "open_sessions_current_count")
     public Integer getOpenSessionsCurrent() {
         return openSessionsCurrent;
     }
@@ -193,7 +208,7 @@ public class WlsWebapp  implements java.io.Serializable {
         this.openSessionsCurrent = openSessionsCurrent;
     }
 
-    @Column(name="sessions_opened_total_count")
+    @Column(name = "sessions_opened_total_count")
     public Integer getSessionsOpenedTotal() {
         return sessionsOpenedTotal;
     }
@@ -203,10 +218,10 @@ public class WlsWebapp  implements java.io.Serializable {
     }
 
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
 }
 

@@ -6,21 +6,23 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * WlsServer.
- *
  */
 @Entity
-@Table(name="ge_monitor_wls_server")
-public class WlsServer  implements java.io.Serializable {
+@Table(name = "ge_monitor_wls_server")
+public class WlsServer implements java.io.Serializable {
 
     /**
      * weblogic版本
@@ -29,7 +31,7 @@ public class WlsServer  implements java.io.Serializable {
     /**
      * Server名称
      */
-    private String serverName;
+    private String siteName;
     /**
      * 记录时间
      */
@@ -74,7 +76,7 @@ public class WlsServer  implements java.io.Serializable {
     public WlsServer() {
     }
 
-    @Column(name="version", length=20)
+    @Column(name = "version", length = 20)
     public String getVersion() {
         return this.version;
     }
@@ -84,16 +86,17 @@ public class WlsServer  implements java.io.Serializable {
     }
 
     @Id
-    @Column(name="server_name", unique=true)
-    public String getServerName() {
-        return this.serverName;
+    @Column(name = "site_name", unique = true)
+    public String getSiteName() {
+        return this.siteName;
     }
 
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
     }
+
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="rec_time", length=19)
+    @Column(name = "rec_time", length = 19)
     public Date getRecTime() {
         return this.recTime;
     }
@@ -102,7 +105,7 @@ public class WlsServer  implements java.io.Serializable {
         this.recTime = recTime;
     }
 
-    @Column(name="listen_address")
+    @Column(name = "listen_address")
     public String getListenAddress() {
         return this.listenAddress;
     }
@@ -111,7 +114,7 @@ public class WlsServer  implements java.io.Serializable {
         this.listenAddress = listenAddress;
     }
 
-    @Column(name="listen_port", length=10)
+    @Column(name = "listen_port", length = 10)
     public Integer getListenPort() {
         return this.listenPort;
     }
@@ -120,7 +123,7 @@ public class WlsServer  implements java.io.Serializable {
         this.listenPort = listenPort;
     }
 
-    @Column(name="interval_")
+    @Column(name = "interval_")
     public Integer getInterval() {
         return this.interval;
     }
@@ -129,7 +132,7 @@ public class WlsServer  implements java.io.Serializable {
         this.interval = interval;
     }
 
-    @Column(name="user_name")
+    @Column(name = "user_name")
     public String getUserName() {
         return this.userName;
     }
@@ -138,7 +141,7 @@ public class WlsServer  implements java.io.Serializable {
         this.userName = userName;
     }
 
-    @Column(name="password")
+    @Column(name = "password")
     public String getPassword() {
         return this.password;
     }
@@ -147,7 +150,7 @@ public class WlsServer  implements java.io.Serializable {
         this.password = password;
     }
 
-    @Column(name="is_SSL")
+    @Column(name = "is_SSL")
     public Integer getIsSsl() {
         return this.isSsl;
     }
@@ -156,7 +159,7 @@ public class WlsServer  implements java.io.Serializable {
         this.isSsl = isSsl;
     }
 
-    @Column(name="status")
+    @Column(name = "status")
     public Integer getStatus() {
         return status;
     }
@@ -165,7 +168,7 @@ public class WlsServer  implements java.io.Serializable {
         this.status = status;
     }
 
-    @Column(name="weblogic_ip")
+    @Column(name = "weblogic_ip")
     public String getWeblogicIp() {
         return weblogicIp;
     }
@@ -174,7 +177,7 @@ public class WlsServer  implements java.io.Serializable {
         this.weblogicIp = weblogicIp;
     }
 
-    @Column(name="weblogic_port")
+    @Column(name = "weblogic_port")
     public Integer getWeblogicPort() {
         return weblogicPort;
     }
@@ -183,7 +186,7 @@ public class WlsServer  implements java.io.Serializable {
         this.weblogicPort = weblogicPort;
     }
 
-    @Column(name="domain_name")
+    @Column(name = "domain_name")
     public String getDomainName() {
         return domainName;
     }

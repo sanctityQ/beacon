@@ -83,7 +83,7 @@
                     <ul class="add_sub_menu" id="subNav">
                         <li class="action" style="border:none"><span class="middleware">应用服务器</span>
                             <ul class="list">
-                                <%--<li><a href="${ctx}/appServer/tuxedo/manager">Tuxedo</a></li>--%>
+                                <li><a href="${ctx}/appServer/tuxedo/manager">Tuxedo</a></li>
                                 <li><a href="${ctx}/appServer/weblogic/manager">Weblogic</a></li>
                             </ul>
                         </li>
@@ -108,7 +108,7 @@
                 </li>
                 <%--<li><a href="${ctx}/application/manager/appmanager/applist/1"><i class="performance"></i>应用性能</a></li>--%>
                 <li><a href="${ctx}/alarm/manager/list"><i class="alarm"></i>告警</a></li>
-                <li><a href="${ctx}/report"><i class="form"></i>报表</a></li>
+                <li><a href="${ctx}/report?resourceType=WEBLOGIC"><i class="form"></i>报表</a></li>
                 <li><a href="${ctx}/account/user/list"><i class="users"></i>用户管理</a></li>
             </ul>
         </div>

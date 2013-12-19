@@ -41,8 +41,6 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
     private List<WlsEjbpool> poolRuntimes = new ArrayList<WlsEjbpool>();
     @XmlElement(name = "ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime")
     private List<WlsEjbcache> cacheRuntime = new ArrayList<WlsEjbcache>();
-    @XmlElement(name = "SYSTEM")
-    private WlsError error;
     @XmlElement(name = "OSResource")
     private WlsResource resource;
 
@@ -110,14 +108,6 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
         this.cacheRuntime = cacheRuntime;
     }
 
-    public WlsError getError() {
-        return error;
-    }
-
-    public void setError(WlsError error) {
-        this.error = error;
-    }
-
     public WlsResource getResource() {
         return resource;
     }
@@ -129,50 +119,50 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
     public WlsInTimeData defaultData() {
         try {
             Field[] fields = this.getClass().getDeclaredFields();
-            for(Field field : fields) {
-                if("error".equals(field.getName())) continue;
-                if(field.isAnnotationPresent(XmlElement.class)) {
+            for (Field field : fields) {
+                if ("error".equals(field.getName())) continue;
+                if (field.isAnnotationPresent(XmlElement.class)) {
                     field.setAccessible(true);
                     Object fieldVal = field.get(this);
-                    if(fieldVal == null) continue;
-                    if(field.getType() == List.class) {
+                    if (fieldVal == null) continue;
+                    if (field.getType() == List.class) {
                         List<?> fieldList = (List<?>) fieldVal;
-                        for(Object obj : fieldList) {
-                            for(Field subField : obj.getClass().getDeclaredFields()) {
+                        for (Object obj : fieldList) {
+                            for (Field subField : obj.getClass().getDeclaredFields()) {
                                 subField.setAccessible(true);
-                                if(subField.isAnnotationPresent(XmlAttribute.class) && subField.getType()==String.class) {
-                                    Object subFieldVal =subField.get(obj);
-                                    if(subFieldVal == null || StringUtils.isBlank(subFieldVal.toString())) {
+                                if (subField.isAnnotationPresent(XmlAttribute.class) && subField.getType() == String.class) {
+                                    Object subFieldVal = subField.get(obj);
+                                    if (subFieldVal == null || StringUtils.isBlank(subFieldVal.toString())) {
                                         subField.set(obj, "N/A");
                                     }
                                 }
-                                if(subField.isAnnotationPresent(XmlAttribute.class) && subField.getType()==Integer.class) {
-                                    Object subFieldVal =subField.get(obj);
-                                    if(subFieldVal == null) {
+                                if (subField.isAnnotationPresent(XmlAttribute.class) && subField.getType() == Integer.class) {
+                                    Object subFieldVal = subField.get(obj);
+                                    if (subFieldVal == null) {
                                         subField.set(obj, 0);
                                     }
                                 }
-                                if("recTime".equals(subField.getName()) && subField.getType()==Date.class) {
+                                if ("recTime".equals(subField.getName()) && subField.getType() == Date.class) {
                                     subField.set(obj, new Date());
                                 }
                             }
                         }
                     } else {
-                        for(Field subField : fieldVal.getClass().getDeclaredFields()) {
+                        for (Field subField : fieldVal.getClass().getDeclaredFields()) {
                             subField.setAccessible(true);
-                            if(subField.isAnnotationPresent(XmlAttribute.class) && subField.getType()==String.class) {
+                            if (subField.isAnnotationPresent(XmlAttribute.class) && subField.getType() == String.class) {
                                 Object subFieldVal = subField.get(fieldVal);
-                                if(subFieldVal ==null || StringUtils.isBlank(subFieldVal.toString())) {
+                                if (subFieldVal == null || StringUtils.isBlank(subFieldVal.toString())) {
                                     subField.set(fieldVal, "N/A");
                                 }
                             }
-                            if(subField.isAnnotationPresent(XmlAttribute.class) && subField.getType()==Integer.class) {
-                                Object subFieldVal =subField.get(fieldVal);
-                                if(subFieldVal == null) {
+                            if (subField.isAnnotationPresent(XmlAttribute.class) && subField.getType() == Integer.class) {
+                                Object subFieldVal = subField.get(fieldVal);
+                                if (subFieldVal == null) {
                                     subField.set(fieldVal, 0);
                                 }
                             }
-                            if("recTime".equals(subField.getName()) && subField.getType()==Date.class) {
+                            if ("recTime".equals(subField.getName()) && subField.getType() == Date.class) {
                                 subField.set(fieldVal, new Date());
                             }
                         }

@@ -17,7 +17,7 @@
             $("#monitorType").find("optgroup:eq(0)").find("option:eq(1)").attr("selected","selected");
             var editFlag = '${empty server}' == 'false';
             if(editFlag) {
-                $("#serverName").attr({"readonly":true});
+                $("#siteName").attr({"readonly":true});
                 var isSsl = '${server.isSsl}';
                 $(".server_isSsl[value="+isSsl+"]").attr("checked", true);
             }
@@ -84,9 +84,9 @@
                                 </tr>
                                 <tr>
                                     <td width="25%">站点名称<span class="mandatory">*</span></td>
-                                    <td id="v_serverName">
-                                        <input id="serverName" name="serverName" type="text" class="validate {required:true} formtext" value="${server.serverName}"/>
-                                        <span id="v_serverName_validate"></span>
+                                    <td id="v_siteName">
+                                        <input id="siteName" name="siteName" type="text" class="validate {required:true} formtext" value="${server.siteName}"/>
+                                        <span id="v_siteName_validate"></span>
                                     </td>
                                 </tr>
                                 <tr>

@@ -56,7 +56,7 @@ public class MonitorManage {
       }
 
       for(WlsServer wlsServer : wlsService.getSites()) {
-          monitor(wlsServer.getServerName());
+          monitor(wlsServer.getSiteName());
       }
     }
 

@@ -100,12 +100,12 @@ public class ConfigEmergencyController {
             };
             jsonMonitorNames = jsonArray.toJSONString();
             return Replys.with(jsonMonitorNames).as(Json.class);
-        } else if (ResourceType.WEBLOGIC.name().equals(resourceType)) {
+        } else if (ResourceType.WEBLOGIC.equals(type)) {
             for(WlsServer wlsServer : wlsServerDao.findAll()) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("monitorId",wlsServer.getServerName());
+                jsonObject.put("monitorId",wlsServer.getSiteName());
                 //获取GE_MONITOR_OS表的NAME字段值
-                jsonObject.put("monitorName", wlsServer.getServerName());
+                jsonObject.put("monitorName", wlsServer.getSiteName());
                 jsonArray.add(jsonObject);
             }
             jsonMonitorNames = jsonArray.toJSONString();

@@ -22,7 +22,7 @@ public class WlsAlertMessage extends AlertMessage {
     private Set<String> jdbcAlarmServerName = new HashSet<String>();
     private Set<String> threadAlarmServerName = new HashSet<String>();
     private Set<String> cpuAlarmServerName = new HashSet<String>();
-    private Set<String> stopServerName = new HashSet<String>();
+    private String stopServerName;
 
 
     public String getMessageByAlarmMessageFormat(AlarmMessageFormat alarmMessageFormat){
@@ -94,11 +94,11 @@ public class WlsAlertMessage extends AlertMessage {
         this.cpuAlarmServerName.add(cpuAlarmServerName);
     }
 
-    public Set<String> getStopServerName() {
+    public String getStopServerName() {
         return stopServerName;
     }
 
-    public void addStopServerName(String stopServerName) {
-        this.stopServerName.add(stopServerName);
+    public void setStopServerName(String stopServerName) {
+        this.stopServerName = stopServerName;
     }
 }

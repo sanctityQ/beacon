@@ -32,6 +32,11 @@ public class WlsJvm  implements java.io.Serializable {
     @XmlTransient
     private Integer id;
     /**
+     * 站点名称
+     */
+    @XmlTransient
+    private String siteName;
+    /**
     * 入库时间.
     */
     @XmlTransient
@@ -62,7 +67,6 @@ public class WlsJvm  implements java.io.Serializable {
 
    
     @Id @GeneratedValue(strategy=IDENTITY)
-    
     @Column(name="id", unique=true)
     public Integer getId() {
     return this.id;
@@ -71,6 +75,15 @@ public class WlsJvm  implements java.io.Serializable {
     public void setId(Integer id) {
     this.id = id;
     }
+    @Column(name = "site_name")
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="rec_time", length=19)
     public Date getRecTime() {

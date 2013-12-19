@@ -42,9 +42,9 @@
             if($("#monitorName").val()==''){
                 return;
             }
-            var url = "${ctx}/report/resourceType/Tuxedo/attribute/"+attribute+"?dateSeries=today&resourceId="+$("#monitorName").val();
+            var url = "${ctx}/report/resourceType/WEBLOGIC/attribute/"+attribute+"?dateSeries=today&resourceId="+$("#monitorName").val();
             if(attribute == 'PROGRESS_CPU_USED'||attribute=='PROGRESS_MEM_USED'){
-                url = "${ctx}/report/resourceType/Tuxedo/attribute/"+attribute+"/top?top=five&dateSeries=today&resourceId="+$("#monitorName").val();
+                url = "${ctx}/report/resourceType/WEBLOGIC/attribute/"+attribute+"/top?top=five&dateSeries=today&resourceId="+$("#monitorName").val();
             }
 
             var temWin = $("body").window({
@@ -80,7 +80,7 @@
                         <div class="report_title">报表</div>
                         <ul id="reporMenu" class="report_menu">
                             <%--<li><img src="${ctx}/global/images/icon_hyper_vhost.gif" width="15" height="16" />Linux</li>--%>
-                            <%--<li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>--%>
+                            <li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>
                             <li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Weblogic</li>
                         </ul>
                     </td>

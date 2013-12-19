@@ -368,6 +368,24 @@ public class Connect{
         //return null;
 	}
 
+    public  String startSiteThread(Document xmlDocument, String siteName,
+                                   String agentIPP, int sitePortP, int sampleIntervalP){
+//		try {
+        SiteThread task = siteThreadMap.get(siteName);
+        if(task==null){
+            task = new SiteThread(xmlDocument, siteName, agentIPP,
+                    sitePortP, sampleIntervalP);
+            siteThreadMap.put(siteName, task);
+        }
+        return task.init();
+
+//		} catch (Exception ioe) {
+//			System.out.println("Got IOException while creating site thread");
+//			ioe.printStackTrace();
+//		}
+        //return null;
+    }
+
     public String getInTimeData(String siteName){
          SiteThread st = siteThreadMap.get(siteName);
          return st.getMonitorData();

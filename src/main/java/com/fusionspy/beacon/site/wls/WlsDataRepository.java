@@ -68,6 +68,7 @@ public class WlsDataRepository implements MonitorDataRepository {
         String initXml = connect.startSiteThread(xmlDocument, siteName, ip, port, 0);
         logger.debug("get initXml Xml: {}", initXml);
         WlsIniData initData = iniBinder.fromXml(initXml);
+        initData.setSiteName(siteName);
         return initData.defaultData();
     }
 

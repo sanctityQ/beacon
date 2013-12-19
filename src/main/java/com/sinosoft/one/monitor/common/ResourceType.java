@@ -15,7 +15,7 @@ public enum ResourceType {
 //	DB("数据库"),
 //    APP_SERVER("应用服务器"),
     Tuxedo("Tuxedo"),
-    Weblogic("Weblogic");
+    WEBLOGIC("WEBLOGIC");
 //	NONE("");
 //	APPLICATION("应用系统"),
 //	APPLICATION_SCENARIO("业务场景"),

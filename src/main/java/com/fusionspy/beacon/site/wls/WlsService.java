@@ -13,6 +13,7 @@ import com.sinosoft.one.monitor.alarm.model.Alarm;
 import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.attribute.model.AttributeAction;
+import com.sinosoft.one.monitor.common.AlarmAttribute;
 import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.ResourceType;
@@ -79,16 +80,27 @@ public class WlsService {
 
     /**
      * process init data
+     *
      * @param wlsIniData
      * @return
      */
     @Transactional
     public int processInitData(WlsIniData wlsIniData) {
-        wlsIniData.defaultData();
-        WlsSysrec wlsSysrec = wlsIniData.getWlsSysrec();
-        if(wlsSysrec != null) {
-            wlsSysrec.setRecTime(new Date());
-            wlsSysrecDao.save(wlsSysrec);
+        if (wlsIniData.isStop()) { //验证weblogic服务器是否启动 (未启动时)
+            Resource resource = this.resourcesCache.getResource(wlsIniData.getSiteName());
+            Attribute alarmAttribute = this.attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
+            WlsAlertMessage wlsAlertMessage = new WlsAlertMessage();
+            wlsAlertMessage.setStopServerName(wlsIniData.getSiteName());
+            alarmMessage(resource, alarmAttribute, wlsIniData.getSiteName(), SeverityLevel.CRITICAL, wlsAlertMessage.getMessageByAlarmMessageFormat(AlarmMessageFormat.WLS_STOP));
+            throw new IllegalStateException("被监控Welogic系统并无运行，请检查");
+        } else {//启动时记录 初始化返回信息
+            wlsIniData.defaultData();
+            WlsSysrec wlsSysrec = wlsIniData.getWlsSysrec();
+            if (wlsSysrec != null) {
+                wlsSysrec.setSiteName(wlsIniData.getSiteName());
+                wlsSysrec.setRecTime(new Date());
+                wlsSysrecDao.save(wlsSysrec);
+            }
         }
         return 1;
     }
@@ -96,21 +108,22 @@ public class WlsService {
 
     /**
      * process intime data
+     *
      * @param siteName
      * @param period
      * @param inTimeData
      * @param hisData
      */
     @Transactional
-    public void processInTimeData(String siteName,int period,WlsInTimeData inTimeData,WlsHisData hisData) {
+    public void processInTimeData(String siteName, int period, WlsInTimeData inTimeData, WlsHisData hisData) {
         inTimeData.defaultData();  //赋默认值
         new ProcessData(siteName, period, inTimeData, hisData).process();
 
     }
 
     private Integer parsetInt(String str) {
-        try{
-           return Integer.parseInt(str);
+        try {
+            return Integer.parseInt(str);
         } catch (Exception e) {
             return 0;
         }
@@ -121,22 +134,22 @@ public class WlsService {
         wlsServer.setRecTime(new Date());
         wlsServerDao.save(wlsServer);
         Resource resource = new Resource();
-        resource.setResourceId(wlsServer.getServerName());
-        resource.setResourceName(wlsServer.getServerName());
-        resource.setResourceType(ResourceType.WEBLOGIC.toString());
+        resource.setResourceId(wlsServer.getSiteName());
+        resource.setResourceName(wlsServer.getSiteName());
+        resource.setResourceType(ResourceType.WEBLOGIC);
         resourcesService.saveResource(resource);
 
     }
 
     @Transactional
-    public void delete(String serverName) {
+    public void delete(String siteName) {
         //TODO delete--Resource
-        wlsServerDao.delete(serverName);
+        wlsServerDao.delete(siteName);
     }
 
     @Transactional(readOnly = true)
-    public WlsServer getSite(String serverName) {
-        return wlsServerDao.findOne(serverName);
+    public WlsServer getSite(String siteName) {
+        return wlsServerDao.findOne(siteName);
     }
 
     public List<WlsServer> getSites() {
@@ -153,6 +166,30 @@ public class WlsService {
     @Autowired
     private ActionService actionService;
 
+    private void alarmMessage(Resource resource, Attribute attribute, String siteName, SeverityLevel severityLevel, String message) {
+        if (attribute == null || severityLevel == SeverityLevel.UNKNOWN || org.apache.commons.lang.StringUtils.isBlank(message))
+            return;
+        Alarm alarm = new Alarm(UUID.randomUUID().toString().replaceAll("-", ""));
+        alarm.setAttributeId(attribute.getId());
+        alarm.setMonitorId(siteName);
+        alarm.setAlarmSource(AlarmSource.WEBLOGIC);
+        alarm.setMonitorType(ResourceType.WEBLOGIC.name());
+        alarm.setSeverity(severityLevel);
+        alarm.setMessage(controlFixedLength(message));
+        alarm.setCreateTime(new Date());
+        alarm.setSubResourceId(siteName);
+        alarm.setSubResourceType(ResourceType.WEBLOGIC);
+        alarmService.saveAlarm(alarm);
+
+        //发送邮件
+        List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(resource.getResourceId(), attribute.getId(), severityLevel);
+
+        //处理动作
+        if (thresholdAttributeActions != null && thresholdAttributeActions.size() > 0) {
+            actionService.doActions(thresholdAttributeActions, resource, attribute, severityLevel, message);
+        }
+    }
+
     /**
      * 记录实时监控数据
      */
@@ -162,7 +199,6 @@ public class WlsService {
         private WlsInTimeData inTimeData;
         private WlsHisData hisData;
         private Resource resource;
-        private Date now = new Date();
 
         private WlsAlertMessage wlsAlertMessage = new WlsAlertMessage();
 
@@ -170,7 +206,7 @@ public class WlsService {
             this.siteName = siteName;
             this.inTimeData = inTimeData;
             this.period = period;
-            this.hisData =  hisData;
+            this.hisData = hisData;
             this.resource = resourcesCache.getResource(siteName);
         }
 
@@ -183,8 +219,8 @@ public class WlsService {
             this.processJms();
             this.processWebapp();
             this.processWlsResource();
-            WlsError error = inTimeData.getError();
-            if(error != null && StringUtils.isNotBlank(error.getErrMsg().trim())) {
+            WlsError error = inTimeData.getWlsError();
+            if (error != null && StringUtils.isNotBlank(error.getErrMsg().trim())) {
                 Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
                 //停机发告警
                 alarmMessage(resource, attribute, siteName, SeverityLevel.CRITICAL, wlsAlertMessage.getMessageByAlarmMessageFormat(AlarmMessageFormat.WLS_STOP));
@@ -201,18 +237,19 @@ public class WlsService {
             if (jvmRuntimes == null)
                 return;
             Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.FreeHeap.name());
-            if(attribute == Attribute.EMPTY){
-                logger.error("{}'s attribute is empty,fix it!",AttributeName.FreeHeap.name());
+            if (attribute == Attribute.EMPTY) {
+                logger.error("{}'s attribute is empty,fix it!", AttributeName.FreeHeap.name());
             }
             //获取阈值
             Threshold threshold = thresholdService.queryThreshold(siteName, attribute.getId());
             SeverityLevel severityLevel = SeverityLevel.UNKNOWN;
             for (int i = 0; i < jvmRuntimes.size(); i++) {
                 WlsJvm t = jvmRuntimes.get(i);
+                t.setSiteName(siteName);
                 // 取alarm级别最高的作为报警级别
-                SeverityLevel temp =  jvmAlarm(t, threshold);
-                if(severityLevel.ordinal()>temp.ordinal()){
-                    severityLevel =  temp;
+                SeverityLevel temp = jvmAlarm(t, threshold);
+                if (severityLevel.ordinal() > temp.ordinal()) {
+                    severityLevel = temp;
                 }
             }
             alarmMessage(resource, attribute, siteName, severityLevel, wlsAlertMessage.getMessageByAlarmMessageFormat(AlarmMessageFormat.WLS_HEAP));
@@ -225,18 +262,19 @@ public class WlsService {
                 return;
 
             Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.ThreadUtilization.name());
-            if(attribute == Attribute.EMPTY){
-                logger.error("{}'s attribute is empty,fix it!",AttributeName.ThreadUtilization.name());
+            if (attribute == Attribute.EMPTY) {
+                logger.error("{}'s attribute is empty,fix it!", AttributeName.ThreadUtilization.name());
             }
             //获取阈值
             Threshold threshold = thresholdService.queryThreshold(siteName, attribute.getId());
             SeverityLevel severityLevel = SeverityLevel.UNKNOWN;
             for (int i = 0; i < threadPoolRuntimes.size(); i++) {
                 WlsThread t = threadPoolRuntimes.get(i);
+                t.setSiteName(siteName);
                 // 取alarm级别最高的作为报警级别
-                SeverityLevel temp =  threadAlarm(t, threshold);
-                if(severityLevel.ordinal()>temp.ordinal()){
-                    severityLevel =  temp;
+                SeverityLevel temp = threadAlarm(t, threshold);
+                if (severityLevel.ordinal() > temp.ordinal()) {
+                    severityLevel = temp;
                 }
             }
             alarmMessage(resource, attribute, siteName, severityLevel, wlsAlertMessage.getMessageByAlarmMessageFormat(AlarmMessageFormat.WLS_THREAD));
@@ -249,18 +287,19 @@ public class WlsService {
                 return;
 
             Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.JdbcUtilization.name());
-            if(attribute == Attribute.EMPTY){
-                logger.error("{}'s attribute is empty,fix it!",AttributeName.JdbcUtilization.name());
+            if (attribute == Attribute.EMPTY) {
+                logger.error("{}'s attribute is empty,fix it!", AttributeName.JdbcUtilization.name());
             }
             //获取阈值
             Threshold threshold = thresholdService.queryThreshold(siteName, attribute.getId());
             SeverityLevel severityLevel = SeverityLevel.UNKNOWN;
             for (int i = 0; i < jdbcDataSourceRuntimes.size(); i++) {
                 WlsJdbc t = jdbcDataSourceRuntimes.get(i);
+                t.setSiteName(siteName);
                 // 取alarm级别最高的作为报警级别
-                SeverityLevel temp =  jdbcAlarm(t, threshold);
-                if(severityLevel.ordinal()>temp.ordinal()){
-                    severityLevel =  temp;
+                SeverityLevel temp = jdbcAlarm(t, threshold);
+                if (severityLevel.ordinal() > temp.ordinal()) {
+                    severityLevel = temp;
                 }
             }
             alarmMessage(resource, attribute, siteName, severityLevel, wlsAlertMessage.getMessageByAlarmMessageFormat(AlarmMessageFormat.WLS_JDBC));
@@ -269,7 +308,8 @@ public class WlsService {
 
         private void processWebapp() {
             List<WlsWebapp> componentRuntimes = inTimeData.getComponentRuntimes();
-            for(WlsWebapp webapp : componentRuntimes) {
+            for (WlsWebapp webapp : componentRuntimes) {
+                webapp.setSiteName(siteName);
                 webapp.setOpenSessionsHigh(parsetInt(webapp.getOpenSessionsHighCount()));
                 webapp.setOpenSessionsCurrent(parsetInt(webapp.getOpenSessionsCurrentCount()));
                 webapp.setSessionsOpenedTotal(parsetInt(webapp.getSessionsOpenedTotalCount()));
@@ -280,17 +320,26 @@ public class WlsService {
 
         private void processJms() {
             List<WlsJms> jmsServers = inTimeData.getJmsServers();
+            for (WlsJms jms : jmsServers) {
+                jms.setSiteName(siteName);
+            }
             wlsJmsDao.save(jmsServers);
         }
 
         private void processEjbPool() {
             List<WlsEjbpool> poolRuntimes = inTimeData.getPoolRuntimes();
+            for (WlsEjbpool ejbpool : poolRuntimes) {
+                ejbpool.setSiteName(siteName);
+            }
             wlsEjbPoolDao.save(poolRuntimes);
         }
 
         private void processEjbCache() {
-            List<WlsEjbcache> cacheRuntime = inTimeData.getCacheRuntime();
-            wlsEjbCacheDao.save(cacheRuntime);
+            List<WlsEjbcache> cacheRuntimes = inTimeData.getCacheRuntime();
+            for (WlsEjbcache ejbcache : cacheRuntimes) {
+                ejbcache.setSiteName(siteName);
+            }
+            wlsEjbCacheDao.save(cacheRuntimes);
         }
 
         private void processWlsResource() {
@@ -298,19 +347,19 @@ public class WlsService {
             //汇总信息处理
             WlsResource wlsResource = inTimeData.getResource();
             Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.CPUUtilization.name());
-            if(attribute == Attribute.EMPTY){
-                logger.error("{}'s attribute is empty,fix it!",AttributeName.CPUUtilization.name());
+            if (attribute == Attribute.EMPTY) {
+                logger.error("{}'s attribute is empty,fix it!", AttributeName.CPUUtilization.name());
             }
             String mem = wlsResource.getMem();
             wlsResource.setRunServerNumber(hisData.getWlsInTimeData().getJvmRuntimes().size()); //服务器数量
             wlsResource.setServerNumber(sysrec.getServerNum()); //运行服务器数量
-            if(StringUtils.isNotBlank(wlsResource.getCpu())) { //CPU空闲
+            if (StringUtils.isNotBlank(wlsResource.getCpu())) { //CPU空闲
                 wlsResource.setCpuIdle(Integer.parseInt(wlsResource.getCpu().trim()));
             } else {
                 wlsResource.setCpuIdle(0);
             }
             wlsResource.setOsType(sysrec.getOsType());
-            if(StringUtils.isNotBlank(mem)) { //获取当前'M'之前的数值
+            if (StringUtils.isNotBlank(mem)) { //获取当前'M'之前的数值
                 wlsResource.setMemFree(mem.substring(0, mem.indexOf('M')));
             } else {
                 wlsResource.setMemFree("0");
@@ -324,15 +373,16 @@ public class WlsService {
 
         /**
          * java内存使用率
+         *
          * @param jvm
          * @param threshold
          * @return
          */
-        private SeverityLevel jvmAlarm(WlsJvm jvm, Threshold threshold){
-            if(threshold==null)
+        private SeverityLevel jvmAlarm(WlsJvm jvm, Threshold threshold) {
+            if (threshold == null)
                 return SeverityLevel.UNKNOWN;
             SeverityLevel severityLevel = threshold.match(jvm.getFreePercent());
-            if(severityLevel != SeverityLevel.UNKNOWN) {
+            if (severityLevel != SeverityLevel.UNKNOWN) {
                 wlsAlertMessage.addHeapAlarm(jvm.getServerName());
             }
             return severityLevel;
@@ -340,15 +390,16 @@ public class WlsService {
 
         /**
          * 线程使用率
+         *
          * @param thread
          * @param threshold
          * @return
          */
-        private SeverityLevel threadAlarm(WlsThread thread, Threshold threshold){
-            if(threshold==null)
+        private SeverityLevel threadAlarm(WlsThread thread, Threshold threshold) {
+            if (threshold == null)
                 return SeverityLevel.UNKNOWN;
             SeverityLevel severityLevel = threshold.match(thread.getThdusage().toString());
-            if(severityLevel != SeverityLevel.UNKNOWN) {
+            if (severityLevel != SeverityLevel.UNKNOWN) {
                 wlsAlertMessage.addThreadAlarm(thread.getServerName());
             }
             return severityLevel;
@@ -356,15 +407,16 @@ public class WlsService {
 
         /**
          * 数据库连接诶
+         *
          * @param jdbc
          * @param threshold
          * @return
          */
-        private SeverityLevel jdbcAlarm(WlsJdbc jdbc, Threshold threshold){
-            if(threshold==null)
+        private SeverityLevel jdbcAlarm(WlsJdbc jdbc, Threshold threshold) {
+            if (threshold == null)
                 return SeverityLevel.UNKNOWN;
             SeverityLevel severityLevel = threshold.match(jdbc.getJdbcusage().multiply(new BigDecimal("100")).toString());
-            if(severityLevel != SeverityLevel.UNKNOWN) {
+            if (severityLevel != SeverityLevel.UNKNOWN) {
                 wlsAlertMessage.addJdbcAlarm(jdbc.getServerName());
             }
             return severityLevel;
@@ -372,53 +424,30 @@ public class WlsService {
 
         /**
          * CPU使用率
+         *
          * @param wlsResource
          * @param threshold
          * @return
          */
-        private SeverityLevel cpuAlarm(WlsResource wlsResource, Threshold threshold){
-            if(threshold==null)
+        private SeverityLevel cpuAlarm(WlsResource wlsResource, Threshold threshold) {
+            if (threshold == null)
                 return SeverityLevel.UNKNOWN;
-            SeverityLevel severityLevel = threshold.match((100-wlsResource.getCpuIdle())+"");
-            if(severityLevel != SeverityLevel.UNKNOWN) {
+            SeverityLevel severityLevel = threshold.match((100 - wlsResource.getCpuIdle()) + "");
+            if (severityLevel != SeverityLevel.UNKNOWN) {
                 wlsAlertMessage.addCpuAlarm(siteName);
             }
             return severityLevel;
         }
+    }
 
-        private void alarmMessage(Resource resource, Attribute attribute,String siteName, SeverityLevel severityLevel,String message){
-            if(attribute==null||severityLevel == SeverityLevel.UNKNOWN || org.apache.commons.lang.StringUtils.isBlank(message))
-                return;
-            Alarm alarm = new Alarm(UUID.randomUUID().toString().replaceAll("-", ""));
-            alarm.setAttributeId(attribute.getId());
-            alarm.setMonitorId(siteName);
-            alarm.setAlarmSource(AlarmSource.WEBLOGIC);
-            alarm.setMonitorType(ResourceType.WEBLOGIC.name());
-            alarm.setSeverity(severityLevel);
-            alarm.setMessage(controlFixedLength(message));
-            alarm.setCreateTime(now);
-            alarm.setSubResourceId(siteName);
-            alarm.setSubResourceType(ResourceType.WEBLOGIC);
-            alarmService.saveAlarm(alarm);
-
-            //发送邮件
-            List<AttributeAction> thresholdAttributeActions = actionService.queryAttributeActions(resource.getResourceId(), attribute.getId(), severityLevel);
-
-            //处理动作
-            if(thresholdAttributeActions != null && thresholdAttributeActions.size() > 0) {
-                actionService.doActions(thresholdAttributeActions, resource, attribute, severityLevel, message);
-            }
+    private String controlFixedLength(String message) {
+        String back = null;
+        if (message.length() > 500) {
+            back = org.apache.commons.lang.StringUtils.substring(message, 0, 500);
+            back = back + "...";
+        } else {
+            back = message;
         }
-
-        private String controlFixedLength(String message){
-            String back=null;
-            if(message.length()>500){
-                back =  org.apache.commons.lang.StringUtils.substring(message, 0, 500);
-                back =back + "...";
-            }else {
-                back = message;
-            }
-            return back;
-        }
+        return back;
     }
 }

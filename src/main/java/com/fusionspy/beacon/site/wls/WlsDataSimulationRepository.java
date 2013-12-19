@@ -36,6 +36,7 @@ public class WlsDataSimulationRepository implements MonitorDataRepository {
             String resp = xmlDocument.asXML();
             JaxbBinder jaxbBinder2 = new JaxbBinder(WlsIniData.class);
             WlsIniData initData = jaxbBinder2.fromXml(resp);
+            initData.setSiteName(siteName);
             initData.getWlsSysrec().setAdminServerName(siteName);
             return initData;
         } catch (Exception e) {
