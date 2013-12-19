@@ -132,7 +132,7 @@ public class Connect{
             agentPort = sitePortP;
             sampleInterval = sampleIntervalP;
             buffer = "".toCharArray();
-            signal = true;
+//            signal = true;
             errXml = "<Err/>";
         }
 
