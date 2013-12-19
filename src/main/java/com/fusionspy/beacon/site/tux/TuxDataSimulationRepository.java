@@ -40,7 +40,7 @@ public class TuxDataSimulationRepository implements MonitorDataRepository {
     private ConcurrentMap<String, SimulationData> last = new MapMaker().concurrencyLevel(32).makeMap();
 
     @Override
-    public <T> InitData getInitData(String siteName, String ip, int port) {
+    public TuxIniData getInitData(String siteName, String ip, int port) {
         Assert.hasText(siteName);
         TuxIniData initData = new TuxIniData();
         SysrecsEntity sysrecs = new SysrecsEntity();

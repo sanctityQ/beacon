@@ -8,17 +8,27 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
+
+import static com.google.common.collect.Maps.newHashMap;
 
 @Component
 public abstract class StatisticReportFactory {
 
+
     @Autowired
-    private StatisticFactory statisticFactory;
+    List<StatisticReport> statisticReports;
+
+    private static Map<String,StatisticReport> attributeReportMap = newHashMap();
+
+
 
     @PostConstruct
     public void init(){
-        statisticFactory.addStatisticReportFactory(getResourceType(),this);
         initChild();
+        for(StatisticReport statisticReport : statisticReports){
+            attributeReportMap.put(statisticReport.getAttribute().getAttribute(),statisticReport);
+        }
 
     }
 
@@ -30,9 +40,11 @@ public abstract class StatisticReportFactory {
      * 返回报表属性
      * @return
      */
-    public abstract List<Attribute> getAttribute();
+    public abstract List<Attribute> getAttributes();
 
-    public abstract StatisticReport create(String attribute);
+    public StatisticReport getStatisticReport(String attribute){
+        return this.attributeReportMap.get(attribute);
+    }
 
 
 }

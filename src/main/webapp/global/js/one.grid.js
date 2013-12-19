@@ -413,7 +413,7 @@
                     //processData : false,
                     beforeSend : function(){loading();},
                     error : function (XMLHttpRequest, errorThrown) {
-                        console("数据加载出错！" + errorThrown);
+                        console.error("数据加载出错！" + errorThrown);
                     },
                     success: function(returnData){
                     	if(returnData == null || returnData == undefined || returnData.total == 0 || returnData.rows.length == 0) {
@@ -1792,7 +1792,7 @@
 	                            data : newObj,
 	                            async : defaults.isAsync,
 	                            error: function (XMLHttpRequest, errorThrown) {
-                                    console("数据加载出错！" + errorThrown);
+                                    console.error("数据加载出错！" + errorThrown);
 	                            },
 	                            success: function(myData){
 	                                _data = myData;
@@ -1901,7 +1901,7 @@
                                                     reGreadPage();
                                                 },
                                                 error:function(XMLHttpRequest, errorThrown) {
-                                                    console("数据加载出错！" + errorThrown);
+                                                    console.error("数据加载出错！" + errorThrown);
                                                 }
                                             });
                                         } else {
@@ -1969,7 +1969,7 @@
                                                     
                                                 },
                                                 error:function(XMLHttpRequest, errorThrown) {
-                                                    console("数据加载出错！" + errorThrown);
+                                                    console.error("数据加载出错！" + errorThrown);
                                                 }
                                             });
 
@@ -2026,7 +2026,7 @@
                                 async : defaults.isAsync,
                                 data : newObj,
                                 error: function (XMLHttpRequest, errorThrown) {
-                                    console("数据加载出错！" + errorThrown);
+                                    console.error("数据加载出错！" + errorThrown);
                                 },
                                 success: function(myData){
                                     _data = myData;
@@ -2144,7 +2144,7 @@
                                                     reGreadPage();
                                                 },
                                                 error:function(XMLHttpRequest, errorThrown) {
-                                                    console("数据加载出错！" + errorThrown);
+                                                    console.error("数据加载出错！" + errorThrown);
                                                 }
                                             });
                                         } else {
@@ -2217,7 +2217,7 @@
                                                     
                                                 },
                                                 error:function(XMLHttpRequest, errorThrown) {
-                                                    console("数据加载出错！" + errorThrown);
+                                                    console.error("数据加载出错！" + errorThrown);
                                                 }
                                             });
 

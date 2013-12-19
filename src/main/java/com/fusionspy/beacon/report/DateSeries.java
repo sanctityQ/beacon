@@ -71,6 +71,7 @@ public enum DateSeries {
         public String getDescription() {
             return "昨天";
         }
+
     },
     lastWeek {
         @Override

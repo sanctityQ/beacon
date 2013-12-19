@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StatisticReport{
 
-    public ReportResult getStatistic(String resourceId,DateSeries dateSeries);
+    ReportResult getStatistic(String resourceId,DateSeries dateSeries);
 
     public Attribute getAttribute();
 

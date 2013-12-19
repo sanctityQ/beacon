@@ -4,6 +4,7 @@ import com.fusionspy.beacon.site.Connect;
 import com.fusionspy.beacon.site.InTimeData;
 import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorDataRepository;
+import com.fusionspy.beacon.site.tux.dao.SysrecsDao;
 import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
 import com.fusionspy.beacon.site.tux.entity.TuxIniData;
 import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
@@ -32,11 +33,17 @@ public class TuxDataRepository implements MonitorDataRepository {
     @Autowired
     private Connect connect;
 
+    @Autowired
+    private SysrecsDao sysrecsDao;
+
     @Override
-    public InitData getInitData(String siteName, String ip, int port) {
+    public TuxIniData getInitData(String siteName, String ip, int port) {
         String initXml = connect.startSiteThread("", siteName, ip, port, 0);
-        logger.debug("get initXml Xml: {}", initXml);
-        return iniBinder.fromXml(initXml);
+        logger.debug("siteName is {}, ip is {}, get initXml Xml: {}",new Object[]{ siteName,ip,initXml});
+        TuxIniData tuxIniData =  iniBinder.fromXml(initXml);
+        tuxIniData.setSiteName(siteName);
+        tuxIniData.setSysrecsDao(sysrecsDao);
+        return tuxIniData;
     }
 
     @Override

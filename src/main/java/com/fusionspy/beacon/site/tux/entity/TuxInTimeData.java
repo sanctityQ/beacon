@@ -72,14 +72,5 @@ public class TuxInTimeData extends MonitorData implements InTimeData {
     }
 
 
-    private TuxError tuxError;
 
-    @XmlElement(name="ERROR")
-    public TuxError getTuxError() {
-        return tuxError;
-    }
-
-    public void setTuxError(TuxError tuxError) {
-        this.tuxError = tuxError;
-    }
 }

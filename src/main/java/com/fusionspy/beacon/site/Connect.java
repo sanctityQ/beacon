@@ -34,6 +34,21 @@ public class Connect{
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    private static final int HAND_INIT_CODE = 91;
+
+    private static final int HAND_ACK_CODE = 92;
+
+    private static final int GET_SVR_DATA_CODE = 93;
+
+    private static final int GET_INIT_DATA_CODE = 94;
+
+    private static final int CLOSE_CONNECT_CODE = 95;
+
+    private static final int CLOSE_SVR_CODE = 96;
+
+    private static final int DUMP = 97;
+
+
 	static {
 		coreMap.put("HANDINIT", "91");
 		coreMap.put("HANDACK", "92");
@@ -60,7 +75,7 @@ public class Connect{
 
 	private final class SiteThread {
 
-		private volatile boolean signal;
+	//	private volatile boolean signal;
 
 		private String iniXmlName;
 
@@ -105,7 +120,7 @@ public class Connect{
 			agentPort = sitePortP;
 			sampleInterval = sampleIntervalP;
 			buffer = "".toCharArray();
-			signal = true;
+			//signal = true;
 			errXml = "<Err/>";
 		}
 
@@ -127,7 +142,7 @@ public class Connect{
 				if (this.siteSocket != null) {
 					this.siteSocket.close();
 				}
-				this.signal = false;
+	//			this.signal = false;
 			} catch (IOException ioe) {
                 throw  new RuntimeException(ioe);
 			}
@@ -230,7 +245,7 @@ public class Connect{
 						out.write(buffer);
 						out.flush();
 
-                        if(buffer.length == 0)
+//                        if(buffer.length == 0)
                             buffer = new char[9];
 						// get length of response-xml
 						respLenCharCount = in.read(buffer, 0, 9);
@@ -240,10 +255,16 @@ public class Connect{
 						// get response-xml
 						//respLenStr = new String(buffer, 0, respLenCharCount);
 						respLenInt = Integer.parseInt(respLenStr.trim());
-                        buffer = new char[respLenInt];
-						readInLen = in.read(buffer, 0, respLenInt);
-                        logger.debug("readInLen = {} , all line = {}" ,readInLen,respLenInt);
-						respXmlStr = new String(buffer, 0, readInLen);
+//                        buffer = new char[respLenInt];
+//						readInLen = in.read(buffer, 0, respLenInt);
+//                        logger.debug("readInLen = {} , all line = {}" ,readInLen,respLenInt);
+//						respXmlStr = new String(buffer, 0, readInLen);
+                        count = 0;
+                        bufferWriter = new  StringBuilder(respLenInt);
+                        while (count++<respLenInt) {
+                            bufferWriter.append((char)in.read());
+                        }
+                        respXmlStr = bufferWriter.toString();
                         logger.debug("--GETINITDATA:receive data {}",respXmlStr);
 						break;
 
@@ -276,8 +297,8 @@ public class Connect{
 //				ioe.printStackTrace();
 //			}
             catch (Throwable e) {
-				System.out.println("getData: got RuntimeException while getting data from agent...");
-				e.printStackTrace();
+//				System.out.println("getData: got RuntimeException while getting data from agent...");
+				logger.error("getData: got RuntimeException while getting data from agent,exception info is {}",e);
                 throw new ConnectAgentException(e);
 			}
 //            return  StringUtils.EMPTY;

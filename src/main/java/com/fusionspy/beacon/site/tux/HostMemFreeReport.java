@@ -4,6 +4,8 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.report.*;
 import com.fusionspy.beacon.site.tux.dao.TuxResourceDao;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.sinosoft.one.monitor.common.ResourceType;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class HostMemFreeReport implements TuxReport{
+public class HostMemFreeReport extends StatisticForwardReport implements TuxReport{
 
     private Attribute attribute;
 
@@ -19,19 +21,10 @@ public class HostMemFreeReport implements TuxReport{
     private TuxResourceDao resourceDao;
 
     @Override
-    public ReportResult getStatistic(String resourceId, DateSeries dateSeries) {
-        ReportQuery query = dateSeries.getQuery();
-        ReportResult reportResult = new ReportResult();
-        for(TimePeriod timePeriod:query.getPeriods()){
-            Statistics statistics =  resourceDao.statisticHostMemFreeByRectimeBetween(resourceId,
-                    new Timestamp(timePeriod.getStartDateTime().getMillis()),
-                    new Timestamp(timePeriod.getEndDateTime().getMillis()));
-            statistics.setTimePeriod(timePeriod);
-            reportResult.addStatistics(statistics);
-        }
-        reportResult.setStartTime(query.getStartDateTime());
-        reportResult.setEndTime(query.getEndDateTime());
-        return reportResult;
+    public Statistics getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
+        return resourceDao.statisticHostMemFreeByRectimeBetween(resourceId,
+                new Timestamp(startDate.getMillis()),
+                new Timestamp(endDate.getMillis()));
     }
 
     @Override
@@ -40,6 +33,7 @@ public class HostMemFreeReport implements TuxReport{
             attribute = new Attribute();
             attribute.setAttribute("MEM_FREE");
             attribute.setAttributeCn("主机空闲内存");
+            attribute.setResourceType(ResourceType.Tuxedo);
             attribute.setUnits("M");
         }
         return attribute;
