@@ -6,6 +6,7 @@
 <%@ include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
 $(function(){
+    $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
     /*获得所有的阈值列表*/
     $.ajax({
         type:"post",

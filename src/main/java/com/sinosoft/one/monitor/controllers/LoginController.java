@@ -51,7 +51,7 @@ public class LoginController {
 //                return "r:/login";
 //            }
             inv.getRequest().getSession().setAttribute("loginUserName", checkuser.getLoginName());
-            return "index";
+            return "r:/home";
         } else {
             inv.addModel("msg", "-1");
             return "r:/login";

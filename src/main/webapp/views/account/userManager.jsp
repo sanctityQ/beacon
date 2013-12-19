@@ -5,6 +5,7 @@
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
 $(function(){
+    $(".users").parent().parent().addClass("seleck").siblings().removeClass("seleck");
 	$("#thresholdList").Grid({
 		type : "post",
 		url : "${ctx}/account/user/data",  

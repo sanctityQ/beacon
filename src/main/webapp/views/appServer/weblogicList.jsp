@@ -11,6 +11,7 @@
     <script type="text/javascript">
         var gird;
         $(function(){
+            $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
             grid = $("#thresholdList").Grid({
                 url : "${ctx}/appServer/weblogic/list",
                 type:"get",

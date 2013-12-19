@@ -7,6 +7,7 @@
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script type="text/javascript">
     $(function(){
+        $(".form").parent().parent().addClass("seleck").siblings().removeClass("seleck");
         $("body").layout();
 
         function query(){

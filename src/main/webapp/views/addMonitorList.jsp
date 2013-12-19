@@ -5,6 +5,11 @@
 <head>
 <title>新建监视器</title>
 <%@include file="/WEB-INF/layouts/base.jsp"%>
+<script type="text/javascript">
+    $(function() {
+        $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
+    })
+</script>
 </head>
 
 <body>
@@ -18,7 +23,7 @@
                 <td width="25%">
                       <h3 class="title3">应用服务器</h3>
                       <ul>
-                          <li><a href="${ctx}/addmonitor/server/tuxedo">Tuxedo</a></li>
+                          <%--<li><a href="${ctx}/addmonitor/server/tuxedo">Tuxedo</a></li>--%>
                           <li><a href="${ctx}/appServer/weblogic/addUI">Weblogic</a></li>
                       </ul>
                   </td>

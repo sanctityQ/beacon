@@ -66,16 +66,32 @@ public class WlsController {
             public JsonGrid.JsonRow buildRow(WlsServer t) {
                 WlsHisData hisData = monitorManage.getMonitorInf(t.getServerName());
                 WlsInTimeData inTimeData = hisData.getWlsInTimeData();
+                List<WlsSvr> serverRuntimes = inTimeData.getServerRuntimes();
                 String availability = (inTimeData.getError() == null || StringUtils.isBlank(inTimeData.getError().getErrMsg())) ? "fine" : "poor";
                 JsonGrid.JsonRow row = new JsonGrid.JsonRow();
                 row.setId(t.getServerName());
                 row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, preUrl + t.getServerName(), t.getServerName()));
-                row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, availability));
-                if (inTimeData.getThreadPoolRuntimes().isEmpty()) {
-                    row.addCell("0");
-                } else {
-                    row.addCell(inTimeData.getThreadPoolRuntimes().get(0).getThoughput() + "");
+                StringBuilder serverList = new StringBuilder();
+                StringBuilder healthList = new StringBuilder();
+                for(WlsSvr serverRuntime : serverRuntimes) {
+                    serverList.append(MessageUtils.formateMessage(MessageUtils.MESSAGE_INFO_DIV, "", serverRuntime.getServerName()));
+                    //HEALTH_OK，HEALTH_WARN，HEALTH_CRITICAL，HEALTH_FAILED
+                    String health = serverRuntime.getHealth();
+                    String cssClass = "";
+                    if (health.indexOf("HEALTH_OK") != -1) {
+                        cssClass = "fine";
+                    } else if (health.indexOf("HEALTH_WARN") != -1) {
+                        cssClass = "y_poor";
+                    } else if (health.indexOf("HEALTH_CRITICAL") != -1) {
+                        cssClass = "poor";
+                    } else if (health.indexOf("HEALTH_FAILED") != -1) {
+                        cssClass = "poor";
+                    }
+                    healthList.append(MessageUtils.formateMessage(MessageUtils.MESSAGE_INFO_DIV, cssClass, ""));
+
                 }
+                row.addCell(serverList.toString());
+                row.addCell(healthList.toString());
                 return row;
             }
         });
@@ -192,6 +208,7 @@ public class WlsController {
         lastInfo.put("rectime", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").print(new DateTime(iniData.getWlsSysrec().getRecTime())));
         lastInfo.put("cpuIdle", inTimeData.getResource().getCpuIdle());
         lastInfo.put("memFree", inTimeData.getResource().getMemFree());
+        lastInfo.put("serverNum", iniData.getWlsSysrec().getServerNum());
         return Replys.with(lastInfo).as(Json.class);
     }
 

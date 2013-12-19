@@ -16,44 +16,43 @@
 <script type="text/javascript">
     $(function () {
         $("body").layout({
-            top:{topHeight:100},
+            top:{topHeight:106},
             bottom:{bottomHeight:30}
         });
         $("#myDesk").height($("#layout_center").height());
         $("#nav").delegate('li', 'mouseover mouseout', navHover);
         $("#nav,#menu").delegate('li', 'click', navClick);
+
         if($.browser.msie && ($.browser.version == "7.0")){
             var center = $("#layout_center");
             $("#main").width(center.width() - 31).height(center.height() - 30);
         }
     });
-    function navHover() {
+
+    function navHover(){
         $(this).toggleClass("hover")
     }
-    function navClick() {
+    function navClick(){
         $(this).addClass("seleck").siblings().removeClass("seleck");
-        if ($(this).hasClass('has_sub')) {
+        if($(this).hasClass('has_sub')){
             var subMav = $(this).children("ul.add_sub_menu");
             var isAdd = false;
-            if ($(this).parent().attr("id") == "menu") {
+            if($(this).parent().attr("id") == "menu"){
                 isAdd = true;
-            }
-            ;
-            subMav.slideDown('fast', function () {
-                $(document).bind('click', {dom:subMav, add:isAdd}, hideNav);
+            };
+            subMav.slideDown('fast',function(){
+                $(document).bind('click',{dom:subMav,add:isAdd},hideNav);
                 return false;
             });
-        }
-        ;
+        };
     }
-    function hideNav(e) {
+    function hideNav(e){
         var subMenu = e.data.dom;
         var isAdd = e.data.add;
-        subMenu.slideUp('fast', function () {
-            if (isAdd) {
+        subMenu.slideUp('fast',function(){
+            if(isAdd){
                 subMenu.parent().removeClass('seleck');
-            }
-            ;
+            };
         });
         $(document).unbind();
     }
@@ -75,17 +74,16 @@
 </script>
 <div id="layout_top">
     <div class="header">
-        <div style="float:left;width: 242px;height:40px;cursor:pointer;" onclick="javascript:go_index()"></div>
         <p class="user">当前登录用户【${sessionScope.loginUserName}】 身份【${name}】 <span>|</span> <a href="${ctx}/login">退出系统</a></p>
         <div class="menu_box">
             <ul class="nav" id="nav">
-                <li><a href="${ctx }/index">首页</a></li>
+                <li class="seleck"><a href="${ctx }/index"><i class="home"></i>首页</a></li>
                 <li class="has_sub">
-                    <a href="javascript:void(0)">监视器</a><span class="show_sub_anv"></span>
+                    <a href="javascript:void(0)"><i class="monitor"></i>监视器</a><span class="show_sub_anv"></span>
                     <ul class="add_sub_menu" id="subNav">
                         <li class="action" style="border:none"><span class="middleware">应用服务器</span>
                             <ul class="list">
-                                <li><a href="${ctx}/appServer/tuxedo/manager">Tuxedo</a></li>
+                                <%--<li><a href="${ctx}/appServer/tuxedo/manager">Tuxedo</a></li>--%>
                                 <li><a href="${ctx}/appServer/weblogic/manager">Weblogic</a></li>
                             </ul>
                         </li>
@@ -108,13 +106,13 @@
                     </ul>
 
                 </li>
-                <%--<li><a href="${ctx}/application/manager/appmanager/applist/1">应用性能</a></li>--%>
-                <li><a href="${ctx}/alarm/manager/list">告警</a></li>
-                <li><a href="${ctx}/report">报表</a></li>
-                <li><a href="${ctx}/account/user/list">用户管理</a></li>
+                <%--<li><a href="${ctx}/application/manager/appmanager/applist/1"><i class="performance"></i>应用性能</a></li>--%>
+                <li><a href="${ctx}/alarm/manager/list"><i class="alarm"></i>告警</a></li>
+                <li><a href="${ctx}/report"><i class="form"></i>报表</a></li>
+                <li><a href="${ctx}/account/user/list"><i class="users"></i>用户管理</a></li>
             </ul>
         </div>
-        <ul class="add_menu" id="menu">
+        <ul class="add_menu" style="display: none;" id="menu">
             <shiro:hasPermission name="admin">
             <li><a href="${ctx}/addmonitor/list">新建监视器</a></li>
             </shiro:hasPermission>

@@ -7,6 +7,7 @@
     <script type="text/javascript">
 
         $(function(){
+            $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
             $("#monitorType").bind("change",getMonitorNames);
             <c:if test="${not empty resourceType}" >
                 $("#monitorType").val('${resourceType}');
@@ -75,7 +76,7 @@
         }
         function getNewGrid(resourceType,monitorId){
             $("body").layout({
-                top:{topHeight:100},
+                top:{topHeight:106},
                 bottom:{bottomHeight:30}
             });
             if($.browser.msie && ($.browser.version == "7.0")){
@@ -254,7 +255,7 @@
                     <td><select id="monitorType" name="monitorType"   class="diySelect" style="width:200px">
                         <option value="">--选择一个监视器类型--</option>
                         <%--<option value="APPLICATION">应用系统</option>--%>
-                        <option value="APP_SERVER">TUXEDO</option>
+                        <%--<option value="APP_SERVER">TUXEDO</option>--%>
                         <option value="WEBLOGIC">WEBLOGIC</option>
                         <%--<option value="DB">数据库</option>--%>
                         <%--<option value="OS">操作系统</option>--%>

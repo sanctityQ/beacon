@@ -6,13 +6,14 @@
 <head>
     <title>新建监视器</title>
     <%@include file="/WEB-INF/layouts/base.jsp" %>
-    <script type="text/javascript" src="${ctx}/global/js/jquery.validate.js"></script>
-    <script type="text/javascript" src="${ctx}/global/js/jquery.metadata.js"></script>
-    <script type="text/javascript" src="${ctx}/global/js/validate.js"></script>
+    <%--<script type="text/javascript" src="${ctx}/global/js/jquery.validate.js"></script>--%>
+    <%--<script type="text/javascript" src="${ctx}/global/js/jquery.metadata.js"></script>--%>
+    <%--<script type="text/javascript" src="${ctx}/global/js/validate.js"></script>--%>
     <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
         var weblogicValidator; //生成校验器
         $(function() {
+            $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
             $("#monitorType").find("optgroup:eq(0)").find("option:eq(1)").attr("selected","selected");
             var editFlag = '${empty server}' == 'false';
             if(editFlag) {
@@ -20,8 +21,8 @@
                 var isSsl = '${server.isSsl}';
                 $(".server_isSsl[value="+isSsl+"]").attr("checked", true);
             }
-            weblogicValidator = buildValidator("weblogic_fm"); //构建校验器
-            weblogicValidator.form(); clearError(); //先from可以实现实时校验
+            //weblogicValidator = buildValidator("weblogic_fm"); //构建校验器
+            //weblogicValidator.form(); clearError(); //先from可以实现实时校验
             $("input[name='isSsl']").click(function(){ //实现单选功能
                 var flag = $(this).attr("checked");
                 $("input[name='isSsl']").removeAttr("checked");
@@ -41,7 +42,7 @@
             });
         });
         function save(){
-            if(!weblogicValidator.form()) return false;
+            //if(!weblogicValidator.form()) return false;
             var data_ = $('#weblogic_fm').serialize();
             $.ajax({
                 url: rootPath + '/appServer/weblogic/save',

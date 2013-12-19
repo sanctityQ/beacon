@@ -14,7 +14,7 @@
                 quckList:false, //是否有快速选择
                 slideTab:false, //切换动画
                 minHeight:'auto', //最小高度
-                maxHeight:'auto',  //最大高度
+                maxHeight:'auto'  //最大高度
             }
             var defaults = $.extend(defaults, opts);
             var tab = $(this);

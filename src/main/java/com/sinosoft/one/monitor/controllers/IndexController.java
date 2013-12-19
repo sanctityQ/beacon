@@ -39,6 +39,16 @@ public class IndexController {
 	
 	@Autowired
 	private ApplicationEnhanceFactory applicationEnhanceFactory;
+
+    @Get("left")
+    public String left() {
+        return "left";
+    }
+
+    @Get("home")
+    public String home() {
+        return "home";
+    }
 	
 	@Get("index")
 	public String index() {

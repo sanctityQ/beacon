@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 $(function(){
-
+    $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
 	$("#thresholdList").Grid({
 		type : "post",
 		url : "${ctx}/threshold/data",

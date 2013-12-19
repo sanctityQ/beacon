@@ -5,7 +5,9 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
-
+        $(function() {
+            $(".users").parent().parent().addClass("seleck").siblings().removeClass("seleck");
+        })
         function toSaveUser() {
             var loginName = $("#loginName").val();
             if(!loginName || loginName == "") {

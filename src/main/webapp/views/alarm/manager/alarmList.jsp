@@ -6,6 +6,7 @@
 <%@include file="/WEB-INF/layouts/base.jsp"%>
 <script type="text/javascript">
 $(function(){
+    $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
     getAlarmListOfGivenTimeAndType();
     $("#timeSelect").bind("change",function(){getAlarmListOfGivenTimeAndType(window.severityLevel)});
     $("#typeSelect").bind("change",function(){getAlarmListOfGivenTimeAndType(window.severityLevel)});
@@ -151,7 +152,8 @@ function alert(){
                 </select>
                 <select id="typeSelect" name="typeSelect" class="diySelect">
                     <option value="">选择类型</option>
-                    <option value="APP_SERVER">TUXEDO</option>
+                    <%--<option value="APP_SERVER">TUXEDO</option>--%>
+                    <option value="WEBLOGIC">WEBLOGIC</option>
                     <%--<option value="APPLICATION">应用系统</option>--%>
                     <%--<option value="OS">操作系统</option>--%>
                     <%--<option value="DB">数据库</option>--%>

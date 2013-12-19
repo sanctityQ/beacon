@@ -86,8 +86,10 @@ public class WlsService {
     public int processInitData(WlsIniData wlsIniData) {
         wlsIniData.defaultData();
         WlsSysrec wlsSysrec = wlsIniData.getWlsSysrec();
-        wlsSysrec.setRecTime(new Date());
-        wlsSysrecDao.save(wlsSysrec);
+        if(wlsSysrec != null) {
+            wlsSysrec.setRecTime(new Date());
+            wlsSysrecDao.save(wlsSysrec);
+        }
         return 1;
     }
 

@@ -250,7 +250,7 @@ function chart_init(){
             })
             return data;
         })(),
-        colors: ['#87bdc9']
+        colors: ["#FF6600","#330066","#008800","#cc0099","#990033"]
     });
 
     //server_throughput chart
@@ -332,7 +332,7 @@ function chart_init(){
             })
             return data;
         })(),
-        colors: ['#87bdc9']
+        colors: ['#87bdc9',"#663300"]
     });
 
     new Highcharts.Chart({
@@ -411,7 +411,7 @@ function chart_init(){
             })
             return data;
         })(),
-        colors: ['#769f5d']
+        colors: ["#00cc99","#ccffcc","#ccccff","#cc9909"]
     });
 
     new Highcharts.Chart({
@@ -491,7 +491,7 @@ function chart_init(){
             })
             return data;
         })(),
-        colors: ['#87bdc9']
+        colors: ["#333366","#0033ff","#ff6699","#9900cc"]
     });
 };
 

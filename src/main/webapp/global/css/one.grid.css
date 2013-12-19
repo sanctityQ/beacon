@@ -3,12 +3,11 @@
 .grid_box table td,.grid_head .gird_head_column{white-space:nowrap;overflow:hidden;vertical-align:middle;white-space:nowrap;border:#ccc 1px solid;border-width:0 1px 1px 0;}
 .grid_box .multiple,.grid_head div.multiple{width:22px;text-align:center;padding:0;cursor:default;}
 .grid_view{clear:both;position:relative;overflow:auto;}
-.grid_view table td{border-color:#ededed;line-height:26px;text-overflow:ellipsis;background:#fff;}
+.grid_view table td{border-color:#ededed;line-height:26px;text-overflow:ellipsis;}
 .grid_view table td span{padding:0 3px;white-space:nowrap;display:block;}
-.grid_view a{color:#005590;}
+.grid_view a{color:#005590;text-decoration:none}
 .grid_view a:hover{color:#000;text-decoration:none;}
 .grid_view a img{margin:0 3px -3px 2px;}
-.grid_view tr.odd td{background:url(../images/grids/grid_td.gif)}
 .grid_view tr.select td{background:#c8ddf1;}
 .grid_view tr.hover td{background:#E1EBF5;border-bottom-color:#b0b0b0;}
 .grid_box .grid_head_menu{display:none;width:126px;position:absolute;border:#aaa 1px solid;z-index:9}
@@ -36,8 +35,8 @@
 .grid_box div.hover .grid_head_menu{display:block}
 .grid_box div.hover .grid_head_menu span{background:none}
 .grid_box .grid_head_menu label{display:block}
-.grid_box .grid_page{background:#EDF2F7}
-.grid_box .grid_page_box{height:21px;padding:4px 6px 0;border-top:#e1eaf7 1px solid}
+.grid_box .grid_page{background:#f5f5f5}
+.grid_box .grid_page_box{height:21px;padding:4px 6px 0;border:#c2c2c2 1px solid;border-width:1px 0}
 .grid_box .grid_page_box div,.grid_box .grid_page_box span{float:left;}
 .grid_box .prick{border-left:#b0bac9 1px solid;border-right:#e1eaf7 1px solid;height:16px;margin:0 6px;}
 .grid_box .grid_page_box input.page_nub{border:1px solid #b0bac9;background:#fff url(../images/grids/index_input_bg.png) repeat;width:22px;margin-right:2px;}
@@ -54,7 +53,7 @@
 .grid_head .gird_head_column{float:left;border-bottom:none;height:28px;font-weight:bold;text-shadow:0 1px 0 #fff;line-height:28px;position:relative}
 .gird_head_column .grid_menu{width:14px;height:100%;position:absolute;right:0;top:0;border-left:#ccc 1px solid;cursor:default;background:url(../images/grids/grids-head-menu.gif) no-repeat center center;display:none}
 .grid_box .grid_head{height:28px;;overflow:hidden;background:#eeeff0 url(../images/grids/grids-head.gif) repeat-x;border-bottom:#ccc 1px solid;position:relative}
-.gird_head_column span{padding:0 12px 0 3px;_line-height:26px}
+.gird_head_column span{padding:0 12px 0 10px;_line-height:26px}
 /*.grid_head .hover,.grid_head_menu .hover,.grid_head .select{background:#d9e1fb url(../images/grids/grids-head-hove.gif) repeat-x 0 0}*/
 .grid_head .hover .grid_menu,.grid_head .select .grid_menu{display:block;}
 .grid_head .hover .clk,.grid_head .select .clk{background-color:#dce3fb}

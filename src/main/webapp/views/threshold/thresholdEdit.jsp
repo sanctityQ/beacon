@@ -19,6 +19,7 @@
 <script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
+    $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
 	$("#thresholdList").Grid({
 		url : "thresholdList.json",  
 		dataType: "json",

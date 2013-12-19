@@ -7,6 +7,7 @@
 <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
 <script type="text/javascript">
     $(function(){
+        $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
         if('${threshold.type}'){
             $('#thresholdType').val('${threshold.type}');
             redirectToPattern('${threshold.type}');

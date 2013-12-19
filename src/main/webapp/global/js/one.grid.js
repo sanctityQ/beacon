@@ -1768,7 +1768,8 @@
             return ({
             	grid:{
                 	getDataTotalCount : function () {
-						return _data.total;	
+                        if(_data) return _data.total;
+						return 0;
 					},
 					
 					//条件查询

@@ -7,11 +7,12 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
         $(function(){
+            $(".form").parent().parent().addClass("seleck").siblings().removeClass("seleck");
          //   $("#reporMenu li").on('click',reporMenu);
 
             $.ajax({
                 type:"post",
-                url:"${ctx}/alarm/manager/configemergency/monitornames/APP_SERVER",
+                url:"${ctx}/alarm/manager/configemergency/monitornames/WEBLOGIC",
                 dataType:"json",
                 async:false,
                 success:function(data){
@@ -79,7 +80,8 @@
                         <div class="report_title">报表</div>
                         <ul id="reporMenu" class="report_menu">
                             <%--<li><img src="${ctx}/global/images/icon_hyper_vhost.gif" width="15" height="16" />Linux</li>--%>
-                            <li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>
+                            <%--<li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>--%>
+                            <li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Weblogic</li>
                         </ul>
                     </td>
                     <td>

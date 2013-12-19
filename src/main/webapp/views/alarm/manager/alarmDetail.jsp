@@ -6,6 +6,7 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
         $(function () {
+            $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
             $("#thresholdList").Grid({
                 type: "post",
                 url: "${ctx}/alarm/manager/history/${monitorId}",

@@ -1,15 +1,21 @@
-.tabs_box{background:none;}
-.tabs_box .tabs_titles{padding:0 0 2px 20px;height:26px;margin-bottom:3px;position:relative;overflow:hidden}
+.tabs_box{background:none;margin-top:-10px;}
+.tabs_box .tabs_titles{padding:0 0 2px 20px;height:36px;margin-bottom:3px;position:relative;overflow:hidden}
 .tabs_box .tabs_titles li{display:block;float:left;vertical-align:top;position:relative;margin-left:1px;padding-left:12px;cursor:pointer;white-space:nowrap}
-.tabs_box .tabs_titles b{display:inline-block;padding:3px 12px 3px 0;height:20px;line-height:20px;font-weight:normal;cursor:pointer;text-decoration:none;color:#000;padding-right:14px;}
-.tabs_box .tabs_cont{clear:both;display:none;}
-.tabs_box .tabs_show{display:block;background:#fff;}
+.tabs_box .tabs_titles b{display:inline-block;padding:3px 12px;height:30px;line-height:30px;font-weight:normal;cursor:pointer;text-decoration:none;color:#616161;padding-right:14px;}
+.tabs_box .tabs_cont{clear:both;display:none;background:#efefef}
+.tabs_box .tabs_show{display:block;background:#efefef;}
 .tabs_box .tabs_titles .li_hover{font-weight:bold;background-position:0 -28px}
 .tabs_box .tabs_titles .li_hover b{background-position:right -28px}
 .tabs_box .tabs_titles .disabled{background-position:0 -84px;}
 .tabs_box .tabs_titles .disabled b{color:#8ea0bb;background-position:right -84px;cursor:default}
-.tabs_box .tabs_titles .tabs_select{margin-bottom:-1px;background:url(../images/tb_selected_leftbox.gif) no-repeat;cursor:default;height:27px;}
-.tabs_box .tabs_titles .tabs_select b{cursor:default;font-weight:bold;background:url(../images/tb_selected_leftbox.gif) no-repeat right center}
+.tabs_box .tabs_titles .tabs_select{margin-bottom:-1px;cursor:default;}
+.tabs_box .tabs_titles .tabs_select b{cursor:default;font-weight:bold;border:#ddd 1px solid;border-bottom:none;border-radius:6px 6px 0 0;
+    background:url(../images/tab_select.gif) repeat-x}
+.tabs_box .tabs_titles i{display:block;width:22px;height:22px;float:left;background:url(../images/tab_icon.gif) no-repeat;margin:4px 4px 0 0;}
+.tabs_box .tabs_titles i.performance{background-position:0 -44px;}
+.tabs_box .tabs_titles i.list{background-position:0 -22px;}
+.tabs_box .tabs_titles i.overview{background-position:0 -66px;}
+.tabs_box .tabs_titles i.disk{background-position:0 -88px;}
 .tabs_box .tabs_select a{font-weight:bold;height:21px;line-height:21px;background-position:right -56px}
 .tabs_box .tabs_titles span.close{position:absolute;right:4px;top:7px;background:url(../images/tabs/tabs_icons.gif) no-repeat -1px -1px;display:block;width:14px;height:14px;overflow:hidden;}
 .tabs_box .tabs_select span.close{background-position:-1px -17px;cursor:pointer}
@@ -23,10 +29,11 @@
 .tabs_box div.hover ul li.disabled{color:#acb1b8}
 .tabs_box div.hover li.hover{background:#e6edf6;border-color:#d5e3f3;border-top-color:#eef3f9}
 .tabs_box .tab_next,.tabs_box .tab_prev{position:absolute;left:0;bottom:3px;width:20px;height:24px;background:url(../images/tabs/tabs_icons.gif) no-repeat -35px 0;
-border-bottom:1px solid #6F747D}
+    border-bottom:1px solid #6F747D}
 .tabs_box .tab_next{right:0;background-position:-55px 0;left:auto}
-.tabs_box .tab_scroll{position:relative;background:url(../images/tab_behindbg.gif) repeat-x;}
+.tabs_box .tab_scroll{position:relative;background:#efefef;margin:0 -15px;border-bottom:#dadada 1px solid;
+    height:36px;}
 .tabs_box .has_scroll{padding:0 19px}
-.tabs_box .title_box{overflow:hidden;width:100%;height:26px;}
+.tabs_box .title_box{overflow:hidden;width:100%;height:40px;}
 .tabs_box .p_hover{background-position: -35px -24px;}
 .tabs_box .n_hover{background-position: -55px -24px;}

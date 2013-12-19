@@ -11,7 +11,7 @@
     interval = '${interval}';
     serverName = '${serverName}';
 $(function() {
-
+    $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
     var autoWidth = $("#layout_center").width() - 100;
     $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth);
     $("#cipan_space_detail").width(autoWidth + 65);
@@ -26,6 +26,8 @@ $(function() {
         $("#main").width(center.width() - 31).height(center.height() - 30)
     };
 
+    chart_init();
+
     function getServerLatestData(){
         $.ajax({
             url: '${ctx}/appServer/weblogic/viewLast/${serverName}',
@@ -39,14 +41,13 @@ $(function() {
                 $('#count').html(data.count);
                 $('#cpuIdle').html(data.cpuIdle);
                 $('#memFree').html(data.memFree);
-                $('#rectime').html(data.rectime);;
+                $('#rectime').html(data.rectime);
+                $('#serverNum').html(data.serverNum);
             }
         });
     }
 
     setInterval(getServerLatestData, 1000 * interval);
-
-    chart_init();
 });
 
 </script>
@@ -57,14 +58,13 @@ $(function() {
 <div id="layout_center">
     <div class="main-linux" id="main">
         <ul class="crumbs">
-            <li><a href="${ctx}/appServer/list/tuxedo" target="_blank">Weblogic监视器</a> ></li>
+            <li><a href="${ctx}/appServer/weblogic/manager">Weblogic监视器</a> ></li>
             <li><b>${serverName}</b></li>
         </ul>
-        <hr class="top_border" />
         <div id="tabs">
             <ul>
-                <li id='state_tab' class="tabs_select">状态监控</li>
-                <li id='data_tab'>数据监控</li>
+                <li id="state_tab" class="tabs_select"><i class="overview"></i>状态监控</li>
+                <li id="data_tab"><i class="disk"></i>数据监控</li>
             </ul>
             <br />
             <div class="first">
@@ -98,7 +98,7 @@ $(function() {
                                     <td align="right" class="monitorinfoodd" >监控时间：</td>
                                     <td class="monitorinfoeven"><span id="rectime">${rectime}</span></td>
                                     <td align="right" class="monitorinfoodd" >服务器数量：</td>
-                                    <td class="monitorinfoeven">${serverNum}</td>
+                                    <td class="monitorinfoeven"><span id="serverNum">${serverNum}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">Domain名称：</td>
@@ -304,6 +304,7 @@ $(function() {
                 <br />
             </div>
         </div>
+
     </div>
 
 </div>

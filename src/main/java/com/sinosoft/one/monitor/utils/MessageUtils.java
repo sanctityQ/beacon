@@ -20,6 +20,8 @@ public class MessageUtils {
 	public final static String MESSAGE_FORMAT_DIV = "message_format_div";
 	public final static String MESSAGE_FORMAT_SPAN = "message_format_span";
 	public final static String HANDLER_FORMAT = "handler_format";
+
+    public final static String MESSAGE_INFO_DIV = "message_info_div";
 	
 	private final static Properties pops = new Properties();
 	static {
