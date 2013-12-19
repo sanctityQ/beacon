@@ -1,6 +1,6 @@
-﻿drop table if exists ge_monitor_alarm;
+﻿
 
-drop table if exists ge_monitor_application;
+drop table if exists ge_monitor_alarm;
 
 drop table if exists ge_monitor_attribute;
 
@@ -8,69 +8,11 @@ drop table if exists ge_monitor_attribute_action;
 
 drop table if exists ge_monitor_attribute_threshold;
 
-drop table if exists ge_monitor_biz_scenario;
+drop table if exists ge_monitor_email_action;
 
-drop table if exists ge_monitor_biz_scenario_url;
+drop table if exists ge_monitor_resources;
 
-drop table if exists GE_MONITOR_EMAIL_ACTION;
-
-drop table if exists GE_MONITOR_EUM_URL;
-
-drop table if exists GE_MONITOR_EUM_URL_AVA;
-
-drop table if exists GE_MONITOR_EUM_URL_AVA_STA;
-
-drop table if exists GE_MONITOR_EXCEPTION_INFO;
-
-drop table if exists GE_MONITOR_METHOD;
-
-drop table if exists GE_MONITOR_METHOD_RESPONSETIME;
-
-drop table if exists GE_MONITOR_METHOD_TRACE_LOG;
-
-drop table if exists GE_MONITOR_ORACLE_AVA;
-
-drop table if exists GE_MONITOR_ORACLE_AVA_STA;
-
-drop table if exists GE_MONITOR_ORACLE_EVENT_STA;
-
-drop table if exists GE_MONITOR_ORACLE_INFO;
-
-drop table if exists GE_MONITOR_ORACLE_LASTEVENT;
-
-drop table if exists GE_MONITOR_OS;
-
-drop table if exists GE_MONITOR_OS_AVAILABLE;
-
-drop table if exists GE_MONITOR_OS_AVAILABLETEMP;
-
-drop table if exists GE_MONITOR_OS_CPU;
-
-drop table if exists GE_MONITOR_OS_DISK;
-
-drop table if exists GE_MONITOR_OS_RAM;
-
-drop table if exists GE_MONITOR_OS_RESPONDTIME;
-
-drop table if exists GE_MONITOR_OS_SHELL;
-
-drop table if exists GE_MONITOR_OS_STATI;
-
-drop table if exists GE_MONITOR_REQUEST_PER_MINUTE;
-
-drop table if exists GE_MONITOR_RESOURCES;
-
-drop table if exists GE_MONITOR_THRESHOLD;
-
-drop table if exists GE_MONITOR_URL;
-
-drop table if exists GE_MONITOR_URL_METHOD;
-
-drop table if exists GE_MONITOR_URL_RESPONSE_TIME;
-
-drop table if exists GE_MONITOR_URL_TRACE_LOG;
-
-drop table if exists GE_MONITOR_URL_VISITS_STA;
+drop table if exists ge_monitor_threshold;
 
 /*==============================================================*/
 /* Table: ge_monitor_alarm                                      */
@@ -91,28 +33,8 @@ create table ge_monitor_alarm
    primary key (ID)
 );
 
-alter table ge_monitor_alarm comment '应用系统告警信息表';
+alter table ge_monitor_alarm comment '告警信息';
 
-/*==============================================================*/
-/* Table: ge_monitor_application                                */
-/*==============================================================*/
-create table ge_monitor_application
-(
-   ID                   varchar(32) not null comment '主键ID',
-   APPLICATION_NAME     varchar(100) not null comment '应用系统英文名称',
-   CN_NAME              varchar(300) comment '应用系统中文名称',
-   APPLICATION_IP       varchar(100) comment '应用IP',
-   APPLICATION_PORT     varchar(5) comment '应用端口',
-   CREATE_TIME          datetime not null comment '创建时间',
-   CREATOR_ID           varchar(32) not null comment '创建人ID',
-   MODIFY_TIME          datetime comment '修改时间',
-   MODIFIER_ID          varchar(32) comment '修改人ID',
-   `INTERVAL`             numeric(8,0) comment '轮询间隔',
-   STATUS               varchar(1) not null default '1' comment '有效状态:1有效,0删除',
-   primary key (ID)
-);
-
-alter table ge_monitor_application comment '存储需要监控的应用系统信息';
 
 /*==============================================================*/
 /* Table: ge_monitor_attribute                                  */
@@ -159,40 +81,11 @@ create table ge_monitor_attribute_threshold
 
 alter table ge_monitor_attribute_threshold comment '属性阈值信息表';
 
-/*==============================================================*/
-/* Table: GE_MONITOR_BIZ_SCENARIO                               */
-/*==============================================================*/
-create table ge_monitor_biz_scenario
-(
-   ID                   varchar(32) not null comment '主键ID',
-   NAME                 varchar(300) not null comment '业务场景名称',
-   BIZ_SCENARIO_GRADE   varchar(15) comment '业务场景级别',
-   APPLICATION_ID       varchar(32) not null comment '所属应用系统ID',
-   CREATE_TIME          datetime not null comment '创建时间',
-   CREATOR_ID           varchar(32) not null comment '创建人ID',
-   MODIFY_TIME          datetime comment '修改时间',
-   MODIFIER_ID          varchar(32) comment '修改人ID',
-   STATUS               varchar(1) not null default '1' comment '有效状态:1有效,0删除',
-   primary key (ID)
-);
-
-alter table ge_monitor_biz_scenario comment '存储指定应用系统的业务场景信息';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_BIZ_SCENARIO_URL                           */
-/*==============================================================*/
-create table ge_monitor_biz_scenario_url
-(
-   URL_ID               varchar(32) not null comment 'URLID',
-   BIZ_SCENARIO_ID      varchar(32) comment '业务场景ID'
-);
-
-alter table ge_monitor_biz_scenario_url comment '应用系统业务场景URL信息表';
 
 /*==============================================================*/
 /* Table: GE_MONITOR_EMAIL_ACTION                               */
 /*==============================================================*/
-create table GE_MONITOR_EMAIL_ACTION
+create table ge_monitor_email_action
 (
    ID                   varchar(32) not null comment '主键ID',
    FROM_ADDRESS         varchar(250) not null comment '发件地址(fromaddress)',
@@ -207,403 +100,13 @@ create table GE_MONITOR_EMAIL_ACTION
    primary key (ID)
 );
 
-alter table GE_MONITOR_EMAIL_ACTION comment '应用系统邮件动作信息表';
+alter table ge_monitor_email_action comment '邮件动作信息表';
 
-/*==============================================================*/
-/* Table: GE_MONITOR_EUM_URL                                    */
-/*==============================================================*/
-create table GE_MONITOR_EUM_URL
-(
-   ID                   varchar(32) not null comment '主键ID',
-   URL                  varchar(300) not null comment 'URL地址',
-   APPLICATION_ID       varchar(32) comment '所属应用系统ID',
-   RECORD_TIME          datetime comment '记录时间',
-   URL_ID               varchar(32) comment 'URL的ID',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_EUM_URL comment '业务仿真URL信息表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_EUM_URL_AVA                                */
-/*==============================================================*/
-create table GE_MONITOR_EUM_URL_AVA
-(
-   ID                   varchar(32) not null comment '主键ID',
-   EUM_URL_ID           varchar(32) comment '业务仿真ID',
-   STATE                varchar(1) comment '状态1可用0不可用',
-   RECORD_TIME          datetime comment '记录时间',
-   `INTERVAL`           numeric(8,0) not null comment '轮询间隔',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_EUM_URL_AVA comment '应用系统可用性临时表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_EUM_URL_AVA_STA                            */
-/*==============================================================*/
-create table GE_MONITOR_EUM_URL_AVA_STA
-(
-   ID                   varchar(32) not null comment '主键ID',
-   EUM_URL_ID           varchar(32) comment '业务仿真URLID',
-   NORMAL_RUNTIME       numeric(8,0) comment '正常运行时间',
-   TOTAL_FAILURE_TIME   numeric(8,0) comment '总失败时间',
-   FAILURE_COUNT        numeric(8,0) comment '停止次数',
-   AVG_FAILURE_TIME     numeric(8,0) comment '平均故障间隔时间',
-   RECORD_TIME          datetime comment '记录时间',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_EUM_URL_AVA_STA comment '业务仿真URL可用性统计表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_EXCEPTION_INFO                             */
-/*==============================================================*/
-create table GE_MONITOR_EXCEPTION_INFO
-(
-   ID                   varchar(32) not null comment '主键ID',
-   APPLICATION_ID       varchar(32) comment '所属应用系统',
-   EXCEPTION_DESCRIPTION varchar(500) comment '异常描述',
-   EXCEPTION_STACK_TRACE text comment '异常堆栈',
-   RECORD_TIME          datetime comment '异常时间',
-   URL_TRACE_LOG_ID     varchar(32) comment 'URL追踪日志ID',
-   ALARM_ID             varchar(32) comment '告警消息ID',
-   URL                  varchar(300) comment 'URL地址',
-   REQUEST_PARAMS       text comment 'URL请求参数',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_EXCEPTION_INFO comment '记录所有的异常信息';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_METHOD                                     */
-/*==============================================================*/
-create table GE_MONITOR_METHOD
-(
-   ID                   varchar(32) not null comment '主键ID',
-   DESCRIPTION          varchar(300) comment '方法描述',
-   CLASS_NAME           varchar(500) not null comment '方法所属类名',
-   METHOD_NAME          varchar(100) not null comment '方法名称',
-   THRESHOLD            numeric(6,0) not null comment '方法阈值，单位ms',
-   CREATE_TIME          datetime not null comment '创建时间',
-   CREATOR_ID           varchar(32) not null comment '创建人ID',
-   MODIFY_TIME          datetime comment '修改时间',
-   MODIFIER_ID          varchar(32) comment '修改人ID',
-   STATUS               varchar(1) not null default '1' comment '有效状态（1--有效 0--删除）',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_METHOD comment '应用系统方法信息表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_METHOD_RESPONSETIME                        */
-/*==============================================================*/
-create table GE_MONITOR_METHOD_RESPONSETIME
-(
-   ID                   varchar(32) not null comment '主键ID',
-   METHOD_NAME          varchar(300) comment '方法名',
-   URL_ID               varchar(32) comment 'URL信息ID',
-   MIN_RESPONSE_TIME    numeric(8,0) comment '最小响应时间',
-   MAX_RESPONSE_TIME    numeric(8,0) comment '最大响应时间',
-   TOTAL_RESPONSE_TIME  numeric(8,0) comment '总响应时间',
-   TOTAL_COUNT          numeric(8,0) comment '总次数',
-   RECORD_TIME          datetime comment '记录时间',
-   APPLICATION_ID       varchar(32) comment '所属应用系统',
-   METHOD_ID            varchar(32) comment '方法信息ID',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_METHOD_RESPONSETIME comment '方法响应时间';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_METHOD_TRACE_LOG                           */
-/*==============================================================*/
-create table GE_MONITOR_METHOD_TRACE_LOG
-(
-   ID                   varchar(32) not null comment '主键ID',
-   URL_TRACE_LOG_ID     varchar(32) comment 'URL追踪日志ID',
-   METHOD_NAME          varchar(100) not null comment '方法名',
-   CLASS_NAME           varchar(200) comment '方法所属类名',
-   IN_PARAM             varchar(3000) comment '方法输入参数',
-   OUT_PARAM            varchar(3000) comment '方法输出参数',
-   BEGIN_TIME           datetime comment '方法开始时间',
-   END_TIME             datetime comment '方法结束时间',
-   CONSUME_TIME         numeric(8,0) comment 'URL执行时间',
-   RECORD_TIME          datetime comment '日志记录时间',
-   METHOD_ID            varchar(32) comment '方法信息ID',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_METHOD_TRACE_LOG comment '方法追踪日志信息表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_ORACLE_AVA                                 */
-/*==============================================================*/
-create table GE_MONITOR_ORACLE_AVA
-(
-   ID                   varchar(32) not null comment '主键ID',
-   DATABASE_ID          varchar(32) comment '数据库ID',
-   RECORD_TIME          datetime comment '记录时间',
-   STATE                varchar(1),
-   `INTERVAL`           numeric(8,0),
-   primary key (ID)
-);
-
-alter table GE_MONITOR_ORACLE_AVA comment 'ORACLE可用性临时表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_ORACLE_AVA_STA                             */
-/*==============================================================*/
-create table GE_MONITOR_ORACLE_AVA_STA
-(
-   ID                   varchar(32) not null comment '主键ID',
-   DATABASE_ID          varchar(32) comment '数据库ID',
-   NORMAL_RUNTIME       numeric(8,0),
-   TOTAL_POWEROFF_TIME  numeric(8,0),
-   POWEROFF_COUNT       numeric(8,0),
-   AVG_FAILURE_TIME     numeric(8,0),
-   AVA_RECORD_TIME      datetime comment '记录时间',
-   AV_COUNT             numeric(8,0),
-   UNAV_COUNT           numeric(8,0),
-   UNKONW_TIME          numeric(8,0),
-   RECORD_TIME          datetime,
-   primary key (ID)
-);
-
-alter table GE_MONITOR_ORACLE_AVA_STA comment 'ORACLE可用性统计表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_ORACLE_EVENT_STA                           */
-/*==============================================================*/
-create table GE_MONITOR_ORACLE_EVENT_STA
-(
-   ID                   varchar(32) not null comment '主键ID',
-   DATABASE_ID          varchar(32) comment '数据库ID',
-   EVENT_TYPE           varchar(2),
-   MIN                  numeric(8,0) comment '活动连接数',
-   MAX                  numeric(8,0) comment '活动连接数最大值',
-   AVG                  numeric(8,0),
-   ENVENT_RECORD_TIME   datetime comment '记录时间',
-   EVENT_COUNT          numeric(38,0),
-   RECORD_TIME          datetime,
-   primary key (ID)
-);
-
-alter table GE_MONITOR_ORACLE_EVENT_STA comment 'ORACLE事件统计表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_ORACLE_INFO                                */
-/*==============================================================*/
-create table GE_MONITOR_ORACLE_INFO
-(
-   ID                   varchar(32) not null comment '主键ID',
-   NAME                 varchar(80) comment '名称',
-   VERSION              varchar(50) comment '版本',
-   IP_ADDRESS           varchar(30) comment 'IP地址',
-   SUBNET_MASK          varchar(30) comment '子网掩码',
-   PORT                 varchar(5) comment '端口',
-   PULL_INTERVAL        numeric(8,0) comment '轮询间隔',
-   USERNAME             varchar(100) comment '用户名',
-   PASSWORD             varchar(50) comment '密码',
-   INSTANCE_NAME        varchar(20) comment '服务名',
-   SYS_TIME             datetime,
-   START_TIME           varchar(50),
-   primary key (ID)
-);
-
-alter table GE_MONITOR_ORACLE_INFO comment 'Oracle数据库信息表';
-
-
-/*==============================================================*/
-/* Table: GE_MONITOR_ORACLE_LASTEVENT                           */
-/*==============================================================*/
-create table GE_MONITOR_ORACLE_LASTEVENT
-(
-   ID                   varchar(32) not null comment '主键ID',
-   DATABASE_ID          varchar(32) comment '数据库ID',
-   ACTIVE_COUNT         numeric(8,0) comment '活动连接数',
-   CONNECT_TIME         numeric(8,0) comment '连接时间',
-   BUFFER_HIT_RATE      float comment '缓冲区命中率',
-   DICK_HIT_RATE        float,
-   BUFFER_LIB_HIT_RATE  float,
-   RECORD_TIME          datetime comment '记录时间',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_ORACLE_LASTEVENT comment 'ORACLE最近一小时事件记录';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS                                         */
-/*==============================================================*/
-create table GE_MONITOR_OS
-(
-   OS_INFO_ID           varchar(32) not null comment 'OS信息表ID',
-   NAME                 varchar(16) comment 'OS名称',
-   TYPE                 varchar(16) comment 'OS类型',
-   IP_ADDR              varchar(16) comment 'OSIP地址',
-   SUBNET_MASK          varchar(16) comment 'OS子网掩码',
-   INTERCYCLE_TIME      numeric(8,0) comment '轮询间隔',
-   primary key (OS_INFO_ID)
-);
-
-alter table GE_MONITOR_OS comment '操作系统信息';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS_AVAILABLE                               */
-/*==============================================================*/
-create table GE_MONITOR_OS_AVAILABLE
-(
-   ID                   varchar(32) not null comment 'ID',
-   OS_INFO_ID           varchar(32) not null comment 'OS信息表ID',
-   NORMAL_RUN           numeric(8,0) comment '正常运行时间',
-   CRASH_TIME           numeric(8,0) comment '总停机时间',
-   AVE_REPAIR_TIME      numeric(8,0) comment '平均修复时间',
-   AVE_FAULT_TIME       numeric(8,0) comment '平均故障间隔时间',
-   TIME_SPAN            datetime comment '时间段',
-   STOP_COUNT           numeric(8,0),
-   primary key (ID)
-);
-
-alter table GE_MONITOR_OS_AVAILABLE comment '系统可用性';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS_AVAILABLETEMP                           */
-/*==============================================================*/
-create table GE_MONITOR_OS_AVAILABLETEMP
-(
-   ID                   varchar(32) not null comment 'ID',
-   OS_INFO_ID           varchar(32) not null comment 'OS信息表ID',
-   SAMPLE_DATE          datetime,
-   STATUS               varchar(2),
-   INTERCYCLE_TIME      numeric(8,0),
-   primary key (ID)
-);
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS_CPU                                     */
-/*==============================================================*/
-create table GE_MONITOR_OS_CPU
-(
-   ID                   varchar(32) not null comment 'CPU信息表',
-   OS_INFO_ID           varchar(32) not null comment 'OS信息表ID',
-   SAMPLE_DATE          datetime comment '采样时间',
-   UTILI_ZATION         varchar(10) comment 'CPU使用率',
-   RUN_QUEUE            varchar(10) comment '运行队列',
-   BLOCK_PROCESS        varchar(10) comment '阻塞进程',
-   USER_TIME            varchar(10) comment '用户时间',
-   SYS_TIME             varchar(10) comment '系统时间',
-   IO_WAIT              varchar(10) comment 'I/o等待时间',
-   CPU_IDLE             varchar(10) comment '空闲时间',
-   INTER_RUPT           varchar(10) comment '中断',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_OS_CPU comment 'CPU信息表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS_DISK                                    */
-/*==============================================================*/
-create table GE_MONITOR_OS_DISK
-(
-   ID                   varchar(32) not null comment '磁盘信息表ID',
-   OS_INFO_ID           varchar(32) not null comment 'OS信息表ID',
-   DISK_PATH            varchar(32),
-   TOTAL                varchar(20) comment '总量',
-   USED                 varchar(20) comment '使用量',
-   FREE                 varchar(20) comment '空闲量',
-   USED_UTILI_ZATION    varchar(20) comment '使用率',
-   FREE_UTILI_ZATION    varchar(20) comment '空闲率',
-   SAMPLE_DATE          datetime comment '采样时间',
-   MOUNT_POINT          varchar(20) comment '挂载点',
-   TOTAL_UTILI_ZATION   varchar(20) comment '总利用率',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_OS_DISK comment '磁盘信息表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS_RAM                                     */
-/*==============================================================*/
-create table GE_MONITOR_OS_RAM
-(
-   ID                   varchar(32) not null,
-   OS_INFO_ID           varchar(32) not null comment 'OS信息表ID',
-   SAMPLE_DATE          datetime,
-   MEM_TOTAL            varchar(20),
-   MEM_USED             varchar(20),
-   MEM_UTILI_ZATION     varchar(8),
-   SWAP_TOTAL           varchar(20),
-   SWAP_USED            varchar(20),
-   SWAP_UTILI_ZATION    varchar(8),
-   primary key (ID)
-);
-
-alter table GE_MONITOR_OS_RAM comment '内存信息表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS_RESPONDTIME                             */
-/*==============================================================*/
-create table GE_MONITOR_OS_RESPONDTIME
-(
-   ID                   varchar(32) not null,
-   OS_INFO_ID           varchar(32) comment 'OS信息表ID',
-   SAMPLE_DATE          datetime comment '采样时间',
-   RESPOND_TIME         varchar(32) comment '应答时间',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_OS_RESPONDTIME comment '应答时间';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS_SHELL                                   */
-/*==============================================================*/
-create table GE_MONITOR_OS_SHELL
-(
-   ID                   varchar(32) not null comment 'ID',
-   TYPE                 varchar(2) comment '类别',
-   TEMPLATE             text comment '脚本',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_OS_SHELL comment '操作系统脚本信息';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_OS_STATI                                   */
-/*==============================================================*/
-create table GE_MONITOR_OS_STATI
-(
-   ID                   varchar(32) not null,
-   OSID                 varchar(32) comment '操作系统OS',
-   TYPE                 varchar(2) comment '类型',
-   RECORD_TIME          datetime comment '时间',
-   MIN_VALUE            varchar(20) comment '最小值',
-   MAX_VALUE            varchar(20) comment '最大值',
-   AVERAGE_VALUE        varchar(20) comment '平均值',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_OS_STATI comment 'OS信息统计表
-
-系统可用性时间点 1/-1';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_REQUEST_PER_MINUTE                         */
-/*==============================================================*/
-create table GE_MONITOR_REQUEST_PER_MINUTE
-(
-   ID                   varchar(32) not null comment '主键ID',
-   APPLICATION_ID       varchar(32) comment '所属应用系统ID',
-   REQUEST_NUMBER       numeric(8,0) comment '请求数',
-   RECORD_TIME          datetime comment '记录时间',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_REQUEST_PER_MINUTE comment '应用系统每分钟请求数';
 
 /*==============================================================*/
 /* Table: GE_MONITOR_RESOURCES                                  */
 /*==============================================================*/
-create table GE_MONITOR_RESOURCES
+create table ge_monitor_resources
 (
    RESOURCE_ID          varchar(32) not null comment '资源ID',
    RESOURCE_NAME        varchar(300) comment '资源名称',
@@ -611,12 +114,12 @@ create table GE_MONITOR_RESOURCES
    primary key (RESOURCE_ID)
 );
 
-alter table GE_MONITOR_RESOURCES comment '资源表';
+alter table ge_monitor_resources comment '资源表';
 
 /*==============================================================*/
 /* Table: GE_MONITOR_THRESHOLD                                  */
 /*==============================================================*/
-create table GE_MONITOR_THRESHOLD
+create table ge_monitor_threshold
 (
    ID                   varchar(32) not null comment '主键ID',
    NAME                 varchar(100) comment '名称',
@@ -634,165 +137,8 @@ create table GE_MONITOR_THRESHOLD
    primary key (ID)
 );
 
-alter table GE_MONITOR_THRESHOLD comment '阈值信息表';
+alter table ge_monitor_threshold comment '阈值信息表';
 
-/*==============================================================*/
-/* Table: GE_MONITOR_URL                                        */
-/*==============================================================*/
-create table GE_MONITOR_URL
-(
-   ID                   varchar(32) not null comment '主键ID',
-   DESCRIPTION          varchar(300) not null comment 'URL描述',
-   URL                  varchar(500) not null comment 'URL地址',
-   THRESHOLD            numeric(6,0) not null comment 'URL阈值，单位ms',
-   CREATE_TIME          datetime not null comment '创建时间',
-   CREATOR_ID           varchar(32) not null comment '创建人ID',
-   MODIFY_TIME          datetime comment '修改时间',
-   MODIFIER_ID          varchar(32) comment '修改人ID',
-   STATUS               varchar(1) not null default '1' comment '有效状态（1--有效 0--删除）',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_URL comment '应用系统URL信息表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_URL_METHOD                                 */
-/*==============================================================*/
-create table GE_MONITOR_URL_METHOD
-(
-   URL_ID               varchar(32) not null comment 'URLID',
-   METHOD_ID            varchar(32) not null comment '方法ID'
-);
-
-alter table GE_MONITOR_URL_METHOD comment '应用系统URL方法信息表';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_URL_RESPONSE_TIME                          */
-/*==============================================================*/
-create table GE_MONITOR_URL_RESPONSE_TIME
-(
-   ID                   varchar(32) not null comment '主键ID',
-   URL                  varchar(300) comment 'URL地址',
-   URL_ID               varchar(32) comment 'URL信息ID',
-   MIN_RESPONSE_TIME    numeric(8,0) comment '最小响应时间',
-   MAX_RESPONSE_TIME    numeric(8,0) comment '最大响应时间',
-   TOTAL_RESPONSE_TIME  numeric(8,0) comment '总响应时间',
-   TOTAL_COUNT          numeric(8,0) comment '总次数',
-   RECORD_TIME          datetime comment '记录时间',
-   APPLICATION_ID       varchar(32) comment '所属应用系统',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_URL_RESPONSE_TIME comment 'URL响应时间';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_URL_TRACE_LOG                              */
-/*==============================================================*/
-create table GE_MONITOR_URL_TRACE_LOG
-(
-   ID                   varchar(32) not null comment '主键ID',
-   URL                  varchar(500) not null comment 'URL地址',
-   URL_ID               varchar(32) comment 'URL信息ID',
-   BIZ_SCENARIO_ID      varchar(32) comment '所属业务场景ID',
-   BEGIN_TIME           datetime comment 'URL开始时间',
-   END_TIME             datetime comment 'URL结束时间',
-   CONSUME_TIME         numeric(8,0) comment 'URL执行时间',
-   SESSION_ID           varchar(32) comment '会话ID',
-   USER_ID              varchar(32) comment '用户ID',
-   USER_IP              varchar(100) comment '用户IP',
-   TRACE_ID             varchar(32) comment '追踪ID',
-   REQUEST_PARAMS       text comment '请求参数信息',
-   ALARM_ID             varchar(32) comment '告警信息ID',
-   RECORD_TIME          datetime comment '日志记录时间',
-   USERNAME             varchar(200) comment '用户名',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_URL_TRACE_LOG comment '记录应用系统URL追踪日志信息';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_URL_VISITS_STA                             */
-/*==============================================================*/
-create table GE_MONITOR_URL_VISITS_STA
-(
-   ID                   varchar(32) not null comment '主键ID',
-   URL_ID               varchar(32) comment 'URL信息ID',
-   VISIT_NUMBER         numeric(8,0) comment '访问量',
-   RECORD_TIME          datetime comment '记录时间',
-   APPLICATION_ID       varchar(32) comment '所属应用系统ID',
-   primary key (ID)
-);
-
-alter table GE_MONITOR_URL_VISITS_STA comment '应用系统URL访问量统计';
-
-/*==============================================================*/
-/* Table: GE_MONITOR_ACCOUNT                                    */
-/*==============================================================*/
-create table GE_MONITOR_ACCOUNT
-(
-  ID                   varchar(32) not null comment '主键ID',
-  LOGIN_NAME						varchar(100) comment '登陆名称',
-  PASSWORD             varchar(50) comment '密码',
-  NAME									varchar(50) comment '姓名',
-  EMAIL								varchar(100) comment '邮件',
-  PHONE         				varchar(30) comment '手机号',
-  CREATE_TIME          datetime comment '创建时间',
-  STATUS       				varchar(1) comment '状态',
-  primary key (ID)
-);
-
-alter table GE_MONITOR_ACCOUNT comment '用户管理';
-
-alter table GE_MONITOR_BIZ_SCENARIO add constraint FK_BUSINESS_SCENARIO foreign key (APPLICATION_ID)
-      references ge_monitor_application (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_BIZ_SCENARIO_URL add constraint FK_BIZ_SCENARIO_URL_BIZ foreign key (BIZ_SCENARIO_ID)
-      references GE_MONITOR_BIZ_SCENARIO (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_BIZ_SCENARIO_URL add constraint FK_BIZ_SCENARIO_URL_URL foreign key (URL_ID)
-      references GE_MONITOR_URL (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_EUM_URL_AVA add constraint FK_EUM_URL_AVA_EUM_URL foreign key (EUM_URL_ID)
-      references GE_MONITOR_EUM_URL (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_EUM_URL_AVA_STA add constraint FK_EUM_URL_AVA_STA_EUM_URL foreign key (EUM_URL_ID)
-      references GE_MONITOR_EUM_URL (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_ORACLE_AVA add constraint FK_ava_databaseid_fk_info_id foreign key (DATABASE_ID)
-      references GE_MONITOR_ORACLE_INFO (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_ORACLE_AVA_STA add constraint FK_ava_sta_databaseid_fk_info_id foreign key (DATABASE_ID)
-      references GE_MONITOR_ORACLE_INFO (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_ORACLE_EVENT_STA add constraint FK_sta_databaseid_fk_info_id foreign key (DATABASE_ID)
-      references GE_MONITOR_ORACLE_INFO (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_ORACLE_LASTEVENT add constraint FK_lastevent_databaseid_fk_info_id foreign key (DATABASE_ID)
-      references GE_MONITOR_ORACLE_INFO (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_OS_AVAILABLE add constraint FK_GE_MONIT_AvALIABLE_GE_MONIT foreign key (OS_INFO_ID)
-      references GE_MONITOR_OS (OS_INFO_ID) on delete cascade;
-
-alter table GE_MONITOR_OS_AVAILABLETEMP add constraint FK_GE_MONIT_AVAILABLET_GE_MONIT foreign key (OS_INFO_ID)
-      references GE_MONITOR_OS (OS_INFO_ID) on delete cascade;
-
-alter table GE_MONITOR_OS_CPU add constraint FK_GE_MONIT_CPU_GE_MONIT foreign key (OS_INFO_ID)
-      references GE_MONITOR_OS (OS_INFO_ID) on delete cascade;
-
-alter table GE_MONITOR_OS_DISK add constraint FK_GE_MONIT_DISK_GE_MONIT foreign key (OS_INFO_ID)
-      references GE_MONITOR_OS (OS_INFO_ID) on delete cascade;
-
-alter table GE_MONITOR_OS_RAM add constraint FK_GE_MONIT_RAM_GE_MONIT foreign key (OS_INFO_ID)
-      references GE_MONITOR_OS (OS_INFO_ID) on delete cascade;
-
-alter table GE_MONITOR_OS_RESPONDTIME add constraint FK_GE_MONIT_RESPOTIME_GE_MONIT foreign key (OS_INFO_ID)
-      references GE_MONITOR_OS (OS_INFO_ID) on delete cascade;
-
-alter table GE_MONITOR_URL_METHOD add constraint FK_URL_METHOD_METHOD foreign key (METHOD_ID)
-      references GE_MONITOR_METHOD (ID) on delete restrict on update restrict;
-
-alter table GE_MONITOR_URL_METHOD add constraint FK_URL_METHOD_URL foreign key (URL_ID)
-      references GE_MONITOR_URL (ID) on delete restrict on update restrict;
 
 
 
@@ -800,8 +146,8 @@ alter table GE_MONITOR_URL_METHOD add constraint FK_URL_METHOD_URL foreign key (
 -- add by tuxedo
 --  Table structure for GE_MONITOR_APP_SERVER
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_APP_SERVER;
-CREATE TABLE GE_MONITOR_APP_SERVER (
+DROP TABLE IF EXISTS ge_monitor_app_server;
+CREATE TABLE ge_monitor_app_server (
   siteName varchar(255) COLLATE utf8_bin NOT NULL COMMENT '站点名称',
   siteType varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点类型',
   siteIP varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点IP',
@@ -821,8 +167,8 @@ CREATE TABLE GE_MONITOR_APP_SERVER (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_CLT
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_CLT;
-CREATE TABLE GE_MONITOR_TUX_CLT (
+DROP TABLE IF EXISTS ge_monitor_tux_clt;
+CREATE TABLE ge_monitor_tux_clt (
   id int(11) NOT NULL AUTO_INCREMENT,
   siteName varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点名称',
   recTime datetime DEFAULT NULL COMMENT '记录保存时间',
@@ -839,8 +185,8 @@ CREATE TABLE GE_MONITOR_TUX_CLT (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_CLT_STATS
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_CLT_STATS;
-CREATE TABLE GE_MONITOR_TUX_CLT_STATS (
+DROP TABLE IF EXISTS ge_monitor_tux_clt_stats;
+CREATE TABLE ge_monitor_tux_clt_stats (
   id int(11) NOT NULL AUTO_INCREMENT,
   siteName varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点名称',
   recTime datetime DEFAULT NULL COMMENT '记录保存时间',
@@ -855,8 +201,8 @@ CREATE TABLE GE_MONITOR_TUX_CLT_STATS (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_QUE
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_QUE;
-CREATE TABLE GE_MONITOR_TUX_QUE (
+DROP TABLE IF EXISTS ge_monitor_tux_que;
+CREATE TABLE ge_monitor_tux_que (
   id int(11) NOT NULL AUTO_INCREMENT,
   siteName varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点名称',
   recTime datetime DEFAULT NULL COMMENT '记录保存时间',
@@ -873,8 +219,8 @@ CREATE TABLE GE_MONITOR_TUX_QUE (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_QUE_STATS
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_QUE_STATS;
-CREATE TABLE GE_MONITOR_TUX_QUE_STATS (
+DROP TABLE IF EXISTS ge_monitor_tux_que_stats;
+CREATE TABLE ge_monitor_tux_que_stats (
   id int(11) NOT NULL AUTO_INCREMENT,
   siteName varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点名称',
   recTime datetime DEFAULT NULL COMMENT '记录保存时间',
@@ -888,8 +234,8 @@ CREATE TABLE GE_MONITOR_TUX_QUE_STATS (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_RESOURCE
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_RESOURCE;
-CREATE TABLE GE_MONITOR_TUX_RESOURCE (
+DROP TABLE IF EXISTS ge_monitor_tux_resource;
+CREATE TABLE ge_monitor_tux_resource (
   id int(11) NOT NULL AUTO_INCREMENT,
   siteName varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点名称',
   recTime datetime DEFAULT NULL COMMENT '记录保存时间',
@@ -909,8 +255,8 @@ CREATE TABLE GE_MONITOR_TUX_RESOURCE (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_SETTING
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_SETTING;
-CREATE TABLE GE_MONITOR_TUX_SETTING (
+DROP TABLE IF EXISTS ge_monitor_tux_setting;
+CREATE TABLE ge_monitor_tux_setting (
   siteName varchar(255) COLLATE utf8_bin NOT NULL,
   siteType varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点类型',
   siteSetting longtext COLLATE utf8_bin COMMENT '站点设置',
@@ -922,8 +268,8 @@ CREATE TABLE GE_MONITOR_TUX_SETTING (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_SVR
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_SVR;
-CREATE TABLE GE_MONITOR_TUX_SVR (
+DROP TABLE IF EXISTS ge_monitor_tux_svr;
+CREATE TABLE ge_monitor_tux_svr (
   id int(11) NOT NULL AUTO_INCREMENT,
   siteName varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点名称',
   recTime datetime DEFAULT NULL COMMENT '记录保存时间',
@@ -945,8 +291,8 @@ CREATE TABLE GE_MONITOR_TUX_SVR (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_SVR_STATS
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_SVR_STATS;
-CREATE TABLE GE_MONITOR_TUX_SVR_STATS (
+DROP TABLE IF EXISTS ge_monitor_tux_svr_stats;
+CREATE TABLE ge_monitor_tux_svr_stats (
   id int(11) NOT NULL AUTO_INCREMENT,
   siteName varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点名称',
   recTime datetime DEFAULT NULL COMMENT '记录保存时间',
@@ -961,8 +307,8 @@ CREATE TABLE GE_MONITOR_TUX_SVR_STATS (
 -- ----------------------------
 --  Table structure for GE_MONITOR_TUX_SYSRECS
 -- ----------------------------
-DROP TABLE IF EXISTS GE_MONITOR_TUX_SYSRECS;
-CREATE TABLE GE_MONITOR_TUX_SYSRECS (
+DROP TABLE IF EXISTS ge_monitor_tux_sysrecs;
+CREATE TABLE ge_monitor_tux_sysrecs (
   id int(11) NOT NULL AUTO_INCREMENT,
   siteName varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '站点名称',
   recTime datetime DEFAULT NULL COMMENT '记录保存时间',
@@ -987,26 +333,23 @@ CREATE TABLE ge_monitor_tux_server (
   PRIMARY KEY (siteName)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
--- ----------------------------
---  `GE_MONITOR_ACCOUNT` 用户登陆
--- ----------------------------
-DROP TABLE IF EXISTS ge_monitor_account_group;
-CREATE TABLE ge_monitor_account_group (
-  user_id varchar(32) COLLATE utf8_bin NOT NULL,
-  group_id bigint(20) NOT NULL,
-  KEY `FKFE85CB3EDE3FB930` (group_id),
-  KEY `FKFE85CB3E836A7D10` (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
-BEGIN;
-INSERT INTO ge_monitor_account_group VALUES ('1', '1');
-COMMIT;
+DROP TABLE IF EXISTS ge_monitor_account;
 
-BEGIN;
-INSERT INTO GE_MONITOR_ACCOUNT VALUES ('1', 'admin', 'admin', 'Admin', 'admin@springside.org.cn', '13800138001', '2012-12-25 19:36:34', '1');
-COMMIT;
+create table ge_monitor_account
+(
+  ID                   varchar(32) not null comment '主键ID',
+  LOGIN_NAME						varchar(100) comment '登陆名称',
+  PASSWORD             varchar(50) comment '密码',
+  NAME									varchar(50) comment '姓名',
+  EMAIL								varchar(100) comment '邮件',
+  PHONE         				varchar(30) comment '手机号',
+  CREATE_TIME          datetime comment '创建时间',
+  STATUS       				varchar(1) comment '状态',
+  primary key (ID)
+);
 
-
+alter table ge_monitor_account comment '用户管理';
 
 DROP TABLE IF EXISTS ge_monitor_group;
 CREATE TABLE ge_monitor_group (
@@ -1016,39 +359,269 @@ CREATE TABLE ge_monitor_group (
   UNIQUE KEY name (name)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
 
--- ----------------------------
---  Records of `ge_monitor_group`
--- ----------------------------
+
+DROP TABLE IF EXISTS ge_monitor_account_group;
+CREATE TABLE ge_monitor_account_group (
+  user_id varchar(32) COLLATE utf8_bin NOT NULL,
+  group_id bigint(20) NOT NULL,
+  KEY `FKFE85CB3EDE3FB930` (group_id),
+  KEY `FKFE85CB3E836A7D10` (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT;
+
 BEGIN;
+
 INSERT INTO ge_monitor_group VALUES ('1', 'admin'), ('2', 'user');
+
+INSERT INTO ge_monitor_account_group VALUES ('1', '1');
+
+INSERT INTO ge_monitor_account VALUES ('1', 'admin', 'admin', 'Admin', 'admin@springside.org.cn', '13800138001', '2012-12-25 19:36:34', '1');
 COMMIT;
 
+
 -- ----------------------------
---  `GE_MONITOR_ATTRIBUTE` 监控属性
+--  `GE_MONITOR_ATTRIBUTE 监控属性
 -- ----------------------------
 BEGIN;
-INSERT INTO GE_MONITOR_ATTRIBUTE VALUES ('1', 'APPLICATION', 'ResponseTime', 'ms', '响应时间'),
-('10', 'DB', 'Availability', null, '可用性'),
-('11', 'DB', 'ResponseTime', 'ms', '响应时间'),
-('12', 'DB', 'Health', null, '健康度'),
-('13', 'OS', 'Availability', null, '可用性'),
-('14', 'OS', 'DiskUtilization', null, '磁盘使用率'),
-('15', 'OS', 'ResponseTime', 'ms', '响应时间'),
-('16', 'DB', 'BufferHitRatio', null, '缓存击中率'),
-('17', 'OS', 'CPUUtilization', null, 'CPU利用率'),
-('18', 'APP_SERVER', 'ServerDied', null, '进程异常退出'),
-('19', 'APP_SERVER', 'ServerNoTrans', '', '无交易'),
-('2', 'APPLICATION', 'Exception', null, '异常'),
-('20', 'APP_SERVER', 'ServerBusy', '', '服务繁忙'),
-('21', 'APP_SERVER', 'UsedMemory', '', '已用内存'),
-('22', 'APP_SERVER', 'QueuedNumber', '', '队列大小'),
-('23', 'APP_SERVER', 'CPUUtilization', '', 'CPU利用率'),
-('24', 'APP_SERVER', 'SystemStop', null, '系统停止'),
-('3', 'APPLICATION', 'Availability', null, '可用性'),
-('4', 'APPLICATION', 'Health', null, '健康度'),
-('5', 'OS', 'PhysicalMemoryUtilization', null, '物理内存'),
-('6', 'OS', 'Health', null, '健康度'),
-('7', 'OS', 'SwapMemoryUtilization', null, '交换内存'),
-('8', 'DB', 'Sql', null, 'SQL'),
-('9', 'DB', 'ActiveConnection', null, '连接数');
+INSERT INTO ge_monitor_attribute VALUES
+('1', 'WEBLOGIC', 'ServerDied', null, '宕机'),
+('2', 'WEBLOGIC', 'FreeHeap', 'M', '可用内存'),
+('3', 'WEBLOGIC', 'ThreadUtilization', null, '线程使用率'),
+('4', 'WEBLOGIC', 'JdbcUtilization', null, '数据库连接使用率'),
+('5', 'WEBLOGIC', 'CPUUtilization', null, 'CPU利用率'),
+('6', 'WEBLOGIC', 'SystemStop', null, '系统停止'),
+('18', 'Tuxedo', 'ServerDied', null, '进程异常退出'),
+('19', 'Tuxedo', 'ServerNoTrans', '', '无交易'),
+('20', 'Tuxedo', 'ServerBusy', '', '服务繁忙'),
+('21', 'Tuxedo', 'UsedMemory', 'M', '已用内存'),
+('22', 'Tuxedo', 'QueuedNumber', '', '队列大小'),
+('23', 'Tuxedo', 'CPUUtilization', '%', 'CPU利用率'),
+('24', 'Tuxedo', 'SystemStop', null, '系统停止');
 COMMIT;
+
+
+/* -----统计报表 start-----*/
+DROP TABLE IF EXISTS ge_monitor_report_statistics;
+CREATE TABLE ge_monitor_report_statistics (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  resource_id varchar(32) DEFAULT NULL,
+  resource_type varchar(32) DEFAULT NULL,
+  attribute_name varchar(255) DEFAULT NULL,
+  start_time datetime DEFAULT NULL,
+  end_time datetime DEFAULT NULL,
+  max decimal(7,2) DEFAULT NULL,
+  min decimal(7,2) DEFAULT NULL,
+  avg decimal(7,2) DEFAULT NULL,
+  name varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+DROP TABLE IF EXISTS ge_monitor_report_statistics_top;
+CREATE TABLE ge_monitor_report_statistics_top (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  resource_id varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  resource_type varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  attribute_name varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  start_time datetime DEFAULT NULL,
+  end_time datetime DEFAULT NULL,
+  top_value longtext COLLATE utf8_bin,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+/* ----- webLogic start-----*/
+DROP TABLE IF EXISTS ge_monitor_wls_ejbcache;
+CREATE TABLE ge_monitor_wls_ejbcache (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  server_name varchar(255) DEFAULT NULL COMMENT 'Server名称',
+  name varchar(255) DEFAULT NULL COMMENT '名称',
+  cache_access_count int(11) DEFAULT NULL COMMENT '缓存访问数量',
+  activation_count int(11) DEFAULT NULL COMMENT '激活数量',
+  cache_beans_current_count int(11) DEFAULT NULL COMMENT '缓存bean当前数量',
+  cache_hit_count int(11) DEFAULT NULL COMMENT '缓存击中数量',
+  cache_miss_count int(11) DEFAULT NULL COMMENT '缓存错失数量',
+  passivation_count int(11) DEFAULT NULL COMMENT '钝化数量',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_ejbpool
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_ejbpool;
+CREATE TABLE ge_monitor_wls_ejbpool (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  server_name varchar(255) DEFAULT NULL COMMENT 'Server名称',
+  name varchar(255) DEFAULT NULL COMMENT '名称',
+  beans_inUse_count int(11) DEFAULT NULL COMMENT '使用中bean数量',
+  beans_inUser_current_count int(11) DEFAULT NULL COMMENT '当前使用中bean数量',
+  access_total_count int(11) DEFAULT NULL COMMENT '总计访问数',
+  destroyed_total_count int(11) DEFAULT NULL COMMENT '总计销毁数',
+  idle_beans_count int(11) DEFAULT NULL COMMENT '空闲bean数量',
+  miss_total_count int(11) DEFAULT NULL COMMENT '总计错失数量',
+  pooled_beans_current_count int(11) DEFAULT NULL COMMENT '当前池化bean数量',
+  timeout_total_count int(11) DEFAULT NULL COMMENT '总计超时数量',
+  waiter_current_count int(11) DEFAULT NULL COMMENT '当前等待数量',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_jdbc
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_jdbc;
+CREATE TABLE ge_monitor_wls_jdbc (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  server_name varchar(255) DEFAULT NULL COMMENT 'Server名称',
+  name varchar(255) DEFAULT NULL COMMENT '连接池名称',
+  active_count int(11) DEFAULT NULL COMMENT '活动链接数',
+  active_high int(11) DEFAULT NULL COMMENT '连接最高值',
+  curr_capacity int(11) DEFAULT NULL COMMENT '连接池大小',
+  leak_count int(11) DEFAULT NULL COMMENT '连接泄露数',
+  state varchar(255) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_jms
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_jms;
+CREATE TABLE ge_monitor_wls_jms (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  server_name varchar(255) DEFAULT NULL COMMENT 'Server名称',
+  name varchar(255) DEFAULT NULL COMMENT '名称',
+  bytes_current_count int(11) DEFAULT NULL COMMENT '当前字节数',
+  bytes_high_count int(11) DEFAULT NULL COMMENT '最高字节数',
+  bytes_pending_count int(11) DEFAULT NULL COMMENT '挂起字节数',
+  bytes_received_count int(11) DEFAULT NULL COMMENT '接收字节数',
+  messages_current_count int(11) DEFAULT NULL COMMENT '当前消息数',
+  messages_high_count int(11) DEFAULT NULL COMMENT '最高消息数',
+  messages_pending_count int(11) DEFAULT NULL COMMENT '挂起消息数',
+  messages_received_count int(11) DEFAULT NULL COMMENT '接收消息数',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_jvm
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_jvm;
+CREATE TABLE ge_monitor_wls_jvm (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '入库时间',
+  server_name varchar(255) DEFAULT NULL COMMENT 'Server名称',
+  free_heap varchar(255) DEFAULT NULL COMMENT '空闲heap',
+  current_heap varchar(255) DEFAULT NULL COMMENT '当前heap使用数',
+  free_percent varchar(255) DEFAULT NULL COMMENT '空闲heap百分比',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_resource
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_resource;
+CREATE TABLE ge_monitor_wls_resource (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  server_number int(11) DEFAULT NULL COMMENT '服务器数量',
+  run_server_number int(11) DEFAULT NULL COMMENT '运行服务器数量',
+  cpu_idle int(11) DEFAULT NULL COMMENT 'cpu空闲',
+  mem_free varchar(255) DEFAULT NULL,
+  os_type varchar(255) DEFAULT NULL COMMENT 'os类型',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_server
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_server;
+CREATE TABLE ge_monitor_wls_server (
+  site_name varchar(255) NOT NULL DEFAULT '' COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  version varchar(20) DEFAULT NULL COMMENT 'weblogic版本',
+  listen_address varchar(255) DEFAULT NULL COMMENT 'IP地址',
+  listen_port int(10) DEFAULT NULL COMMENT '端口',
+  interval_ int(11) DEFAULT NULL COMMENT '轮询时间',
+  weblogic_ip varchar(255) DEFAULT NULL COMMENT 'weblogic监听地址',
+  weblogic_port int(11) DEFAULT NULL COMMENT 'weblogic监听端口',
+  domain_name varchar(255) DEFAULT 'domain名称',
+  user_name varchar(255) DEFAULT NULL COMMENT '用户名',
+  password varchar(255) DEFAULT NULL COMMENT '密码',
+  is_SSL int(11) DEFAULT NULL,
+  status int(11) DEFAULT NULL COMMENT '有效位：1-有效0-无效',
+  PRIMARY KEY (site_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_svr
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_svr;
+CREATE TABLE ge_monitor_wls_svr (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  server_name varchar(255) DEFAULT NULL COMMENT 'Server名称',
+  listen_address varchar(255) DEFAULT NULL COMMENT '监听地址',
+  listen_port varchar(255) DEFAULT NULL COMMENT '监听端口',
+  health varchar(255) DEFAULT NULL COMMENT '健康状态',
+  state varchar(255) DEFAULT NULL COMMENT '状态',
+  open_socket_num int(11) DEFAULT NULL COMMENT '开启端口数',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_sysrec
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_sysrec;
+CREATE TABLE ge_monitor_wls_sysrec (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  agent_version varchar(255) DEFAULT NULL COMMENT 'Agent版本',
+  domain_version varchar(255) DEFAULT NULL COMMENT '中间件版本',
+  system_boot varchar(255) DEFAULT NULL COMMENT '系统启动时间',
+  os_type varchar(255) DEFAULT NULL COMMENT 'os类型',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_thread
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_thread;
+CREATE TABLE ge_monitor_wls_thread (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  server_name varchar(255) DEFAULT NULL COMMENT 'Server名称',
+  idle_count int(11) DEFAULT NULL COMMENT '空闲数量',
+  standby_count int(11) DEFAULT NULL COMMENT '备用数量',
+  total_count int(11) DEFAULT NULL COMMENT '总量',
+  thoughput int(11) DEFAULT NULL COMMENT '吞吐量',
+  queue_length int(11) DEFAULT NULL COMMENT '队列大小',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+--  Table structure for ge_monitor_wls_webapp
+-- ----------------------------
+DROP TABLE IF EXISTS ge_monitor_wls_webapp;
+CREATE TABLE ge_monitor_wls_webapp (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  site_name varchar(255) DEFAULT NULL COMMENT '站点名称',
+  rec_time datetime DEFAULT NULL COMMENT '记录时间',
+  server_name varchar(255) DEFAULT NULL COMMENT 'Server名称',
+  name varchar(255) DEFAULT NULL COMMENT '应用名称',
+  deployment_state varchar(255) DEFAULT NULL COMMENT '部署状态',
+  status varchar(255) DEFAULT NULL COMMENT '状态',
+  component_name varchar(255) DEFAULT NULL COMMENT '组件名称',
+  open_sessions_high_count int(11) DEFAULT NULL COMMENT '最高会话数',
+  open_sessions_current_count int(11) DEFAULT NULL COMMENT '当前会话数',
+  sessions_opened_total_count int(11) DEFAULT NULL COMMENT '累计打开会话数',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
