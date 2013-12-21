@@ -16,5 +16,8 @@ public interface WlsResourceDao extends PagingAndSortingRepository<WlsResource, 
     @SQL("select MAX(100-u.cpu_idle) max,MIN(100-u.cpu_idle) min,AVG(100-u.cpu_idle) avg from ge_monitor_wls_resource u where u.site_name = ?1 and u.rec_time >= ?2 and  u.rec_time < ?3")
     public Statistics statisticHostCpuUsedByRectimeBetween(String siteName, Timestamp startTime, Timestamp endTime);
 
+    @SQL("select MAX(mem_free) max,MIN(mem_free) min,AVG(mem_free) avg from ge_monitor_wls_resource u where u.site_name = ?1 and u.rec_time >= ?2 and  u.rec_time < ?3")
+    public Statistics statisticHostMemFreeByRectimeBetween(String siteName, Timestamp startTime, Timestamp endTime);
+
 }
 
