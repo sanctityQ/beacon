@@ -7,12 +7,12 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.util.date.DateUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
+import java.sql.Timestamp;
 import java.util.Map;
 
 
@@ -38,9 +38,7 @@ public class EJBCachedBeansCurrentCountReport extends StatisticForwardReport imp
 
     @Override
     public Map<String, Statistics> getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
-        String start = DateUtils.toFormatString(startDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
-        String end = DateUtils.toFormatString(endDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
-        Iterable<Statistics> iterable = wlsEjbCacheDao.statisticCacheBeanCurCount(resourceId, start, end);
+        Iterable<Statistics> iterable = wlsEjbCacheDao.statisticCacheBeanCurCount(resourceId, new Timestamp(startDate.getMillis()), new Timestamp(endDate.getMillis()));
         return Maps.uniqueIndex(iterable, new Function<Statistics, String>() {
             @Nullable
             @Override

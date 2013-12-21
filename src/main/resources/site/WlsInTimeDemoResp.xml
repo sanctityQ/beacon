@@ -4,8 +4,8 @@
     <ServerRuntime ActivationTime="1255939107375" HealthState="State:HEALTH_OK,ReasonCode:[,]" State="RUNNING" Name="examplesServer2" OpenSocketsCurrentCount="3" WeblogicVersion="WebLogic Server 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 WebLogic XMLX Module 8.1 SP6  Wed Jun 21 08:18:55 PDT 2006 781680 " ListenAddress="hdang-cn/10.182.228.108" ListenPort="7001" RestartsTotalCount="0" serverName="examplesServer2"/>
     <!--wxT("HEALTH_OK"),wxT("HEALTH_WARN"),wxT("HEALTH_CRITICAL"),wxT("HEALTH_FAILED"),-->`
 
-    <JVMRuntime HeapFreeCurrent="17181728" HeapSizeCurrent="32347824" HeapFreePercent="50" serverName="examplesServer1"/>
-    <JVMRuntime HeapFreeCurrent="17181728" HeapSizeCurrent="32347824" HeapFreePercent="50" serverName="examplesServer2"/>
+    <JVMRuntime HeapFreeCurrent="181728" HeapSizeCurrent="347824" HeapFreePercent="50" serverName="examplesServer1"/>
+    <JVMRuntime HeapFreeCurrent="181728" HeapSizeCurrent="347824" HeapFreePercent="50" serverName="examplesServer2"/>
 
     <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="20" ExecuteThreadIdleCount="7" StandbyThreadCount="6" serverName="examplesServer1" QueueLength="0" />
     <ThreadPoolRuntime Name="weblogic.admin.HTTP" CompletedRequestCount="0" ExecuteThreadTotalCount="20" ExecuteThreadIdleCount="5" StandbyThreadCount="4" serverName="examplesServer2" QueueLength="0" />

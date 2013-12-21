@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @DirtiesContext
 @ContextConfiguration(locations = {"/spring/applicationContext-test.xml"})
@@ -111,5 +112,15 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
         String end = DateUtils.toFormatString(endDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
         Iterable<Statistics> iterable = wlsEjbCacheDao.statisticCacheBeanCurCount("115.28.16.154", start, end);
         System.out.println(iterable);
+    }
+
+    @Autowired
+    private WlsJvmDao wlsJvmDao;
+
+    @Test
+    public void testAA() {
+        System.out.println(Double.MAX_VALUE);
+        List<Statistics> list = wlsJvmDao.statisticFreeHeap("115.28.16.154", "2013-12-21 14:00:00", "2013-12-21 15:00:00");
+        System.out.println(list);
     }
 }
