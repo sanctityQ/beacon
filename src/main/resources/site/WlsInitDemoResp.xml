@@ -4,5 +4,5 @@
              ActivationTime="2009-10-20 21:00:18" RootDirectory="." ProductionModeEnabled="false"
              JDKVendor="Sun Microsystems Inc." JDKVersion="1.4.2_11" OSVersion="5.1" OSName="Windows XP" ServerNum="2"
              AgentVersion="1.0 - FORMAL LICENSE"/>
-    <SYSTEM errMsg="Weblogic is shutdown!"/>
+    <!--<SYSTEM errMsg="Weblogic is shutdown!"/>-->
 </MONITOR>

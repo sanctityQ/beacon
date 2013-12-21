@@ -28,7 +28,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class WlsInTimeData extends MonitorData implements InTimeData {
 
-    public static WlsInTimeData EMPTY = new WlsInTimeData();
+    public static WlsInTimeData EMPTY;
 
     static {
         try {

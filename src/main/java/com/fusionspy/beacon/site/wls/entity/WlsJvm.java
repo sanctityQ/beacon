@@ -6,7 +6,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,15 +22,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * WlsJvm.
-* 
  */
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD)
-@Table(name="ge_monitor_wls_jvm")
-public class WlsJvm  implements java.io.Serializable {
+@Table(name = "ge_monitor_wls_jvm")
+public class WlsJvm implements java.io.Serializable {
 
     /**
-        */
+     */
     @XmlTransient
     private Integer id;
     /**
@@ -37,44 +38,46 @@ public class WlsJvm  implements java.io.Serializable {
     @XmlTransient
     private String siteName;
     /**
-    * 入库时间.
-    */
+     * 入库时间.
+     */
     @XmlTransient
     private Date recTime;
     /**
-    * Server名称.
-    */
+     * Server名称.
+     */
     @XmlAttribute(name = "serverName")
     private String serverName;
     /**
-    * 空闲heap.
-    */
+     * 空闲heap.
+     */
     @XmlAttribute(name = "HeapFreeCurrent")
     private String freeHeap;
     /**
-    * 当前heap使用数.
-    */
+     * 当前heap使用数.
+     */
     @XmlAttribute(name = "HeapSizeCurrent")
     private String currentHeap;
     /**
-    * 空闲heap百分比.
-    */
+     * 空闲heap百分比.
+     */
     @XmlAttribute(name = "HeapFreePercent")
     private String freePercent;
 
     public WlsJvm() {
     }
 
-   
-    @Id @GeneratedValue(strategy=IDENTITY)
-    @Column(name="id", unique=true)
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true)
     public Integer getId() {
-    return this.id;
+        return this.id;
     }
 
     public void setId(Integer id) {
-    this.id = id;
+        this.id = id;
     }
+
     @Column(name = "site_name")
     public String getSiteName() {
         return siteName;
@@ -85,56 +88,56 @@ public class WlsJvm  implements java.io.Serializable {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="rec_time", length=19)
+    @Column(name = "rec_time", length = 19)
     public Date getRecTime() {
-    return this.recTime;
+        return this.recTime;
     }
 
     public void setRecTime(Date recTime) {
-    this.recTime = recTime;
+        this.recTime = recTime;
     }
-    
-    @Column(name="server_name")
+
+    @Column(name = "server_name")
     public String getServerName() {
-    return this.serverName;
+        return this.serverName;
     }
 
     public void setServerName(String serverName) {
-    this.serverName = serverName;
+        this.serverName = serverName;
     }
-    
-    @Column(name="free_heap")
+
+    @Column(name = "free_heap")
     public String getFreeHeap() {
-    return this.freeHeap;
+        return this.freeHeap;
     }
 
     public void setFreeHeap(String freeHeap) {
-    this.freeHeap = freeHeap;
+        this.freeHeap = freeHeap;
     }
-    
-    @Column(name="current_heap")
+
+    @Column(name = "current_heap")
     public String getCurrentHeap() {
-    return this.currentHeap;
+        return this.currentHeap;
     }
 
     public void setCurrentHeap(String currentHeap) {
-    this.currentHeap = currentHeap;
+        this.currentHeap = currentHeap;
     }
-    
-    @Column(name="free_percent")
+
+    @Column(name = "free_percent")
     public String getFreePercent() {
-    return this.freePercent;
+        return this.freePercent;
     }
 
     public void setFreePercent(String freePercent) {
-    this.freePercent = freePercent;
+        this.freePercent = freePercent;
     }
 
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
 }
 

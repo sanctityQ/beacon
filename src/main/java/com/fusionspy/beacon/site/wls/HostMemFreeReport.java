@@ -3,9 +3,6 @@ package com.fusionspy.beacon.site.wls;
 
 import com.fusionspy.beacon.report.StatisticForwardReport;
 import com.fusionspy.beacon.report.Statistics;
-import com.fusionspy.beacon.site.tux.TuxReport;
-import com.fusionspy.beacon.site.tux.TuxStatisticReport;
-import com.fusionspy.beacon.site.tux.dao.TuxResourceDao;
 import com.fusionspy.beacon.site.wls.dao.WlsResourceDao;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
@@ -18,7 +15,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-@Service
+@Service("wlsHostMemFreeReport")
 public class HostMemFreeReport extends StatisticForwardReport implements WlsReport {
 
     private Attribute attribute;

@@ -3,6 +3,7 @@ package com.fusionspy.beacon.site.wls;
 import com.fusionspy.beacon.report.Report;
 import com.fusionspy.beacon.report.StatisticReportFactory;
 import com.fusionspy.beacon.site.tux.TuxReport;
+import com.google.common.collect.Ordering;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ class WlsReportFactory extends StatisticReportFactory {
     @Autowired
     private Set<WlsReport> wlsReports;
 
-    //private Ordering<Attribute> naturalOrdering =  Ordering.natural();
+    private Ordering<Attribute> naturalOrdering = Ordering.natural();
 
-    private List<Attribute> attributes = newArrayList();;
+    private List<Attribute> attributes = newArrayList();
 
 
     @Override
@@ -35,7 +36,7 @@ class WlsReportFactory extends StatisticReportFactory {
     @Override
     protected void initChild() {
         for (Iterator<WlsReport> iterator = wlsReports.iterator(); iterator.hasNext(); ) {
-            attributes.add(((Report)iterator.next()).getAttribute());
+            attributes.add(((Report) iterator.next()).getAttribute());
         }
     }
 

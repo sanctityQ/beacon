@@ -18,4 +18,5 @@
     <ApplicationRuntimes.ComponentRuntimes.EJBRuntimes.CacheRuntime  Name="" CacheAccessCount="0" ActivationCount="0" CachedBeansCurrentCount="0" CacheHitCount="0" CacheMissCount="0" PassivationCount="0" serverName=""/>
 
     <OSResource CPU="0" MEM="0M0"/>
+    <SYSTEM errMsg="Weblogic is shutdown!"/>
 </MONITOR>

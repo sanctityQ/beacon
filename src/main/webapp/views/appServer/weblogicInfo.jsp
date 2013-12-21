@@ -10,7 +10,19 @@
 <script type="text/javascript">
     interval = '${interval}';
     serverName = '${serverName}';
+
+    var weblogicStopMessage = "<strong>错误：</strong>Weblogic系统监控已经停止，请检查Weblogic是否正常运行!";
+    var agentStopMessage = '<strong>错误：</strong>Wblogic系统监控无法连接到agent端，请检查agent端是否正常运行!';
+
 $(function() {
+    if(${stop}) {
+        $('#errorMsg').html(weblogicStopMessage);
+        $('#errorMsg').fadeIn();
+    }
+    if(${agentStop}) {
+        $('#errorMsg').html(agentStopMessage)
+        $('#errorMsg').fadeIn();
+    }
     $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
     var autoWidth = $("#layout_center").width() - 100;
     $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth);
@@ -43,6 +55,17 @@ $(function() {
                 $('#memFree').html(data.memFree);
                 $('#rectime').html(data.rectime);
                 $('#serverNum').html(data.serverNum);
+                if(data.stop){
+                    $('#errorMsg').html(weblogicStopMessage);
+                    $('#errorMsg').fadeIn();
+                }
+                else if(data.agentStop){
+                    $('#errorMsg').html(agentStopMessage)
+                    $('#errorMsg').fadeIn();
+                }
+                else{
+                    $('#errorMsg').fadeOut();
+                }
             }
         });
     }
@@ -61,6 +84,7 @@ $(function() {
             <li><a href="${ctx}/appServer/weblogic/manager">Weblogic监视器</a> ></li>
             <li><b>${serverName}</b></li>
         </ul>
+        <div id="errorMsg" class="alert alert-danger" style="display: none;"></div>
         <div id="tabs">
             <ul>
                 <li id="state_tab" class="tabs_select"><i class="overview"></i>状态监控</li>

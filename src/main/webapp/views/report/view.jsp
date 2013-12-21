@@ -80,7 +80,7 @@
                         <div class="report_title">报表</div>
                         <ul id="reporMenu" class="report_menu">
                             <%--<li><img src="${ctx}/global/images/icon_hyper_vhost.gif" width="15" height="16" />Linux</li>--%>
-                            <li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>
+                            <%--<li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>--%>
                             <li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Weblogic</li>
                         </ul>
                     </td>

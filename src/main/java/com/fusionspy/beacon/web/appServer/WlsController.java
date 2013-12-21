@@ -1,6 +1,7 @@
 package com.fusionspy.beacon.web.appServer;
 
 import com.fusionspy.beacon.site.MonitorManage;
+import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.tux.TuxHisData;
 import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.fusionspy.beacon.site.wls.WlsHisData;
@@ -172,7 +173,8 @@ public class WlsController {
     @Get("view/{siteName}")
     public String view(@Param("siteName") String siteName, Invocation invocation) {
         WlsServer wlsServer = wlsService.getSite(siteName);
-        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
+        MonitorSite monitorSite = monitorManage.getMonitorInf(siteName);
+        WlsHisData hisData = monitorSite.getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         invocation.addModel("serverName", siteName);
@@ -191,6 +193,8 @@ public class WlsController {
         invocation.addModel("ip", inTimeData.getServerRuntimes().get(0).getListenAddress());
         invocation.addModel("port", inTimeData.getServerRuntimes().get(0).getListenPort());
         invocation.addModel("interval", wlsServer.getInterval());
+        invocation.addModel("stop", hisData.isWlsStop());
+        invocation.addModel("agentStop",!monitorSite.isAgentRunning());
         return "weblogicInfo";
     }
 
@@ -201,7 +205,8 @@ public class WlsController {
      */
     @Get("/viewLast/${siteName}")
     public Reply viewLast(@Param("siteName") String siteName) {
-        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
+        MonitorSite monitorSite = monitorManage.getMonitorInf(siteName);
+        WlsHisData hisData = monitorSite.getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         Map<String, Object> lastInfo = new HashMap<String, Object>();
@@ -210,6 +215,8 @@ public class WlsController {
         lastInfo.put("cpuIdle", inTimeData.getResource().getCpuIdle());
         lastInfo.put("memFree", inTimeData.getResource().getMemFree());
         lastInfo.put("serverNum", iniData.getWlsSysrec().getServerNum());
+        lastInfo.put("stop", hisData.isWlsStop());
+        lastInfo.put("agentStop",!monitorSite.isAgentRunning());
         return Replys.with(lastInfo).as(Json.class);
     }
 

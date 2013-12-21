@@ -7,18 +7,17 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
+import com.sinosoft.one.util.date.DateUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
-import java.sql.Timestamp;
 import java.util.Map;
 
 
 @Service
-public class EJBCachedBeansCurrentCountReport extends StatisticForwardReport implements WlsReport  {
+public class EJBCachedBeansCurrentCountReport extends StatisticForwardReport implements WlsReport {
 
     private Attribute attribute;
 
@@ -27,7 +26,7 @@ public class EJBCachedBeansCurrentCountReport extends StatisticForwardReport imp
 
     @Override
     public Attribute getAttribute() {
-        if(attribute == null){
+        if (attribute == null) {
             attribute = new Attribute();
             attribute.setAttribute("CachedBeansCurrentCount");
             attribute.setAttributeCn("EJB缓存bean当前数量");
@@ -39,8 +38,10 @@ public class EJBCachedBeansCurrentCountReport extends StatisticForwardReport imp
 
     @Override
     public Map<String, Statistics> getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
-       return Maps.uniqueIndex(wlsEjbCacheDao.statisticCacheBeanCurCount(resourceId, new Timestamp(startDate.getMillis()),
-                new Timestamp(endDate.getMillis())),new Function<Statistics, String>() {
+        String start = DateUtils.toFormatString(startDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
+        String end = DateUtils.toFormatString(endDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
+        Iterable<Statistics> iterable = wlsEjbCacheDao.statisticCacheBeanCurCount(resourceId, start, end);
+        return Maps.uniqueIndex(iterable, new Function<Statistics, String>() {
             @Nullable
             @Override
             public String apply(@Nullable Statistics input) {

@@ -346,6 +346,7 @@ public class WlsService {
             WlsSysrec sysrec = hisData.getWlsIniData().getWlsSysrec();
             //汇总信息处理
             WlsResource wlsResource = inTimeData.getResource();
+            wlsResource.setSiteName(siteName);
             Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.CPUUtilization.name());
             if (attribute == Attribute.EMPTY) {
                 logger.error("{}'s attribute is empty,fix it!", AttributeName.CPUUtilization.name());

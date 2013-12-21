@@ -97,10 +97,10 @@ public class WlsHisData implements HisData {
     }
 
     public boolean isWlsStop() {
-        if (wlsIniData.getTuxError() != null && StringUtils.isNotBlank(wlsIniData.getWlsError().getErrMsg())) {
+        if (wlsIniData.getWlsError() != null && StringUtils.isNotBlank(wlsIniData.getWlsError().getErrMsg())) {
             return true;
         }
-        if (wlsInTimeData.getTuxError() != null && StringUtils.isNotBlank(wlsInTimeData.getWlsError().getErrMsg())) {
+        if (wlsInTimeData.getWlsError() != null && StringUtils.isNotBlank(wlsInTimeData.getWlsError().getErrMsg())) {
             return true;
         }
         return false;

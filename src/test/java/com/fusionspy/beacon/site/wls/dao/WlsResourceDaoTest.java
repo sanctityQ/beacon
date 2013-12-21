@@ -1,11 +1,13 @@
 package com.fusionspy.beacon.site.wls.dao;
 
+import com.fusionspy.beacon.report.Statistics;
 import com.fusionspy.beacon.site.Connect;
 import com.fusionspy.beacon.site.wls.WlsHisData;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
+import com.sinosoft.one.util.date.DateUtils;
 import com.sinosoft.one.util.encode.JaxbBinder;
 import com.sinosoft.one.util.test.SpringTxTestCase;
 import org.dom4j.Attribute;
@@ -13,6 +15,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -22,6 +25,8 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import javax.annotation.Resource;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @DirtiesContext
 @ContextConfiguration(locations = {"/spring/applicationContext-test.xml"})
@@ -68,7 +73,7 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
     @Test
     public void testSave() {
         WlsServer wlsServer = new WlsServer();
-        wlsServer.setServerName("aaa");
+        wlsServer.setSiteName("aaa");
         wlsServer.setListenAddress("aaa");
         wlsServer.setListenPort(11);
         wlsServer.setInterval(30);
@@ -81,4 +86,30 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
     }
 
 
+    @Autowired
+    private WlsEjbCacheDao wlsEjbCacheDao;
+
+    @Autowired
+    private WlsResourceDao wlsResourceDao;
+
+    @Test
+    public void testReport0() {
+        Date date = new Date();
+        DateTime end = new DateTime(date);
+        DateTime start = end.minusDays(1);
+        Statistics s = wlsResourceDao.statisticHostCpuUsedByRectimeBetween("115.28.16.154", new Timestamp(start.getMillis()), new Timestamp(end.getMillis()));
+        System.out.println(s);
+    }
+
+    @Test
+    public void testReport() {
+
+        Date date = new Date();
+        DateTime endDate = new DateTime(date);
+        DateTime startDate = endDate.minusDays(1);
+        String start = DateUtils.toFormatString(startDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
+        String end = DateUtils.toFormatString(endDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
+        Iterable<Statistics> iterable = wlsEjbCacheDao.statisticCacheBeanCurCount("115.28.16.154", start, end);
+        System.out.println(iterable);
+    }
 }

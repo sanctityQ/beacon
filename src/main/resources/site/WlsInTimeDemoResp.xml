@@ -26,5 +26,5 @@
 
     <OSResource CPU="10" MEM="1800M4048"/>
 
-    <SYSTEM errMsg=""/>
+    <!--<SYSTEM errMsg="Weblogic is shutdown!"/>-->
 </MONITOR>
