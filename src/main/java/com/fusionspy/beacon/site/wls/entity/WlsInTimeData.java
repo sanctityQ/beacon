@@ -195,4 +195,15 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
         }
         return this;
     }
+
+    @XmlElement(name = "SYSTEM")
+    private WlsError wlsError;
+
+    public WlsError getWlsError() {
+        return wlsError;
+    }
+
+    public void setWlsError(WlsError wlsError) {
+        this.wlsError = wlsError;
+    }
 }

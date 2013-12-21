@@ -20,8 +20,6 @@ public class MonitorData {
 
     private String siteName;
 
-    private WlsError wlsError;
-
     @XmlAttribute(name="Date")
     public String getDate() {
         return Date;
@@ -47,14 +45,5 @@ public class MonitorData {
 
     public void setSiteName(String siteName) {
         this.siteName = siteName;
-    }
-
-    @XmlElement(name = "SYSTEM")
-    public WlsError getWlsError() {
-        return wlsError;
-    }
-
-    public void setWlsError(WlsError wlsError) {
-        this.wlsError = wlsError;
     }
 }

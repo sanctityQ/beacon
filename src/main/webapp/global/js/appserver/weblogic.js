@@ -605,10 +605,10 @@ function buildDataList(type, colums) {
         $("#"+type).Grid({
             url : rootPath + "/appServer/weblogic/data/"+type+"/"+serverName,
             dataType: "json",
+            isAsync:false,
             colDisplay: false,
-            clickSelect: true,
+            clickSelect: false,
             draggable:false,
-            height: "auto",
             searchClass:"serverRefreshInput",
             searchBtn:"serverRefreshButton",
             colums:colums,
@@ -630,10 +630,10 @@ ServerInfo.prototype.start = function () {
     $("#serverInfo").Grid({
         url: rootPath + "/appServer/weblogic/serverInfo/"+serverName,
         dataType: "json",
+        isAsync:false,
         colDisplay: false,
-        clickSelect: true,
-        draggable: false,
-        height: "auto",
+        clickSelect: false,
+        draggable:false,
         colums: [
             {id: '1', text: '服务器名称', name: "server_name", index: '1', align: ''},
             {id: '2', text: '监听地址', name: "listen_address", index: '1', align: ''},
@@ -736,10 +736,10 @@ EmergencyMsg.prototype.start = function(){
     $("#emergencyList").Grid({
         url : rootPath + "/alarm/manager/resource/"+serverName,
         dataType: "json",
+        isAsync:false,
         colDisplay: false,
-        clickSelect: true,
+        clickSelect: false,
         draggable:false,
-        height: "auto",
         colums:[
             {id:'1',text:'状态',name:"appellation",index:'1',align:'',width:'52'},
             {id:'2',text:'消息',name:"appellation",index:'1',align:'',width:'420'},

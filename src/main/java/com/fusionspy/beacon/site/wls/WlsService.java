@@ -211,19 +211,20 @@ public class WlsService {
         }
 
         public void process() {
-            this.processJvm();
-            this.processThread();
-            this.processJdbc();
-            this.processEjbCache();
-            this.processEjbPool();
-            this.processJms();
-            this.processWebapp();
-            this.processWlsResource();
             WlsError error = inTimeData.getWlsError();
             if (error != null && StringUtils.isNotBlank(error.getErrMsg().trim())) {
                 Attribute attribute = attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
                 //停机发告警
                 alarmMessage(resource, attribute, siteName, SeverityLevel.CRITICAL, wlsAlertMessage.getMessageByAlarmMessageFormat(AlarmMessageFormat.WLS_STOP));
+            } else {
+                this.processJvm();
+                this.processThread();
+                this.processJdbc();
+                this.processEjbCache();
+                this.processEjbPool();
+                this.processJms();
+                this.processWebapp();
+                this.processWlsResource();
             }
             hisData.setWlsInTimeData(inTimeData);
             hisData.addWlsIntimeData(siteName, inTimeData);

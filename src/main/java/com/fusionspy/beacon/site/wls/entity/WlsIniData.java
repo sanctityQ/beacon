@@ -95,4 +95,15 @@ public class WlsIniData extends MonitorData implements InitData {
     public boolean isStop() {
         return (getWlsError() != null && StringUtils.isNotBlank(getWlsError().getErrMsg()));
     }
+
+    @XmlElement(name = "SYSTEM")
+    private WlsError wlsError;
+
+    public WlsError getWlsError() {
+        return wlsError;
+    }
+
+    public void setWlsError(WlsError wlsError) {
+        this.wlsError = wlsError;
+    }
 }
