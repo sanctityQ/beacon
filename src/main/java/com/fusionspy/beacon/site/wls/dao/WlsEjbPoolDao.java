@@ -12,7 +12,8 @@ import java.util.List;
 @Repository
 public interface WlsEjbPoolDao extends PagingAndSortingRepository<WlsEjbpool, Integer> {
 
-    @SQL("select u.server_name name, MAX(u.beans_inUser_current_count) max,MIN(u.beans_inUser_current_count) min,AVG(u.beans_inUser_current_count) avg from ge_monitor_wls_ejbpool u where u.site_name = ?1 and u.rec_time between ?2 and ?3 group by u.server_name")
+    @SQL("select u.server_name name, MAX(u.beans_inUser_current_count) max,MIN(u.beans_inUser_current_count) min,AVG(u.beans_inUser_current_count) avg " +
+            "from ge_monitor_wls_ejbpool u where u.site_name = ?1 and u.rec_time between ?2 and ?3 group by u.server_name")
     public List<Statistics> statisticBeansInUseCurrentCount(String resourceId, String start, String end);
 }
 
