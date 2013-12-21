@@ -9,17 +9,17 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
-        var gird;
+        var grid;
         $(function(){
             $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
-            grid = $("#thresholdList").Grid({
+
+                grid = $("#thresholdList").Grid({
                 url : "${ctx}/appServer/weblogic/list",
-                type:"get",
                 dataType: "json",
+                isAsync:false,
                 colDisplay: false,
-                clickSelect: true,
+                clickSelect: false,
                 draggable:false,
-                height: "auto",
                 colums:[
                     {id:'1',text:'站点名称',name:"siteName",index:'1',align:''},
                     {id:'2',text:'IP地址',name:"siteIp",index:'1',align:''},
@@ -28,7 +28,6 @@
                     {id:'5',text:'操作',name:"operation",index:'1',align:''}
                     </shiro:hasPermission>
                 ],
-                rowNum:9999,
                 pager : false,
                 number:false,
                 multiselect: true
