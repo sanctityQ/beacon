@@ -84,7 +84,6 @@
 <script type="text/javascript">
 
 $(function(){
-    $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
     $("#monitorType").bind("change",getMonitorNames);
     <c:if test="${not empty resourceType}" >
     $("#monitorType").val('${resourceType}');
@@ -97,6 +96,10 @@ $(function(){
 
     $("#monitorType").val('Tuxedo');
     getMonitorNames();
+
+
+    leftMenuSelected('left_menu_configEmergency');
+
 });
 
 function setHealthOrAvailable(monitorType,monitorId,attributeType,attributeId){

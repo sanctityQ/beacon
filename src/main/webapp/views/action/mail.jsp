@@ -7,7 +7,6 @@
     <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
     <script type="text/javascript">
         $(function () {
-            $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
             $('#emailForm').ajaxForm({
                 dataType: "json",
                 success: function(data) {
@@ -21,7 +20,7 @@
                     msgSuccess("系统消息", "邮件动作保存失败！");
                 }
             });
-
+            leftMenuSelected('left_menu_mailAction');
         });
 
         function toSaveMailAction() {

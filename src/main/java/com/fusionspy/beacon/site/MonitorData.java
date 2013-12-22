@@ -20,19 +20,18 @@ public class MonitorData {
 
     private String siteName;
 
-    private WlsError wlsError;
-
-    @XmlAttribute(name="Date")
+    @XmlAttribute(name = "Date")
     public String getDate() {
         return Date;
     }
+
     public void setDate(String date) {
         Date = date;
     }
 
     private TuxError tuxError;
 
-    @XmlElement(name="ERROR")
+    @XmlElement(name = "ERROR")
     public TuxError getTuxError() {
         return tuxError;
     }
@@ -49,12 +48,4 @@ public class MonitorData {
         this.siteName = siteName;
     }
 
-    @XmlElement(name = "SYSTEM")
-    public WlsError getWlsError() {
-        return wlsError;
-    }
-
-    public void setWlsError(WlsError wlsError) {
-        this.wlsError = wlsError;
-    }
 }

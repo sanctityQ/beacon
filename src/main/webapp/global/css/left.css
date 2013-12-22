@@ -1,7 +1,6 @@
-body{background:#222 url(../images/left_menu.gif) no-repeat center 20px;padding-top:60px;font-family:Microsoft Yahei}
-.left_menu{border-top:#181818 1px solid;border-bottom:#393939 1px solid;display:block;*height:230px}
-.left_menu a{color:#fff;font-size:14px;text-decoration:none;padding:12px 0;display:block}
-.left_menu li{background:#222;border-top:#393939 1px solid;border-bottom:#181818 1px solid;width:170px;display:block;*margin-bottom:-4px;}
+.left_menu{background:#222 url(../images/left_menu.gif) no-repeat center 20px;padding-top:60px;border-top:#181818 1px solid;border-bottom:#393939 1px solid;display:block;overflow:hidden;height:100%}
+.left_menu a{color:#fff;font-size:14px;text-decoration:none;padding:12px 0;display:block;}
+.left_menu li{background:#222;border-top:#393939 1px solid;border-bottom:#181818 1px solid;width:170px;display:block;*margin-bottom:-4px;height:auto;}
 .left_menu i{display:block;width:16px;height:16px;background:url(../images/left_menu.gif) no-repeat;float:left;margin:3px 15px 0 12px;}
 .left_menu i.icon01{background-position:0 -56px;}
 .left_menu i.icon02{background-position:0 -72px;}

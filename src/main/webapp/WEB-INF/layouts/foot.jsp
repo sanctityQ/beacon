@@ -2,3 +2,6 @@
 <div id="layout_bottom">
     <p class="footer">Copyright &copy; 2007-2013 北京恒信数源科技有限公司 【Build V5.20131124】</p>
 </div>
+</td>
+</tr>
+</table>
