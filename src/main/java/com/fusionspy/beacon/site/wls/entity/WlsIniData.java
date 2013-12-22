@@ -2,6 +2,7 @@ package com.fusionspy.beacon.site.wls.entity;
 
 import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorData;
+import com.fusionspy.beacon.site.wls.WlsMonitorData;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.dao.WlsSysrecDao;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 @XmlRootElement(name = "MONITOR")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class WlsIniData extends MonitorData implements InitData {
+public class WlsIniData extends WlsMonitorData implements InitData {
 
 
     public static WlsIniData EMPTY;

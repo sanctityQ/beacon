@@ -7,7 +7,7 @@
 <%@include file="/WEB-INF/layouts/base.jsp"%>
 <script type="text/javascript">
     $(function() {
-        $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
+        leftMenuSelected('left_menu_newMonitor');
     })
 </script>
 </head>

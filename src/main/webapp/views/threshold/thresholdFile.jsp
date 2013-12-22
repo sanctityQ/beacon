@@ -7,7 +7,6 @@
 
 <script type="text/javascript">
 $(function(){
-    $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
 	$("#thresholdList").Grid({
 		type : "post",
 		url : "${ctx}/threshold/data",
@@ -36,7 +35,7 @@ $(function(){
 		number:false,  
 		multiselect: true  
 	});
-
+    leftMenuSelected('left_menu_thresholdList');
 });
 
 function delRow(e){

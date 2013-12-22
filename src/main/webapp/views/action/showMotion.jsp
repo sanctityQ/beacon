@@ -6,7 +6,6 @@
     <%@include file="/WEB-INF/layouts/base.jsp" %>
     <script type="text/javascript">
         $(function () {
-            $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
             $("#thresholdList").Grid({
                 type: "post",
                 url: "${ctx}/action/email/data",
@@ -23,11 +22,11 @@
                     {id: '6', text: '操作', name: "operation", index: '1', align: ''}
                     </shiro:hasPermission>
                 ],
-                rowNum: 9999,
                 pager: false,
                 number: false,
                 multiselect: false
             });
+            leftMenuSelected('left_menu_actionList');
         });
 
         function updRow(e) {

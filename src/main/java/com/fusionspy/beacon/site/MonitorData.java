@@ -24,13 +24,14 @@ public class MonitorData {
     public String getDate() {
         return Date;
     }
+
     public void setDate(String date) {
         Date = date;
     }
 
     private TuxError tuxError;
 
-    @XmlElement(name="ERROR")
+    @XmlElement(name = "ERROR")
     public TuxError getTuxError() {
         return tuxError;
     }

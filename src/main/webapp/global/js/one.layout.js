@@ -102,20 +102,15 @@
             if (footer.length == '0') {
                 bottomHeight = 0;
             }
-            ;
             if (header.length == '0') {
                 topHeight = 0;
             }
-            ;
             if (leftBar.length == '0') {
                 leftWidth = 0;
             }
-            ;
             if (rightBar.length == '0') {
                 rightWidth = 0;
             }
-            ;
-
 
             forPane();
             function forPane() {
@@ -212,14 +207,11 @@
                     ;
 
                 }
-                ;
                 if (contenter.length > 0) {
                     contenter.css({'top':topHeight, 'left':leftWidth + 1, 'width':cenWidth, 'height':cenHeight});
                 }
-                ;
             }
 
-            ;
 
             var _move = false;
             var _x, _y;

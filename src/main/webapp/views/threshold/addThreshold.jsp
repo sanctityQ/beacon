@@ -7,7 +7,7 @@
 <script type="text/javascript" src="${ctx}/global/js/jquery.form.js"></script>
 <script type="text/javascript">
     $(function(){
-        $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
+    //    $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
         if('${threshold.type}'){
             $('#thresholdType').val('${threshold.type}');
             redirectToPattern('${threshold.type}');
@@ -229,5 +229,6 @@ function addNumOption(selectObj, selected) {
         if($("#criticalThresholdValue").val() || $("#warningThresholdValue").val() || $("infoThresholdValue").val()){
             $("#createPropFile").val("确定修改");
         }
+        leftMenuSelected('left_menu_newThreshold');
 </script>
 </html>

@@ -15,19 +15,34 @@
 
 <script type="text/javascript">
     $(function () {
-        $("body").layout({
-            top:{topHeight:106},
-            bottom:{bottomHeight:30}
-        });
-        $("#myDesk").height($("#layout_center").height());
+
+        var bodyHeight = $('body').height();
+
+        var topHeight = 106;
+        var bottomHeight = 30;
+        var cenHeight = bodyHeight - topHeight - bottomHeight;
+
+        var bottomTop = topHeight + cenHeight;
+
+        $("#layout_bottom").css({'top':bottomTop, 'left':0, 'height':30,'bottom':0});
+        $("#layout_center").css({'top':topHeight, 'height':cenHeight});
+
+
+
+
+      //  $("#myDesk").height($("#layout_center").height());
         $("#nav").delegate('li', 'mouseover mouseout', navHover);
-        $("#nav,#menu").delegate('li', 'click', navClick);
+        $("#nav").delegate('li', 'click', navClick);
 
         if($.browser.msie && ($.browser.version == "7.0")){
             var center = $("#layout_center");
             $("#main").width(center.width() - 31).height(center.height() - 30);
         }
     });
+
+    function navClear(){
+        $("#nav").find('li').removeClass('seleck');
+    }
 
     function navHover(){
         $(this).toggleClass("hover")
@@ -71,7 +86,17 @@
         window.location = '${ctx }/index';
     }
 
+
+
 </script>
+
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td style="vertical-align:top;" width="42px">
+    <%@include file="left.jsp"%>
+</td>
+
+<td>
 <div id="layout_top">
     <div class="header">
         <p class="user">当前登录用户【${sessionScope.loginUserName}】 身份【${name}】 <span>|</span> <a href="${ctx}/login">退出系统</a></p>

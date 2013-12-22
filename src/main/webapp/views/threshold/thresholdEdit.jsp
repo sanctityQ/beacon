@@ -19,7 +19,6 @@
 <script language="javascript" src="${ctx}/static/js/sinosoft.message.js"></script>
 <script type="text/javascript">
 $(function(){
-    $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
 	$("#thresholdList").Grid({
 		url : "thresholdList.json",  
 		dataType: "json",
@@ -63,11 +62,12 @@ $(function(){
 			{id:'4',text:'状态',name:"appellation",index:'1',align:''},
 			{id:'5',text:'操作',name:"appellation",index:'1',align:''}
 		],  
-		rowNum:9999,
 		pager : false,
 		number:false,  
 		multiselect: false  
 	});
+
+    navClear();
 });
 function shiftOut(e){
 	var rows = $(e).parent().parent();
