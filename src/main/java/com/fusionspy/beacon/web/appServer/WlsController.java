@@ -65,7 +65,8 @@ public class WlsController {
         JsonGrid grid = JsonGrid.buildGrid(wlsService.list(), new JsonGrid.JsonRowHandler<WlsServer>() {
             @Override
             public JsonGrid.JsonRow buildRow(WlsServer t) {
-                WlsHisData hisData = monitorManage.getMonitorInf(t.getSiteName()).getMonitorData();
+                MonitorSite monitorSite = monitorManage.getMonitorInf(t.getSiteName());
+                WlsHisData hisData = monitorSite.getMonitorData();
                 WlsInTimeData inTimeData = hisData.getWlsInTimeData();
                 //TODO
                 List<WlsSvr> serverRuntimes = inTimeData.getServerRuntimes();
@@ -80,13 +81,17 @@ public class WlsController {
                     //HEALTH_OK，HEALTH_WARN，HEALTH_CRITICAL，HEALTH_FAILED
                     String health = serverRuntime.getHealth();
                     String cssClass = "";
-                    if (health.indexOf("HEALTH_OK") != -1) {
-                        cssClass = "fine";
-                    } else if (health.indexOf("HEALTH_WARN") != -1) {
-                        cssClass = "y_poor";
-                    } else if (health.indexOf("HEALTH_CRITICAL") != -1) {
-                        cssClass = "poor";
-                    } else if (health.indexOf("HEALTH_FAILED") != -1) {
+                    if(monitorSite.isAgentRunning()) {
+                        if (health.indexOf("HEALTH_OK") != -1) {
+                            cssClass = "fine";
+                        } else if (health.indexOf("HEALTH_WARN") != -1) {
+                            cssClass = "y_poor";
+                        } else if (health.indexOf("HEALTH_CRITICAL") != -1) {
+                            cssClass = "poor";
+                        } else if (health.indexOf("HEALTH_FAILED") != -1) {
+                            cssClass = "poor";
+                        }
+                    } else {
                         cssClass = "poor";
                     }
                     healthList.append(MessageUtils.formateMessage(MessageUtils.MESSAGE_INFO_DIV, cssClass, ""));
@@ -234,12 +239,13 @@ public class WlsController {
 
     /**
      * server信息列表
-     * @param serverName
+     * @param siteName
      * @return
      */
-    @Get("serverInfo/{serverName}")
-    public Reply serverInfo(@Param("serverName") String serverName) {
-        WlsHisData hisData = monitorManage.getMonitorInf(serverName).getMonitorData();
+    @Get("serverInfo/{siteName}")
+    public Reply serverInfo(@Param("siteName") String siteName) {
+        final MonitorSite monitorSite = monitorManage.getMonitorInf(siteName);
+        WlsHisData hisData = monitorSite.getMonitorData();
         List<WlsSvr> serverRuntimes = hisData.getWlsInTimeData().getServerRuntimes();
         JsonGrid grid = JsonGrid.buildGrid(serverRuntimes, new JsonGrid.JsonRowHandler<WlsSvr>() {
             @Override
@@ -252,13 +258,17 @@ public class WlsController {
                 //HEALTH_OK，HEALTH_WARN，HEALTH_CRITICAL，HEALTH_FAILED
                 String health = wlsSvr.getHealth();
                 String cssClass = "";
-                if (health.indexOf("HEALTH_OK") != -1) {
-                    cssClass = "fine";
-                } else if (health.indexOf("HEALTH_WARN") != -1) {
-                    cssClass = "y_poor";
-                } else if (health.indexOf("HEALTH_CRITICAL") != -1) {
-                    cssClass = "poor";
-                } else if (health.indexOf("HEALTH_FAILED") != -1) {
+                if(monitorSite.isAgentRunning()) {
+                    if (health.indexOf("HEALTH_OK") != -1) {
+                        cssClass = "fine";
+                    } else if (health.indexOf("HEALTH_WARN") != -1) {
+                        cssClass = "y_poor";
+                    } else if (health.indexOf("HEALTH_CRITICAL") != -1) {
+                        cssClass = "poor";
+                    } else if (health.indexOf("HEALTH_FAILED") != -1) {
+                        cssClass = "poor";
+                    }
+                } else {
                     cssClass = "poor";
                 }
                 row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_DIV, cssClass));
