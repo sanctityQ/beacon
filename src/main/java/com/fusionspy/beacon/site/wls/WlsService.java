@@ -86,22 +86,11 @@ public class WlsService {
      */
     @Transactional
     public int processInitData(WlsIniData wlsIniData) {
-        if (wlsIniData.isStop()) { //验证weblogic服务器是否启动 (未启动时)
-            Resource resource = this.resourcesCache.getResource(wlsIniData.getSiteName());
-            Attribute alarmAttribute = this.attributeCache.getAttribute(resource.getResourceType(), AttributeName.SystemStop.name());
-            WlsAlertMessage wlsAlertMessage = new WlsAlertMessage();
-            wlsAlertMessage.setStopServerName(wlsIniData.getSiteName());
-            alarmMessage(resource, alarmAttribute, wlsIniData.getSiteName(), SeverityLevel.CRITICAL, wlsAlertMessage.getMessageByAlarmMessageFormat(AlarmMessageFormat.WLS_STOP));
-            throw new IllegalStateException("被监控Welogic系统并无运行，请检查");
-        } else {//启动时记录 初始化返回信息
-            wlsIniData.defaultData();
-            WlsSysrec wlsSysrec = wlsIniData.getWlsSysrec();
-            if (wlsSysrec != null) {
-                wlsSysrec.setSiteName(wlsIniData.getSiteName());
-                wlsSysrec.setRecTime(new Date());
-                wlsSysrecDao.save(wlsSysrec);
-            }
-        }
+        wlsIniData.defaultData();
+        WlsSysrec wlsSysrec = wlsIniData.getWlsSysrec();
+        wlsSysrec.setSiteName(wlsIniData.getSiteName());
+        wlsSysrec.setRecTime(new Date());
+        wlsSysrecDao.save(wlsSysrec);
         return 1;
     }
 
@@ -166,7 +155,7 @@ public class WlsService {
     @Autowired
     private ActionService actionService;
 
-    private void alarmMessage(Resource resource, Attribute attribute, String siteName, SeverityLevel severityLevel, String message) {
+    public void alarmMessage(Resource resource, Attribute attribute, String siteName, SeverityLevel severityLevel, String message) {
         if (attribute == null || severityLevel == SeverityLevel.UNKNOWN || org.apache.commons.lang.StringUtils.isBlank(message))
             return;
         Alarm alarm = new Alarm(UUID.randomUUID().toString().replaceAll("-", ""));

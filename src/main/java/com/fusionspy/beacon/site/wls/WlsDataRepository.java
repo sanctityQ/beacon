@@ -64,10 +64,10 @@ public class WlsDataRepository implements MonitorDataRepository {
         node.attribute("name").setData(wlsServer.getDomainName());
         node.attribute("principal").setData(wlsServer.getUserName()); //Weblogic用户名
         node.attribute("password").setData(wlsServer.getPassword()); //密码
-        System.out.println(xmlDocument.asXML());
         String initXml = connect.startSiteThread(xmlDocument, siteName, ip, port, 0);
         logger.debug("get initXml Xml: {}", initXml);
         WlsIniData initData = iniBinder.fromXml(initXml);
+        initData.setWlsService(wlsService);
         initData.setSiteName(siteName);
         return initData.defaultData();
     }

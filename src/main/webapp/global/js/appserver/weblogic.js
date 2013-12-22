@@ -350,11 +350,13 @@ function chart_init(){
                             async:false,
                             success:function(back){
                                 $(back).each(function(i,d) {
-                                    if(series[i].data.length < 20){
-                                        series[i].addPoint(d, true, false);
-                                    }
-                                    else{
-                                        series[i].addPoint(d, true, true);
+                                    if(series[i]) {
+                                        if(series[i].data.length < 20){
+                                            series[i].addPoint(d, true, false);
+                                        }
+                                        else{
+                                            series[i].addPoint(d, true, true);
+                                        }
                                     }
                                 });
                             }
@@ -430,11 +432,13 @@ function chart_init(){
                             async:false,
                             success:function(back){
                                 $(back).each(function(i,d) {
-                                    if(series[i].data.length < 20){
-                                        series[i].addPoint(d, true, false);
-                                    }
-                                    else{
-                                        series[i].addPoint(d, true, true);
+                                    if(series[i]) {
+                                        if(series[i].data.length < 20){
+                                            series[i].addPoint(d, true, false);
+                                        }
+                                        else{
+                                            series[i].addPoint(d, true, true);
+                                        }
                                     }
                                 });
                             }})

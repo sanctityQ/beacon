@@ -2,6 +2,7 @@ package com.fusionspy.beacon.site.wls.entity;
 
 import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorData;
+import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.dao.WlsSysrecDao;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,15 @@ public class WlsIniData extends MonitorData implements InitData {
         return this;
     }
 
+    private WlsService wlsService;
+
+    public void setWlsService(WlsService wlsService) {
+        this.wlsService = wlsService;
+    }
+
     @Override
     public void process() {
+        wlsService.processInitData(this);
     }
 
     public boolean isStop() {

@@ -189,7 +189,7 @@ public class WlsController {
         invocation.addModel("memFree", inTimeData.getResource().getMemFree());
         invocation.addModel("agentVer", iniData.getWlsSysrec().getAgentVersion());
         invocation.addModel("systemboot", iniData.getWlsSysrec().getSystemBoot());
-        invocation.addModel("count", hisData.getMonitorCount());
+        invocation.addModel("count", monitorSite.getMonitorCount());
         invocation.addModel("ip", inTimeData.getServerRuntimes().get(0).getListenAddress());
         invocation.addModel("port", inTimeData.getServerRuntimes().get(0).getListenPort());
         invocation.addModel("interval", wlsServer.getInterval());
@@ -205,16 +205,28 @@ public class WlsController {
      */
     @Get("/viewLast/${siteName}")
     public Reply viewLast(@Param("siteName") String siteName) {
+        WlsServer wlsServer = wlsService.getSite(siteName);
         MonitorSite monitorSite = monitorManage.getMonitorInf(siteName);
         WlsHisData hisData = monitorSite.getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         Map<String, Object> lastInfo = new HashMap<String, Object>();
-        lastInfo.put("count", hisData.getMonitorCount());
+        lastInfo.put("serverName", siteName);
+        lastInfo.put("serverType", "weblogic");
+        lastInfo.put("wlsVersion", iniData.getWlsSysrec().getDomainVersion());
         lastInfo.put("rectime", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").print(new DateTime(iniData.getWlsSysrec().getRecTime())));
+        lastInfo.put("osVersion", iniData.getWlsSysrec().getOsVersion());
+        lastInfo.put("serverNum", iniData.getWlsSysrec().getServerNum());
+        lastInfo.put("domainName", iniData.getWlsSysrec().getName());
+        lastInfo.put("adminServerName", iniData.getWlsSysrec().getAdminServerName());
         lastInfo.put("cpuIdle", inTimeData.getResource().getCpuIdle());
         lastInfo.put("memFree", inTimeData.getResource().getMemFree());
-        lastInfo.put("serverNum", iniData.getWlsSysrec().getServerNum());
+        lastInfo.put("agentVer", iniData.getWlsSysrec().getAgentVersion());
+        lastInfo.put("systemboot", iniData.getWlsSysrec().getSystemBoot());
+        lastInfo.put("count", monitorSite.getMonitorCount());
+        lastInfo.put("ip", inTimeData.getServerRuntimes().size() > 0 ? inTimeData.getServerRuntimes().get(0).getListenAddress() : "");
+        lastInfo.put("port", inTimeData.getServerRuntimes().size() > 0 ? inTimeData.getServerRuntimes().get(0).getListenPort() : "");
+        lastInfo.put("interval", wlsServer.getInterval());
         lastInfo.put("stop", hisData.isWlsStop());
         lastInfo.put("agentStop",!monitorSite.isAgentRunning());
         return Replys.with(lastInfo).as(Json.class);

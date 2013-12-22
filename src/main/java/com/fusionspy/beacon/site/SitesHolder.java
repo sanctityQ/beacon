@@ -150,6 +150,8 @@ public class SitesHolder {
     public MonitorSite getWlsSite() {
         WlsSite wlsSite = new WlsSite();
         wlsSite.setWlsService(wlsService);
+        wlsSite.setAttributeCache(this.attributeCache);
+        wlsSite.setResourcesCache(this.resourcesCache);
         if (demo) {
             wlsSite.setMonitorDataRepository(wlsDemoRep);
         } else {

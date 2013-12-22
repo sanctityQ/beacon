@@ -50,11 +50,11 @@ $(function() {
                 alert("数据加载出错！" + errorThrown);
             },
             success: function(data){
-                $('#count').html(data.count);
-                $('#cpuIdle').html(data.cpuIdle);
-                $('#memFree').html(data.memFree);
-                $('#rectime').html(data.rectime);
-                $('#serverNum').html(data.serverNum);
+                interval = data.interval;
+                $(".ehco_data").each(function(i, d) {
+                    var key = d.id;
+                    $(d).html(data[key]);
+                });
                 if(data.stop){
                     $('#errorMsg').html(weblogicStopMessage);
                     $('#errorMsg').fadeIn();
@@ -102,49 +102,49 @@ $(function() {
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">服务器名称： </td>
-                                    <td class="monitorinfoeven">${serverName}</td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="serverName">${serverName}</span></td>
                                     <td align="right" class="monitorinfoodd">服务器类型： </td>
-                                    <td class="monitorinfoeven">${serverType}<br /></td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="serverType">${serverType}</span><br /></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">IP地址：</td>
-                                    <td class="monitorinfoeven">${ip}</td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="ip">${ip}</span></td>
                                     <td align="right" class="monitorinfoodd"> 端口：</td>
-                                    <td class="monitorinfoeven">${port}</td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="port">${port}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd" >产品版本： </td>
-                                    <td class="monitorinfoeven">${wlsVersion}</td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="wlsVersion">${wlsVersion}</span></td>
                                     <td align="right" class="monitorinfoodd" >启动时间： </td>
-                                    <td class="monitorinfoeven">${systemboot}</td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="systemboot">${systemboot}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd" >监控时间：</td>
-                                    <td class="monitorinfoeven"><span id="rectime">${rectime}</span></td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="rectime">${rectime}</span></td>
                                     <td align="right" class="monitorinfoodd" >服务器数量：</td>
-                                    <td class="monitorinfoeven"><span id="serverNum">${serverNum}</span></td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="serverNum">${serverNum}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">Domain名称：</td>
-                                    <td class="monitorinfoeven"><span id='domainName'>${domainName}</span></td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id='domainName'>${domainName}</span></td>
                                     <td align="right" class="monitorinfoodd">管理服务器： </td>
-                                    <td class="monitorinfoeven"><span id='adminServerName'>${adminServerName}</span></td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id='adminServerName'>${adminServerName}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd"> 操作系统：</td>
-                                    <td class="monitorinfoeven">${osVersion}</td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="osVersion">${osVersion}</span></td>
                                     <td align="right" class="monitorinfoodd">CPU空余：</td>
-                                    <td class="monitorinfoeven"><span id='cpuIdle'>${cpuIdle}</span></td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id='cpuIdle'>${cpuIdle}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd"> 内存空余：</td>
-                                    <td class="monitorinfoeven"><span id='memFree'>${memFree}</span>M</td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id='memFree'>${memFree}</span>M</td>
                                     <td align="right" class="monitorinfoodd">Agent版本：</td>
-                                    <td class="monitorinfoeven">${agentVer}</td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id="agentVer">${agentVer}</span></td>
                                 </tr>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">监控次数：</td>
-                                    <td class="monitorinfoeven"><span id='count'>${count}</span></td>
+                                    <td class="monitorinfoeven"><span class="ehco_data" id='count'>${count}</span></td>
                                     <td align="right" class="monitorinfoodd">&nbsp;</td>
                                     <td class="monitorinfoeven">&nbsp;</td>
                                 </tr>
