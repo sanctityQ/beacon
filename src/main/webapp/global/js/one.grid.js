@@ -113,7 +113,7 @@
 			var originGridData = "";
             
             var _data;
-            
+
             //用来判断pager是不是在grid第一次初始化的时候用的，如果是grid第一次初始化，他是true
             //在pager也初始化完了之后，我就让他编程false了
             var firstCreatePager = true;
@@ -1768,8 +1768,7 @@
             return ({
             	grid:{
                 	getDataTotalCount : function () {
-                        if(_data) return _data.total;
-						return 0;
+						return _data.total;
 					},
 					
 					//条件查询

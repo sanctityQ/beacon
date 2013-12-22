@@ -20,7 +20,7 @@ public class MonitorData {
 
     private String siteName;
 
-    @XmlAttribute(name = "Date")
+    @XmlAttribute(name="Date")
     public String getDate() {
         return Date;
     }
@@ -47,5 +47,4 @@ public class MonitorData {
     public void setSiteName(String siteName) {
         this.siteName = siteName;
     }
-
 }

@@ -25,7 +25,7 @@ public class HostMemFreeReport extends StatisticForwardReport implements WlsRepo
 
     @Override
     public Attribute getAttribute() {
-        if(attribute == null){
+        if (attribute == null) {
             attribute = new Attribute();
             attribute.setAttribute("MEM_FREE");
             attribute.setAttributeCn("主机空闲内存");

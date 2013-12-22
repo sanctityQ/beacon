@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
+import java.sql.Timestamp;
 import java.util.Map;
 
 @Service
@@ -25,9 +26,7 @@ public class ThreadThoughtputReport extends StatisticForwardReport implements Wl
 
     @Override
     public Map<String, Statistics> getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
-        String start = DateUtils.toFormatString(startDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
-        String end = DateUtils.toFormatString(endDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
-        return Maps.uniqueIndex(wlsThreadDao.statisticThought(resourceId, start,end),
+        return Maps.uniqueIndex(wlsThreadDao.statisticThought(resourceId, new Timestamp(startDate.getMillis()), new Timestamp(endDate.getMillis())),
         new Function<Statistics, String>() {
             @Nullable
             @Override
