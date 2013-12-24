@@ -108,10 +108,10 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
         Date date = new Date();
         DateTime endDate = new DateTime(date);
         DateTime startDate = endDate.minusDays(1);
-        String start = DateUtils.toFormatString(startDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
-        String end = DateUtils.toFormatString(endDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
-        Iterable<Statistics> iterable = wlsEjbCacheDao.statisticCacheBeanCurCount("115.28.16.154", start, end);
-        System.out.println(iterable);
+      //  String start = DateUtils.toFormatString(startDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
+      //  String end = DateUtils.toFormatString(endDate.toDate(), DateUtils.Formatter.YEAR_TO_SECOND);
+     //   Iterable<Statistics> iterable = wlsEjbCacheDao.statisticCacheBeanCurCount("115.28.16.154", start, end);
+     //   System.out.println(iterable);
     }
 
     @Autowired
@@ -120,7 +120,7 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
     @Test
     public void testAA() {
         System.out.println(Double.MAX_VALUE);
-        List<Statistics> list = wlsJvmDao.statisticFreeHeap("115.28.16.154", "2013-12-21 14:00:00", "2013-12-21 15:00:00");
-        System.out.println(list);
+    //    List<Statistics> list = wlsJvmDao.statisticFreeHeap("115.28.16.154", "2013-12-21 14:00:00", "2013-12-21 15:00:00");
+     //   System.out.println(list);
     }
 }

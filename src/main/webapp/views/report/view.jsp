@@ -5,14 +5,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>报表</title>
     <%@include file="/WEB-INF/layouts/base.jsp" %>
+
     <script type="text/javascript">
         $(function(){
             $(".form").parent().parent().addClass("seleck").siblings().removeClass("seleck");
-         //   $("#reporMenu li").on('click',reporMenu);
+            $("#reportMenu li").on('click',reportSelected);
 
             $.ajax({
                 type:"post",
-                url:"${ctx}/alarm/manager/configemergency/monitornames/WEBLOGIC",
+                url:"${ctx}/alarm/manager/configemergency/monitornames/${resourceType}",
                 dataType:"json",
                 async:false,
                 success:function(data){
@@ -29,14 +30,18 @@
                     //$(".conf_box").slideDown("fast");
                 }
             });
+
+           $('#${resourceType}').addClass("select").siblings().removeClass("select");
         });
-        function reporMenu(){
-            var index = $(this).index();
-            var contant = $("#contant > div.reporCont");
-            $(this).addClass("select").siblings().removeClass("select");
-            contant.eq(index).slideDown(200)
-                    .siblings().slideUp(200);
+        function reportSelected(){
+//            var index = $(this).index();
+//            var content = $("#contant > div.reporCont");
+         //   $(this).addClass("select").siblings().removeClass("select");
+            window.location = "${ctx}/report?resourceType=" +$(this).attr("id");
+           // content.eq(index).slideDown(200).siblings().slideUp(200);
+
         }
+
         function viewWindow(attribute,attribute_name){
 
             if($("#monitorName").val()==''){
@@ -52,7 +57,7 @@
                 "title":attribute_name,
                 "url":encodeURI(url),
                 "hasIFrame":true,
-                "width": 840,
+                "width": 900,
                 "height":540,
                 "diyButton":[{
                     "id": "btOne",
@@ -78,10 +83,10 @@
                 <tr>
                     <td class="repor_box">
                         <div class="report_title">报表</div>
-                        <ul id="reporMenu" class="report_menu">
+                        <ul id="reportMenu" class="report_menu">
                             <%--<li><img src="${ctx}/global/images/icon_hyper_vhost.gif" width="15" height="16" />Linux</li>--%>
-                            <%--<li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>--%>
-                            <li class="center select"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Weblogic</li>
+                            <li class="center" id="Tuxedo"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Tuxedo</li>
+                            <li class="center select" id="WEBLOGIC"><img src="${ctx}/global/images/icon_monitors_cam.gif" width="16" height="16" />Weblogic</li>
                         </ul>
                     </td>
                     <td>
