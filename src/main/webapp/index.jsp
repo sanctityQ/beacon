@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
 <script type="text/javascript">
-    location.href = "${ctx}/home"
+    location.href = "${ctx}/index"
 </script>
 </head>
 <body>

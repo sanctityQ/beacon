@@ -30,16 +30,6 @@ public class IndexController {
 	@Autowired
 	private AlarmService alarmService;
 	
-    @Get("left")
-    public String left() {
-        return "left";
-    }
-
-    @Get("home")
-    public String home() {
-        return "home";
-    }
-	
 	@Get("index")
 	public String index() {
 		return "index";
