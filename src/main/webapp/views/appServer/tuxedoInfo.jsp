@@ -126,7 +126,7 @@
                             <div class="hr_box h_b">
                                 <div class="head-cpu">
                                     <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>
-                                    CPU使用率-最近6小时
+                                    CPU使用率
                                 </div>
                                 <div id="CPU_line" style="height:230px;padding-top:15px"></div>
                             </div>
@@ -136,7 +136,7 @@
                             <div class="hr_box h_b">
                                 <div class="head-cpu">
                                     <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>
-                                    物理内存剩余-最近6小时
+                                    物理内存剩余
                                 </div>
                                 <div id="RAM_line" style="height:230px;padding-top:15px"></div>
                             </div>

@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 
 @Component
@@ -27,6 +28,11 @@ public abstract class StatisticReportFactory implements StatisticClean{
     private static Map<String,StatisticsTopCacheReport> topReportMap = newHashMap();
 
 
+    protected List<Attribute> attributes = newArrayList();
+
+    protected List<Attribute> staticAttributes =  newArrayList();
+
+    protected List<Attribute> staticTopAttributes =  newArrayList();
 
     @PostConstruct
     public void init(){
@@ -49,11 +55,6 @@ public abstract class StatisticReportFactory implements StatisticClean{
 
     protected abstract void initChild();
 
-    /**
-     * 返回报表属性
-     * @return
-     */
-    public abstract List<Attribute> getAttributes();
 
     public StatisticReport getStatisticReport(String attribute){
         return this.staticReportMap.get(attribute);
@@ -74,5 +75,17 @@ public abstract class StatisticReportFactory implements StatisticClean{
     public  StatisticTopReport getTopReport(String attribute){
         return this.topReportMap.get(attribute);
 
+    }
+
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public List<Attribute> getStatisticAttributes() {
+        return staticAttributes;
+    }
+
+    public List<Attribute> getStatisticTopAttributes() {
+        return staticTopAttributes;
     }
 }

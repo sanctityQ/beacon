@@ -3,6 +3,7 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.report.Report;
 import com.fusionspy.beacon.report.StatisticReport;
 import com.fusionspy.beacon.report.StatisticReportFactory;
+import com.fusionspy.beacon.report.StatisticTopReport;
 import com.google.common.collect.Ordering;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
@@ -22,10 +23,6 @@ class TuxReportFactory extends StatisticReportFactory {
     @Autowired
     private Set<TuxReport> tuxReports;
 
-    //private Ordering<Attribute> naturalOrdering =  Ordering.natural();
-
-    private List<Attribute> attributes = newArrayList();;
-
 
     @Override
     public ResourceType getResourceType() {
@@ -35,14 +32,18 @@ class TuxReportFactory extends StatisticReportFactory {
     @Override
     protected void initChild() {
         for (Iterator<TuxReport> iterator = tuxReports.iterator(); iterator.hasNext(); ) {
-            attributes.add(((Report)iterator.next()).getAttribute());
+            Report report =  (Report)iterator.next();
+            if(report instanceof StatisticTopReport){
+                staticTopAttributes.add(report.getAttribute());
+            }
+            if(report instanceof  StatisticReport){
+                staticAttributes.add(report.getAttribute());
+            }
+            attributes.add(report.getAttribute());
         }
     }
 
-    @Override
-    public List<Attribute> getAttributes() {
-        return attributes;
-    }
+
 
 
 }
