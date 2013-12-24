@@ -23,9 +23,9 @@ public abstract class StatisticReportFactory implements StatisticClean{
     @Autowired
     List<StatisticTopReport> statisticTopReports;
 
-    private static Map<String,StatisticCacheReport> staticReportMap = newHashMap();
+    private Map<String,StatisticCacheReport> staticReportMap = newHashMap();
 
-    private static Map<String,StatisticsTopCacheReport> topReportMap = newHashMap();
+    private Map<String,StatisticsTopCacheReport> topReportMap = newHashMap();
 
 
     protected List<Attribute> attributes = newArrayList();
