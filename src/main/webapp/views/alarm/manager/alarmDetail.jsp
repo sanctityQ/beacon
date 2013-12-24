@@ -7,7 +7,7 @@
     <script type="text/javascript">
         $(function () {
             $(".alarm").parent().parent().addClass("seleck").siblings().removeClass("seleck");
-            $("#thresholdList").Grid({
+            /*$("#thresholdList").Grid({
                 type: "post",
                 url: "${ctx}/alarm/manager/history/${monitorId}",
                 dataType: "json",
@@ -25,7 +25,7 @@
                 pager: true,
                 number: false,
                 multiselect: false
-            });
+            });*/
 
 
         });
@@ -111,11 +111,11 @@
         </div>
         <br/>
 
-        <div class="threshold_file">
-            <h3 class="title3">历史告警信息：</h3>
+        <%--<div class="threshold_file">--%>
+            <%--<h3 class="title3">历史告警信息：</h3>--%>
 
-            <div id="thresholdList"></div>
-        </div>
+            <%--<div id="thresholdList"></div>--%>
+        <%--</div>--%>
         <div class="tool_bar big">
             <input type="button" class="buttons" value="返回列表" onclick="window.history.back()"/>
         </div>
