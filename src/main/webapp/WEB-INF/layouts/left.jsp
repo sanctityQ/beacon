@@ -91,6 +91,6 @@ function leftMenuSelected(id){
     <shiro:hasPermission name="admin">
         <li id="left_menu_configEmergency"><a href="${ctx}/alarm/manager/configemergency/config"><i class="icon05"></i>配置告警</a></li>
     </shiro:hasPermission>
-    <li style="height: 100%;background:#222">&nbsp;</li>
+    <li style="height: 100%;background:#222"></li>
 </ul>
 </div>
