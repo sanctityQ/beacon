@@ -50,6 +50,7 @@ public class Resource implements java.io.Serializable {
     }
     
     @Column(name="resource_type", length=100)
+    @Enumerated(value = EnumType.STRING)
     public ResourceType getResourceType() {
     return this.resourceType;
     }
