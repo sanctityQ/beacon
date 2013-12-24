@@ -1,6 +1,7 @@
 package com.fusionspy.beacon.site.wls;
 
 import com.fusionspy.beacon.report.Report;
+import com.fusionspy.beacon.report.StatisticReport;
 import com.fusionspy.beacon.report.StatisticReportFactory;
 import com.fusionspy.beacon.site.tux.TuxReport;
 import com.google.common.collect.Ordering;
@@ -23,10 +24,7 @@ class WlsReportFactory extends StatisticReportFactory {
     @Autowired
     private Set<WlsReport> wlsReports;
 
-    private Ordering<Attribute> naturalOrdering = Ordering.natural();
-
-    private List<Attribute> attributes = newArrayList();
-
+    //private Ordering<Attribute> naturalOrdering = Ordering.natural();
 
     @Override
     public ResourceType getResourceType() {
@@ -36,14 +34,13 @@ class WlsReportFactory extends StatisticReportFactory {
     @Override
     protected void initChild() {
         for (Iterator<WlsReport> iterator = wlsReports.iterator(); iterator.hasNext(); ) {
-            attributes.add(((Report) iterator.next()).getAttribute());
+
+            Report report = (Report) iterator.next();
+            if(report instanceof StatisticReport){
+                staticAttributes.add(report.getAttribute());
+            }
+            attributes.add(report.getAttribute());
         }
     }
-
-    @Override
-    public List<Attribute> getAttributes() {
-        return attributes;
-    }
-
 
 }
