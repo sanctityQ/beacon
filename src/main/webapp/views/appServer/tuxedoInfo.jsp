@@ -20,11 +20,11 @@
         </ul>
 
         <div id="errorMsg" class="alert alert-danger" style="display: none;"></div>
-        <hr class="top_border" />
+        <div class="page_cont">
         <div id="tabs">
             <ul>
-                <li id='state_tab' class="tabs_select">状态监控</li>
-                <li id='data_tab'>数据监控</li>
+                <li id='state_tab' class="tabs_select"><i class="overview"></i>状态监控</li>
+                <li id='data_tab'><i class="disk"></i>数据监控</li>
             </ul>
             <br />
             <div class="first">
@@ -215,7 +215,7 @@
             </div>
         </div>
     </div>
-
+  </div>
 </div>
 </div>
 <%@include file="/WEB-INF/layouts/foot.jsp" %>

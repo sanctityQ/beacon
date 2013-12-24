@@ -1,4 +1,4 @@
-package com.fusionspy.beacon.web.report;
+package com.fusionspy.beacon.report.controllers;
 
 
 import com.alibaba.fastjson.JSON;
@@ -7,7 +7,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.fusionspy.beacon.report.*;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.*;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimaps;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -16,7 +19,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesCache;
-import com.sinosoft.one.monitor.utils.Reflections;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -75,7 +77,8 @@ public class ReportController {
 
         List<Attribute> attributes = factory.getAttributes(resourceType);
         inv.addModel("attributes",attributes);
-        return "view";
+        inv.addModel("resourceType",resourceType);
+        return "report/view";
     }
 
 
@@ -98,7 +101,7 @@ public class ReportController {
         inv.addModel("resource", StringUtils.isBlank(resourceId)?resourceId:resourcesCache.getResource(resourceId));
         inv.addModel("attribute",statisticReport.getAttribute());
 
-        return "info";
+        return "report/info";
     }
 
     @Get("/resourceType/{type}/attribute/{attribute}/top")
@@ -120,7 +123,7 @@ public class ReportController {
         inv.addModel("attribute",statisticReport.getAttribute());
         inv.addModel("top",top);
 
-        return "topInfo";
+        return "report/topInfo";
     }
 
     void topDeal(List<Map<String,String>> rows, final ReportAttribute reportAttribute, Invocation inv){
@@ -371,9 +374,9 @@ public class ReportController {
      * 将SVG矢量转换为Image
      * @param svg
      * @return
-     * @throws TranscoderException
-     * @throws BadElementException
-     * @throws IOException
+     * @throws org.apache.batik.transcoder.TranscoderException
+     * @throws com.itextpdf.text.BadElementException
+     * @throws java.io.IOException
      */
     Image createImage(String svg) throws TranscoderException, BadElementException, IOException {
         Transcoder transcoder = new JPEGTranscoder();

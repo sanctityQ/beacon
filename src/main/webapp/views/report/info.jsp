@@ -6,9 +6,10 @@
 <title>monitor监控系统</title>
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script language="javascript" src="${ctx}/global/js/one.layout.js"></script>
-<script type="text/javascript">
+
+    <script type="text/javascript">
     $(function(){
-        $(".form").parent().parent().addClass("seleck").siblings().removeClass("seleck");
+      //  $(".form").parent().parent().addClass("seleck").siblings().removeClass("seleck");
         $("body").layout();
 
         function query(){
@@ -50,13 +51,21 @@
             chart: {
                 renderTo: 'container',
                 type: 'column',
-                margin: [ 50, 50, 50, 50]
+                margin: [ 50, 50, 50, 70]
             },
             title: {
                 text: ''
             },
             xAxis: {
-                categories: ${xAxisCategories}
+                categories: ${xAxisCategories},
+                labels: {
+                    rotation: -45,
+                    align: 'right',
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
             },
             yAxis: {
                 min: 0,
@@ -127,54 +136,7 @@
         document.body.appendChild(form);
         form.submit();
     }
-//    $(function(){
-//        var charts = new Highcharts.Chart({
-//            chart: {
-//                renderTo: 'memory_utilization',
-//                type: 'line',
-//                marginRight: 50,
-//                marginBottom: 75,
-//                height:200
-//            },
-//            title: {
-//                text: ' ',
-//                x: -20 //center
-//            },
-//            xAxis: {
-//                categories: ['00:00', '00:02', '00:04', '00:06', '00:08', '00:10','00:12']
-//            },
-//            yAxis: {
-//                title: {
-//                    text: '%'
-//                },
-//                plotLines: false
-//            },
-//            plotOptions:{
-//                series: {
-//                    marker: {
-//                        radius: 0
-//                    }
-//                }
-//            },
-//            credits: {
-//                text: '',
-//                href: ''
-//            },
-//            tooltip: false,
-//            legend: {
-//                enabled :true
-//            },
-//            series: [{
-//                name: 'linux',
-//                data: [4,7,9,0,7,1,9]
-//            },{
-//                name: 'linux2',
-//                data: [1,1,4,5,0,9,12]
-//            }]
-//        });
 
-
-//    })
 
 
 </script>

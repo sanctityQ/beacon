@@ -29,8 +29,6 @@
 
 
 
-
-      //  $("#myDesk").height($("#layout_center").height());
         $("#nav").delegate('li', 'mouseover mouseout', navHover);
         $("#nav").delegate('li', 'click', navClick);
 
@@ -131,38 +129,11 @@
                     </ul>
 
                 </li>
-                <%--<li><a href="${ctx}/application/manager/appmanager/applist/1"><i class="performance"></i>应用性能</a></li>--%>
                 <li><a href="${ctx}/alarm/manager/list"><i class="alarm"></i>告警</a></li>
                 <li><a href="${ctx}/report?resourceType=WEBLOGIC"><i class="form"></i>报表</a></li>
                 <li><a href="${ctx}/account/user/list"><i class="users"></i>用户管理</a></li>
             </ul>
         </div>
-        <ul class="add_menu" style="display: none;" id="menu">
-            <shiro:hasPermission name="admin">
-            <li><a href="${ctx}/addmonitor/list">新建监视器</a></li>
-            </shiro:hasPermission>
-            <li class="has_sub">
-                <a href="javascript:void(0);"><span>阈值配置文件</span></a>
-                <ul class="add_sub_menu">
-                    <shiro:hasPermission name="admin">
-                    <li><a class="addThreshold" href="${ctx}/threshold/create">新建阈值文件</a></li>
-                    </shiro:hasPermission>
-                    <li><a class="thresholdFile" href="${ctx}/threshold/list">查看阈值配置文件</a></li>
-                </ul>
-            </li>
-            <li class="has_sub">
-                <a href="javascript:void(0)"><span>动作</span></a>
-                <ul class="add_sub_menu">
-                    <li class="title"><a href="${ctx}/action/email/list">显示动作</a></li>
-                    <shiro:hasPermission name="admin">
-                    <li class="action">创建新动作</li>
-                    <li><a class="email" href="${ctx}/action/email/create">邮件</a></li>
-                    </shiro:hasPermission>
-                </ul>
-            </li>
-            <shiro:hasPermission name="admin">
-            <li><a href="${ctx}/alarm/manager/configemergency/config">配置告警</a></li>
-            </shiro:hasPermission>
-        </ul>
+
     </div>
 </div>
