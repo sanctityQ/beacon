@@ -19,6 +19,10 @@
             window.location=loc[0].substring(0,loc[0].indexOf("=")+1)+$('#dateSeries').val()+"&"+loc[1];
         }
 
+        $('#attribute').html('');
+        <c:forEach var="attribute" items="${attributes}" varStatus="status">
+            $("#attribute").append("<option value='${attribute.attribute}' > ${attribute.attributeCn}</option> ");
+        </c:forEach>
         $('#dateSeries').change(query);
         $('#attribute').change(query);
 

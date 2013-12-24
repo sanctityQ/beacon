@@ -47,9 +47,9 @@
             if($("#monitorName").val()==''){
                 return;
             }
-            var url = "${ctx}/report/resourceType/WEBLOGIC/attribute/"+attribute+"?dateSeries=today&resourceId="+$("#monitorName").val();
+            var url = "${ctx}/report/resourceType/${resourceType}/attribute/"+attribute+"?dateSeries=today&resourceId="+$("#monitorName").val();
             if(attribute == 'PROGRESS_CPU_USED'||attribute=='PROGRESS_MEM_USED'){
-                url = "${ctx}/report/resourceType/WEBLOGIC/attribute/"+attribute+"/top?top=five&dateSeries=today&resourceId="+$("#monitorName").val();
+                url = "${ctx}/report/resourceType/${resourceType}/attribute/"+attribute+"/top?top=five&dateSeries=today&resourceId="+$("#monitorName").val();
             }
 
             var temWin = $("body").window({

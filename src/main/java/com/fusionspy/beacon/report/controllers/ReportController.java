@@ -99,6 +99,7 @@ public class ReportController {
         inv.addModel("dateSeries",series);
         inv.addModel("resourceType",type);
         inv.addModel("resource", StringUtils.isBlank(resourceId)?resourceId:resourcesCache.getResource(resourceId));
+        inv.addModel("attributes",factory.getStatisticAttributes(type));
         inv.addModel("attribute",statisticReport.getAttribute());
 
         return "report/info";

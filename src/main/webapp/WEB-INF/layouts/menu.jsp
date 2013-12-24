@@ -15,9 +15,9 @@
 
 <script type="text/javascript">
     $(function () {
-
+        $('html,body').width('100%').height('100%');
         var bodyHeight = $('body').height();
-
+       // alert(bodyHeight);
         var topHeight = 106;
         var bottomHeight = 30;
         var cenHeight = bodyHeight - topHeight - bottomHeight;
