@@ -38,6 +38,7 @@ class WlsReportFactory extends StatisticReportFactory {
             Report report = (Report) iterator.next();
             if(report instanceof StatisticReport){
                 staticAttributes.add(report.getAttribute());
+                statisticReports.add((StatisticReport)report);
             }
             attributes.add(report.getAttribute());
         }
