@@ -279,7 +279,6 @@
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.properties</include>
-                    <include>**/*.java</include>
                 </includes>
             </resource>
             <resource>
@@ -291,7 +290,7 @@
                 </includes>
             </resource>
             <resource>
-                <directory>src/main/weba</directory>
+                <directory>src/main/webapp</directory>
             </resource>
         </resources>
 	</build>
