@@ -67,10 +67,14 @@ function leftMenuSelected(id){
 <div id="left_content" style="top:0px;height:100%;background:#222;width:42px;overflow: hidden;float: left">
 
 <ul class="left_menu" id="leftBar">
-	<li id="left_menu_newMonitor"><a href="${ctx}/addmonitor/list"><i class="icon01"></i>新建监视器</a></li>
+    <shiro:hasPermission name="admin">
+    <li id="left_menu_newMonitor"><a href="${ctx}/addmonitor/list"><i class="icon01"></i>新建监视器</a></li>
+    </shiro:hasPermission>
     <li class="has"><a href="javascript:void(0);"><i class="icon02"></i>阈值配置文件</a>
     	<ul class="sub">
+        <shiro:hasPermission name="admin">
         	<li id="left_menu_newThreshold"><a href="${ctx}/threshold/create">新建阈值文件</a></li>
+        </shiro:hasPermission>
             <li id="left_menu_thresholdList"><a href="${ctx}/threshold/list">查看阈值配置文件</a></li>
         </ul>
     </li>
@@ -87,5 +91,6 @@ function leftMenuSelected(id){
     <shiro:hasPermission name="admin">
         <li id="left_menu_configEmergency"><a href="${ctx}/alarm/manager/configemergency/config"><i class="icon05"></i>配置告警</a></li>
     </shiro:hasPermission>
+    <li style="height: 100%;background:#222">&nbsp;</li>
 </ul>
 </div>
