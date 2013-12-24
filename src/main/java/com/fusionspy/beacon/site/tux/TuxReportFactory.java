@@ -1,9 +1,6 @@
 package com.fusionspy.beacon.site.tux;
 
-import com.fusionspy.beacon.report.Report;
-import com.fusionspy.beacon.report.StatisticReport;
-import com.fusionspy.beacon.report.StatisticReportFactory;
-import com.fusionspy.beacon.report.StatisticTopReport;
+import com.fusionspy.beacon.report.*;
 import com.google.common.collect.Ordering;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
@@ -35,8 +32,10 @@ class TuxReportFactory extends StatisticReportFactory {
             Report report =  (Report)iterator.next();
             if(report instanceof StatisticTopReport){
                 staticTopAttributes.add(report.getAttribute());
+                statisticTopReports.add((StatisticTopReport)report);
             }
             if(report instanceof  StatisticReport){
+                statisticReports.add((StatisticReport)report);
                 staticAttributes.add(report.getAttribute());
             }
             attributes.add(report.getAttribute());
