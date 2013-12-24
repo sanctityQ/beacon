@@ -1,14 +1,12 @@
 package com.fusionspy.beacon.site.wls.entity;
 
 import com.fusionspy.beacon.site.InTimeData;
-import com.fusionspy.beacon.site.MonitorData;
+import com.fusionspy.beacon.site.wls.WlsMonitorData;
 import com.sinosoft.one.util.encode.JaxbBinder;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.annotation.*;
 import java.io.InputStream;
@@ -26,7 +24,7 @@ import java.util.List;
  */
 @XmlRootElement(name = "MONITOR")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class WlsInTimeData extends MonitorData implements InTimeData {
+public class WlsInTimeData extends WlsMonitorData implements InTimeData {
 
     public static WlsInTimeData EMPTY;
 
@@ -38,7 +36,7 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
             String resp = xmlDocument.asXML();
             JaxbBinder jaxbBinder2 = new JaxbBinder(WlsInTimeData.class);
             EMPTY = jaxbBinder2.fromXml(resp);
-            EMPTY.getResource().setCpuIdle(100);
+            EMPTY.getResource().setCpuIdle(0);
             EMPTY.getResource().setMemFree("0");
             EMPTY.defaultData();
         } catch (DocumentException e) {
@@ -194,16 +192,5 @@ public class WlsInTimeData extends MonitorData implements InTimeData {
             e.printStackTrace();
         }
         return this;
-    }
-
-    @XmlElement(name = "SYSTEM")
-    private WlsError wlsError;
-
-    public WlsError getWlsError() {
-        return wlsError;
-    }
-
-    public void setWlsError(WlsError wlsError) {
-        this.wlsError = wlsError;
     }
 }

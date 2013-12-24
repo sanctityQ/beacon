@@ -288,7 +288,11 @@ public class WlsController {
                 list.add(inTimeData.getResource().getRecTime().getTime());
                 if ("cpu".equals(type)) {
                     //cpu使用率=100-cpu空闲率
-                    list.add(100 - inTimeData.getResource().getCpuIdle());
+                    if(inTimeData.getResource().getCpuIdle() == 0) {
+                        list.add(inTimeData.getResource().getCpuIdle());
+                    } else {
+                        list.add(100 - inTimeData.getResource().getCpuIdle());
+                    }
                 } else {
                     //TODO 内存使用率取值 此时获取的是内存空闲
                     list.add(Double.parseDouble(inTimeData.getResource().getMemFree()));
@@ -301,7 +305,11 @@ public class WlsController {
                     //TODO 非latest
                     if ("cpu".equals(type)) {
                         //cpu使用率=100-cpu空闲率
-                        point.put("y", 100 - inTimeData.getResource().getCpuIdle());
+                        if(inTimeData.getResource().getCpuIdle() == 0) {
+                            point.put("y", inTimeData.getResource().getCpuIdle());
+                        } else {
+                            point.put("y", 100 - inTimeData.getResource().getCpuIdle());
+                        }
                     } else {
                         //TODO 内存使用率取值 此时获取的是内存空闲
                         point.put("y", Double.parseDouble(inTimeData.getResource().getMemFree()));
@@ -319,7 +327,11 @@ public class WlsController {
                     //lineSerie.addData(jvm.getRecTime().getTime());
                     int freePercent = Integer.parseInt(jvm.getFreePercent());
                     point.add(jvm.getRecTime().getTime());
-                    point.add(100 - freePercent);
+                    if(freePercent == 0) {
+                        point.add(freePercent);
+                    } else {
+                        point.add(100 - freePercent);
+                    }
                     list.add(point);
                 }
                 retVal = list;
@@ -340,7 +352,11 @@ public class WlsController {
                         Map<String, Object> point = new HashMap<String, Object>();
                         int freePercent = Integer.parseInt(jvm.getFreePercent());
                         point.put("x", jvm.getRecTime().getTime());
-                        point.put("y", 100 - freePercent);
+                        if(freePercent == 0) {
+                            point.put("y", freePercent);
+                        } else {
+                            point.put("y", 100 - freePercent);
+                        }
                         data.add(point);
                     }
                 }

@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>monitor监控系统</title>
 <%@include file="/WEB-INF/layouts/base.jsp" %>
+    <script language="javascript" src="${ctx}/global/js/one.layout.js"></script>
 <script type="text/javascript">
     $(function(){
         $(".form").parent().parent().addClass("seleck").siblings().removeClass("seleck");

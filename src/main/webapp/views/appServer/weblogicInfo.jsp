@@ -13,13 +13,15 @@
 
     var weblogicStopMessage = "<strong>错误：</strong>Weblogic系统监控已经停止，请检查Weblogic是否正常运行!";
     var agentStopMessage = '<strong>错误：</strong>Wblogic系统监控无法连接到agent端，请检查agent端是否正常运行!';
-
+    var site_flag = true;
 $(function() {
     if(${stop}) {
+        site_flag = false;
         $('#errorMsg').html(weblogicStopMessage);
         $('#errorMsg').fadeIn();
     }
     if(${agentStop}) {
+        site_flag = false;
         $('#errorMsg').html(agentStopMessage)
         $('#errorMsg').fadeIn();
     }
