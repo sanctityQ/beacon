@@ -374,7 +374,7 @@ INSERT INTO ge_monitor_group VALUES ('1', 'admin'), ('2', 'user');
 
 INSERT INTO ge_monitor_account_group VALUES ('1', '1');
 
-INSERT INTO ge_monitor_account VALUES ('1', 'admin', 'admin', 'Admin', 'admin@springside.org.cn', '13800138001', '2012-12-25 19:36:34', '1');
+INSERT INTO ge_monitor_account VALUES ('1', 'admin', 'admin', 'Admin', 'admin@datasource.cn', '', '2012-12-25 19:36:34', '1');
 COMMIT;
 
 
@@ -408,9 +408,9 @@ CREATE TABLE ge_monitor_report_statistics (
   attribute_name varchar(255) DEFAULT NULL,
   start_time datetime DEFAULT NULL,
   end_time datetime DEFAULT NULL,
-  max decimal(7,2) DEFAULT NULL,
-  min decimal(7,2) DEFAULT NULL,
-  avg decimal(7,2) DEFAULT NULL,
+  max decimal(10,2) DEFAULT NULL,
+  min decimal(10,2) DEFAULT NULL,
+  avg decimal(10,2) DEFAULT NULL,
   name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
