@@ -183,8 +183,8 @@ public class WlsController {
         invocation.addModel("agentVer", iniData.getWlsSysrec().getAgentVersion());
         invocation.addModel("systemboot", iniData.getWlsSysrec().getSystemBoot());
         invocation.addModel("count", monitorSite.getMonitorCount());
-        invocation.addModel("ip", inTimeData.getServerRuntimes().get(0).getListenAddress());
-        invocation.addModel("port", inTimeData.getServerRuntimes().get(0).getListenPort());
+        invocation.addModel("ip", inTimeData.getServerRuntimes().size() > 0 ? inTimeData.getServerRuntimes().get(0).getListenAddress() : "");
+        invocation.addModel("port", inTimeData.getServerRuntimes().size() > 0 ? inTimeData.getServerRuntimes().get(0).getListenPort() : "") ;
         invocation.addModel("interval", wlsServer.getInterval());
         invocation.addModel("stop", hisData.isWlsStop());
         invocation.addModel("agentStop",!monitorSite.isAgentRunning());

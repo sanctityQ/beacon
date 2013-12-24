@@ -52,22 +52,30 @@ $(function() {
                 alert("数据加载出错！" + errorThrown);
             },
             success: function(data){
+                var currentFlag = true;
                 interval = data.interval;
                 $(".ehco_data").each(function(i, d) {
                     var key = d.id;
                     $(d).html(data[key]);
                 });
                 if(data.stop){
+                    currentFlag = false;
                     $('#errorMsg').html(weblogicStopMessage);
                     $('#errorMsg').fadeIn();
                 }
                 else if(data.agentStop){
+                    currentFlag = false;
                     $('#errorMsg').html(agentStopMessage)
                     $('#errorMsg').fadeIn();
                 }
                 else{
+                    currentFlag = true;
                     $('#errorMsg').fadeOut();
                 }
+                if(!site_flag && currentFlag) { //site_flag=false currentFlag=true
+                    window.location.reload();
+                }
+                site_flag = currentFlag;
             }
         });
     }
