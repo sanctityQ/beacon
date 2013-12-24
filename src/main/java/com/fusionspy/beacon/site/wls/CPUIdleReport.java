@@ -6,6 +6,8 @@ import com.fusionspy.beacon.site.wls.dao.WlsResourceDao;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.ResourceType;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +25,8 @@ import java.util.Map;
 @Component
 public class CPUIdleReport extends StatisticForwardReport implements WlsReport {
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     private Attribute attribute;
 
     @Autowired
@@ -30,7 +34,11 @@ public class CPUIdleReport extends StatisticForwardReport implements WlsReport {
 
     @Override
     public Map<String, Statistics> getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
+        logger.info("查询日期范围："+startDate.toString() + "--" + endDate.toString());
         Statistics statistics = wlsResourceDao.statisticHostCpuUsedByRectimeBetween(resourceId, new Timestamp(startDate.getMillis()), new Timestamp(endDate.getMillis()));
+        if(statistics != null) {
+            logger.info("查询结果："+resourceId+";min:"+statistics.getMin() + ";max:"+statistics.getMax()+";avg:"+statistics.getAvg());
+        }
         Map<String, Statistics> statisticsMap = new HashMap<String, Statistics>();
         statisticsMap.put(resourceId, statistics);
         return statisticsMap;
