@@ -10,6 +10,7 @@ import org.dom4j.io.SAXReader;
 
 import javax.xml.bind.annotation.*;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,7 @@ public class WlsInTimeData extends WlsMonitorData implements InTimeData {
     static {
         try {
             InputStream in = WlsInTimeData.class.getClassLoader().getResourceAsStream("site/WlsInTimeEmpty.xml");
+            //InputStreamReader
             SAXReader xmlReader = new SAXReader();
             Document xmlDocument = xmlReader.read(in);
             String resp = xmlDocument.asXML();

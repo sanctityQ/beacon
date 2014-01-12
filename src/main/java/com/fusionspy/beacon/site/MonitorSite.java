@@ -5,8 +5,10 @@ import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
 import com.sinosoft.one.monitor.attribute.domain.AttributeService;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.common.AttributeName;
+import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.domain.ResourcesCache;
 import com.sinosoft.one.monitor.resources.model.Resource;
+import com.sinosoft.one.util.thread.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -14,7 +16,7 @@ import org.springframework.util.Assert;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.net.ConnectException;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.*;
 
 /**
  * monitor site
@@ -24,11 +26,11 @@ import java.util.concurrent.ScheduledFuture;
  */
 public abstract class MonitorSite {
 
+    private ScheduledExecutorService scheduledExecutorService;
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     //default 30s
     private volatile int period = 30;
-
-    protected boolean saveDbFlag = false;
 
     private MonitorDataRepository repository;
 
@@ -44,7 +46,7 @@ public abstract class MonitorSite {
 
     protected Resource resource;
 
-    protected void setMonitorDataRepository(MonitorDataRepository repository) {
+    public  <T extends MonitorDataRepository> void setMonitorDataRepository(T repository) {
         this.repository = repository;
     }
 
@@ -58,6 +60,10 @@ public abstract class MonitorSite {
     }
 
     protected int monitorCount = 0;
+
+    public String getSiteIp() {
+        return siteIp;
+    }
 
     protected String siteIp;
 
@@ -74,15 +80,19 @@ public abstract class MonitorSite {
     }
 
 
-    void setSiteIp(String siteIp) {
+    protected void setSiteIp(String siteIp) {
         this.siteIp = siteIp;
     }
 
 
     protected int sitePort;
 
-    void setSitePort(int sitePort) {
+    protected void setSitePort(int sitePort) {
         this.sitePort = sitePort;
+    }
+
+    public int getSitePort(){
+        return this.sitePort;
     }
 
     /**
@@ -99,6 +109,8 @@ public abstract class MonitorSite {
     //agent端是否运行标识
     private volatile boolean agentRunning = false;
 
+    private volatile boolean needRefresh = false;
+
     public int getPeriod() {
         return period;
     }
@@ -111,28 +123,16 @@ public abstract class MonitorSite {
      * 设置时间，默认为30S，注意传入数值为s
      * @param period
      */
-    void setPeriod(int period) {
+    protected void setPeriod(int period) {
         this.period = period;
     }
 
-    /**
-     * switch save db flag
-     * @return  save db flag
-     */
-    boolean switchSaveFlag() {
-       this.saveDbFlag = this.saveDbFlag?false:true;
-       return this.saveDbFlag;
-    }
 
 
     @PostConstruct
 	void checkSetting() {
         Assert.isTrue(period >= 30);
 	}
-
-    void setScheduledFuture(ScheduledFuture scheduledFuture) {
-        this.scheduledFuture = scheduledFuture;
-    }
 
     private ScheduledFuture scheduledFuture;
 
@@ -150,61 +150,38 @@ public abstract class MonitorSite {
     protected abstract <T extends InTimeData> void recordInTimeData(T inTimeData);
 
 
-    Runnable start() {
-        return new Runnable() {
-
-
-
-            @Override
-            public void run() {
-
-                try {
-                    before();
-                    init();
-                    //in time data
-                    recordInTimeData(repository.getInTimeData(siteName));
-                    //监控计数
-                    monitorCount++;
-                } catch (Throwable t) {
-
-                    if(t instanceof ConnectAgentException){
-                        //连接失败重试一次连接
-                        reset();
-                        //agent运行不正常，设置agent状态
-                        agentRunning = false;
-                        t = t.getCause();
-                    }
-                    logger.error("siteName:{} has  ConnectAgentException , detail is:", getSiteName(), t);
-                }
-
-            }
-
-
-
-
-
-        };
+    void start(){
+        if(!this.isRunning()){
+            this.scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(new monitorRunnable(), 0, this.getPeriod(), TimeUnit.SECONDS);
+            logger.info("Site Name: {} start now", siteName);
+        }else{
+            logger.info("Site Name: {} has started, so do nothing", siteName);
+        }
     }
 
     private void init(){
         //start
-        if (!isRunning) {
+        if (!isRunning||needRefresh) {
             logger.debug("siteName:{} started", siteName);
-            initData = repository.getInitData(siteName, siteIp, sitePort);
+            //set is running flag
+            isRunning = true;
+
+            initData = repository.getInitData(this);
             agentRunning = true;
 
             recordInitData(initData);
             initData.process();
-            isRunning = true;
         }
     }
 
+    //TODO 有无更好方案？譬如：如果心跳几次始终无数据，自动关闭？在此处理还是放置在Connect端更合理？
     private void before(){
         //如果监控次数超过1000重置连接
         if(monitorCount > 0 && monitorCount%resetMonitorCount==0){
             reset();
         }
     }
+
 
     private void reset() {
         try {
@@ -213,7 +190,7 @@ public abstract class MonitorSite {
         } catch (Throwable t) {
             logger.error("site name is: {}, reset failed：{}", siteName, t);
         } finally {
-            this.isRunning = false;
+            this.needRefresh = true;
         }
         // repository.getInitData(siteName, siteIp, sitePort);
     }
@@ -222,29 +199,69 @@ public abstract class MonitorSite {
 
     @PreDestroy
     void stop(){
+        if(!this.isRunning())
+            return;
         Assert.notNull(this.scheduledFuture);
-        this.isRunning = false;
         this.scheduledFuture.cancel(true);
+        this.isRunning = false;
         repository.stopSite(siteName);
 
     }
 
-    public abstract <T extends HisData> T getMonitorData();
+    public  <T extends HisData> T getMonitorData(){
+        return (T)hisData;
+    }
 
-    protected void setResourcesCache(ResourcesCache resourcesCache) {
+    public void setResourcesCache(ResourcesCache resourcesCache) {
         this.resourcesCache = resourcesCache;
     }
 
-    protected void setAttributeCache(AttributeCache attributeCache) {
+    public void setAttributeCache(AttributeCache attributeCache) {
         this.attributeCache = attributeCache;
     }
 
 
-    public void setSiteName(String siteName) {
+    protected void setSiteName(String siteName) {
         this.siteName = siteName;
     }
 
     public boolean isAgentRunning() {
         return agentRunning;
+    }
+
+    public void setScheduledExecutorService(ScheduledExecutorService scheduledExecutorService) {
+        this.scheduledExecutorService = scheduledExecutorService;
+    }
+
+
+    class monitorRunnable implements Runnable{
+
+        @Override
+        public void run() {
+            try {
+                before();
+                init();
+                //in time data
+                recordInTimeData(repository.getInTimeData(siteName));
+                //监控计数
+                monitorCount++;
+            } catch (Throwable t) {
+
+                if(t instanceof ConnectAgentException){
+                    //连接失败重试一次连接? TODO 设置从Connect返回信号需要重置才进行重置
+
+                    ConnectAgentException connectAgentException = (ConnectAgentException)t;
+
+                    //agent运行不正常，设置agent状态
+                    agentRunning = false;
+
+                    //设置刷新标识位
+                    needRefresh = true;
+                    t = t.getCause();
+                    logger.error("siteName[{}] ExceptionMessage :{},stackTrace：{}", new Object[]{getSiteName(),
+                            connectAgentException.getMessage(),t});
+                }
+            }
+        }
     }
 }

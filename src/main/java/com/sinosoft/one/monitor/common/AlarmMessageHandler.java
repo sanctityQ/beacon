@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sinosoft.one.monitor.action.domain.ActionService;
-import com.sinosoft.one.monitor.alarm.domain.AlarmService;
-import com.sinosoft.one.monitor.alarm.model.Alarm;
+import com.fusionspy.beacon.alarm.domain.AlarmService;
+import com.fusionspy.beacon.alarm.model.Alarm;
 import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.attribute.model.AttributeAction;
@@ -40,8 +40,7 @@ public class AlarmMessageHandler {
 	private ThresholdService thresholdService;
 	@Autowired
 	private ActionService actionService;
-	@Autowired
-	private HealthStaCache healthStaCache;
+
 	private static Logger logger = LoggerFactory.getLogger(AlarmMessageHandler.class);
 	/**
 	 * 处理告警消息

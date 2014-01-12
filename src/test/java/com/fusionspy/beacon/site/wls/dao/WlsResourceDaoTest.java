@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 @DirtiesContext
-@ContextConfiguration(locations = {"/spring/applicationContext-test.xml"})
+@ContextConfiguration(locations = {"/spring/applicationContext.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 public class WlsResourceDaoTest extends SpringTxTestCase {
 
@@ -62,13 +62,13 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
         WlsHisData hisData = new WlsHisData();
         hisData.setWlsIniData(initData.defaultData());
 
-        InputStream in = Test.class.getClassLoader().getResourceAsStream("a.xml");
-        SAXReader xmlReader = new SAXReader();
-        Document xmlDocument = (Document) xmlReader.read(in);
-        String resp = xmlDocument.asXML();
-        JaxbBinder jaxbBinder = new JaxbBinder(WlsInTimeData.class);
-        WlsInTimeData inTimeData = jaxbBinder.fromXml(resp);
-        wlsService.processInTimeData("", 5, inTimeData.defaultData(), hisData);
+//        InputStream in = Test.class.getClassLoader().getResourceAsStream("a.xml");
+//        SAXReader xmlReader = new SAXReader();
+//        Document xmlDocument = (Document) xmlReader.read(in);
+//        String resp = xmlDocument.asXML();
+//        JaxbBinder jaxbBinder = new JaxbBinder(WlsInTimeData.class);
+//        WlsInTimeData inTimeData = jaxbBinder.fromXml(resp);
+//        wlsService.processInTimeData("", 5, inTimeData.defaultData(), hisData);
     }
 
     @Test

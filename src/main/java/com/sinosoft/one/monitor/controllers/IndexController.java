@@ -9,8 +9,8 @@ import java.util.Map;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sinosoft.one.monitor.alarm.domain.AlarmService;
-import com.sinosoft.one.monitor.alarm.model.Alarm;
+import com.fusionspy.beacon.alarm.domain.AlarmService;
+import com.fusionspy.beacon.alarm.model.Alarm;
 import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Path;

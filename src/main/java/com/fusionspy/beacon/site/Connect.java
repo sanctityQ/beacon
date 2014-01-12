@@ -1,91 +1,72 @@
 package com.fusionspy.beacon.site;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
-import org.dom4j.Document;
-import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.MessageFormatter;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ConnectException;
-import java.net.Socket;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * site connect
- * Date: 11-9-11
- * Time: 下午1:25
- */
+
 @Component
 public class Connect{
 
     private final static int BUFFER_LEN = 8192;
 
-	private final static Map coreMap = new HashMap(6);
+	private final static BiMap<Integer,String> operationCodeMap = HashBiMap.create();
 
-	public final static Map<String,SiteThread> siteThreadMap = new HashMap<String,SiteThread>(100);
+	public final static Map<String,SiteThread> siteThreadMap = Maps.newConcurrentMap();
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(Connect.class);
 
-    private static final int HAND_INIT_CODE = 91;
+    static final int HAND_INIT_CODE = 91;
 
     private static final int HAND_ACK_CODE = 92;
 
-    private static final int GET_SVR_DATA_CODE = 93;
+    static final int GET_SVR_DATA_CODE = 93;
 
-    private static final int GET_INIT_DATA_CODE = 94;
+    static final int GET_INIT_DATA_CODE = 94;
 
-    private static final int CLOSE_CONNECT_CODE = 95;
+    static final int CLOSE_CONNECT_CODE = 95;
 
-    private static final int CLOSE_SVR_CODE = 96;
+    //!!no use
+    //private static final int CLOSE_SVR_CODE = 96;
+    //!!no use
+    //private static final int DUMP = 97;
 
-    private static final int DUMP = 97;
-
+    enum Protocol{
+        hand,init,runtime,close
+    }
 
 	static {
-		coreMap.put("HANDINIT", "91");
-		coreMap.put("HANDACK", "92");
-		coreMap.put("GETSVRDATA", "93");
-		coreMap.put("GETINITDATA", "94");
-		coreMap.put("CLOSECONNECT", "95");
-		coreMap.put("CLOSESVR", "96");
-		coreMap.put("DUMP", "97");
+        operationCodeMap.put(HAND_INIT_CODE,"HANDINIT");
+        operationCodeMap.put(HAND_ACK_CODE,"HANDACK");
+        operationCodeMap.put(GET_SVR_DATA_CODE,"GETSVRDATA");
+        operationCodeMap.put(GET_INIT_DATA_CODE,"GETINITDATA");
+        operationCodeMap.put(CLOSE_CONNECT_CODE,"CLOSECONNECT");
+//		coreMap.put("CLOSESVR", "96");
+//		coreMap.put("DUMP", "97");
 	}
 
-    private String loadXML(String iniXmlNameP) {
-		try {
-            if(StringUtils.isEmpty(iniXmlNameP))
-                return StringUtils.EMPTY;
-            URL initXml =Connect.class.getClassLoader().getResource(iniXmlNameP);
-			SAXReader xmlReader = new SAXReader();
-			Document xmlDocument = (Document) xmlReader.read(initXml);
-			return xmlDocument.asXML();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 	private final class SiteThread {
 
-	//	private volatile boolean signal;
-
-		private String iniXmlName;
-
 		private String siteID;
 
-		private String agentIP;
+		private String ip;
 
-		private int agentPort;
-
-		private int sampleInterval=0;
+		private int port;
 
 		private Socket siteSocket;
 
@@ -93,311 +74,189 @@ public class Connect{
 
 		private BufferedReader in;
 
-		char[] buffer;
-
-		int respLenCharCount;
-
-		// get response-xml
-		String respLenStr;
-
-		int respLenInt;
-
-		int readInLen;
-
-		String respXmlStr;
-
-		String iniRespXmlStr;
-
-		String errXml;
-
         private String iniXml;
 
-        public SiteThread(String iniXmlNameP, String siteIDP, String agentIPP,
-				int sitePortP, int sampleIntervalP) {
-            iniXml = loadXML(iniXmlNameP);
-			siteID = siteIDP;
-			agentIP = agentIPP;
-			agentPort = sitePortP;
-			sampleInterval = sampleIntervalP;
-			buffer = "".toCharArray();
-			//signal = true;
-			errXml = "<Err/>";
-		}
+        private int connectCount;
 
-        public SiteThread(Document xmlDocument, String siteIDP, String agentIPP,
-                          int sitePortP, int sampleIntervalP) {
-            iniXml = xmlDocument.asXML();
-            siteID = siteIDP;
-            agentIP = agentIPP;
-            agentPort = sitePortP;
-            sampleInterval = sampleIntervalP;
-            buffer = "".toCharArray();
-//            signal = true;
-            errXml = "<Err/>";
-        }
-
-        public String getMonitorDataByResetConnect(){
-            stop();
+        public SiteThread(String siteID, String ip,
+				int port,String iniXml) {
+            this.siteID = siteID;
+            this.ip = ip;
+            this.port = port;
+            this.iniXml = iniXml;
             init();
-            return getMonitorData();
-        }
-
-		public void stop() {
-			try {
-                getData("CLOSECONNECT",null);
-				if (this.out != null) {
-					this.out.close();
-				}
-				if (this.in != null) {
-					this.in.close();
-				}
-				if (this.siteSocket != null) {
-					this.siteSocket.close();
-				}
-	//			this.signal = false;
-			} catch (IOException ioe) {
-                throw  new RuntimeException(ioe);
-			}
-
+            hand();
 		}
 
-		public String getRespXmlStr() {
-			return this.respXmlStr;
-		}
-
-		public String getIniRespXmlStr() {
-			return this.iniRespXmlStr;
-		}
-
-		private String getData(String action, String para) {
-			try {
-
-				if (action != null) {
-
-					int actionInt = Integer.parseInt((String) coreMap.get(action));
-
-					switch (actionInt) {
-
-					case 91:
-                        logger.debug("HANDINIT");
-						siteSocket = new Socket(agentIP, agentPort);
-						out = new PrintWriter(siteSocket.getOutputStream(),true);
-						in = new BufferedReader(new InputStreamReader(siteSocket.getInputStream()));
-
-						int iniRCode;
-
-						out.write((char) Integer.parseInt((String) coreMap
-								.get("HANDINIT")));
-						out.flush();
-
-						char[] pubBuffer = new char[BUFFER_LEN];
-						int len = in.read(pubBuffer, 0, 1);
-
-						if (len <= 0) {
-							System.out.println("handleSiteSocket: Cannot read any bytes from InputStream, Agent doesn't response ...");
-						} else {
-							iniRCode = (int) pubBuffer[0];
-							if (iniRCode == Integer.valueOf((String) coreMap.get("HANDACK")).intValue()) {
-								System.out.println("handleSiteSocket: Handshake with siteAgent confirmed, put the socket into siteSocketMap...");
-							}
-						}
-						break;
-					case 93:
-                        logger.debug("GETSVRDATA");
-						out.write((char) Integer.parseInt((String) coreMap
-								.get("GETSVRDATA")));
-						out.flush();
-                        buffer = new char[9];
-						// get length of response-xml
-						respLenCharCount = in.read(buffer, 0, 9);
-                        respLenStr = new String(buffer).trim();
-						// get response-xml
-                        logger.debug("respLenStr  = {}",respLenStr);
-                        if(StringUtils.isEmpty(respLenStr)){
-                            return getMonitorDataByResetConnect();
-                        }
-						int respLenInt = Integer.parseInt(respLenStr.trim());
-                        int count = 0;
-                        StringBuilder bufferWriter = new  StringBuilder(respLenInt);
-                        while (count++<respLenInt) {
-                             bufferWriter.append((char)in.read());
-                        }
-						respXmlStr = bufferWriter.toString();
-
-						break;
-
-					case 94:
-                        logger.debug("GETINITDATA");
-						// write 94 into stream to indicate this is to ask for
-						// site's initial information
-						out.write((char) 94);
-						out.flush();
-                        logger.debug("para =  {}",para);
-						// construct and send the length of parameter xml
-						int inXmlLen = para.length();
-						String sLen = String.valueOf(inXmlLen);
-						if (sLen.length() < 8) {
-							int dif = 8 - sLen.length();
-							StringBuffer zeroStr = new StringBuffer();
-							for (int m = 0; m < dif; m++) {
-								zeroStr = zeroStr.append("0");
-							}
-							sLen = zeroStr.toString() + sLen;
-						}
-						char[] charLen = sLen.toCharArray();
-						for (int i = 0; i < charLen.length; i++) {
-							out.write(charLen[i]);
-						}
-						out.flush();
-
-
-						// send parameter xml
-						buffer =  new String(para.getBytes()).toCharArray();
-
-						out.write(buffer);
-						out.flush();
-
-//                        if(buffer.length == 0)
-                            buffer = new char[9];
-						// get length of response-xml
-						respLenCharCount = in.read(buffer, 0, 9);
-
-                        String  respLenStr = new String(buffer).trim();
-                        logger.debug("GETINITDATA:{} -- respLenCharCount:{}" , buffer,respLenStr);
-						// get response-xml
-						//respLenStr = new String(buffer, 0, respLenCharCount);
-						respLenInt = Integer.parseInt(respLenStr.trim());
-//                        buffer = new char[respLenInt];
-//						readInLen = in.read(buffer, 0, respLenInt);
-//                        logger.debug("readInLen = {} , all line = {}" ,readInLen,respLenInt);
-//						respXmlStr = new String(buffer, 0, readInLen);
-                        count = 0;
-                        bufferWriter = new  StringBuilder(respLenInt);
-                        while (count++<respLenInt) {
-                            bufferWriter.append((char)in.read());
-                        }
-                        respXmlStr = bufferWriter.toString();
-                        logger.debug("--GETINITDATA:receive data {}",respXmlStr);
-						break;
-
-					case 95:
-                        logger.debug("CLOSECONNECT");
-						out.write((char) Integer.parseInt((String) coreMap
-								.get("CLOSECONNECT")));
-						out.flush();
-						// get length of incoming-xml
-						// len = in.read(buffer, 0, 8);
-						break;
-					default:
-                        logger.debug("NO PROPER CODE");
-						in.close();
-						out.close();
-						break;
-					}
-
-				} else {
-                    logger.error("getData: no action specified, need to point out which action to do...");
-				}
-				return respXmlStr;
-			}
-//            catch (UnknownHostException uhe) {
-//				uhe.printStackTrace();
-//			} catch (ConnectException connectException){
-//                throw new RuntimeException(connectException);
-//            }
-//            catch (IOException ioe) {
-//				ioe.printStackTrace();
-//			}
-            catch (Throwable e) {
-//				System.out.println("getData: got RuntimeException while getting data from agent...");
-				logger.error("getData: got RuntimeException while getting data from agent,exception info is {}",e);
-                throw new ConnectAgentException(e);
-			}
-//            return  StringUtils.EMPTY;
-		}
-
-        public String init(){
-            if (siteSocket == null || siteSocket.isClosed()) {
-					getData("HANDINIT", null);
-		    }
-            return getData("GETINITDATA", iniXml);
-        }
-
-        public String getMonitorData(){
-            return this.getData("GETSVRDATA", iniXml);
-        }
-
-//		public void run() {
-//			System.out.println("Site Thread running now...");
-//			try {
-//
-//				String iniXml = loadXML(iniXmlName);
-//				// System.out.println(iniXml);
-//
-//				if (siteSocket == null || siteSocket.isClosed()) {
-//					getData("HANDINIT", null);
-//				}
-//
-//				getData("GETINITDATA", iniXml);
-//				while (this.signal == true) {
-//					getData("GETSVRDATA", iniXml);
-//					Thread.sleep(sampleInterval);
-//				}
-//			} catch (InterruptedException ie) {
-//				ie.printStackTrace();
-//			}
-//		}
-
-	}
-
-	public  String startSiteThread(String iniXmlNameP, String siteName,
-			String agentIPP, int sitePortP, int sampleIntervalP){
-//		try {
-            SiteThread task = siteThreadMap.get(siteName);
-            if(task==null){
-               task = new SiteThread(iniXmlNameP, siteName, agentIPP,
-					sitePortP, sampleIntervalP);
-                siteThreadMap.put(siteName, task);
+        private void init(){
+            try {
+                this.siteSocket = new Socket(ip, port);
+                this.out = new PrintWriter(siteSocket.getOutputStream(), true);
+                this.in = new BufferedReader(new InputStreamReader(siteSocket.getInputStream()));
+            }catch (UnknownHostException e1){
+                throw new ConnectAgentException(MessageFormatter.arrayFormat(" siteId[{}], ip[{}],port[{}]:获取不到主机地址",
+                        new Object[]{this.siteID,this.ip,this.port}).getMessage());
             }
-            return task.init();
+            catch (IOException e) {
+                throw new ConnectAgentException(MessageFormatter.arrayFormat(" siteId[{}], ip[{}],port[{}]:创建主机Connect失败",
+                        new Object[]{this.siteID,this.ip,this.port}).getMessage());
+            }
+        }
 
-//		} catch (Exception ioe) {
-//			System.out.println("Got IOException while creating site thread");
-//			ioe.printStackTrace();
-//		}
-        //return null;
+        private void hand() {
+            log("HANDINIT");
+
+            //connect hand
+            out.write((char) HAND_INIT_CODE);
+            out.flush();
+            char[] pubBuffer = new char[BUFFER_LEN];
+            try {
+                int len = in.read(pubBuffer, 0, 1);
+                if (len <= 0) {
+                    System.out.println("handleSiteSocket: Cannot read any bytes from InputStream, Agent doesn't response ...");
+                } else {
+                    int iniRCode = (int) pubBuffer[0];
+                    if (iniRCode == HAND_ACK_CODE) {
+                        System.out.println("handleSiteSocket: Handshake with siteAgent confirmed, put the socket into siteSocketMap...");
+                    } else {
+                        //need close socket
+                        this.close();
+                        throw new ConnectAgentException("握手返回协议码不正确", HAND_ACK_CODE);
+                    }
+                }
+            } catch (IOException e) {
+                if(e instanceof SocketException){
+                    this.close();
+                }
+                throw new ConnectAgentException(e, HAND_INIT_CODE);
+            }
+        }
+
+
+
+        private String getInitData() {
+            log("GETINITDATA");
+            // write 94 into stream to indicate this is to ask for
+            // site's initial information
+            out.write((char) GET_INIT_DATA_CODE);
+            out.flush();
+            request(this.iniXml,GET_INIT_DATA_CODE);
+            return getResponse(GET_INIT_DATA_CODE);
+        }
+
+        private void request(String data,int code){
+            data = data.trim();
+            int dataLength = data.length();
+            String sLen = String.valueOf(dataLength);
+            if (sLen.length() < 8) {
+                int dif = 8 - sLen.length();
+                StringBuffer zeroStr = new StringBuffer();
+                for (int m = 0; m < dif; m++) {
+                    zeroStr = zeroStr.append("0");
+                }
+                sLen = zeroStr.toString() + sLen;
+            }
+            log(MessageFormatter.arrayFormat("Protocol[{}] request data: length is {}, xml is {}" ,new Object[]{operationCodeMap.get(code),sLen,data}).getMessage());
+            char[] charLen = sLen.toCharArray();
+            for (int i = 0; i < charLen.length; i++) {
+                out.write(charLen[i]);
+            }
+            out.flush();
+            // send parameter xml
+            out.write(data.toCharArray());
+            out.flush();
+        }
+
+        private  void checkResponse(String respLenStr,int code){
+            log(MessageFormatter.arrayFormat("Protocol[{}] output respLen: {}",new Object[]{operationCodeMap.get(code),respLenStr}).getMessage());
+            if (StringUtils.isBlank(respLenStr)) {
+                throw new ConnectAgentException("返回数据长度为空",code);
+            }
+        }
+
+        private String getResponse(int code){
+            char[] buffer = new char[9];
+            try {
+                in.read(buffer, 0, 9);
+                String respLenStr = new String(buffer).trim();
+                checkResponse(respLenStr,code);
+                int respLenInt = Integer.parseInt(respLenStr.trim());
+
+                int count = 0;
+                StringBuilder bufferWriter = new StringBuilder(respLenInt);
+                while (count++ < respLenInt) {
+                    bufferWriter.append((char) in.read());
+                }
+                String data =  bufferWriter.toString();
+                log(MessageFormatter.format("Protocol[{}] response data: {}" ,operationCodeMap.get(code),data).getMessage());
+                return data;
+            } catch (IOException e) {
+                if(e instanceof SocketException){
+                   this.close();
+                }
+                throw new ConnectAgentException(e,code);
+            }
+        }
+
+        private String getRuntimeData() {
+            log("GETSVRDATA");
+            out.write((char) GET_SVR_DATA_CODE);
+            out.flush();
+            return getResponse(GET_SVR_DATA_CODE);
+        }
+
+
+		private void close() {
+
+            log("CLOSECONNECT");
+            if (this.out != null) {
+                this.out.write((char) CLOSE_CONNECT_CODE);
+                this.out.flush();
+                this.out.close();
+            }
+            try {
+                if (this.in != null) {
+                    this.in.close();
+                }
+
+                if (this.siteSocket != null) {
+                    this.siteSocket.close();
+                }
+                siteThreadMap.remove(this.siteID);
+            } catch (IOException ioe) {
+                //关闭连接异常
+                throw  new ConnectAgentException(ioe,CLOSE_CONNECT_CODE);
+            }
+        }
+
+
+        private void log(String message){
+            logger.debug("SITE ID:[{}]  "+ message,siteID);
+        }
+
 	}
 
-    public  String startSiteThread(Document xmlDocument, String siteName,
-                                   String agentIPP, int sitePortP, int sampleIntervalP){
-//		try {
+	public String startSiteThread(String siteName,
+			String agentIP, int sitePort,String initXml) {
         SiteThread task = siteThreadMap.get(siteName);
-        if(task==null){
-            task = new SiteThread(xmlDocument, siteName, agentIPP,
-                    sitePortP, sampleIntervalP);
+        if (task == null) {
+            task = new SiteThread(siteName, agentIP,sitePort,initXml);
             siteThreadMap.put(siteName, task);
         }
-        return task.init();
-
-//		} catch (Exception ioe) {
-//			System.out.println("Got IOException while creating site thread");
-//			ioe.printStackTrace();
-//		}
-        //return null;
+        return task.getInitData();
     }
 
     public String getInTimeData(String siteName){
          SiteThread st = siteThreadMap.get(siteName);
-         return st.getMonitorData();
+         if(st==null){
+
+         }
+         return st.getRuntimeData();
     }
 
 	public void stopSiteThreadByName(String siteName) {
-		SiteThread st = siteThreadMap.get(siteName);
-		st.stop();
-        siteThreadMap.remove(siteName);
-	}
-
-    public static void main(String[] args){
-         System.out.println(SiteThread.class.getClassLoader().getResource("ini9.xml"));
+        SiteThread st = siteThreadMap.get(siteName);
+        st.close();
     }
+
 }

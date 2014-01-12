@@ -17,15 +17,13 @@ import static com.google.common.collect.Maps.newHashMap;
 public abstract class StatisticReportFactory implements StatisticClean{
 
 
-    //@Autowired
     protected List<StatisticReport> statisticReports = newArrayList();
 
-    //@Autowired
     protected List<StatisticTopReport> statisticTopReports = newArrayList();
 
-    protected Map<String,StatisticCacheReport> staticReportMap = newHashMap();
+    private Map<String,StatisticCacheReport> staticReportMap = newHashMap();
 
-    protected Map<String,StatisticsTopCacheReport> topReportMap = newHashMap();
+    private Map<String,StatisticsTopCacheReport> topReportMap = newHashMap();
 
 
     protected List<Attribute> attributes = newArrayList();

@@ -1,7 +1,7 @@
 package com.sinosoft.one.monitor.common;
 
-import com.sinosoft.one.monitor.alarm.model.Alarm;
-import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.fusionspy.beacon.alarm.model.Alarm;
+import com.fusionspy.beacon.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.LocalDate;

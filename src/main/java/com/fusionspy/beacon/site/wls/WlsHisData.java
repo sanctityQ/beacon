@@ -1,6 +1,9 @@
 package com.fusionspy.beacon.site.wls;
 
 import com.fusionspy.beacon.site.HisData;
+import com.fusionspy.beacon.site.tux.ProcessInTimeResult;
+import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
+import com.fusionspy.beacon.site.tux.entity.TuxIniData;
 import com.fusionspy.beacon.site.tux.entity.TuxcltsStatsEntity;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
@@ -28,6 +31,12 @@ public class WlsHisData implements HisData {
         EMPTY = new WlsHisData();
         EMPTY.setWlsIniData(WlsIniData.EMPTY);
         EMPTY.setWlsInTimeData(WlsInTimeData.EMPTY);
+    }
+
+    WlsHisData(){
+        this.setWlsInTimeData(new WlsInTimeData());
+        this.setWlsInTimeData(WlsInTimeData.EMPTY);
+        this.setWlsIniData(WlsIniData.EMPTY);
     }
 
     /**

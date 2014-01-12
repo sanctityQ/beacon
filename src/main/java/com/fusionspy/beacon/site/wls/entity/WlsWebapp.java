@@ -62,27 +62,30 @@ public class WlsWebapp implements java.io.Serializable {
     @XmlAttribute(name = "ComponentName")
     private String componentName;
 
+    @XmlAttribute(name = "OpenSessionsHighCount")
     private Integer openSessionsHigh;
 
+    @XmlAttribute(name = "OpenSessionsCurrentCount")
     private Integer openSessionsCurrent;
 
+    @XmlAttribute(name = "SessionsOpenedTotalCount")
     private Integer sessionsOpenedTotal;
 
-    /**
-     * 最高会话数.
-     */
-    @XmlAttribute(name = "OpenSessionsHighCount")
-    private String openSessionsHighCount;
-    /**
-     * 当前会话数.
-     */
-    @XmlAttribute(name = "OpenSessionsCurrentCount")
-    private String openSessionsCurrentCount;
-    /**
-     * 累计打开会话数.
-     */
-    @XmlAttribute(name = "SessionsOpenedTotalCount")
-    private String sessionsOpenedTotalCount;
+//    /**
+//     * 最高会话数.
+//     */
+//    @XmlAttribute(name = "OpenSessionsHighCount")
+//    private String openSessionsHighCount;
+//    /**
+//     * 当前会话数.
+//     */
+//    @XmlAttribute(name = "OpenSessionsCurrentCount")
+//    private String openSessionsCurrentCount;
+//    /**
+//     * 累计打开会话数.
+//     */
+//    @XmlAttribute(name = "SessionsOpenedTotalCount")
+//    private String sessionsOpenedTotalCount;
 
     public WlsWebapp() {
     }
@@ -163,32 +166,32 @@ public class WlsWebapp implements java.io.Serializable {
         this.componentName = componentName;
     }
 
-    @Transient
-    public String getOpenSessionsHighCount() {
-        return this.openSessionsHighCount;
-    }
+//    @Transient
+//    public String getOpenSessionsHighCount() {
+//        return this.openSessionsHighCount;
+//    }
+//
+//    public void setOpenSessionsHighCount(String openSessionsHighCount) {
+//        this.openSessionsHighCount = openSessionsHighCount;
+//    }
 
-    public void setOpenSessionsHighCount(String openSessionsHighCount) {
-        this.openSessionsHighCount = openSessionsHighCount;
-    }
+//    @Transient
+//    public String getOpenSessionsCurrentCount() {
+//        return this.openSessionsCurrentCount;
+//    }
+//
+//    public void setOpenSessionsCurrentCount(String openSessionsCurrentCount) {
+//        this.openSessionsCurrentCount = openSessionsCurrentCount;
+//    }
 
-    @Transient
-    public String getOpenSessionsCurrentCount() {
-        return this.openSessionsCurrentCount;
-    }
-
-    public void setOpenSessionsCurrentCount(String openSessionsCurrentCount) {
-        this.openSessionsCurrentCount = openSessionsCurrentCount;
-    }
-
-    @Transient
-    public String getSessionsOpenedTotalCount() {
-        return this.sessionsOpenedTotalCount;
-    }
-
-    public void setSessionsOpenedTotalCount(String sessionsOpenedTotalCount) {
-        this.sessionsOpenedTotalCount = sessionsOpenedTotalCount;
-    }
+//    @Transient
+//    public String getSessionsOpenedTotalCount() {
+//        return this.sessionsOpenedTotalCount;
+//    }
+//
+//    public void setSessionsOpenedTotalCount(String sessionsOpenedTotalCount) {
+//        this.sessionsOpenedTotalCount = sessionsOpenedTotalCount;
+//    }
 
     @Column(name = "open_sessions_high_count")
     public Integer getOpenSessionsHigh() {

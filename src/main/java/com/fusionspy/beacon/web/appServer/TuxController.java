@@ -11,6 +11,7 @@ import com.fusionspy.beacon.system.service.SystemService;
 import com.fusionspy.beacon.web.BeaconLocale;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.DefValue;
@@ -37,8 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -73,14 +72,14 @@ public class TuxController {
     @Put("/save")
     public Reply update(SiteListEntity appServer){
         systemService.addSite(appServer);
-        monitorManage.cancel(appServer.getSiteName());
-        monitorManage.monitor(appServer.getSiteName());
+        monitorManage.cancel(appServer.getSiteName(), ResourceType.Tuxedo);
+        monitorManage.monitor(appServer.getSiteName(),ResourceType.Tuxedo);
         return Replys.with("success").as(Text.class);
     }
 
     @Delete("/delete/{serverName}")
     public Reply delete(@Param("serverName")String serverName) {
-        monitorManage.cancel(serverName);
+        monitorManage.cancel(serverName, ResourceType.Tuxedo);
         systemService.delSite(serverName);
         return Replys.with("success").as(Text.class);
     }
@@ -90,7 +89,7 @@ public class TuxController {
     public Reply save(SiteListEntity appServer,@DefValue("zh_CN")Locale locale){
         systemService.addSite(appServer);
         BeaconLocale.setLocale(locale);
-        monitorManage.monitor(appServer.getSiteName());
+        monitorManage.monitor(appServer.getSiteName(),ResourceType.Tuxedo);
         return Replys.with("success").as(Text.class);
     }
 
@@ -140,8 +139,7 @@ public class TuxController {
         map.put("siteIp",siteListEntity.getSiteIp());
         map.put("sitePort",String.valueOf(siteListEntity.getSitePort()));
         map.put("interval",String.valueOf(siteListEntity.getInterval()));
-        map.put("operation","<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> " +
-                "<a href='javascript:void(0)' class='eid' onclick='setTuxMergency(this)'>数据保存设置</a>"+
+        map.put("operation","<a  href='javascript:void(0)' onclick='updRow(this)' class='eid'>编辑</a> "+
                 "<a href='javascript:void(0)' class='del' onclick='delRow(this)'>删除</a>");
         return map;
     }
@@ -150,7 +148,7 @@ public class TuxController {
 
     @Delete("delete/{serverName}")
     public Reply delete(@Param("type")String type,@Param("serverName")String serverName) {
-        monitorManage.cancel(serverName);
+        monitorManage.cancel(serverName, ResourceType.Tuxedo);
         systemService.delSite(serverName);
         logger.debug("delete server type is {} ,name is",type,serverName);
 
@@ -163,7 +161,7 @@ public class TuxController {
         List<Map<String,String>> datas = Lists.newArrayList();
         for(SiteListEntity siteListEntity:systemService.getSites()){
 
-            MonitorSite monitorInf = monitorManage.getMonitorInf(siteListEntity.getSiteName());
+            MonitorSite monitorInf = monitorManage.getMonitorInf(siteListEntity.getSiteName(),ResourceType.Tuxedo );
             TuxHisData hisData = monitorInf.getMonitorData();
             Map<String,String> map = Maps.newHashMap();
             String url = inv.getServletContext().getContextPath()+"/appServer/tuxedo/view/"+EncodeUtils.urlEncode(siteListEntity.getSiteName());
@@ -189,7 +187,7 @@ public class TuxController {
     @Post("start/{serverName}")
     public Reply startMonitor(@Param("serverName")String serverName,@DefValue("zh_CN")Locale locale){
         BeaconLocale.setLocale(locale);
-        monitorManage.monitor(serverName);
+        monitorManage.monitor(serverName,ResourceType.Tuxedo);
         logger.debug("start server name is {} ", serverName);
         return Replys.with("success").as(Text.class);
     }
@@ -198,7 +196,7 @@ public class TuxController {
     public String showMonitor(@Param("serverName")String serverName,Invocation invocation){
         SiteListEntity siteListEntity = systemService.getSite(serverName);
 
-        MonitorSite monitorSite = monitorManage.getMonitorInf(serverName);
+        MonitorSite monitorSite = monitorManage.getMonitorInf(serverName, ResourceType.Tuxedo);
         TuxHisData hisData = monitorSite.getMonitorData();
         boolean stopFlag =  hisData.isTuxedoStop();
         invocation.addModel("serverName",serverName);
@@ -226,7 +224,7 @@ public class TuxController {
 
     @Get("view/{serverName}/latest")
     public Reply showMonitorLatest(@Param("serverName")String serverName){
-        MonitorSite monitorSite = monitorManage.getMonitorInf(serverName);
+        MonitorSite monitorSite = monitorManage.getMonitorInf(serverName,ResourceType.Tuxedo );
         TuxHisData hisData = monitorSite.getMonitorData();
         Map<String,String> reply = Maps.newHashMap();
         reply.put("cpuIdle",hisData.getProcessResult().getTuxRes()==null?"-":String.valueOf(hisData.getProcessResult().getTuxRes().getCpuidle()));
@@ -249,7 +247,7 @@ public class TuxController {
 
     @Get("data/{type}/{serverName}")
     public void getInTimeData(@Param("type")String type,@Param("serverName")String serverName,Invocation invocation){
-        TuxHisData hisData = monitorManage.getMonitorInf(serverName).getMonitorData();
+        TuxHisData hisData = monitorManage.getMonitorInf(serverName,ResourceType.Tuxedo ).getMonitorData();
         TuxInTimeData tuxInTimeData = hisData.getTuxInTimeData();
         if(type.equals("server")){
             getServerDate(tuxInTimeData.getServers(),invocation);
@@ -364,7 +362,7 @@ public class TuxController {
     @Get("queue/top/{serverName}")
     public void chartQue(@Param("serverName")String siteName,Invocation inv){
 
-        TuxHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
+        TuxHisData hisData = monitorManage.getMonitorInf(siteName, ResourceType.Tuxedo).getMonitorData();
         int index = 0;
         List<Map<String,String>> l = new ArrayList<Map<String, String>>(hisData.getProcessResult().getTop5Que().size());
         for (Iterator<TuxquesEntity> iter = hisData.getProcessResult().getTop5Que().iterator(); iter.hasNext();) {
@@ -391,7 +389,7 @@ public class TuxController {
 
     @Get("memory/top/{serverName}")
     public void chartMem(@Param("serverName")String serverName,Invocation inv){
-        TuxHisData hisData = monitorManage.getMonitorInf(serverName).getMonitorData();
+        TuxHisData hisData = monitorManage.getMonitorInf(serverName, ResourceType.Tuxedo).getMonitorData();
         int index = 0;
         List<Map<String,String>> l = new ArrayList<Map<String, String>>(hisData.getProcessResult().getTop5Mem().size());
         for (Iterator<TuxsvrsEntity> iter = hisData.getProcessResult().getTop5Mem().iterator(); iter.hasNext();) {
@@ -416,7 +414,7 @@ public class TuxController {
 
     @Get("transcation/top/{serverName}")
     public void chartTrans(@Param("serverName")String siteName,Invocation inv){
-        TuxHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
+        TuxHisData hisData = monitorManage.getMonitorInf(siteName,ResourceType.Tuxedo ).getMonitorData();
 
         int index = 0;
         List<Map<String,String>> l = new ArrayList<Map<String, String>>(hisData.getProcessResult().getTop5Tran().size());
@@ -443,7 +441,7 @@ public class TuxController {
 
     @Get("/chart/client/{serverName}/{operation}/{type}")
     public Reply chartClt(@Param("serverName")String serverName,@Param("operation")String operation,@Param("type")String type) {
-        TuxHisData hisData = monitorManage.getMonitorInf(serverName).getMonitorData();
+        TuxHisData hisData = monitorManage.getMonitorInf(serverName,ResourceType.Tuxedo ).getMonitorData();
         JSONArray jsonArray = new JSONArray();
         if(operation.equals("latest")){
             TuxcltsStatsEntity tuxcltsStats = hisData.getProcessResult().getTuxcltsStats();
@@ -477,7 +475,7 @@ public class TuxController {
     @Get("/chart/{type}/{serverName}/{operation}")
     public Reply chartFree(@Param("type")String type,@Param("serverName")String serverName,
                            @Param("operation")String operation) {
-        TuxHisData hisData = monitorManage.getMonitorInf(serverName).getMonitorData();
+        TuxHisData hisData = monitorManage.getMonitorInf(serverName,ResourceType.Tuxedo ).getMonitorData();
 
         JSONArray jsonArray = new JSONArray();
         if(type.equals("cpu")||type.equals("memory")){

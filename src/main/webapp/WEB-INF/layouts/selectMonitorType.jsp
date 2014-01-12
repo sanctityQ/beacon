@@ -2,7 +2,7 @@
 <h2 class="title2"><b>新建监视器类型　</b>
     <select id="monitorType" name="monitorType" class="diySelect" onchange="top.location=this.value;">
         <optgroup label="应用服务器">
-            <%--<option selected="selected" value="${ctx}/addmonitor/server/tuxedo">Tuxedo</option>--%>
+            <option selected="selected" value="${ctx}/addmonitor/server/tuxedo">Tuxedo</option>
             <option value="${ctx}/addmonitor/server/weblogic">Weblogic</option>
         </optgroup>
         <%--<optgroup label="应用服务器">--%>

@@ -1,15 +1,13 @@
 package com.fusionspy.beacon.site.tux;
 
-import com.fusionspy.beacon.site.Connect;
-import com.fusionspy.beacon.site.InTimeData;
-import com.fusionspy.beacon.site.InitData;
-import com.fusionspy.beacon.site.MonitorDataRepository;
+import com.fusionspy.beacon.site.*;
 import com.fusionspy.beacon.site.tux.dao.SysrecsDao;
 import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
 import com.fusionspy.beacon.site.tux.entity.TuxIniData;
 import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import com.fusionspy.beacon.site.tux.entity.SysrecsEntity;
 import com.sinosoft.one.util.encode.JaxbBinder;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +35,12 @@ public class TuxDataRepository implements MonitorDataRepository {
     private SysrecsDao sysrecsDao;
 
     @Override
-    public TuxIniData getInitData(String siteName, String ip, int port) {
-        String initXml = connect.startSiteThread("", siteName, ip, port, 0);
-        logger.debug("siteName is {}, ip is {}, get initXml Xml: {}",new Object[]{ siteName,ip,initXml});
+    public TuxIniData getInitData(MonitorSite monitorSite) {
+        String initXml = connect.startSiteThread( monitorSite.getSiteName(), monitorSite.getSiteIp(),
+                monitorSite.getSitePort(), StringUtils.EMPTY);
+        //logger.debug("siteName is {}, ip is {}, get initXml Xml: {}",new Object[]{ siteName,ip,initXml});
         TuxIniData tuxIniData =  iniBinder.fromXml(initXml);
-        tuxIniData.setSiteName(siteName);
+        tuxIniData.setSiteName(monitorSite.getSiteName());
         tuxIniData.setSysrecsDao(sysrecsDao);
         return tuxIniData;
     }
@@ -49,7 +48,7 @@ public class TuxDataRepository implements MonitorDataRepository {
     @Override
     public InTimeData getInTimeData(String siteName) {
         String inTimeXml = connect.getInTimeData(siteName);
-        logger.debug("get inTime Xml: {}", inTimeXml);
+       // logger.debug("get inTime Xml: {}", inTimeXml);
         return inTimeBinder.fromXml(inTimeXml);
     }
 

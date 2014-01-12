@@ -5,11 +5,11 @@ import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.wls.WlsHisData;
 import com.fusionspy.beacon.site.wls.WlsService;
 import com.fusionspy.beacon.site.wls.entity.*;
-import com.fusionspy.beacon.web.BeaconLocale;
 import com.fusionspy.beacon.web.JsonGrid;
+import com.google.common.collect.Maps;
+import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
-import com.sinosoft.one.mvc.web.annotation.DefValue;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
 import com.sinosoft.one.mvc.web.annotation.rest.Delete;
@@ -26,18 +26,12 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Resource;
 import java.util.*;
 
-/**
- * tuxedo action
- * User: qc
- * Date: 11-8-30
- * Time: 下午8:26
- */
+
 @Path("/weblogic")
 public class WlsController {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(WlsController.class);
 
-    private Map<String, Object> message = new HashMap<String, Object>();
 
     @Resource
     private MonitorManage monitorManage;
@@ -53,7 +47,7 @@ public class WlsController {
         JsonGrid grid = JsonGrid.buildGrid(wlsService.list(), new JsonGrid.JsonRowHandler<WlsServer>() {
             @Override
             public JsonGrid.JsonRow buildRow(WlsServer t) {
-                MonitorSite monitorSite = monitorManage.getMonitorInf(t.getSiteName());
+                MonitorSite monitorSite = monitorManage.getMonitorInf(t.getSiteName(), ResourceType.WEBLOGIC );
                 WlsHisData hisData = monitorSite.getMonitorData();
                 WlsInTimeData inTimeData = hisData.getWlsInTimeData();
                 //TODO
@@ -100,19 +94,21 @@ public class WlsController {
 
     @Get("editUI/{siteName}")
     public String editUI(@Param("siteName") String siteName, Invocation invocation) {
-        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
-        hisData.getWlsIniData().getWlsSysrec();
+//        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
+//        hisData.getWlsIniData().getWlsSysrec();
         WlsServer wlsServer = wlsService.getSite(siteName);
         invocation.addModel("server", wlsServer);
         return "weblogicSaveUI";
     }
 
     @Post("save")
-    public String save(WlsServer wlsServer) {
-        wlsServer.setStatus(1);
+    public Reply save(WlsServer wlsServer) {
         wlsService.save(wlsServer);
-        monitorManage.cancel(wlsServer.getSiteName());
-        return "/appServer/weblogic/start/" + wlsServer.getSiteName();
+        monitorManage.cancel(wlsServer.getSiteName(),ResourceType.WEBLOGIC  );
+        monitorManage.monitor(wlsServer.getSiteName(),ResourceType.WEBLOGIC );
+        Map m = Maps.newHashMap();
+        m.put("type", "success");
+        return Replys.with(m).as(Json.class);
     }
 
     /**
@@ -123,12 +119,13 @@ public class WlsController {
      */
     @Delete("delete/{siteNames}")
     public Reply delete(@Param("siteNames") List<String> siteNames) {
-        message.put("result", true);
+        Map m = Maps.newHashMap();
         for (String siteName : siteNames) {
-            monitorManage.cancel(siteName);
+            monitorManage.cancel(siteName, ResourceType.WEBLOGIC );
             wlsService.delete(siteName);
         }
-        return Replys.with(message).as(Json.class);
+        m.put("result", true);
+        return Replys.with(m).as(Json.class);
     }
 
     @Get("manager")
@@ -166,7 +163,7 @@ public class WlsController {
     @Get("view/{siteName}")
     public String view(@Param("siteName") String siteName, Invocation invocation) {
         WlsServer wlsServer = wlsService.getSite(siteName);
-        MonitorSite monitorSite = monitorManage.getMonitorInf(siteName);
+        MonitorSite monitorSite = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC );
         WlsHisData hisData = monitorSite.getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
@@ -178,7 +175,7 @@ public class WlsController {
         invocation.addModel("serverNum", iniData.getWlsSysrec().getServerNum());
         invocation.addModel("domainName", iniData.getWlsSysrec().getName());
         invocation.addModel("adminServerName", iniData.getWlsSysrec().getAdminServerName());
-        invocation.addModel("cpuIdle", inTimeData.getResource().getCpuIdle());
+        invocation.addModel("cpuIdle", inTimeData.getResource()==null?"-":inTimeData.getResource().getCpuIdle());
         invocation.addModel("memFree", inTimeData.getResource().getMemFree());
         invocation.addModel("agentVer", iniData.getWlsSysrec().getAgentVersion());
         invocation.addModel("systemboot", iniData.getWlsSysrec().getSystemBoot());
@@ -199,7 +196,7 @@ public class WlsController {
     @Get("/viewLast/${siteName}")
     public Reply viewLast(@Param("siteName") String siteName) {
         WlsServer wlsServer = wlsService.getSite(siteName);
-        MonitorSite monitorSite = monitorManage.getMonitorInf(siteName);
+        MonitorSite monitorSite = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC );
         WlsHisData hisData = monitorSite.getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
@@ -232,7 +229,7 @@ public class WlsController {
      */
     @Get("serverInfo/{siteName}")
     public Reply serverInfo(@Param("siteName") String siteName) {
-        final MonitorSite monitorSite = monitorManage.getMonitorInf(siteName);
+        final MonitorSite monitorSite = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC );
         WlsHisData hisData = monitorSite.getMonitorData();
         List<WlsSvr> serverRuntimes = hisData.getWlsInTimeData().getServerRuntimes();
         JsonGrid grid = JsonGrid.buildGrid(serverRuntimes, new JsonGrid.JsonRowHandler<WlsSvr>() {
@@ -267,18 +264,10 @@ public class WlsController {
         return Replys.with(grid).as(Json.class);
     }
 
-    @Post("start/{siteName}")
-    public Reply startMonitor(@Param("siteName") String siteName, @DefValue("zh_CN") Locale locale) {
-        BeaconLocale.setLocale(locale);
-        monitorManage.monitor(siteName);
-        logger.debug("start server name is {} ", siteName);
-        message.put("type", "success");
-        return Replys.with(message).as(Json.class);
-    }
 
     @Get("/chart/{type}/{siteName}/{operation}")
     public Reply chartFree(@Param("type") String type, @Param("siteName") String siteName, @Param("operation") String operation) {
-        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
+        WlsHisData hisData = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC ).getMonitorData();
         WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         Iterator<WlsInTimeData> iterator = hisData.getIntimeDatasQue(siteName);
         Object retVal = null; //返回char数据对象，用于转化为JSON
@@ -501,7 +490,7 @@ public class WlsController {
      */
     @Get("data/{type}/{siteName}")
     public Reply getInTimeData(@Param("type") String type, @Param("siteName") String siteName) {
-        WlsHisData hisData = monitorManage.getMonitorInf(siteName).getMonitorData();
+        WlsHisData hisData = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC ).getMonitorData();
         WlsInTimeData wlsInTimeData = hisData.getWlsInTimeData();
         if (type.equals("WlsServer")) {
             return getServerDate(wlsInTimeData.getServerRuntimes());
@@ -611,13 +600,13 @@ public class WlsController {
                 row.setId(webapp.getId() + "");
                 index = index + 1;
                 row.addCell(webapp.getServerName());
-                row.addCell(webapp.getName() + "");
-                row.addCell(webapp.getDeploymentState() + "");
-                row.addCell(webapp.getStatus() + "");
-                row.addCell(webapp.getComponentName() + "");
-                row.addCell(webapp.getOpenSessionsHighCount() + "");
-                row.addCell(webapp.getOpenSessionsCurrentCount() + "");
-                row.addCell(webapp.getSessionsOpenedTotalCount() + "");
+                row.addCell(webapp.getName());
+                row.addCell(webapp.getDeploymentState());
+                row.addCell(webapp.getStatus());
+                row.addCell(webapp.getComponentName());
+                row.addCell(webapp.getOpenSessionsHigh() + "");
+                row.addCell(webapp.getOpenSessionsCurrent() + "");
+                row.addCell(webapp.getSessionsOpenedTotal() + "");
                 return row;
             }
         });

@@ -1,9 +1,6 @@
 package com.fusionspy.beacon.site.wls;
 
-import com.fusionspy.beacon.site.Connect;
-import com.fusionspy.beacon.site.InTimeData;
-import com.fusionspy.beacon.site.InitData;
-import com.fusionspy.beacon.site.MonitorDataRepository;
+import com.fusionspy.beacon.site.*;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
@@ -16,19 +13,15 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.net.URL;
 
-/**
- * Created with IntelliJ IDEA.
- * User: bao
- * Date: 13-9-21
- * Time: 上午12:06
- * To change this template use File | Settings | File Templates.
- */
-@Repository
-public class WlsDataRepository implements MonitorDataRepository {
+
+@Component(value = "wlsDataRepository")
+public class WlsDataRepository implements MonitorDataRepository<WlsSite> {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
     /** 处理初始化报文数据binder*/
@@ -40,36 +33,36 @@ public class WlsDataRepository implements MonitorDataRepository {
     @Autowired
     private Connect connect;
 
-    /**
-     * 获取初始化监控数据
-     * @param siteName
-     * @param ip
-     * @param port
-     * @return
-     */
+    private Document xmlDocument;
+
+
     @Override
-    public InitData getInitData(String siteName, String ip, int port) {
-        URL initXmlReq =Connect.class.getClassLoader().getResource("site/WlsInitReq.xml");
-        SAXReader xmlReader = new SAXReader();
-        Document xmlDocument = null;
-        try {
-            xmlDocument = (Document) xmlReader.read(initXmlReq);
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
+    public WlsIniData getInitData(WlsSite wlsSite) {
+
         Element node = (Element) xmlDocument.selectSingleNode("/wlsagent/Domain");
-        WlsServer wlsServer = wlsService.getSite(siteName);
-        node.attribute("adminAddress").setData(wlsServer.getWeblogicIp());  //Weblogic监听地址
-        node.attribute("adminPort").setData(wlsServer.getWeblogicPort()); //Weblogic监听端口
-        node.attribute("name").setData(wlsServer.getDomainName());
-        node.attribute("principal").setData(wlsServer.getUserName()); //Weblogic用户名
-        node.attribute("password").setData(wlsServer.getPassword()); //密码
-        String initXml = connect.startSiteThread(xmlDocument, siteName, ip, port, 0);
-        logger.debug("get initXml Xml: {}", initXml);
+        node.attribute("adminAddress").setData(wlsSite.getWebLogicIp());  //Weblogic监听地址
+        node.attribute("adminPort").setData(wlsSite.getWebLogicPort()); //Weblogic监听端口
+        node.attribute("name").setData(wlsSite.getDomainName());
+        node.attribute("principal").setData(wlsSite.getUserName()); //Weblogic用户名
+        node.attribute("password").setData(wlsSite.getPassword()); //密码
+        String initXml = connect.startSiteThread( wlsSite.getSiteName(), wlsSite.getSiteIp(), wlsSite.getSitePort(),
+                xmlDocument.asXML());
+      //  logger.debug("siteName:{} get initXml Xml: {}", siteName,initXml);
         WlsIniData initData = iniBinder.fromXml(initXml);
         initData.setWlsService(wlsService);
-        initData.setSiteName(siteName);
+        initData.setSiteName(wlsSite.getSiteName());
         return initData.defaultData();
+    }
+
+    @PostConstruct
+    void initDocument(){
+        URL initXmlReq =Connect.class.getClassLoader().getResource("site/WlsInitReq.xml");
+        SAXReader xmlReader = new SAXReader();
+        try {
+            xmlDocument = xmlReader.read(initXmlReq);
+        } catch (DocumentException e) {
+            throw new RuntimeException("无法加载site/WlsInitReq.xml",e);
+        }
     }
 
     /**
@@ -80,7 +73,7 @@ public class WlsDataRepository implements MonitorDataRepository {
     @Override
     public InTimeData getInTimeData(String siteName) {
         String inTimeXml = connect.getInTimeData(siteName);
-        logger.debug("get inTime Xml: {}", inTimeXml);
+       // logger.debug("get inTime Xml: {}", inTimeXml);
         WlsInTimeData inTimeData = inTimeBinder.fromXml(inTimeXml);
         return inTimeData.defaultData();
     }

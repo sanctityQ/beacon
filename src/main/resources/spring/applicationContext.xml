@@ -69,27 +69,20 @@
 	<context:property-placeholder
 		ignore-unresolvable="true" location="classpath*:/application.properties" />
 	<!-- 数据源配置, 使用Druid数据库连接池 -->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="${jdbc.driver}" />
         <property name="url" value="${jdbc.url}" />
         <property name="username" value="${jdbc.username}" />
         <property name="password" value="${jdbc.password}" />
 
-        <property name="filters" value="stat" />
-
-        <property name="maxActive" value="${jdbc.maxActive}" />
-        <property name="initialSize" value="1" />
-        <property name="maxWait" value="60000" />
-        <property name="minIdle" value="1" />
-
-        <property name="timeBetweenEvictionRunsMillis" value="60000" />
-        <property name="minEvictableIdleTimeMillis" value="300000" />
-
-        <property name="validationQuery" value="SELECT 'x'" />
-        <property name="testWhileIdle" value="true" />
-        <property name="testOnBorrow" value="false" />
-        <property name="testOnReturn" value="false" />
-        <property name="poolPreparedStatements" value="true" />
-        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+        <!-- Connection Pooling Info -->
+        <property name="maxActive" value="${jdbc.pool.maxActive}" />
+        <property name="maxIdle" value="${jdbc.pool.maxIdle}" />
+        <property name="defaultAutoCommit" value="false" />
+        <!-- 连接Idle半个小时后超时，每15分钟检查一次 -->
+        <property name="timeBetweenEvictionRunsMillis" value="900000" />
+        <property name="minEvictableIdleTimeMillis" value="1800000" />
     </bean>
 
     <bean id="dataSourceProxy" class="com.sinosoft.one.log4jdbc.Log4jdbcProxyDataSource">
@@ -97,9 +90,4 @@
     </bean>
 
 
-    <bean id="sitesHolder" class="com.fusionspy.beacon.site.SitesHolder">
-        <property name="demo" value="${demo.is}"></property>
-    </bean>
-
-    <bean id="monitorManage" class="com.fusionspy.beacon.site.MonitorManage"></bean>
 </beans>

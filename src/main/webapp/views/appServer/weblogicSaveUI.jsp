@@ -41,6 +41,7 @@
                 this.value=this.value.replace(/[^\d.]/g,'');
             });
         });
+
         function save(){
             //if(!weblogicValidator.form()) return false;
             var data_ = $('#weblogic_fm').serialize();
@@ -56,6 +57,7 @@
                 }
             });
         }
+
     </script>
 </head>
 

@@ -1,8 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<MONITOR Date="2009-10-20 21:12:51">
-    <INITBUF AdminServerName="examplesServer" DomainVersion="8.1.6.0" Name="examples"
-             ActivationTime="2009-10-20 21:00:18" RootDirectory="." ProductionModeEnabled="false"
-             JDKVendor="Sun Microsystems Inc." JDKVersion="1.4.2_11" OSVersion="5.1" OSName="Windows XP" ServerNum="2"
-             AgentVersion="1.0 - FORMAL LICENSE"/>
-    <!--<SYSTEM errMsg="Weblogic is shutdown!"/>-->
+<MONITOR Date="2014-01-11 16:46:51">
+    <OSResource CPU="90" MEM="3232"/>
+    <JVMRuntime HeapFreeCurrent="100257808" HeapSizeCurrent="261160960" HeapFreePercent="38" serverName="MedRecServer"/>
+    <ServerRuntime ActivationTime="1389351457983"
+                   HealthState="Component:ServerRuntime,State:HEALTH_OK,MBean:MedRecServer,ReasonCode:[]"
+                   State="RUNNING" Name="MedRecServer" OpenSocketsCurrentCount="2"
+                   WeblogicVersion="WebLogic Server 10.3  Fri Jul 25 16:30:05 EDT 2008 1137967 "
+                   ListenAddress="115.28.16.154/115.28.16.154" ListenPort="7001" RestartsTotalCount="0"
+                   serverName="MedRecServer"/>
+    <ThreadPoolRuntime ExecuteThreadIdleCount="2" CompletedRequestCount="320130" ExecuteThreadTotalCount="5"
+                       PendingUserRequestCount="0" QueueLength="0" StandbyThreadCount="2"
+                       Throughput="14.478282576135797" serverName="MedRecServer"/>
+    <JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="MedRecGlobalDataSourceXA" ConnectionDelayTime="1045"
+                                                    State="Running" ActiveConnectionsCurrentCount="0"
+                                                    LeakedConnectionCount="0" FailuresToReconnectCount="0"
+                                                    ConnectionsTotalCount="2" CurrCapacity="2"
+                                                    PrepStmtCacheAccessCount="0" PrepStmtCacheHitCount="0"
+                                                    serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/medrec" DeploymentState="2" ComponentName="medrec"
+                                           Status="DEPLOYED" OpenSessionsHighCount="1102" OpenSessionsCurrentCount="1"
+                                           SessionsOpenedTotalCount="1104" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/medrec-jaxrpc-services" DeploymentState="2"
+                                           ComponentName="medrec-jaxrpc-services" Status="DEPLOYED"
+                                           OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                           SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/medrec-jaxws-services" DeploymentState="2"
+                                           ComponentName="medrec-jaxws-services" Status="DEPLOYED"
+                                           OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                           SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/console" DeploymentState="2" ComponentName="console"
+                                           Status="DEPLOYED" OpenSessionsHighCount="1" OpenSessionsCurrentCount="0"
+                                           SessionsOpenedTotalCount="4" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/consolehelp" DeploymentState="2"
+                                           ComponentName="consolehelp" Status="DEPLOYED" OpenSessionsHighCount="0"
+                                           OpenSessionsCurrentCount="0" SessionsOpenedTotalCount="0"
+                                           serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/bea_wls_internal" DeploymentState="2"
+                                           ComponentName="bea_wls_internal.war" Status="DEPLOYED"
+                                           OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                           SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/physician-jaxrpc-services" DeploymentState="2"
+                                           ComponentName="physician-jaxrpc-services" Status="DEPLOYED"
+                                           OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                           SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/physician" DeploymentState="2" ComponentName="physician"
+                                           Status="DEPLOYED" OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                           SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/_async" DeploymentState="2"
+                                           ComponentName="bea_wls9_async_response.war" Status="DEPLOYED"
+                                           OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                           SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/browser-starter" DeploymentState="2"
+                                           ComponentName="browser-starter.war" Status="DEPLOYED"
+                                           OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                           SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
+    <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
 </MONITOR>

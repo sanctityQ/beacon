@@ -16,7 +16,7 @@ public interface WlsThreadDao extends PagingAndSortingRepository<WlsThread, Inte
     @SQL("select u.server_name name, MAX(u.idle_count) max,MIN(u.idle_count) min, ROUND(AVG(u.idle_count),2) avg from ge_monitor_wls_thread u where u.site_name = ?1 and u.rec_time between ?2 and ?3 group by u.server_name")
     public List<Statistics> statisticIdleCount(String resourceId, Timestamp start, Timestamp end);
 
-    @SQL("select u.server_name name, MAX(u.thoughput) max,MIN(u.thoughput) min, AVG(u.thoughput) avg from ge_monitor_wls_thread u where u.site_name = ?1 and u.rec_time between ?2 and ?3 group by u.server_name")
+    @SQL("select u.server_name name, MAX(u.thoughput) max,MIN(u.thoughput) min, ROUND(AVG(u.thoughput),2) avg from ge_monitor_wls_thread u where u.site_name = ?1 and u.rec_time between ?2 and ?3 group by u.server_name")
     public List<Statistics> statisticThought(String resourceId, Timestamp start, Timestamp end);
 }
 

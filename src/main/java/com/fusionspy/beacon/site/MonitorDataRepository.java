@@ -6,13 +6,13 @@ package com.fusionspy.beacon.site;
  * Date: 12-3-10
  * Time: 下午12:59
  */
-public interface MonitorDataRepository {
+public interface MonitorDataRepository<E extends MonitorSite> {
 
     /**
      * when monitor start get init data
      * @return
      */
-    <T  extends InitData> T getInitData(String siteName, String ip, int port);
+    <T  extends InitData> T getInitData(E e);
 
     /**
      * every interval get server side in-time data

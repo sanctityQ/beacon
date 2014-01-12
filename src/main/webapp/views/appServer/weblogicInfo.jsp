@@ -49,7 +49,7 @@ $(function() {
             type : 'get',
             async : false,
             error : function (XMLHttpRequest,errorThrown) {
-                alert("数据加载出错！" + errorThrown);
+                //alert("数据加载出错！" + errorThrown);
             },
             success: function(data){
                 var currentFlag = true;

@@ -1,19 +1,14 @@
 package com.fusionspy.beacon.site.wls;
 
 import com.fusionspy.beacon.site.AlarmMessageFormat;
-import com.fusionspy.beacon.site.tux.ProcessInTimeResult;
-import com.fusionspy.beacon.site.tux.TuxDataComparatorFactory;
-import com.fusionspy.beacon.site.tux.TuxHisData;
-import com.fusionspy.beacon.site.tux.entity.*;
 import com.fusionspy.beacon.site.wls.dao.*;
 import com.fusionspy.beacon.site.wls.entity.*;
 import com.sinosoft.one.monitor.action.domain.ActionService;
-import com.sinosoft.one.monitor.alarm.domain.AlarmService;
-import com.sinosoft.one.monitor.alarm.model.Alarm;
+import com.fusionspy.beacon.alarm.domain.AlarmService;
+import com.fusionspy.beacon.alarm.model.Alarm;
 import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
 import com.sinosoft.one.monitor.attribute.model.Attribute;
 import com.sinosoft.one.monitor.attribute.model.AttributeAction;
-import com.sinosoft.one.monitor.common.AlarmAttribute;
 import com.sinosoft.one.monitor.common.AlarmSource;
 import com.sinosoft.one.monitor.common.AttributeName;
 import com.sinosoft.one.monitor.common.ResourceType;
@@ -24,7 +19,6 @@ import com.sinosoft.one.monitor.threshold.domain.ThresholdService;
 import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
 import com.sinosoft.one.monitor.threshold.model.Threshold;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.velocity.runtime.resource.ResourceCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -215,6 +208,7 @@ public class WlsService {
                 this.processWebapp();
                 this.processWlsResource();
             }
+
             hisData.setWlsInTimeData(inTimeData);
             hisData.addWlsIntimeData(siteName, inTimeData);
         }
@@ -300,9 +294,9 @@ public class WlsService {
             List<WlsWebapp> componentRuntimes = inTimeData.getComponentRuntimes();
             for (WlsWebapp webapp : componentRuntimes) {
                 webapp.setSiteName(siteName);
-                webapp.setOpenSessionsHigh(parsetInt(webapp.getOpenSessionsHighCount()));
-                webapp.setOpenSessionsCurrent(parsetInt(webapp.getOpenSessionsCurrentCount()));
-                webapp.setSessionsOpenedTotal(parsetInt(webapp.getSessionsOpenedTotalCount()));
+//                webapp.setOpenSessionsHigh(parsetInt(webapp.getOpenSessionsHighCount()));
+//                webapp.setOpenSessionsCurrent(parsetInt(webapp.getOpenSessionsCurrentCount()));
+//                webapp.setSessionsOpenedTotal(parsetInt(webapp.getSessionsOpenedTotalCount()));
             }
             wlsWebappDao.save(componentRuntimes);
 
@@ -351,7 +345,12 @@ public class WlsService {
             }
             wlsResource.setOsType(sysrec.getOsType());
             if (StringUtils.isNotBlank(mem)) { //获取当前'M'之前的数值
-                wlsResource.setMemFree(mem.substring(0, mem.indexOf('M')));
+
+                if(mem.indexOf('M')>0){
+                    wlsResource.setMemFree(mem.substring(0, mem.indexOf('M')));
+                }else{
+                    wlsResource.setMemFree(mem);
+                }
             } else {
                 wlsResource.setMemFree("0");
             }

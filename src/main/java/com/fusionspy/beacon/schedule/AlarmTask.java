@@ -1,6 +1,6 @@
 package com.fusionspy.beacon.schedule;
 
-import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.fusionspy.beacon.alarm.repository.AlarmRepository;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

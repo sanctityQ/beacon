@@ -1,8 +1,8 @@
 package com.sinosoft.one.monitor.controllers.alarm.manager;
 
-import com.sinosoft.one.monitor.alarm.domain.AlarmService;
-import com.sinosoft.one.monitor.alarm.model.Alarm;
-import com.sinosoft.one.monitor.alarm.repository.AlarmRepository;
+import com.fusionspy.beacon.alarm.domain.AlarmService;
+import com.fusionspy.beacon.alarm.model.Alarm;
+import com.fusionspy.beacon.alarm.repository.AlarmRepository;
 import com.sinosoft.one.monitor.common.ResourceType;
 import com.sinosoft.one.monitor.resources.model.Resource;
 import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
@@ -33,12 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 告警列表和告警详细信息处理Controller.
- * User: zfb
- * Date: 13-3-8
- * Time: 下午3:11
- */
+
 @Path
 public class AlarmManagerController {
 

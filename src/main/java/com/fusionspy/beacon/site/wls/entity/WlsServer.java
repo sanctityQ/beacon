@@ -71,7 +71,7 @@ public class WlsServer implements java.io.Serializable {
      */
     private Integer isSsl;
 
-    private Integer status;
+    private Integer status=1;
 
     public WlsServer() {
     }

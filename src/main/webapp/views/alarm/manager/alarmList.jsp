@@ -152,7 +152,8 @@ function alert(){
                 </select>
                 <select id="typeSelect" name="typeSelect" class="diySelect">
                     <option value="">选择类型</option>
-                    <option value="Tuxedo">TUXEDO</option>
+                    <option value="Tuxedo">Tuxedo</option>
+                    <option value="WEBLOGIC">WEBLOGIC</option>
                     <%--<option value="APPLICATION">应用系统</option>--%>
                     <%--<option value="OS">操作系统</option>--%>
                     <%--<option value="DB">数据库</option>--%>

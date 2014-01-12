@@ -3,6 +3,7 @@ package com.fusionspy.beacon.site.tux;
 import com.fusionspy.beacon.site.InTimeData;
 import com.fusionspy.beacon.site.InitData;
 import com.fusionspy.beacon.site.MonitorDataRepository;
+import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.tux.entity.*;
 import com.fusionspy.beacon.site.tux.entity.DataSave;
 import com.fusionspy.beacon.site.tux.entity.SysrecsEntity;
@@ -40,13 +41,13 @@ public class TuxDataSimulationRepository implements MonitorDataRepository {
     private ConcurrentMap<String, SimulationData> last = new MapMaker().concurrencyLevel(32).makeMap();
 
     @Override
-    public TuxIniData getInitData(String siteName, String ip, int port) {
-        Assert.hasText(siteName);
+    public TuxIniData getInitData(MonitorSite monitorSite) {
+        Assert.hasText(monitorSite.getSiteName());
         TuxIniData initData = new TuxIniData();
         SysrecsEntity sysrecs = new SysrecsEntity();
         initData.setSysrecsEntity(sysrecs);
 
-        initData.setSiteName(siteName);
+        initData.setSiteName(monitorSite.getSiteName());
         initData.setDate(df.format(new Date()));
         sysrecs.setProductver("VVer:8.1,Patch Level");
         sysrecs.setSystemboot("2011-10-15 03:52:51");
