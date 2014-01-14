@@ -69,6 +69,7 @@ public class MonitorManage {
      */
     public void monitor(String siteName,ResourceType resourceType) {
         MonitorSite monitorSite = sitesHolderMap.get(resourceType).getMonitorSite(siteName);
+
         monitorSite.start();
     }
 
@@ -95,6 +96,16 @@ public class MonitorManage {
         monitorSite.stop();
         sitesHolderMap.get(resourceType).remove(siteName);
     }
+
+
+    public void cancelAndRemove(String siteName, ResourceType resourceType){
+        cancel(siteName,resourceType);
+        sitesHolderMap.get(resourceType).remove(siteName);
+    }
+
+
+
+
 
     /**
      * get monitor data

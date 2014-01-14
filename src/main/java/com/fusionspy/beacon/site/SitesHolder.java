@@ -31,7 +31,7 @@ public abstract class SitesHolder<T extends MonitorSite> {
 
     protected ConcurrentMap<String, T> siteMap = new MapMaker().concurrencyLevel(32).makeMap();//监控站点线程
 
-    protected ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10, new ThreadUtils.CustomizableThreadFactory(getResourceType().name()));
+    protected ScheduledExecutorService executorService = Executors.newScheduledThreadPool(20, new ThreadUtils.CustomizableThreadFactory(getResourceType().name()));
 
 
     @Autowired
@@ -53,7 +53,7 @@ public abstract class SitesHolder<T extends MonitorSite> {
     }
 
 
-    public void remove(String siteName){
+    void remove(String siteName){
         Assert.hasText(siteName);
         siteMap.remove(siteName);
     }
@@ -63,79 +63,19 @@ public abstract class SitesHolder<T extends MonitorSite> {
         return Lists.newArrayList(siteMap.values());
     }
 
-    public abstract MonitorSite getMonitorSite(String siteName);
+    public final T getMonitorSite(final String siteName){
+        T site = siteMap.get(siteName);
+        if (site == null) {
+            site= createSite(siteName);
+            siteMap.putIfAbsent(site.getSiteName(), site);
+        }
+        return site;
+    }
 
+    protected abstract T createSite(String siteName);
 
-//    {
-//        Assert.hasText(siteName);
-//        MonitorSite monitorSite = null;
-//        monitorSite = tuxSiteMap.get(siteName);
-//        if (monitorSite == null) {
-//            SiteListEntity siteListEntity = systemService.getSite(siteName);
-//            MonitorSite newMonitorSite = null;
-//            if (siteListEntity != null && siteListEntity instanceof  SiteListEntity) {
-//
-//                newMonitorSite = getTuxSite();
-//                newMonitorSite.setSiteName(siteName);
-//                newMonitorSite.setSiteIp(siteListEntity.getSiteIp());
-//                newMonitorSite.setSitePort(siteListEntity.getSitePort());
-//                newMonitorSite.setPeriod(siteListEntity.getInterval());
-//                monitorSite = tuxSiteMap.putIfAbsent(siteName, newMonitorSite);
-//
-//            } else {
-//                monitorSite = wlsSiteMap.get(siteName);
-//                if(monitorSite == null) {
-//                    WlsServer wlsServer = wlsService.getSite(siteName);
-//                    if(wlsServer != null) {
-//                        newMonitorSite = getWlsSite();
-//                        newMonitorSite.setSiteName(siteName);
-//                        newMonitorSite.setSiteIp(wlsServer.getListenAddress());
-//                        newMonitorSite.setSitePort(wlsServer.getListenPort());
-//                        newMonitorSite.setPeriod(wlsServer.getInterval());
-//                        monitorSite = wlsSiteMap.putIfAbsent(siteName, newMonitorSite);
-//                    }
-//
-//                }
-//
-//            }
-//
-//            if (monitorSite == null)
-//                monitorSite = newMonitorSite;
-//        }
-//        return monitorSite;
-//    }
+    protected void addMonitorSite(T site){
+        siteMap.putIfAbsent(site.getSiteName(), site);
+    }
 
-//    @Bean
-//    public MonitorSite getTuxSite() {
-//        TuxSite tuxSite = new TuxSite();
-//        tuxSite.setTuxService(tuxService);
-//        tuxSite.setAttributeCache(this.attributeCache);
-//        tuxSite.setResourcesCache(this.resourcesCache);
-//        if (demo) {
-//            tuxSite.setMonitorDataRepository(demoRep);
-//        } else {
-//            tuxSite.setMonitorDataRepository(conRep);
-//        }
-//
-//        return tuxSite;
-//    }
-
-    /**
-     * 初始化weblogic站点，并设置监控仓库及持久层service
-     * @return
-     */
-//    @Bean
-//    public MonitorSite getWlsSite() {
-//        WlsSite wlsSite = new WlsSite();
-//        wlsSite.setWlsService(wlsService);
-//        wlsSite.setAttributeCache(this.attributeCache);
-//        wlsSite.setResourcesCache(this.resourcesCache);
-//        if (demo) {
-//            wlsSite.setMonitorDataRepository(wlsDemoRep);
-//        } else {
-//            wlsSite.setMonitorDataRepository(wlsRep);
-//        }
-//
-//        return wlsSite;
-//    }
 }

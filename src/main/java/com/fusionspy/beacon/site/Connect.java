@@ -248,9 +248,6 @@ public class Connect{
 
     public String getInTimeData(String siteName){
          SiteThread st = siteThreadMap.get(siteName);
-         if(st==null){
-
-         }
          return st.getRuntimeData();
     }
 

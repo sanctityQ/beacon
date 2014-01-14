@@ -79,7 +79,7 @@ public class TuxController {
 
     @Delete("/delete/{serverName}")
     public Reply delete(@Param("serverName")String serverName) {
-        monitorManage.cancel(serverName, ResourceType.Tuxedo);
+        monitorManage.cancelAndRemove(serverName, ResourceType.Tuxedo);
         systemService.delSite(serverName);
         return Replys.with("success").as(Text.class);
     }
@@ -148,7 +148,7 @@ public class TuxController {
 
     @Delete("delete/{serverName}")
     public Reply delete(@Param("type")String type,@Param("serverName")String serverName) {
-        monitorManage.cancel(serverName, ResourceType.Tuxedo);
+        monitorManage.cancelAndRemove(serverName, ResourceType.Tuxedo);
         systemService.delSite(serverName);
         logger.debug("delete server type is {} ,name is",type,serverName);
 

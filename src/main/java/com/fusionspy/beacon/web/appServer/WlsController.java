@@ -104,8 +104,8 @@ public class WlsController {
     @Post("save")
     public Reply save(WlsServer wlsServer) {
         wlsService.save(wlsServer);
-        monitorManage.cancel(wlsServer.getSiteName(),ResourceType.WEBLOGIC  );
-        monitorManage.monitor(wlsServer.getSiteName(),ResourceType.WEBLOGIC );
+        monitorManage.cancel(wlsServer.getSiteName(),ResourceType.WEBLOGIC);
+        monitorManage.monitor(wlsServer.getSiteName(),ResourceType.WEBLOGIC);
         Map m = Maps.newHashMap();
         m.put("type", "success");
         return Replys.with(m).as(Json.class);
@@ -121,7 +121,7 @@ public class WlsController {
     public Reply delete(@Param("siteNames") List<String> siteNames) {
         Map m = Maps.newHashMap();
         for (String siteName : siteNames) {
-            monitorManage.cancel(siteName, ResourceType.WEBLOGIC );
+            monitorManage.cancelAndRemove(siteName, ResourceType.WEBLOGIC );
             wlsService.delete(siteName);
         }
         m.put("result", true);

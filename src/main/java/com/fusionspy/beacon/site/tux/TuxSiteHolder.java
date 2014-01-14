@@ -34,7 +34,7 @@ class TuxSiteHolder extends SitesHolder<TuxSite>{
     @PostConstruct
     void init(){
         for(SiteListEntity siteListEntity: systemService.getSites()){
-             create(siteListEntity);
+             super.addMonitorSite(create(siteListEntity));
         }
     }
 
@@ -44,19 +44,13 @@ class TuxSiteHolder extends SitesHolder<TuxSite>{
     }
 
     @Override
-    public TuxSite getMonitorSite(String siteName) {
-
-        TuxSite tuxSite = siteMap.get(siteName);
-        if (tuxSite == null) {
-            SiteListEntity siteListEntity = systemService.getSite(siteName);
-
-            if (siteListEntity != null) {
-                tuxSite =  create(siteListEntity);
-            } else {
-                throw new IllegalStateException("tux查询不到此站点:["+siteName+"]，请检查");
-            }
+    public TuxSite createSite(String siteName) {
+        SiteListEntity siteListEntity = systemService.getSite(siteName);
+        if (siteListEntity != null) {
+            return create(siteListEntity);
+        } else {
+            throw new IllegalStateException("tux查询不到此站点:[" + siteName + "]，请检查");
         }
-        return tuxSite;
     }
 
     TuxSite create(SiteListEntity siteListEntity){
@@ -70,6 +64,6 @@ class TuxSiteHolder extends SitesHolder<TuxSite>{
             tuxSite.setMonitorDataRepository(conRep);
         }
         tuxSite.setScheduledExecutorService(executorService);
-       return siteMap.putIfAbsent(tuxSite.getSiteName(), tuxSite);
+        return tuxSite;
     }
 }

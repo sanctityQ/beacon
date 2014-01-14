@@ -1,5 +1,5 @@
 <%@ page import="org.apache.shiro.SecurityUtils" %>
-<%@ page import="com.sinosoft.one.monitor.account.model.Account" %>
+<%@ page import="com.fusionspy.beacon.account.model.Account" %>
 <%@ page language="java" pageEncoding="UTF-8" %>
 <%
     Account account = (Account)SecurityUtils.getSubject().getPrincipal();

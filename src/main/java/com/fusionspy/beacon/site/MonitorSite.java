@@ -204,7 +204,9 @@ public abstract class MonitorSite {
         Assert.notNull(this.scheduledFuture);
         this.scheduledFuture.cancel(true);
         this.isRunning = false;
-        repository.stopSite(siteName);
+        if(agentRunning){
+          repository.stopSite(siteName);
+        }
 
     }
 

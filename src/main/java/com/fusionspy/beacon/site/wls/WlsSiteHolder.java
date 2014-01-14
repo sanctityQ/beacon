@@ -11,25 +11,29 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 @Component
-class WlsSiteHolder extends SitesHolder<WlsSite>{
+class WlsSiteHolder extends SitesHolder<WlsSite> {
 
     @Autowired
     private WlsService wlsService;
 
-    /** weblogic监控数据仓库 */
+    /**
+     * weblogic监控数据仓库
+     */
     @Resource(name = "wlsDataRepository")
     private WlsDataRepository wlsRep;
 
-    /** weblogic监控数据示例仓库 */
+    /**
+     * weblogic监控数据示例仓库
+     */
     @Resource(name = "wlsDataSimulationRepository")
     private WlsDataSimulationRepository wlsDemoRep;
 
 
     @PostConstruct
-    void init(){
-       for(WlsServer wlsServer: wlsService.getSites()){
-           create(wlsServer);
-       }
+    void init() {
+        for (WlsServer wlsServer : wlsService.getSites()) {
+            addMonitorSite(create(wlsServer));
+        }
     }
 
 
@@ -39,20 +43,16 @@ class WlsSiteHolder extends SitesHolder<WlsSite>{
     }
 
     @Override
-    public WlsSite getMonitorSite(String siteName){
-        WlsSite monitorSite = siteMap.get(siteName);
-        if(monitorSite == null) {
-            WlsServer wlsServer = wlsService.getSite(siteName);
-            if(wlsServer != null) {
-                create(wlsServer);
-            }else{
-                throw new IllegalStateException("wls查询不到此站点:["+siteName+"]，请检查");
-            }
+    public WlsSite createSite(String siteName) {
+        WlsServer wlsServer = wlsService.getSite(siteName);
+        if (wlsServer != null) {
+            return create(wlsServer);
+        } else {
+            throw new IllegalStateException("wls查询不到此站点:[" + siteName + "]，请检查");
         }
-        return monitorSite;
     }
 
-    WlsSite create(WlsServer wlsServer){
+    WlsSite create(WlsServer wlsServer) {
         WlsSite wlsSite = new WlsSite(wlsServer);
         wlsSite.setAttributeCache(this.attributeCache);
         wlsSite.setResourcesCache(this.resourcesCache);
@@ -61,8 +61,9 @@ class WlsSiteHolder extends SitesHolder<WlsSite>{
         } else {
             wlsSite.setMonitorDataRepository(wlsRep);
         }
+        wlsSite.setWlsService(wlsService);
         wlsSite.setScheduledExecutorService(executorService);
-        return siteMap.putIfAbsent(wlsServer.getSiteName(), wlsSite);
+        return wlsSite;
     }
 
 

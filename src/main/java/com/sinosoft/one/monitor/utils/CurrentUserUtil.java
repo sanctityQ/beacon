@@ -1,6 +1,6 @@
 package com.sinosoft.one.monitor.utils;
 
-import com.sinosoft.one.monitor.account.model.Account;
+import com.fusionspy.beacon.account.model.Account;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
