@@ -1,9 +1,7 @@
 package com.fusionspy.beacon.report;
 
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.common.ResourceType;
+import com.fusionspy.beacon.common.ResourceType;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
 import java.util.Date;
 

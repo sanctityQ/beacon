@@ -65,3 +65,135 @@
     <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
     <ApplicationRuntimes.ComponentRuntimes serverName="MedRecServer"/>
 </MONITOR>
+
+
+<MONITOR Date="2014-01-15 00:02:35">
+<OSResource CPU="99
+" MEM="2031.33M
+"/>
+<JVMRuntime HeapFreeCurrent="143750512" HeapSizeCurrent="267124736" HeapFreePercent="74" serverName="ms9902"/>
+<JVMRuntime HeapFreeCurrent="245676064" HeapSizeCurrent="316604416" HeapFreePercent="85" serverName="ms9901"/>
+<JVMRuntime HeapFreeCurrent="101894560" HeapSizeCurrent="262537216" HeapFreePercent="66" serverName="MedRecServer"/>
+<ServerRuntime ActivationTime="1389455905487"
+               HealthState="Component:ServerRuntime,State:HEALTH_OK,MBean:ms9902,ReasonCode:[]" State="RUNNING"
+               Name="ms9902" OpenSocketsCurrentCount="4"
+               WeblogicVersion="WebLogic Server 10.3.6.0  Tue Nov 15 08:52:36 PST 2011 1441050 "
+               ListenAddress="115.28.16.154/115.28.16.154" ListenPort="9902" RestartsTotalCount="0"
+               serverName="ms9902"/>
+<ServerRuntime ActivationTime="1389710733818"
+               HealthState="Component:ServerRuntime,State:HEALTH_OK,MBean:ms9901,ReasonCode:[]" State="RUNNING"
+               Name="ms9901" OpenSocketsCurrentCount="3"
+               WeblogicVersion="WebLogic Server 10.3.6.0  Tue Nov 15 08:52:36 PST 2011 1441050 "
+               ListenAddress="115.28.16.154/115.28.16.154" ListenPort="9901" RestartsTotalCount="0"
+               serverName="ms9901"/>
+<ServerRuntime ActivationTime="1389456594499"
+               HealthState="Component:ServerRuntime,State:HEALTH_OK,MBean:MedRecServer,ReasonCode:[]" State="RUNNING"
+               Name="MedRecServer" OpenSocketsCurrentCount="5"
+               WeblogicVersion="WebLogic Server 10.3.6.0  Tue Nov 15 08:52:36 PST 2011 1441050 "
+               ListenAddress="115.28.16.154/115.28.16.154" ListenPort="7011" RestartsTotalCount="0"
+               serverName="MedRecServer"/>
+<ThreadPoolRuntime ExecuteThreadIdleCount="2" CompletedRequestCount="1254248" ExecuteThreadTotalCount="7"
+                   PendingUserRequestCount="0" QueueLength="0" StandbyThreadCount="4" Throughput="3.4982508745627188"
+                   serverName="ms9902"/>
+<ThreadPoolRuntime ExecuteThreadIdleCount="1" CompletedRequestCount="23593" ExecuteThreadTotalCount="6"
+                   PendingUserRequestCount="0" QueueLength="0" StandbyThreadCount="4" Throughput="4.495504495504496"
+                   serverName="ms9901"/>
+<ThreadPoolRuntime ExecuteThreadIdleCount="2" CompletedRequestCount="608857" ExecuteThreadTotalCount="6"
+                   PendingUserRequestCount="0" QueueLength="0" StandbyThreadCount="3" Throughput="1.4992503748125936"
+                   serverName="MedRecServer"/>
+<JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="MedRecGlobalDataSourceXA" ConnectionDelayTime="316"
+                                                State="Running" ActiveConnectionsCurrentCount="0"
+                                                LeakedConnectionCount="0" FailuresToReconnectCount="0"
+                                                ConnectionsTotalCount="5" CurrCapacity="2" PrepStmtCacheAccessCount="0"
+                                                PrepStmtCacheHitCount="0" serverName="ms9902"/>
+<JDBCServiceRuntime.JDBCDataSourceRuntimeMBeans Name="MedRecGlobalDataSourceXA" ConnectionDelayTime="397"
+                                                State="Running" ActiveConnectionsCurrentCount="0"
+                                                LeakedConnectionCount="0" FailuresToReconnectCount="0"
+                                                ConnectionsTotalCount="2" CurrCapacity="2" PrepStmtCacheAccessCount="0"
+                                                PrepStmtCacheHitCount="0" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRec-jms9902" DeploymentState="2" ComponentName="null" Status="null"
+                                       OpenSessionsHighCount="null" OpenSessionsCurrentCount="null"
+                                       SessionsOpenedTotalCount="null" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9902_/medrec" DeploymentState="2" ComponentName="medrec.war"
+                                       Status="DEPLOYED" OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9902_/bea_wls_deployment_internal" DeploymentState="2"
+                                       ComponentName="bea_wls_deployment_internal.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRecGlobalDataSourceXA" DeploymentState="2" ComponentName="null"
+                                       Status="null" OpenSessionsHighCount="null" OpenSessionsCurrentCount="null"
+                                       SessionsOpenedTotalCount="null" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9902_/browser-starter" DeploymentState="1"
+                                       ComponentName="browser-starter.war" Status="UNDEPLOYED" OpenSessionsHighCount="0"
+                                       OpenSessionsCurrentCount="0" SessionsOpenedTotalCount="0" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9902_/_async" DeploymentState="2"
+                                       ComponentName="bea_wls9_async_response.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9902_/bea_wls_internal" DeploymentState="2"
+                                       ComponentName="bea_wls_internal.war" Status="DEPLOYED" OpenSessionsHighCount="0"
+                                       OpenSessionsCurrentCount="0" SessionsOpenedTotalCount="0" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9902_/physician-web" DeploymentState="2" ComponentName="physician.war"
+                                       Status="DEPLOYED" OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9902_/bea_wls_cluster_internal" DeploymentState="2"
+                                       ComponentName="bea_wls_cluster_internal.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9902"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9901_/_async" DeploymentState="2"
+                                       ComponentName="bea_wls9_async_response.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9901_/bea_wls_internal" DeploymentState="2"
+                                       ComponentName="bea_wls_internal.war" Status="DEPLOYED" OpenSessionsHighCount="0"
+                                       OpenSessionsCurrentCount="0" SessionsOpenedTotalCount="0" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9901_/bea_wls_deployment_internal" DeploymentState="2"
+                                       ComponentName="bea_wls_deployment_internal.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9901_/physician-web" DeploymentState="2" ComponentName="physician.war"
+                                       Status="DEPLOYED" OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRec-jms9901" DeploymentState="2" ComponentName="null" Status="null"
+                                       OpenSessionsHighCount="null" OpenSessionsCurrentCount="null"
+                                       SessionsOpenedTotalCount="null" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRecGlobalDataSourceXA" DeploymentState="2" ComponentName="null"
+                                       Status="null" OpenSessionsHighCount="null" OpenSessionsCurrentCount="null"
+                                       SessionsOpenedTotalCount="null" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9901_/bea_wls_cluster_internal" DeploymentState="2"
+                                       ComponentName="bea_wls_cluster_internal.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9901_/browser-starter" DeploymentState="1"
+                                       ComponentName="browser-starter.war" Status="UNDEPLOYED" OpenSessionsHighCount="0"
+                                       OpenSessionsCurrentCount="0" SessionsOpenedTotalCount="0" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="ms9901_/medrec" DeploymentState="2" ComponentName="medrec.war"
+                                       Status="DEPLOYED" OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="ms9901"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/bea_wls_management_internal2" DeploymentState="2"
+                                       ComponentName="bea_wls_management_internal2.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/_async" DeploymentState="2"
+                                       ComponentName="bea_wls9_async_response.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/bea_wls_deployment_internal" DeploymentState="2"
+                                       ComponentName="bea_wls_deployment_internal.war" Status="DEPLOYED"
+                                       OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/console" DeploymentState="2" ComponentName="console"
+                                       Status="DEPLOYED" OpenSessionsHighCount="2" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="8" serverName="MedRecServer"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/consolehelp" DeploymentState="2" ComponentName="consolehelp"
+                                       Status="DEPLOYED" OpenSessionsHighCount="0" OpenSessionsCurrentCount="0"
+                                       SessionsOpenedTotalCount="0" serverName="MedRecServer"/>
+<ApplicationRuntimes.ComponentRuntimes Name="MedRecServer_/bea_wls_internal" DeploymentState="2"
+                                       ComponentName="bea_wls_internal.war" Status="DEPLOYED" OpenSessionsHighCount="0"
+                                       OpenSessionsCurrentCount="0" SessionsOpenedTotalCount="0"
+                                       serverName="MedRecServer"/>
+<ApplicationRuntimes.ComponentRuntimes Name="mejb" DeploymentState="2" ComponentName="null" Status="null"
+                                       OpenSessionsHighCount="null" OpenSessionsCurrentCount="null"
+                                       SessionsOpenedTotalCount="null" serverName="MedRecServer"/>
+</MONITOR>

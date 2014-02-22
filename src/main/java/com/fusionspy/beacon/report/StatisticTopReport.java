@@ -1,8 +1,6 @@
 package com.fusionspy.beacon.report;
 
 
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-
 import java.util.List;
 import java.util.Map;
 

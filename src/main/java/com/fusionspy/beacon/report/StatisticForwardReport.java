@@ -1,20 +1,14 @@
 package com.fusionspy.beacon.report;
 
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.common.AttributeName;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 @Service

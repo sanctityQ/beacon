@@ -1,6 +1,6 @@
 var serverName;
 var interval;
-function chart_init(){
+//function chart_init(){
     //cpu chart
     new Highcharts.Chart({
         chart: {
@@ -416,88 +416,101 @@ function chart_init(){
         colors: ["#00cc99","#ccffcc","#ccccff","#cc9909"]
     });
 
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'server_session_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
 
-                    var series = this.series;
-                    setInterval(function() {
-                        $.ajax({
-                            url:rootPath + "/appServer/weblogic/chart/server_session/"+serverName+"/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                $(back).each(function(i,d) {
-                                    if(series[i]) {
-                                        if(series[i].data.length < 20){
-                                            series[i].addPoint(d, true, false);
-                                        }
-                                        else{
-                                            series[i].addPoint(d, true, true);
-                                        }
-                                    }
-                                });
-                            }})
-                    }, 1000 * interval);
-                }
-            }
-        },
 
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值'
-            }
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: (function() {
-            // generate an array of random data
-            var data = [];
-            $.ajax({
-                url: rootPath + "/appServer/weblogic/chart/server_session/"+serverName+"/123",
-                cache:false,
-                async:false,
-                success:function(back){
-                    data = back;
-                }
-            })
-            return data;
-        })(),
-        colors: ["#333366","#0033ff","#ff6699","#9900cc"]
-    });
-};
+     function createSessionChart(){
+
+       return  new Highcharts.Chart({
+             chart: {
+                 renderTo: 'server_session_line',
+                 type: 'line',
+                 height:230,
+                 events: {
+                     load: function() {
+
+                         var series = this.series;
+                         setInterval(function() {
+                             var wlsServerName = $('#server_session').val();
+                             $.ajax({
+                                 url:rootPath + "/appServer/weblogic/chart/session/latest",
+                                 cache:false,
+                                 async:false,
+                                 data:{'siteName':serverName,'serverName':wlsServerName},
+                                 success:function(back){
+                                     $(back).each(function(i,d) {
+                                         if(series[i]) {
+                                             if(series[i].data.length < 20){
+                                                 series[i].addPoint(d, true, false);
+                                             }
+                                             else{
+                                                 series[i].addPoint(d, true, true);
+                                             }
+                                         }
+                                     });
+                                 }})
+                         }, 1000 * interval);
+                     }
+                 }
+             },
+
+             title: {
+                 text: ''
+             },
+             subtitle: {
+                 text: ''
+             },
+             xAxis: {
+                 type: 'datetime'
+             },
+             yAxis: {
+                 title: {
+                     text: '值'
+                 }
+             },
+             tooltip: {
+                 formatter: function() {
+                     return '<b>'+ this.series.name +'</b><br/>'+
+                         Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'';
+                 }
+             },
+             plotOptions: {
+                 line: {
+                     dataLabels: {
+                         enabled: true
+                     },
+                     enableMouseTracking: true,
+                     marker:{
+                         enabled:false
+                     }
+                 }
+             },
+             credits: {
+                 text: '',
+                 href: ''
+             },
+             series: (function() {
+                 // generate an array of random data
+                 var data;
+                 var wlsServerName = $('#server_session').val();
+                 $.ajax({
+                     url: rootPath + "/appServer/weblogic/chart/session/"+serverName,
+                     cache:false,
+                     async:false,
+                     data:{'siteName':serverName,'serverName':wlsServerName},
+                     success:function(back){
+                         data = back;
+                     }
+                 })
+                 return data;
+             })(),
+             colors: ["#333366","#0033ff","#ff6699","#9900cc"]
+         });
+     }
+
+    var sessionChart = createSessionChart();
+//};
+
+
 
 var TAB_STATE = {data:0,state:1};
 /**

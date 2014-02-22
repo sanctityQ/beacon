@@ -1,9 +1,7 @@
 package com.fusionspy.beacon.site.tux;
 
 import com.fusionspy.beacon.report.*;
-import com.google.common.collect.Ordering;
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.common.ResourceType;
+import com.fusionspy.beacon.common.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

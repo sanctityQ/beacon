@@ -4,10 +4,10 @@ import com.fusionspy.beacon.site.*;
 import com.fusionspy.beacon.site.wls.entity.WlsInTimeData;
 import com.fusionspy.beacon.site.wls.entity.WlsIniData;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.resources.model.Resource;
-import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import com.fusionspy.beacon.attribute.model.Attribute;
+import com.fusionspy.beacon.common.AttributeName;
+import com.fusionspy.beacon.resources.model.Resource;
+import com.fusionspy.beacon.threshold.model.SeverityLevel;
 
 
 public class WlsSite extends MonitorSite {
@@ -21,6 +21,8 @@ public class WlsSite extends MonitorSite {
 
     private final String userName;
     private final String password;
+
+    private Integer throughputCount;
 
     public void setWlsService(WlsService wlsService) {
         this.wlsService = wlsService;
@@ -85,5 +87,34 @@ public class WlsSite extends MonitorSite {
 
     public String getPassword() {
         return password;
+    }
+
+    public Integer getRunningServerAmount(){
+        if(this.isAgentRunning()&&this.isRunning()){
+            WlsHisData wlsHisData = this.getMonitorData();
+            return wlsHisData.getWlsInTimeData().getRunningServerAmount();
+        }else{
+            return -1;
+        }
+    }
+
+    public Integer getStopServerAmount(){
+        if(this.isAgentRunning()&&this.isRunning()){
+            WlsHisData wlsHisData = this.getMonitorData();
+            return wlsHisData.getWlsInTimeData().getStopServerAmount();
+        }else{
+            return -1;
+        }
+    }
+
+    public Integer getThroughputCount() {
+
+        if(this.isRunning()&&this.isAgentRunning()){
+            WlsHisData wlsHisData = this.getMonitorData();
+            return wlsHisData.getWlsInTimeData().getThroughputCount();
+        }else{
+            return  -1;
+        }
+
     }
 }

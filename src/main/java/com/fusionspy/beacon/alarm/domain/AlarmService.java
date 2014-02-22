@@ -2,7 +2,7 @@ package com.fusionspy.beacon.alarm.domain;
 
 import com.fusionspy.beacon.alarm.model.Alarm;
 import com.fusionspy.beacon.alarm.repository.AlarmRepository;
-import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import com.fusionspy.beacon.threshold.model.SeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

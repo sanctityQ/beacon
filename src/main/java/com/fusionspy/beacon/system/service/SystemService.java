@@ -31,10 +31,4 @@ public interface SystemService {
 
     SiteSettings getSiteSetting(String siteName);
 
-    /**
-     * save Sysrecs
-     * @param sysrecsEntity
-     * @return siteMonitor count
-     */
-    int saveSysRec(SysrecsEntity sysrecsEntity);
 }

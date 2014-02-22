@@ -1,26 +1,17 @@
 package com.fusionspy.beacon.site;
 
-import com.fusionspy.beacon.site.wls.WlsService;
-import com.fusionspy.beacon.site.wls.entity.WlsServer;
-import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
-import com.fusionspy.beacon.system.service.SystemService;
 import com.google.common.collect.Maps;
-import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.util.thread.ThreadUtils;
+import com.fusionspy.beacon.common.ResourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.*;
 
 /**
  * monitor manage
@@ -116,10 +107,10 @@ public class MonitorManage {
      * @param resourceType
      * @return MonitorSite
      */
-    public MonitorSite getMonitorInf(String siteName, ResourceType resourceType) {
+    public <T extends MonitorSite> T getMonitorInf(String siteName, ResourceType resourceType) {
         Assert.hasText(siteName);
         MonitorSite monitorSite = sitesHolderMap.get(resourceType).getMonitorSite(siteName);
-        return  monitorSite;
+        return (T) monitorSite;
     }
 
 }

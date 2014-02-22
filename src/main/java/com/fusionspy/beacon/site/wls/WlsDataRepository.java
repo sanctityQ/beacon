@@ -35,7 +35,6 @@ public class WlsDataRepository implements MonitorDataRepository<WlsSite> {
 
     private Document xmlDocument;
 
-
     @Override
     public WlsIniData getInitData(WlsSite wlsSite) {
 

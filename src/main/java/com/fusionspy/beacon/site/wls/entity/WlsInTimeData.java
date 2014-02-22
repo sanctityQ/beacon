@@ -2,12 +2,16 @@ package com.fusionspy.beacon.site.wls.entity;
 
 import com.fusionspy.beacon.site.InTimeData;
 import com.fusionspy.beacon.site.wls.WlsMonitorData;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
 import com.sinosoft.one.util.encode.JaxbBinder;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.*;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,20 +20,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: bao
- * Date: 13-9-21
- * Time: 上午12:12
- * To change this template use File | Settings | File Templates.
- */
+
 @XmlRootElement(name = "MONITOR")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class WlsInTimeData extends WlsMonitorData implements InTimeData {
 
     public static WlsInTimeData EMPTY;
 
+
     static {
+        //初始化数据需要去除Dom4j
         try {
             InputStream in = WlsInTimeData.class.getClassLoader().getResourceAsStream("site/WlsInTimeEmpty.xml");
             //InputStreamReader
@@ -65,9 +65,41 @@ public class WlsInTimeData extends WlsMonitorData implements InTimeData {
     @XmlElement(name = "OSResource")
     private WlsResource resource;
 
+    private Integer runningServerAmount;
+    private Integer stopServerAmount;
+    private Integer throughputCount = 0;
+
     public List<WlsSvr> getServerRuntimes() {
         return serverRuntimes;
     }
+
+
+    public Integer getRunningServerAmount(){
+        if(runningServerAmount==null){
+            calculateServerAmount();
+        }
+        return runningServerAmount;
+    }
+
+    void calculateServerAmount(){
+        if(this == EMPTY)
+            return;
+        for(WlsSvr serverRuntime : serverRuntimes) {
+            if(serverRuntime.isRunning()){
+                runningServerAmount++;
+            }else{
+                stopServerAmount++;
+            }
+        }
+    }
+
+    public Integer getStopServerAmount(){
+        if(stopServerAmount==null){
+            calculateServerAmount();
+        }
+        return stopServerAmount;
+    }
+
 
     public void setServerRuntimes(List<WlsSvr> serverRuntimes) {
         this.serverRuntimes = serverRuntimes;
@@ -194,5 +226,21 @@ public class WlsInTimeData extends WlsMonitorData implements InTimeData {
             e.printStackTrace();
         }
         return this;
+    }
+
+    public Integer getThroughputCount() {
+        for(WlsThread wlsThread:threadPoolRuntimes){
+            throughputCount = wlsThread.getThoughput()+throughputCount;
+        }
+        return throughputCount;
+    }
+
+    public Iterable<WlsWebapp> getWlsWebappsByServerName(final String serverName){
+       return Iterables.filter(this.getComponentRuntimes(), new Predicate<WlsWebapp>() {
+           @Override
+           public boolean apply(@Nullable WlsWebapp input) {
+               return input.getServerName().equals(serverName);
+           }
+       });
     }
 }

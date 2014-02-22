@@ -3,16 +3,10 @@ package com.fusionspy.beacon.site.wls.entity;
 
 
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -165,6 +159,15 @@ public class WlsSvr implements java.io.Serializable {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Transient
+    public boolean isRunning(){
+        if(this.getState().equals("RUNNING")){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

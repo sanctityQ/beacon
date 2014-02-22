@@ -6,7 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Weblogic站点</title>
 <%@include file="/WEB-INF/layouts/base.jsp" %>
-<script type="text/javascript" src="${ctx}/global/js/appserver/weblogic.js"></script>
 <script type="text/javascript">
     interval = '${interval}';
     serverName = '${serverName}';
@@ -40,7 +39,12 @@ $(function() {
         $("#main").width(center.width() - 31).height(center.height() - 30)
     };
 
-    chart_init();
+    //chart_init();
+
+    $('#server_session').change(function(){
+        sessionChart.destroy();
+        sessionChart = createSessionChart();
+    });
 
     function getServerLatestData(){
         $.ajax({
@@ -78,9 +82,40 @@ $(function() {
                 site_flag = currentFlag;
             }
         });
+
+
+        $.ajax({
+            url: '${ctx}/appServer/weblogic/${serverName}/servers',
+            dataType : 'json',
+            type : 'get',
+            async : false,
+            error : function (XMLHttpRequest,errorThrown) {
+                //alert("数据加载出错！" + errorThrown);
+            },
+            success: function(data){
+                var option;
+                for(var i=0;i<data.length;i++){
+                    option+="<option value='"+data[i].serverName+"' > "+data[i].serverName+" </option>";
+                }
+
+                $(".serverList").each(function(i, d) {
+                 //   $(d).empty();
+                    $(d).append(option);
+                });
+            }
+        });
     }
 
+
+    getServerLatestData();
     setInterval(getServerLatestData, 1000 * interval);
+
+//    $('.serverList').each(function(index,element){
+//        $(element).append("<option value='"+_key+"' > "+_name+" </option> ");
+//
+//    })
+
+
 });
 
 </script>
@@ -104,8 +139,8 @@ $(function() {
             <div class="first">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td width="49%">
-                            <table width="100%" cellspacing="0" cellpadding="0" border="0" class="lrtbdarkborder" height="280px">
+                        <td width="49%" style="vertical-align:top">
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" class="lrtbdarkborder" height="300px">
                                 <tbody>
                                 <tr>
                                     <td colspan="4" class="jsq-message">监视器信息</td>
@@ -140,24 +175,26 @@ $(function() {
                                     <td align="right" class="monitorinfoodd">管理服务器： </td>
                                     <td class="monitorinfoeven"><span class="ehco_data" id='adminServerName'>${adminServerName}</span></td>
                                 </tr>
+                                <%--<tr>--%>
+                                    <%--<td align="right" class="monitorinfoodd"> 操作系统：</td>--%>
+                                    <%--<td class="monitorinfoeven"><span class="ehco_data" id="osVersion">${osVersion}</span></td>--%>
+                                    <%--<td align="right" class="monitorinfoodd">CPU空余：</td>--%>
+                                    <%--<td class="monitorinfoeven"><span class="ehco_data" id='cpuIdle'>${cpuIdle}</span></td>--%>
+                                <%--</tr>--%>
                                 <tr>
-                                    <td align="right" class="monitorinfoodd"> 操作系统：</td>
-                                    <td class="monitorinfoeven"><span class="ehco_data" id="osVersion">${osVersion}</span></td>
-                                    <td align="right" class="monitorinfoodd">CPU空余：</td>
-                                    <td class="monitorinfoeven"><span class="ehco_data" id='cpuIdle'>${cpuIdle}</span></td>
-                                </tr>
-                                <tr>
-                                    <td align="right" class="monitorinfoodd"> 内存空余：</td>
-                                    <td class="monitorinfoeven"><span class="ehco_data" id='memFree'>${memFree}</span>M</td>
+                                    <%--<td align="right" class="monitorinfoodd"> 内存空余：</td>--%>
+                                    <%--<td class="monitorinfoeven"><span class="ehco_data" id='memFree'>${memFree}</span>M</td>--%>
                                     <td align="right" class="monitorinfoodd">Agent版本：</td>
                                     <td class="monitorinfoeven"><span class="ehco_data" id="agentVer">${agentVer}</span></td>
-                                </tr>
-                                <tr>
                                     <td align="right" class="monitorinfoodd">监控次数：</td>
                                     <td class="monitorinfoeven"><span class="ehco_data" id='count'>${count}</span></td>
-                                    <td align="right" class="monitorinfoodd">&nbsp;</td>
-                                    <td class="monitorinfoeven">&nbsp;</td>
                                 </tr>
+                                <%--<tr>--%>
+                                    <%--<td align="right" class="monitorinfoodd">监控次数：</td>--%>
+                                    <%--<td class="monitorinfoeven"><span class="ehco_data" id='count'>${count}</span></td>--%>
+                                    <%--<td align="right" class="monitorinfoodd">&nbsp;</td>--%>
+                                    <%--<td class="monitorinfoeven">&nbsp;</td>--%>
+                                <%--</tr>--%>
                                 <tr>
                                     <td align="right" class="monitorinfoodd">&nbsp;</td>
                                     <td class="monitorinfoeven">&nbsp;</td>
@@ -169,7 +206,7 @@ $(function() {
                         </td>
                         <td width="2%">&nbsp;</td>
                         <td style="vertical-align:top" width="49%">
-                            <div class="tableheadingbborder" style="height:320px;width:100%">
+                            <div class="tableheadingbborder" style="height:300px;width:100%">
                                 <div class="head-cpu">
                                     <a id="emergencyRefresh" href="javascript:void(0)" class="refresh" title="刷新"></a>
                                     <a href="${ctx}/alarm/manager/resource/${serverName}/history" class="alerts_list">历史预警</a>
@@ -248,7 +285,9 @@ $(function() {
                         </div></td>
                         <td width="2%">&nbsp;</td>
                         <td width="49%"><div class="hr_box h_b">
-                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> server session信息 </div>
+                            <div class="head-cpu"> <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a> server session信息
+                               <select style="margin-left: 10px" class="serverList" id="server_session"></select>
+                            </div>
                             <div id="server_session_line" style="height:230px;padding-top:15px"></div>
                         </div></td>
                     </tr>
@@ -346,3 +385,4 @@ $(function() {
 <%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>
+<script type="text/javascript" src="${ctx}/global/js/appserver/weblogic.js"></script>

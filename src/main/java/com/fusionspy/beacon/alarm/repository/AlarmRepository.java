@@ -3,9 +3,9 @@ package com.fusionspy.beacon.alarm.repository;
 
 import com.sinosoft.one.data.jade.annotation.SQL;
 import com.fusionspy.beacon.alarm.model.Alarm;
-import com.sinosoft.one.monitor.common.HealthStaForMonitor;
-import com.sinosoft.one.monitor.common.HealthStaForTime;
-import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
+import com.fusionspy.beacon.common.HealthStaForMonitor;
+import com.fusionspy.beacon.common.HealthStaForTime;
+import com.fusionspy.beacon.threshold.model.SeverityLevel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;

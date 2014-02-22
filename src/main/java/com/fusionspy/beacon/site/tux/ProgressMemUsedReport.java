@@ -2,11 +2,9 @@ package com.fusionspy.beacon.site.tux;
 
 import com.fusionspy.beacon.report.*;
 import com.fusionspy.beacon.site.tux.dao.TuxSvrsDao;
-import com.fusionspy.beacon.site.tux.entity.TuxsvrsEntity;
 import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.Lists;
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.common.ResourceType;
+import com.fusionspy.beacon.attribute.model.Attribute;
+import com.fusionspy.beacon.common.ResourceType;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

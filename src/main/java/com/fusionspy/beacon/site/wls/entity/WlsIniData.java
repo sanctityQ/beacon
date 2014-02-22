@@ -1,25 +1,16 @@
 package com.fusionspy.beacon.site.wls.entity;
 
 import com.fusionspy.beacon.site.InitData;
-import com.fusionspy.beacon.site.MonitorData;
 import com.fusionspy.beacon.site.wls.WlsMonitorData;
 import com.fusionspy.beacon.site.wls.WlsService;
-import com.fusionspy.beacon.site.wls.dao.WlsSysrecDao;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.bind.annotation.*;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: bao
- * Date: 13-9-21
- * Time: 上午12:10
- * To change this template use File | Settings | File Templates.
- */
+
 @XmlRootElement(name = "MONITOR")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class WlsIniData extends WlsMonitorData implements InitData {

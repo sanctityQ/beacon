@@ -7,7 +7,7 @@
 
 
 
-    <bean id="loginFilter" class="com.sinosoft.one.monitor.shiro.LoginFilter"></bean>
+    <bean id="loginFilter" class="com.fusionspy.beacon.shiro.LoginFilter"></bean>
     <!-- Shiro Filter -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
@@ -48,7 +48,7 @@
     <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
 
     <!-- 自定义realm -->
-    <bean id="shiroDbRealm" class="com.sinosoft.one.monitor.shiro.ShiroDbRealm" />
+    <bean id="shiroDbRealm" class="com.fusionspy.beacon.shiro.ShiroDbRealm" />
 
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>

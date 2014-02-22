@@ -95,7 +95,7 @@
             <div class="tool_bar_top">
                <shiro:hasPermission name="admin">
                 <a href="javascript:void(0);" class="batch_del" onclick="batchDel()">批量删除</a>
-                <a href="${ctx}/appServer/weblogic/addUI" class="add">新建Weblogic</a>
+                <a href="${ctx}/appServer/weblogic/add" class="add">新建Weblogic</a>
                </shiro:hasPermission>
             </div>
             <div id="thresholdList"></div>

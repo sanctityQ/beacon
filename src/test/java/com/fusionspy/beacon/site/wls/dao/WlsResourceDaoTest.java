@@ -59,8 +59,8 @@ public class WlsResourceDaoTest extends SpringTxTestCase {
                 "</MONITOR>";
         JaxbBinder jaxbBinder1 = new JaxbBinder(WlsIniData.class);
         WlsIniData initData = jaxbBinder1.fromXml(wlsIniData);
-        WlsHisData hisData = new WlsHisData();
-        hisData.setWlsIniData(initData.defaultData());
+//        WlsHisData hisData = new WlsHisData();
+//        hisData.setWlsIniData(initData.defaultData());
 
 //        InputStream in = Test.class.getClassLoader().getResourceAsStream("a.xml");
 //        SAXReader xmlReader = new SAXReader();

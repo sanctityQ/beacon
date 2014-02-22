@@ -7,7 +7,6 @@ import javax.persistence.*;
  * User: qc
  * Date: 11-8-10
  * Time: 下午6:25
- * To change this template use File | Settings | File Templates.
  */
 @Table(name = "GE_MONITOR_TUX_SERVER")
 @Entity

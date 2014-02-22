@@ -8,7 +8,6 @@ import java.util.List;
  * User: bao
  * Date: 13-10-17
  * Time: 下午11:26
- * To change this template use File | Settings | File Templates.
  */
 public class JsonGrid {
 

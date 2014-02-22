@@ -3,7 +3,7 @@ package com.fusionspy.beacon.site.wls;
 
 import com.fusionspy.beacon.site.SitesHolder;
 import com.fusionspy.beacon.site.wls.entity.WlsServer;
-import com.sinosoft.one.monitor.common.ResourceType;
+import com.fusionspy.beacon.common.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,19 +1,14 @@
 package com.fusionspy.beacon.site.tux;
 
-import com.fusionspy.beacon.site.MonitorDataRepository;
-import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.SitesHolder;
 import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
-import com.fusionspy.beacon.site.wls.WlsSite;
-import com.fusionspy.beacon.site.wls.entity.WlsServer;
 import com.fusionspy.beacon.system.service.SystemService;
-import com.sinosoft.one.monitor.common.ResourceType;
+import com.fusionspy.beacon.common.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.concurrent.ThreadFactory;
 
 @Component
 class TuxSiteHolder extends SitesHolder<TuxSite>{

@@ -3,7 +3,7 @@ package com.fusionspy.beacon.report;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.fusionspy.beacon.attribute.model.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

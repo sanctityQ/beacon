@@ -29,9 +29,10 @@ var columnStyle3 =
         ];
 var wlsColumnStyle =
         [
-            {id:'1',text:'名称',name:"name",index:'1',align:''},
-            {id:'2',text:'服务列表',name:"serverList",index:'1',align:''},
-            {id:'3',text:'健康状态',name:"availability",index:'1',align:''}
+            {id:'1',text:'名称',name:"name",index:'1'},
+            {id:'2',text:'运行(Server)',name:"runningCount",index:'1',align:''},
+            {id:'3',text:'停止(Server)',name:"stopCount",index:'1',align:''},
+            {id:'3',text:'吞吐量(总计)',name:"throughput",index:'1',align:''}
         ];
 
 $(function(){
@@ -44,7 +45,7 @@ $(function(){
 	//gridList.push({"renderId":"systemList","url":rootPath+"/os/systemList?time=" + new Date().getTime(), "columStyle":columStyle1});
 	//gridList.push({"renderId":"oracleList","url":rootPath+"/db/oracle/thresholdList?time=" + new Date().getTime(), "columStyle":columStyle1});
     gridList.push({"renderId":"weblogicList","url":rootPath+"/appServer/weblogic/indexList?time=" + new Date().getTime(), "columStyle":wlsColumnStyle});
-	//gridList.push({"renderId":"tuxedoList","url":rootPath+"/appServer/tuxedo/list?time=" + new Date().getTime(), "columStyle":columnStyle3});
+	gridList.push({"renderId":"tuxedoList","url":rootPath+"/appServer/tuxedo/list?time=" + new Date().getTime(), "columStyle":columnStyle3});
 
 
 	$(gridList).each(function(i, d){
@@ -91,10 +92,10 @@ $(function(){
                     <div id="weblogicList"></div>
                 </div>
                 <br />
-	        	<%--<div class="threshold_file">--%>
-	                <%--<h3 class="title3">操作系统：</h3>--%>
-	                <%--<div id="systemList"></div>--%>
-	            <%--</div>--%>
+	        	<div class="threshold_file">
+	                <h3 class="title3">Tuxedo服务器：</h3>
+	                <div id="tuxedoList"></div>
+	            </div>
 	            <%--<br />--%>
 	        	<%--<div class="threshold_file">--%>
 	                <%--<h3 class="title3">数据库：</h3>--%>

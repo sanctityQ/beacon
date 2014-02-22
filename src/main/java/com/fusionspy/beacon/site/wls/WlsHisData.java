@@ -34,41 +34,19 @@ public class WlsHisData implements HisData {
     }
 
     WlsHisData(){
-        this.setWlsInTimeData(new WlsInTimeData());
+       // this.setWlsInTimeData(new WlsInTimeData());
         this.setWlsInTimeData(WlsInTimeData.EMPTY);
         this.setWlsIniData(WlsIniData.EMPTY);
     }
 
     /**
-     * 记录初始化数据
+     * 记录最新数据
      */
     private WlsInTimeData wlsInTimeData;
     /**
-     * 记录最后一次实时数据
+     * 记录初始化数据
      */
     private WlsIniData wlsIniData;
-
-    private int rqDoneCount = -1;
-    /**
-     * 监控次数
-     */
-    private int monitorCount;
-
-    public int getRqDoneCount() {
-        return rqDoneCount;
-    }
-
-    void setRqDoneCount(int rqDoneCount) {
-        this.rqDoneCount = rqDoneCount;
-    }
-
-    public void setMonitorCount(int monitorCount) {
-        this.monitorCount = monitorCount;
-    }
-
-    public int getMonitorCount() {
-        return monitorCount;
-    }
 
     public WlsInTimeData getWlsInTimeData() {
         if (wlsInTimeData == null)

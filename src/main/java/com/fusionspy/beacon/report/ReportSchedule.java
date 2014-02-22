@@ -1,9 +1,8 @@
 package com.fusionspy.beacon.report;
 
 
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.resources.model.Resource;
-import com.sinosoft.one.monitor.resources.repository.ResourcesRepository;
+import com.fusionspy.beacon.resources.model.Resource;
+import com.fusionspy.beacon.resources.repository.ResourcesRepository;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

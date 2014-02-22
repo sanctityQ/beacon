@@ -4,11 +4,12 @@ import com.fusionspy.beacon.site.MonitorManage;
 import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.wls.WlsHisData;
 import com.fusionspy.beacon.site.wls.WlsService;
+import com.fusionspy.beacon.site.wls.WlsSite;
 import com.fusionspy.beacon.site.wls.entity.*;
 import com.fusionspy.beacon.web.JsonGrid;
 import com.google.common.collect.Maps;
-import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.monitor.utils.MessageUtils;
+import com.fusionspy.beacon.common.ResourceType;
+import com.fusionspy.beacon.utils.MessageUtils;
 import com.sinosoft.one.mvc.web.Invocation;
 import com.sinosoft.one.mvc.web.annotation.Param;
 import com.sinosoft.one.mvc.web.annotation.Path;
@@ -47,49 +48,60 @@ public class WlsController {
         JsonGrid grid = JsonGrid.buildGrid(wlsService.list(), new JsonGrid.JsonRowHandler<WlsServer>() {
             @Override
             public JsonGrid.JsonRow buildRow(WlsServer t) {
-                MonitorSite monitorSite = monitorManage.getMonitorInf(t.getSiteName(), ResourceType.WEBLOGIC );
+
+                WlsSite monitorSite = monitorManage.getMonitorInf(t.getSiteName(), ResourceType.WEBLOGIC );
                 WlsHisData hisData = monitorSite.getMonitorData();
                 WlsInTimeData inTimeData = hisData.getWlsInTimeData();
+
+
                 //TODO
-                List<WlsSvr> serverRuntimes = inTimeData.getServerRuntimes();
                 //String availability = (inTimeData.getError() == null || StringUtils.isBlank(inTimeData.getError().getErrMsg())) ? "fine" : "poor";
+
                 JsonGrid.JsonRow row = new JsonGrid.JsonRow();
                 row.setId(t.getSiteName());
                 row.addCell(MessageUtils.formateMessage(MessageUtils.MESSAGE_FORMAT_A, preUrl + t.getSiteName(), t.getSiteName()));
-                StringBuilder serverList = new StringBuilder();
-                StringBuilder healthList = new StringBuilder();
-                for(WlsSvr serverRuntime : serverRuntimes) {
-                    serverList.append(MessageUtils.formateMessage(MessageUtils.MESSAGE_INFO_DIV, "", serverRuntime.getServerName()));
-                    //HEALTH_OK，HEALTH_WARN，HEALTH_CRITICAL，HEALTH_FAILED
-                    String health = serverRuntime.getHealth();
-                    String cssClass = "";
-                    if(monitorSite.isAgentRunning()) {
-                        if (health.indexOf("HEALTH_OK") != -1) {
-                            cssClass = "fine";
-                        } else if (health.indexOf("HEALTH_WARN") != -1) {
-                            cssClass = "y_poor";
-                        } else if (health.indexOf("HEALTH_CRITICAL") != -1) {
-                            cssClass = "poor";
-                        } else if (health.indexOf("HEALTH_FAILED") != -1) {
-                            cssClass = "poor";
-                        }
-                    } else {
-                        cssClass = "poor";
-                    }
-                    healthList.append(MessageUtils.formateMessage(MessageUtils.MESSAGE_INFO_DIV, cssClass, ""));
 
-                }
-                row.addCell(serverList.toString());
-                row.addCell(healthList.toString());
+//                StringBuilder serverList = new StringBuilder();
+//                StringBuilder healthList = new StringBuilder();
+
+
+                //处理当前domain下server正常运行的数量，server停止的数量
+//                for(WlsSvr serverRuntime : serverRuntimes) {
+                   // serverList.append(MessageUtils.formateMessage(MessageUtils.MESSAGE_INFO_DIV, "", serverRuntime.getServerName()));
+                    //HEALTH_OK，HEALTH_WARN，HEALTH_CRITICAL，HEALTH_FAILED
+//                    String health = serverRuntime.getHealth();
+//                    String cssClass = "";
+
+//                        if (health.indexOf("HEALTH_OK") != -1) {
+//                            cssClass = "fine";
+//                        } else if (health.indexOf("HEALTH_WARN") != -1) {
+//                            cssClass = "y_poor";
+//                        } else if (health.indexOf("HEALTH_CRITICAL") != -1) {
+//                            cssClass = "poor";
+//                        } else if (health.indexOf("HEALTH_FAILED") != -1) {
+//                            cssClass = "poor";
+//                        }
+ //                   } else {
+                        //cssClass = "poor";
+//                    }
+//                    healthList.append(MessageUtils.formateMessage(MessageUtils.MESSAGE_INFO_DIV, cssClass, ""));
+//               }
+
+                row.addCell(String.valueOf(monitorSite.getRunningServerAmount()));
+                row.addCell(String.valueOf(monitorSite.getStopServerAmount()));
+                row.addCell(String.valueOf(monitorSite.getThroughputCount()));
+
+//                row.addCell(serverList.toString());
+//                row.addCell(healthList.toString());
                 return row;
             }
         });
         return Replys.with(grid).as(Json.class);
     }
 
-    @Get("addUI")
-    public String addUI() {
-        return "weblogicSaveUI";
+    @Get("add")
+    public String add() {
+        return "webLogicConfig";
     }
 
     @Get("editUI/{siteName}")
@@ -98,7 +110,7 @@ public class WlsController {
 //        hisData.getWlsIniData().getWlsSysrec();
         WlsServer wlsServer = wlsService.getSite(siteName);
         invocation.addModel("server", wlsServer);
-        return "weblogicSaveUI";
+        return "webLogicConfig";
     }
 
     @Post("save")
@@ -163,30 +175,39 @@ public class WlsController {
     @Get("view/{siteName}")
     public String view(@Param("siteName") String siteName, Invocation invocation) {
         WlsServer wlsServer = wlsService.getSite(siteName);
-        MonitorSite monitorSite = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC );
+        WlsSite monitorSite = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC);
         WlsHisData hisData = monitorSite.getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
-        WlsInTimeData inTimeData = hisData.getWlsInTimeData();
         invocation.addModel("serverName", siteName);
         invocation.addModel("serverType", "weblogic");
         invocation.addModel("wlsVersion", iniData.getWlsSysrec().getDomainVersion());
         invocation.addModel("rectime", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").print(new DateTime(iniData.getWlsSysrec().getRecTime())));
-        invocation.addModel("osVersion", iniData.getWlsSysrec().getOsVersion());
+//        invocation.addModel("osVersion", iniData.getWlsSysrec().getOsVersion());
         invocation.addModel("serverNum", iniData.getWlsSysrec().getServerNum());
         invocation.addModel("domainName", iniData.getWlsSysrec().getName());
         invocation.addModel("adminServerName", iniData.getWlsSysrec().getAdminServerName());
-        invocation.addModel("cpuIdle", inTimeData.getResource()==null?"-":inTimeData.getResource().getCpuIdle());
-        invocation.addModel("memFree", inTimeData.getResource().getMemFree());
+//        invocation.addModel("cpuIdle", inTimeData.getResource()==null?"-":inTimeData.getResource().getCpuIdle());
+//        invocation.addModel("memFree", inTimeData.getResource().getMemFree());
         invocation.addModel("agentVer", iniData.getWlsSysrec().getAgentVersion());
         invocation.addModel("systemboot", iniData.getWlsSysrec().getSystemBoot());
         invocation.addModel("count", monitorSite.getMonitorCount());
-        invocation.addModel("ip", inTimeData.getServerRuntimes().size() > 0 ? inTimeData.getServerRuntimes().get(0).getListenAddress() : "");
-        invocation.addModel("port", inTimeData.getServerRuntimes().size() > 0 ? inTimeData.getServerRuntimes().get(0).getListenPort() : "") ;
+        invocation.addModel("ip", monitorSite.getSiteIp());
+        invocation.addModel("port", monitorSite.getSitePort()) ;
         invocation.addModel("interval", wlsServer.getInterval());
         invocation.addModel("stop", hisData.isWlsStop());
         invocation.addModel("agentStop",!monitorSite.isAgentRunning());
         return "weblogicInfo";
     }
+
+
+    @Get("/${siteName}/servers")
+    public Reply getAllServerInfoBySiteName(@Param("siteName")String siteName){
+        WlsSite monitorSite = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC );
+        WlsHisData hisData = monitorSite.getMonitorData();
+        List<WlsSvr> wlsSvrs= hisData.getWlsInTimeData().getServerRuntimes();
+        return Replys.with(wlsSvrs).as(Json.class);
+    }
+
 
     /**
      * 更新监视汇总信息
@@ -195,7 +216,6 @@ public class WlsController {
      */
     @Get("/viewLast/${siteName}")
     public Reply viewLast(@Param("siteName") String siteName) {
-        WlsServer wlsServer = wlsService.getSite(siteName);
         MonitorSite monitorSite = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC );
         WlsHisData hisData = monitorSite.getMonitorData();
         WlsIniData iniData = hisData.getWlsIniData();
@@ -216,7 +236,7 @@ public class WlsController {
         lastInfo.put("count", monitorSite.getMonitorCount());
         lastInfo.put("ip", inTimeData.getServerRuntimes().size() > 0 ? inTimeData.getServerRuntimes().get(0).getListenAddress() : "");
         lastInfo.put("port", inTimeData.getServerRuntimes().size() > 0 ? inTimeData.getServerRuntimes().get(0).getListenPort() : "");
-        lastInfo.put("interval", wlsServer.getInterval());
+        lastInfo.put("interval", monitorSite.getPeriod());
         lastInfo.put("stop", hisData.isWlsStop());
         lastInfo.put("agentStop",!monitorSite.isAgentRunning());
         return Replys.with(lastInfo).as(Json.class);
@@ -445,26 +465,72 @@ public class WlsController {
                 }
                 retVal = series.values();
             }
-        } else if ("server_session".equals(type)) {//session信息
-            if (operation.equals("latest")) {
-                List<Object> list = new ArrayList<Object>();
-                for (WlsWebapp webapp : inTimeData.getComponentRuntimes()) {
-                    List<Object> point = new ArrayList<Object>();
-                    point.add(webapp.getRecTime().getTime());
-                    point.add(webapp.getOpenSessionsCurrent());
-                    list.add(point);
-                }
-                retVal = list;
-            } else {
+        }
+//        else if ("server_session".equals(type)) {//session信息
+//            if (operation.equals("latest")) {
+//                List<Object> list = new ArrayList<Object>();
+//                for (WlsWebapp webapp : inTimeData.getComponentRuntimes()) {
+//                    List<Object> point = new ArrayList<Object>();
+//                    point.add(webapp.getRecTime().getTime());
+//                    point.add(webapp.getOpenSessionsCurrent());
+//                    list.add(point);
+//                }
+//                retVal = list;
+//            } else {
+//                Map<String, Map<String, Object>> series = new LinkedHashMap<String, Map<String, Object>>();
+//                while (iterator.hasNext()) {
+//                    inTimeData = iterator.next();
+//                    for (WlsWebapp webapp : inTimeData.getComponentRuntimes()) {
+//                        Map<String, Object> serie = series.get(webapp.getServerName());
+//                        if (serie == null) {
+//                            serie = new HashMap<String, Object>();
+//                            series.put(webapp.getServerName(), serie);
+//                            serie.put("name", webapp.getServerName());
+//                            List<Object> data = new ArrayList<Object>();
+//                            serie.put("data", data);
+//                        }
+//                        List<Object> data = (List<Object>) serie.get("data");
+//                        Map<String, Object> point = new HashMap<String, Object>();
+//                        point.put("x", webapp.getRecTime().getTime());
+//                        point.put("y", webapp.getOpenSessionsCurrent());
+//                        data.add(point);
+//                    }
+//                }
+//                retVal = series.values();
+//            }
+//        }
+        return Replys.with(retVal).as(Json.class);
+    }
+
+
+    @Get("/chart/session/${operation}")
+    public Reply serverSessionChartData(@Param("siteName")String siteName,@Param("operation")String operation,@Param("serverName")String serverName){
+        WlsHisData hisData = monitorManage.getMonitorInf(siteName, ResourceType.WEBLOGIC ).getMonitorData();
+        Iterator<WlsInTimeData> iterator = hisData.getIntimeDatasQue(siteName);
+        if (operation.equals("latest")) {
+            WlsInTimeData inTimeData = hisData.getWlsInTimeData();
+
+            List<Object> list = new ArrayList<Object>();
+
+            for (WlsWebapp webapp : inTimeData.getWlsWebappsByServerName(serverName)) {
+                List<Number> point = new ArrayList<Number>();
+                point.add(webapp.getRecTime().getTime());
+                point.add(webapp.getOpenSessionsCurrent());
+                list.add(point);
+            }
+            return Replys.with(list).as(Json.class);
+
+        } else {
+
                 Map<String, Map<String, Object>> series = new LinkedHashMap<String, Map<String, Object>>();
                 while (iterator.hasNext()) {
-                    inTimeData = iterator.next();
-                    for (WlsWebapp webapp : inTimeData.getComponentRuntimes()) {
-                        Map<String, Object> serie = series.get(webapp.getServerName());
+                    WlsInTimeData inTimeData = iterator.next();
+                    for (WlsWebapp webapp : inTimeData.getWlsWebappsByServerName(serverName)) {
+                        Map<String, Object> serie = series.get(webapp.getName());
                         if (serie == null) {
                             serie = new HashMap<String, Object>();
-                            series.put(webapp.getServerName(), serie);
-                            serie.put("name", webapp.getServerName());
+                            series.put(webapp.getName(), serie);
+                            serie.put("name", webapp.getName());
                             List<Object> data = new ArrayList<Object>();
                             serie.put("data", data);
                         }
@@ -475,10 +541,12 @@ public class WlsController {
                         data.add(point);
                     }
                 }
-                retVal = series.values();
-            }
+            return Replys.with(series.values()).as(Json.class);
+
         }
-        return Replys.with(retVal).as(Json.class);
+
+
+
     }
 
     /**

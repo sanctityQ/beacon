@@ -1,9 +1,8 @@
 package com.fusionspy.beacon.report;
 
 
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.common.ResourceType;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fusionspy.beacon.attribute.model.Attribute;
+import com.fusionspy.beacon.common.ResourceType;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

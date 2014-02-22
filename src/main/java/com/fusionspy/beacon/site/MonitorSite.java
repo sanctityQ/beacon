@@ -1,21 +1,15 @@
 package com.fusionspy.beacon.site;
 
-import com.fusionspy.beacon.site.tux.TuxHisData;
-import com.sinosoft.one.monitor.attribute.domain.AttributeCache;
-import com.sinosoft.one.monitor.attribute.domain.AttributeService;
-import com.sinosoft.one.monitor.attribute.model.Attribute;
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.monitor.resources.domain.ResourcesCache;
-import com.sinosoft.one.monitor.resources.model.Resource;
-import com.sinosoft.one.util.thread.ThreadUtils;
+import com.fusionspy.beacon.attribute.domain.AttributeCache;
+import com.fusionspy.beacon.attribute.model.Attribute;
+import com.fusionspy.beacon.resources.domain.ResourcesCache;
+import com.fusionspy.beacon.resources.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.net.ConnectException;
 import java.util.concurrent.*;
 
 /**
@@ -260,9 +254,11 @@ public abstract class MonitorSite {
                     //设置刷新标识位
                     needRefresh = true;
                     t = t.getCause();
-                    logger.error("siteName[{}] ExceptionMessage :{},stackTrace：{}", new Object[]{getSiteName(),
-                            connectAgentException.getMessage(),t});
+                    logger.error("siteName[{}] ExceptionMessage :{}", new Object[]{getSiteName(),
+                            connectAgentException.getMessage()});
                 }
+
+                logger.error("site:["+siteName+"]运行期间异常，请检查",t);
             }
         }
     }

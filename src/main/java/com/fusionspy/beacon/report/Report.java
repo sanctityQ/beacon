@@ -1,7 +1,7 @@
 package com.fusionspy.beacon.report;
 
 
-import com.sinosoft.one.monitor.attribute.model.Attribute;
+import com.fusionspy.beacon.attribute.model.Attribute;
 
 public interface Report {
     Attribute getAttribute();

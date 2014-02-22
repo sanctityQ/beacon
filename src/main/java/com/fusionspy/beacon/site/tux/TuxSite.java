@@ -7,14 +7,8 @@ import com.fusionspy.beacon.site.MonitorSite;
 import com.fusionspy.beacon.site.tux.entity.SiteListEntity;
 import com.fusionspy.beacon.site.tux.entity.TuxInTimeData;
 import com.fusionspy.beacon.site.tux.entity.TuxIniData;
-import com.sinosoft.one.monitor.common.AttributeName;
-import com.sinosoft.one.monitor.common.ResourceType;
-import com.sinosoft.one.monitor.resources.model.Resource;
-import com.sinosoft.one.monitor.threshold.model.SeverityLevel;
-import com.sinosoft.one.util.thread.ThreadUtils;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.concurrent.ThreadFactory;
+import com.fusionspy.beacon.common.AttributeName;
+import com.fusionspy.beacon.threshold.model.SeverityLevel;
 
 /**
  * tuxSite
