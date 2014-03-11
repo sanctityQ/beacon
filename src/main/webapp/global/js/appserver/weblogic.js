@@ -1,175 +1,9 @@
 var serverName;
 var interval;
+
+
+$(function() {
 //function chart_init(){
-    //cpu chart
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'CPU_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:rootPath + "/appServer/weblogic/chart/cpu/"+serverName+"/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(series.data.length < 20){
-                                    series.addPoint(back, true, false);
-                                }
-                                else{
-                                    series.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, 1000 * interval);
-                }
-            }
-        },
-
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值%'
-            }
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'%';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: 'CPU使用率',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:rootPath + "/appServer/weblogic/chart/cpu/"+serverName+"/123",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#87bdc9']
-    });
-
-
-
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'RAM_line',
-            type: 'line',
-            height:230,
-            events: {
-                load: function() {
-
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    //update chart data
-                    setInterval(function() {
-                        $.ajax({
-                            url:rootPath + "/appServer/weblogic/chart/memory/"+serverName+"/latest",
-                            cache:false,
-                            async:false,
-                            success:function(back){
-                                if(series.data.length < 20){
-                                    series.addPoint(back, true, false);
-                                }
-                                else{
-                                    series.addPoint(back, true, true);
-                                }
-                            }
-                        })
-                    }, 1000 * interval);
-                }
-            }
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: '值M'
-            }
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)+'<br/>'+this.y+'M';
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: true,
-                marker:{
-                    enabled:false
-                }
-            }
-        },
-        credits: {
-            text: '',
-            href: ''
-        },
-        series: [{
-            name: '内存使用率',
-            data: (function() {
-                // generate an array of random data
-                var data = [];
-                $.ajax({
-                    url:rootPath + "/appServer/weblogic/chart/memory/"+serverName+"/all",
-                    cache:false,
-                    async:false,
-                    success:function(back){
-                        data = back;
-                    }
-                })
-                return data;
-            })()
-        }],
-        colors: ['#769f5d']
-    });
 
     //server_ram chart
     new Highcharts.Chart({
@@ -508,8 +342,13 @@ var interval;
      }
 
     var sessionChart = createSessionChart();
-//};
 
+    $('#server_session').change(function(){
+        sessionChart.destroy();
+        sessionChart = createSessionChart();
+    });
+//};
+});
 
 
 var TAB_STATE = {data:0,state:1};

@@ -18,7 +18,8 @@ import java.util.Map;
 import static com.google.common.collect.Maps.newHashMap;
 
 @Service("wlsHostMemFreeReport")
-public class HostMemFreeReport extends StatisticForwardReport implements WlsReport {
+@Deprecated //wls目前无法获取每台server的mem，所以暂时取消
+public class HostMemFreeReport {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -27,7 +28,6 @@ public class HostMemFreeReport extends StatisticForwardReport implements WlsRepo
     @Autowired
     private WlsResourceDao resourceDao;
 
-    @Override
     public Attribute getAttribute() {
         if (attribute == null) {
             attribute = new Attribute();
@@ -39,7 +39,6 @@ public class HostMemFreeReport extends StatisticForwardReport implements WlsRepo
         return attribute;
     }
 
-    @Override
     public Map<String, Statistics> getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
         logger.info("查询日期范围："+startDate.toString() + "--" + endDate.toString());
         Map<String, Statistics> map = newHashMap();

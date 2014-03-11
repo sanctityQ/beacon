@@ -7,17 +7,11 @@
 <%@include file="/WEB-INF/layouts/base.jsp" %>
 <script language="javascript" src="${ctx}/global/js/one.layout.js"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
     $(function(){
       //  $(".form").parent().parent().addClass("seleck").siblings().removeClass("seleck");
         $("body").layout();
 
-        function query(){
-            var loc = window.location.toString().split('&');
-            var p = loc[0].split('?');
-            loc[0] = p[0].substring(0,p[0].lastIndexOf("/")+1)+$('#attribute').val()+"?"+p[1];
-            window.location=loc[0].substring(0,loc[0].indexOf("=")+1)+$('#dateSeries').val()+"&"+loc[1];
-        }
 
         $('#attribute').html('');
         <c:forEach var="attribute" items="${attributes}" varStatus="status">
@@ -45,13 +39,12 @@
                 {id:'4',text:'最小值',name:"min",width:'',index:'1',align:'',color:''},
                 {id:'5',text:'平均值',name:"avg",width:'',index:'1',align:'',color:''}
             ],
-            //rowList:[10,20,30],
             pager : false,
             number:false,
             multiselect:false
         });
 
-        var chart3 = new Highcharts.Chart({
+        var chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'container',
                 type: 'column',
@@ -104,7 +97,7 @@
         });
 
         $('#expPdf').click(function(e){
-            var svg=chart3.getSVG();
+            var svg=chart.getSVG();
             post_to_url('${ctx}/report/export',
                     {'svg':svg,
                         'title':'${dateSeries.description}-${type.description}的${attribute.attributeCn}(${attribute.units})',
@@ -119,6 +112,32 @@
         });
         </c:if>
     });
+
+
+    function query(){
+
+        var loc = window.location.toString().split('&');
+        var p = loc[0].split('?');
+        loc[0] = p[0].substring(0,p[0].lastIndexOf("/")+1)+$('#attribute').val()+"?"+p[1];
+
+        loc =loc[0].substring(0,loc[0].indexOf("=")+1)+$('#dateSeries').val()+"&"+loc[1];
+        $.each(conditions,function(i,e){
+            console.log(i);
+            console.log(e);
+            if(i==$('#attribute').val()){
+
+                $.each(e,function(j,k){
+                    console.log(j)
+                    console.log(k)
+                    loc = loc+"&"+k+"="+$('#'+k).val();
+                })
+
+
+            }
+        });
+        window.location = loc;
+    }
+
 
     //自动创建form并提交
     function post_to_url(path, params, method) {
@@ -141,7 +160,8 @@
         form.submit();
     }
 
-
+    //
+    window.conditions={};
 
 </script>
 </head>
@@ -160,8 +180,8 @@
                     </select>
                 </td>
                 <td align="right">选择属性：</td>
-                <td width="120">
-                    <select id='attribute' name="attribute" class="diySelect" style="width:120px">
+                <td width="330">
+                    <select id='attribute' name="attribute" class="diySelect" style="width:120px;float: left">
                         <option value="CPU_IDLE">主机CPU使用率</option>
                         <option value="MEM_FREE">主机内存空闲</option>
                         <option value="SVR_CPU_USED">服务资源CPU使用率</option>
@@ -171,6 +191,28 @@
                         <option value="QUE_BLOCK_COUNT">队列阻塞消息数量</option>
                         <option value="TPS_DONE">TPS</option>
                     </select>
+                    <c:forEach var="conData" items="${conditionInitDatas}">
+                        <select id="${conData.name}" name="${conData.name}" class="diySelect" style="width:200px;float: left">
+                           <c:forEach var="value" items="${conData.values}">
+                               <option value="${value}">${value}</option>
+                           </c:forEach>
+                        </select>
+                        <script type="text/javascript">
+                          $(function(){
+                              <c:set var="name" value="${conData.name}"/>
+                              $('#${conData.name}').val('<c:out value="${requestScope[name]}"/>');
+                              $('#${conData.name}').change(function(){
+                                  query();
+                              });
+                              if(!window.conditions.hasOwnProperty("${attribute.attribute}")){
+                                  window.conditions['${attribute.attribute}'] = [];
+                              }
+                              window.conditions.${attribute.attribute}.push('${conData.name}');
+
+                          });
+
+                        </script>
+                    </c:forEach>
                 </td>
                 <td width="100" align="right"><a id='expPdf' href="javascript:void(0);" class="expor_pdf"><img src="${ctx}/global/images/icon_pdf.gif" width="16" height="16" />导出PDF</a></td>
             </tr>
@@ -229,3 +271,6 @@
 </div>
 </body>
 </html>
+<script>
+
+</script>

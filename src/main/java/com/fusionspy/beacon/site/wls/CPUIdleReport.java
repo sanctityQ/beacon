@@ -15,15 +15,13 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
- * Created with IntelliJ IDEA.
- * User: bao
- * Date: 13-12-19
- * Time: 下午12:14
- * To change this template use File | Settings | File Templates.
+ * CPU目前无法获取到每台server的CPU信息，所以取消
  */
 @Component
-public class CPUIdleReport extends StatisticForwardReport implements WlsReport {
+@Deprecated
+public class CPUIdleReport {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -32,7 +30,7 @@ public class CPUIdleReport extends StatisticForwardReport implements WlsReport {
     @Autowired
     private WlsResourceDao wlsResourceDao;
 
-    @Override
+    //@Override
     public Map<String, Statistics> getStatistic(String resourceId, DateTime startDate, DateTime endDate) {
         logger.info("查询日期范围："+startDate.toString() + "--" + endDate.toString());
         Statistics statistics = wlsResourceDao.statisticHostCpuUsedByRectimeBetween(resourceId, new Timestamp(startDate.getMillis()), new Timestamp(endDate.getMillis()));
@@ -44,7 +42,7 @@ public class CPUIdleReport extends StatisticForwardReport implements WlsReport {
         return statisticsMap;
     }
 
-    @Override
+   // @Override
     public Attribute getAttribute() {
         if (attribute == null) {
             attribute = new Attribute();

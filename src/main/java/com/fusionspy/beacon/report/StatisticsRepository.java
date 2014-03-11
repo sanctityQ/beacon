@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface StatisticsRepository extends PagingAndSortingRepository<Statistics,Long> {
 
-    List<Statistics> findByResourceIdAndAttributeAndStartTimeAndEndTime(String resourceId,String attribute,
+    List<Statistics> findByResourceIdAndAttributeAndConditionAndStartTimeAndEndTime(String resourceId,String attribute,String condition,
                                                                   Timestamp startTime, Timestamp endTime);
 }

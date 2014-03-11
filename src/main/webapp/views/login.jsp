@@ -25,6 +25,8 @@
                 }
             });
 
+            $('#loginName').focus();
+
         });
 
         function trigger()

@@ -65,8 +65,8 @@ public class WlsInTimeData extends WlsMonitorData implements InTimeData {
     @XmlElement(name = "OSResource")
     private WlsResource resource;
 
-    private Integer runningServerAmount;
-    private Integer stopServerAmount;
+    private Integer runningServerAmount = 0;
+    private Integer stopServerAmount =0 ;
     private Integer throughputCount = 0;
 
     public List<WlsSvr> getServerRuntimes() {
@@ -75,7 +75,7 @@ public class WlsInTimeData extends WlsMonitorData implements InTimeData {
 
 
     public Integer getRunningServerAmount(){
-        if(runningServerAmount==null){
+        if(runningServerAmount==0){
             calculateServerAmount();
         }
         return runningServerAmount;
@@ -94,7 +94,7 @@ public class WlsInTimeData extends WlsMonitorData implements InTimeData {
     }
 
     public Integer getStopServerAmount(){
-        if(stopServerAmount==null){
+        if(stopServerAmount==0){
             calculateServerAmount();
         }
         return stopServerAmount;

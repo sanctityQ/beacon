@@ -1,6 +1,7 @@
 package com.fusionspy.beacon.report;
 
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,11 @@ public abstract class StatisticForwardReport implements StatisticReport{
     private StatisticsRepository statisticsRepository;
 
     @Override
-    public final ReportResult getStatistic(String resourceId, DateSeries dateSeries) {
+    public final ReportResult getStatistic(String resourceId, DateSeries dateSeries,Condition condition) {
         ReportQuery query = dateSeries.getQuery();
         ReportResult reportResult = new ReportResult();
         for(TimePeriod timePeriod:query.getPeriods()){
-            for(Statistics statistics:statistic(resourceId,timePeriod)){
+            for(Statistics statistics:statistic(resourceId,timePeriod,condition)){
                 reportResult.addStatistics(statistics);
             }
         }
@@ -32,15 +33,15 @@ public abstract class StatisticForwardReport implements StatisticReport{
         return reportResult;
     }
 
-    List<Statistics> statistic(String resourceId,TimePeriod timePeriod){
+    List<Statistics> statistic(String resourceId,TimePeriod timePeriod,Condition condition){
 
-        List<Statistics> statistics =  statisticsRepository.findByResourceIdAndAttributeAndStartTimeAndEndTime
-                (resourceId, getAttribute().getAttribute(),
+        List<Statistics> statistics =  statisticsRepository.findByResourceIdAndAttributeAndConditionAndStartTimeAndEndTime
+                (resourceId, getAttribute().getAttribute(),JSON.toJSONString(condition),
                         new Timestamp(timePeriod.getStartDateTime().getMillis()),
                         new Timestamp(timePeriod.getEndDateTime().getMillis()));
 
         if(statistics.isEmpty()){
-            statistics = createAndSaveStatistics(resourceId,timePeriod);
+            statistics = createAndSaveStatistics(resourceId,timePeriod,condition);
         }
 
         return  statistics;
@@ -55,8 +56,8 @@ public abstract class StatisticForwardReport implements StatisticReport{
         return true;
     }
 
-    List<Statistics> createAndSaveStatistics(String resourceId,TimePeriod timePeriod){
-        Map<String,Statistics>  map =  getStatistic(resourceId, timePeriod.getStartDateTime(), timePeriod.getEndDateTime());
+    List<Statistics> createAndSaveStatistics(String resourceId,TimePeriod timePeriod,Condition condition){
+        Map<String,Statistics>  map =  getStatistic(resourceId, timePeriod.getStartDateTime(), timePeriod.getEndDateTime(),condition);
 
         for(String name:map.keySet()) {
             Statistics statistics = map.get(name);
@@ -66,6 +67,7 @@ public abstract class StatisticForwardReport implements StatisticReport{
             statistics.setAttribute(getAttribute().getAttribute());
             statistics.setStartTime(timePeriod.getStartDateTime().toDate());
             statistics.setEndTime(timePeriod.getEndDateTime().toDate());
+            statistics.setCondition(JSON.toJSONString(condition));
             if (canSave(timePeriod))
                 statisticsRepository.save(statistics);
         }
@@ -73,6 +75,6 @@ public abstract class StatisticForwardReport implements StatisticReport{
     }
 
 
-    public abstract Map<String,Statistics> getStatistic(String resourceId,DateTime startDate, DateTime endDate);
+    public abstract Map<String,Statistics> getStatistic(String resourceId,DateTime startDate, DateTime endDate,Condition condition);
 
 }

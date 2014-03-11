@@ -34,6 +34,8 @@ public class Statistics implements java.io.Serializable{
 
     private Double avg;
 
+    private String condition;
+
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -143,5 +145,13 @@ public class Statistics implements java.io.Serializable{
     }
 
 
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
 
+    @Lob
+    @Column(name = "`condition`")
+    public String getCondition() {
+        return condition;
+    }
 }

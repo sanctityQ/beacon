@@ -23,7 +23,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
-        <!-- fast-json end-->
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+       <!-- fast-json end-->
 		<!-- security begin -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
@@ -186,6 +191,12 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>

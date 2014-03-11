@@ -7,10 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fusionspy.beacon.report.*;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimaps;
+import com.google.common.collect.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -52,6 +49,7 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +80,26 @@ public class ReportController {
     }
 
 
+    private Condition<String,String> buildCondition(Invocation invocation,StatisticReport statisticReport){
+        LinkedHashSet<ConditionInitData> conditionDatas = statisticReport.getConditionInitData();
+        ImmutableSortedMap.Builder<String,String> builder = new ImmutableSortedMap.Builder<String, String>(Ordering.natural());
+
+        for(ConditionInitData conditionInitData:conditionDatas){
+
+            String value = invocation.getParameter(conditionInitData.getName());
+            //default value
+            if(StringUtils.isBlank(value)){
+                value = conditionInitData.getValues().first();
+            }
+            //返回到model中
+            invocation.addModel(conditionInitData.getName(),value);
+            builder.put(conditionInitData.getName(),value);
+        }
+
+        return new Condition<String, String>(builder.build());
+    }
+
+
     @Get("/resourceType/{type}/attribute/{attribute}")
     public String serverResource(@Param("type")ResourceType type,@Param("attribute")String attribute,
                                  @Param("resourceId")String resourceId,@Param("dateSeries")DateSeries series,
@@ -89,13 +107,15 @@ public class ReportController {
 
         StatisticReport statisticReport = factory.getStatisticReport(type, attribute);
 
+        LinkedHashSet<ConditionInitData> conditionInitDatas =  statisticReport.getConditionInitData();
 
 
-        ReportResult reportResult = statisticReport.getStatistic(resourceId,series);
+        ReportResult reportResult = statisticReport.getStatistic(resourceId,series,buildCondition(inv,statisticReport));
         chartData(reportResult,series,inv);
         toGridJsonData(reportResult,series,inv);
 
         //view data
+        inv.addModel("conditionInitDatas",conditionInitDatas);
         inv.addModel("dateSeries",series);
         inv.addModel("resourceType",type);
         inv.addModel("resource", StringUtils.isBlank(resourceId)?resourceId:resourcesCache.getResource(resourceId));

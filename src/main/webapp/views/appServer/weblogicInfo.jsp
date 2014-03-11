@@ -13,110 +13,7 @@
     var weblogicStopMessage = "<strong>错误：</strong>Weblogic系统监控已经停止，请检查Weblogic是否正常运行!";
     var agentStopMessage = '<strong>错误：</strong>Wblogic系统监控无法连接到agent端，请检查agent端是否正常运行!';
     var site_flag = true;
-$(function() {
-    if(${stop}) {
-        site_flag = false;
-        $('#errorMsg').html(weblogicStopMessage);
-        $('#errorMsg').fadeIn();
-    }
-    if(${agentStop}) {
-        site_flag = false;
-        $('#errorMsg').html(agentStopMessage)
-        $('#errorMsg').fadeIn();
-    }
-    $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
-    var autoWidth = $("#layout_center").width() - 100;
-    $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth);
-    $("#cipan_space_detail").width(autoWidth + 65);
 
-    var toggle = new DataState().start();
-    $("#tabs").tabs({closeTab:false});
-    $("#state_tab").click(function(){setTimeout(toggle.stateShow, 50)});
-    $("#data_tab").click(function(){setTimeout(toggle.dataShow, 50)});
-
-    if($.browser.msie && ($.browser.version == "7.0")){
-        var center = $("#layout_center")
-        $("#main").width(center.width() - 31).height(center.height() - 30)
-    };
-
-    //chart_init();
-
-    $('#server_session').change(function(){
-        sessionChart.destroy();
-        sessionChart = createSessionChart();
-    });
-
-    function getServerLatestData(){
-        $.ajax({
-            url: '${ctx}/appServer/weblogic/viewLast/${serverName}',
-            dataType : 'json',
-            type : 'get',
-            async : false,
-            error : function (XMLHttpRequest,errorThrown) {
-                //alert("数据加载出错！" + errorThrown);
-            },
-            success: function(data){
-                var currentFlag = true;
-                interval = data.interval;
-                $(".ehco_data").each(function(i, d) {
-                    var key = d.id;
-                    $(d).html(data[key]);
-                });
-                if(data.stop){
-                    currentFlag = false;
-                    $('#errorMsg').html(weblogicStopMessage);
-                    $('#errorMsg').fadeIn();
-                }
-                else if(data.agentStop){
-                    currentFlag = false;
-                    $('#errorMsg').html(agentStopMessage)
-                    $('#errorMsg').fadeIn();
-                }
-                else{
-                    currentFlag = true;
-                    $('#errorMsg').fadeOut();
-                }
-                if(!site_flag && currentFlag) { //site_flag=false currentFlag=true
-                    window.location.reload();
-                }
-                site_flag = currentFlag;
-            }
-        });
-
-
-        $.ajax({
-            url: '${ctx}/appServer/weblogic/${serverName}/servers',
-            dataType : 'json',
-            type : 'get',
-            async : false,
-            error : function (XMLHttpRequest,errorThrown) {
-                //alert("数据加载出错！" + errorThrown);
-            },
-            success: function(data){
-                var option;
-                for(var i=0;i<data.length;i++){
-                    option+="<option value='"+data[i].serverName+"' > "+data[i].serverName+" </option>";
-                }
-
-                $(".serverList").each(function(i, d) {
-                 //   $(d).empty();
-                    $(d).append(option);
-                });
-            }
-        });
-    }
-
-
-    getServerLatestData();
-    setInterval(getServerLatestData, 1000 * interval);
-
-//    $('.serverList').each(function(index,element){
-//        $(element).append("<option value='"+_key+"' > "+_name+" </option> ");
-//
-//    })
-
-
-});
 
 </script>
 </head>
@@ -231,29 +128,29 @@ $(function() {
                 </div>
 
 
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td width="49%">
-                            <div class="hr_box h_b">
-                                <div class="head-cpu">
-                                    <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>
-                                    CPU使用率-最近6小时
-                                </div>
-                                <div id="CPU_line" style="height:230px;padding-top:15px"></div>
-                            </div>
-                        </td>
-                        <td width="2%">&nbsp;</td>
-                        <td width="49%">
-                            <div class="hr_box h_b">
-                                <div class="head-cpu">
-                                    <a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>
-                                    内存使用率-最近6小时
-                                </div>
-                                <div id="RAM_line" style="height:230px;padding-top:15px"></div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                <%--<table width="100%" border="0" cellspacing="0" cellpadding="0">--%>
+                    <%--<tr>--%>
+                        <%--<td width="49%">--%>
+                            <%--<div class="hr_box h_b">--%>
+                                <%--<div class="head-cpu">--%>
+                                    <%--<a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>--%>
+                                    <%--CPU使用率-最近6小时--%>
+                                <%--</div>--%>
+                                <%--<div id="CPU_line" style="height:230px;padding-top:15px"></div>--%>
+                            <%--</div>--%>
+                        <%--</td>--%>
+                        <%--<td width="2%">&nbsp;</td>--%>
+                        <%--<td width="49%">--%>
+                            <%--<div class="hr_box h_b">--%>
+                                <%--<div class="head-cpu">--%>
+                                    <%--<a href="javascript:void(0)" class="refresh_dynamic" title="刷新"></a>--%>
+                                    <%--内存使用率-最近6小时--%>
+                                <%--</div>--%>
+                                <%--<div id="RAM_line" style="height:230px;padding-top:15px"></div>--%>
+                            <%--</div>--%>
+                        <%--</td>--%>
+                    <%--</tr>--%>
+                <%--</table>--%>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="49%">
@@ -385,4 +282,109 @@ $(function() {
 <%@include file="/WEB-INF/layouts/foot.jsp" %>
 </body>
 </html>
+<script>
+
+    $(function() {
+        if(${stop}) {
+            site_flag = false;
+            $('#errorMsg').html(weblogicStopMessage);
+            $('#errorMsg').fadeIn();
+        }
+        if(${agentStop}) {
+            site_flag = false;
+            $('#errorMsg').html(agentStopMessage)
+            $('#errorMsg').fadeIn();
+        }
+        $(".monitor").parent().parent().addClass("seleck").siblings().removeClass("seleck");
+        var autoWidth = $("#layout_center").width() - 100;
+        $("#grid_cpudo,#grid_cpudo_tool").width(autoWidth);
+        $("#cipan_space_detail").width(autoWidth + 65);
+
+        var toggle = new DataState().start();
+        $("#tabs").tabs({closeTab:false});
+        $("#state_tab").click(function(){setTimeout(toggle.stateShow, 50)});
+        $("#data_tab").click(function(){setTimeout(toggle.dataShow, 50)});
+
+        if($.browser.msie && ($.browser.version == "7.0")){
+            var center = $("#layout_center")
+            $("#main").width(center.width() - 31).height(center.height() - 30)
+        };
+
+        //chart_init();
+
+
+
+        function getServerLatestData(){
+            $.ajax({
+                url: '${ctx}/appServer/weblogic/viewLast/${serverName}',
+                dataType : 'json',
+                type : 'get',
+                async : false,
+                error : function (XMLHttpRequest,errorThrown) {
+                    //alert("数据加载出错！" + errorThrown);
+                },
+                success: function(data){
+                    var currentFlag = true;
+                    interval = data.interval;
+                    $(".ehco_data").each(function(i, d) {
+                        var key = d.id;
+                        $(d).html(data[key]);
+                    });
+                    if(data.stop){
+                        currentFlag = false;
+                        $('#errorMsg').html(weblogicStopMessage);
+                        $('#errorMsg').fadeIn();
+                    }
+                    else if(data.agentStop){
+                        currentFlag = false;
+                        $('#errorMsg').html(agentStopMessage)
+                        $('#errorMsg').fadeIn();
+                    }
+                    else{
+                        currentFlag = true;
+                        $('#errorMsg').fadeOut();
+                    }
+                    if(!site_flag && currentFlag) { //site_flag=false currentFlag=true
+                        window.location.reload();
+                    }
+                    site_flag = currentFlag;
+                }
+            });
+
+
+
+        }
+
+
+        getServerLatestData();
+        $.ajax({
+            url: '${ctx}/appServer/weblogic/${serverName}/servers',
+            dataType : 'json',
+            type : 'get',
+            async : false,
+            error : function (XMLHttpRequest,errorThrown) {
+                //alert("数据加载出错！" + errorThrown);
+            },
+            success: function(data){
+                var option;
+                for(var i=0;i<data.length;i++){
+                    option+="<option value='"+data[i].serverName+"' > "+data[i].serverName+" </option>";
+                }
+
+                $(".serverList").each(function(i, d) {
+                    //   $(d).empty();
+                    $(d).append(option);
+                });
+            }
+        });
+        setInterval(getServerLatestData, 1000 * interval);
+
+//    $('.serverList').each(function(index,element){
+//        $(element).append("<option value='"+_key+"' > "+_name+" </option> ");
+//
+//    })
+
+
+    });
+</script>
 <script type="text/javascript" src="${ctx}/global/js/appserver/weblogic.js"></script>

@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +28,8 @@ class StatisticCacheReport implements StatisticReport{
 
     private final StatisticReport statisticReport;
 
+    private ConditionDataCache conditionDataCache = ConditionDataCache.build();
+
 
     StatisticCacheReport(StatisticReport statisticReport){
         this.statisticReport = statisticReport;
@@ -37,7 +42,7 @@ class StatisticCacheReport implements StatisticReport{
 
     @Nullable
     @Override
-    public ReportResult getStatistic(final String resourceId, final DateSeries dateSeries){
+    public ReportResult getStatistic(final String resourceId, final DateSeries dateSeries,final Condition condition){
 
         Cache<DateSeries,ReportResult>  cache = resourceReportCache.getIfPresent(resourceId);
 
@@ -54,13 +59,13 @@ class StatisticCacheReport implements StatisticReport{
                         logger.debug("no cache's so load data,resource id is{},attribute is {},dateSeries is {}:",
                                new Object[]{ resourceId,
                                 getAttribute().getAttribute(),dateSeries});
-                        return statisticReport.getStatistic(resourceId,dateSeries);
+                        return statisticReport.getStatistic(resourceId,dateSeries,condition);
                     }
                 });
             }
             //today data is dynamic,so don't do cache
             else{
-                return statisticReport.getStatistic(resourceId,dateSeries);
+                return statisticReport.getStatistic(resourceId,dateSeries,condition);
             }
 
 
@@ -70,11 +75,19 @@ class StatisticCacheReport implements StatisticReport{
 
     }
 
+    @Override
+    public LinkedHashSet<ConditionInitData> getConditionInitData() {
+        return conditionDataCache.merge(statisticReport);
+    }
+
+
 
     @Override
     public Attribute getAttribute() {
         return statisticReport.getAttribute();
     }
+
+
 
 
 

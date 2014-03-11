@@ -59,7 +59,9 @@ class ReportSchedule {
                 for (DateSeries dateSeries : DateSeries.values()) {
                     if (dateSeries.equals(DateSeries.today))
                         continue;
-                    statisticReport.getStatistic(resource.getResourceId(), dateSeries);
+
+                    //TODO 需要考虑如何解决不同的report，不同condition的问题
+                    statisticReport.getStatistic(resource.getResourceId(), dateSeries,null);
                 }
             }
         }
